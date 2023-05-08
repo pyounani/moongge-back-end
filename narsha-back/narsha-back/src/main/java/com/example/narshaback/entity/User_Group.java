@@ -1,7 +1,5 @@
-package com.example.narshaback.user_group;
+package com.example.narshaback.entity;
 
-import com.example.narshaback.group.GroupEntity;
-import com.example.narshaback.user.UserEntity;
 import lombok.Getter;
 import lombok.Setter;
 

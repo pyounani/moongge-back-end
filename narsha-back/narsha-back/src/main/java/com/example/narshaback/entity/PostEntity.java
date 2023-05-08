@@ -1,9 +1,5 @@
-package com.example.narshaback.post;
+package com.example.narshaback.entity;
 
-import com.example.narshaback.comment.CommentEntity;
-import com.example.narshaback.group.GroupEntity;
-import com.example.narshaback.user.UserEntity;
-import com.example.narshaback.user.UserEntity;
 import lombok.Getter;
 import lombok.Setter;
 

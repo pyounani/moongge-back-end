@@ -1,4 +1,4 @@
-package com.example.narshaback.user;
+package com.example.narshaback.entity;
 
 import lombok.Getter;
 import lombok.Setter;

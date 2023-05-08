@@ -1,4 +1,4 @@
-package com.example.narshaback.group;
+package com.example.narshaback.entity;
 
 import lombok.Getter;
 import lombok.Setter;

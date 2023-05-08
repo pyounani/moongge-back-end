@@ -1,6 +1,6 @@
-package com.example.narshaback.comment;
+package com.example.narshaback.entity;
 
-import com.example.narshaback.post.PostEntity;
+import com.example.narshaback.entity.PostEntity;
 import lombok.Getter;
 import lombok.Setter;
 
