@@ -7,7 +7,7 @@ import lombok.*;
 @NoArgsConstructor
 //@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor // 모든 필드 값을 파라미터로 받는 생성자를 만듦
-public class UserDTO {
+public class UserRegisterDTO {
     @NotNull
     private String userId;
     @NotNull

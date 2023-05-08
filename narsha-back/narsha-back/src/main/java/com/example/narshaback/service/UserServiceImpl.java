@@ -1,6 +1,6 @@
 package com.example.narshaback.service;
 
-import com.example.narshaback.dto.UserDTO;
+import com.example.narshaback.dto.UserRegisterDTO;
 import com.example.narshaback.entity.UserEntity;
 import com.example.narshaback.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -13,7 +13,7 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
 
     @Override
-    public String register(UserDTO userDTO) {
+    public String register(UserRegisterDTO userDTO) {
         UserEntity user = UserEntity.builder()
                 .userId(userDTO.getUserId())
                 .userType(userDTO.getUserType())
