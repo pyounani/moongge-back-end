@@ -18,7 +18,7 @@ public class PostEntity {
     @ManyToOne
     private GroupEntity groupId; // 그룹 id
 
-    @Column(columnDefinition = "TEXT")
+    @Column(nullable = false, columnDefinition = "TEXT")
     private String content; // 포스트 내용
 
     @Column(columnDefinition = "TEXT")

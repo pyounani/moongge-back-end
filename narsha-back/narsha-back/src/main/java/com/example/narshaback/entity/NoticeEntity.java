@@ -19,10 +19,10 @@ public class NoticeEntity {
     @ManyToOne
     private GroupEntity groupId; // 그룹 id
 
-    @Column(length=100)
+    @Column(nullable = false, length=100)
     private String noticeTitle; // 공지 제목
 
-    @Column(columnDefinition = "TEXT")
+    @Column(nullable = false, columnDefinition = "TEXT")
     private String noticeContent; // 공지 내용
 
     private LocalDateTime createAt; // 생성일

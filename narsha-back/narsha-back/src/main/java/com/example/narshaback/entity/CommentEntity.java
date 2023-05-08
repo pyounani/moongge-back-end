@@ -22,4 +22,4 @@ public class CommentEntity {
 
     @ManyToOne
     private PostEntity post; // 포스트 id
-}
+ }
