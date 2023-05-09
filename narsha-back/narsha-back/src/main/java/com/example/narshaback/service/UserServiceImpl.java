@@ -43,7 +43,7 @@ public class UserServiceImpl implements UserService {
 
         if(findUser == null) return 1;
         // 비밀번호가 같은지 확인
-        if(findUser.getPassword() != userLoginDTO.password) return 2;
+        else if(!findUser.getPassword().equals(userLoginDTO.password)) return 2;
 
         return 3;
     }
