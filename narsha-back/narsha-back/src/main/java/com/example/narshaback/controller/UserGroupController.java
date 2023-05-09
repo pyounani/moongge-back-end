@@ -20,7 +20,7 @@ public class UserGroupController {
         JsonObject obj = new JsonObject();
         obj.addProperty("res", res);
 
-        if (res == null)  obj.addProperty("message", "해당 그룹이 존재하지 않습니다.");
+        if (res == false)  obj.addProperty("message", "해당 그룹이 존재하지 않습니다.");
         else obj.addProperty("message", "그룹 가입이 완료되었습니다.");
 
         return obj.toString();

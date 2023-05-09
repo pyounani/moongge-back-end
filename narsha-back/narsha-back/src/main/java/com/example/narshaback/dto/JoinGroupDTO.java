@@ -14,8 +14,8 @@ import javax.persistence.ManyToOne;
 @NoArgsConstructor
 public class JoinGroupDTO {
     @NotNull
-    private UserEntity user;
+    private String userId; // 유저 id
 
     @NotNull
-    private GroupEntity group;
+    private String groupCode; // 그룹 코드
 }
