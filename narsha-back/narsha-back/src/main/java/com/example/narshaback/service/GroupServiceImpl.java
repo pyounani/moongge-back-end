@@ -25,7 +25,7 @@ public class GroupServiceImpl implements GroupService {
         String groupCode;
         do{
             groupCode = getRandomCode(20);
-        }while(groupRepository.findByGroupCode(groupCode) == null);
+        }while(groupRepository.findByGroupCode(groupCode) != null);
         // 동일한 그룹 코드가 나오지 않도록
 
         // 그룹 생성

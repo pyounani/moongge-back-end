@@ -1,8 +1,6 @@
 package com.example.narshaback.entity;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 
@@ -10,6 +8,8 @@ import javax.persistence.*;
 @Setter
 @Entity
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class User_Group {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
