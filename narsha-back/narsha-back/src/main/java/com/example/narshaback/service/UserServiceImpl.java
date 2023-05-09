@@ -2,6 +2,7 @@ package com.example.narshaback.service;
 
 import com.example.narshaback.dto.UserLoginDTO;
 import com.example.narshaback.dto.UserRegisterDTO;
+import com.example.narshaback.dto.UserTypeReturnDTO;
 import com.example.narshaback.entity.UserEntity;
 import com.example.narshaback.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -45,5 +46,13 @@ public class UserServiceImpl implements UserService {
         if(findUser.getPassword() != userLoginDTO.password) return 2;
 
         return 3;
+    }
+
+    // return userType
+    @Override
+    public String userType(UserTypeReturnDTO userTypeReturnDTO) {
+        UserEntity user = userRepository.findByUserId(userTypeReturnDTO.getUserId());
+
+        return user.getUserType();
     }
 }

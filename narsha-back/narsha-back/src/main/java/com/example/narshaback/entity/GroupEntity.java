@@ -1,5 +1,6 @@
 package com.example.narshaback.entity;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -9,6 +10,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @Entity
+@Builder
 public class GroupEntity {
     @Id
     @Column(nullable = false, length=20)
