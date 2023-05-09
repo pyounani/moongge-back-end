@@ -23,9 +23,9 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public String register(@RequestBody UserRegisterDTO userDTO){
-        System.out.print(userDTO);
-        String userId = userService.register(userDTO);
+    public String register(@RequestBody UserRegisterDTO userRegisterDTO){
+        System.out.print(userRegisterDTO);
+        String userId = userService.register(userRegisterDTO);
         return "회원가입이 완료되었습니다. + ${userId}";
     }
 

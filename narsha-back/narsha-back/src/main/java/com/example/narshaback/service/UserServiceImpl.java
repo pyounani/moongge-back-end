@@ -16,13 +16,13 @@ public class UserServiceImpl implements UserService {
 
     // 회원가입
     @Override
-    public String register(UserRegisterDTO userDTO) {
+    public String register(UserRegisterDTO userRegisterDTO) {
         UserEntity user = UserEntity.builder()
-                .userId(userDTO.getUserId())
-                .userType(userDTO.getUserType())
-                .password(userDTO.getPassword())
-                .name(userDTO.getName())
-                .nikname(userDTO.getNikname())
+                .userId(userRegisterDTO.getUserId())
+                .userType(userRegisterDTO.getUserType())
+                .password(userRegisterDTO.getPassword())
+                .name(userRegisterDTO.getName())
+                .nikname(userRegisterDTO.getNikname())
             .build();
         return userRepository.save(user).getUserId();
     }
