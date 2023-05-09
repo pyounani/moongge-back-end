@@ -17,14 +17,21 @@ public class UserServiceImpl implements UserService {
     // 회원가입
     @Override
     public String register(UserRegisterDTO userRegisterDTO) {
-        UserEntity user = UserEntity.builder()
-                .userId(userRegisterDTO.getUserId())
-                .userType(userRegisterDTO.getUserType())
-                .password(userRegisterDTO.getPassword())
-                .name(userRegisterDTO.getName())
-                .nikname(userRegisterDTO.getNikname())
-            .build();
-        return userRepository.save(user).getUserId();
+        // 중복된 아이디 존재 여부 확인
+        UserEntity findUser = userRepository.findByUserId(userRegisterDTO.getUserId());
+
+        if(findUser == null){
+            // 유저 생성
+            UserEntity user = UserEntity.builder()
+                    .userId(userRegisterDTO.getUserId())
+                    .userType(userRegisterDTO.getUserType())
+                    .password(userRegisterDTO.getPassword())
+                    .name(userRegisterDTO.getName())
+                    .nikname(userRegisterDTO.getNikname())
+                    .build();
+            return userRepository.save(user).getUserId();
+        } else return null;
+
     }
 
     // 로그인

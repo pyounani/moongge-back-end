@@ -24,9 +24,14 @@ public class UserController {
 
     @PostMapping("/register")
     public String register(@RequestBody UserRegisterDTO userRegisterDTO){
-        System.out.print(userRegisterDTO);
-        String userId = userService.register(userRegisterDTO);
-        return "회원가입이 완료되었습니다. + ${userId}";
+        String res = userService.register(userRegisterDTO);
+        JsonObject obj = new JsonObject();
+        obj.addProperty("res", res);
+
+        if (res == null) obj.addProperty("message", "중복된 아이디 존재, 회원가입 실패");
+        else obj.addProperty("message", "회원가입 완료");
+
+        return obj.toString();
     }
 
     @PostMapping("/login")
