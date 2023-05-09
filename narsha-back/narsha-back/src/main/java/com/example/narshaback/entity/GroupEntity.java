@@ -1,6 +1,7 @@
 package com.example.narshaback.entity;
 
 import lombok.*;
+import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -28,5 +29,6 @@ public class GroupEntity {
     @Column(nullable = false)
     private Integer group_class; // 반
 
+    @CreatedDate
     private LocalDateTime createAt; // 생성일
 }

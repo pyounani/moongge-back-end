@@ -3,6 +3,7 @@ package com.example.narshaback.entity;
 import com.example.narshaback.entity.PostEntity;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -18,6 +19,7 @@ public class CommentEntity {
     @Column(columnDefinition = "TEXT")
     private String content; // 댓글 내용
 
+    @CreatedDate
     private LocalDateTime createAt; // 생성일
 
     @ManyToOne

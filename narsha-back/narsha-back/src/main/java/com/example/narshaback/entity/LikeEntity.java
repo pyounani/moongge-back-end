@@ -4,6 +4,7 @@ import com.example.narshaback.entity.PostEntity;
 import com.example.narshaback.entity.UserEntity;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -16,6 +17,7 @@ public class LikeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id; // 좋아요 id
 
+    @CreatedDate
     private LocalDateTime createAt; // 생성일
 
     @ManyToOne

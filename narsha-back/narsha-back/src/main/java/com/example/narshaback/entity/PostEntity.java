@@ -2,6 +2,7 @@ package com.example.narshaback.entity;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -24,6 +25,7 @@ public class PostEntity {
     @Column(columnDefinition = "TEXT")
     private String imageArray; // 이미지 목록(String Array)
 
+    @CreatedDate
     private LocalDateTime createAt; // 생성일
 
     @ManyToOne

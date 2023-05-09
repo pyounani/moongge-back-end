@@ -4,6 +4,7 @@ import com.example.narshaback.entity.GroupEntity;
 import com.example.narshaback.entity.UserEntity;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -25,6 +26,7 @@ public class NoticeEntity {
     @Column(nullable = false, columnDefinition = "TEXT")
     private String noticeContent; // 공지 내용
 
+    @CreatedDate
     private LocalDateTime createAt; // 생성일
 
     @ManyToOne
