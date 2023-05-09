@@ -9,6 +9,8 @@ import com.example.narshaback.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Random;
+
 @Service
 @RequiredArgsConstructor
 public class GroupServiceImpl implements GroupService {
@@ -19,11 +21,19 @@ public class GroupServiceImpl implements GroupService {
 
     @Override
     public Integer createGroup(CreateGroupDTO createGroupDTO) {
+        // 그룹 코드 생성
+        String groupCode;
+        do{
+            groupCode = getRandomCode(20);
+        }while(groupRepository.findByGroupCode(groupCode) == null);
+        // 동일한 그룹 코드가 나오지 않도록
+
         // 그룹 생성
         GroupEntity group = GroupEntity.builder()
                 .groupName(createGroupDTO.getGroupName())
                 .school(createGroupDTO.getSchool())
                 .grade(createGroupDTO.getGrade())
+                .groupCode(groupCode)
                 .group_class(createGroupDTO.getGroup_class())
                 .build();
         // DB에 그룹 생성, 코드 return
@@ -38,4 +48,20 @@ public class GroupServiceImpl implements GroupService {
                     .build();
         return userGroupRepository.save(userToGroup).getId();
     }
+
+    // 랜덤 코드 생성
+    public String getRandomCode(int length) {
+        String alphaNum = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*";
+        int alphaNumLength = alphaNum.length();
+
+        Random random = new Random();
+
+        StringBuffer code = new StringBuffer();
+        for (int i = 0; i < length; i++) {
+            code.append(alphaNum.charAt(random.nextInt(alphaNumLength)));
+        }
+
+        return code.toString();
+    }
 }
+
