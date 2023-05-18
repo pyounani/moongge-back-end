@@ -1,7 +1,7 @@
 package com.example.narshaback.controller;
 
 import com.example.narshaback.dto.CreateNoticeDTO;
-import com.example.narshaback.dto.GetNoticeListDTO;
+import com.example.narshaback.projection.GetNoticeList;
 import com.example.narshaback.service.NoticeService;
 import com.google.gson.JsonObject;
 import lombok.RequiredArgsConstructor;
@@ -30,13 +30,15 @@ public class NoticeController {
     }
 
     @GetMapping("/getNoticeList")
-    public String getNoticeList(@RequestParam(value = "groupId")String groupId){
-        List<GetNoticeListDTO> res = noticeService.getNoticeList(groupId);
+    public List<GetNoticeList> getNoticeList(@RequestParam(value = "groupId")String groupId){
+        List<GetNoticeList> res = noticeService.getNoticeList(groupId);
         JsonObject obj = new JsonObject();
-        obj.addProperty("res", res.toString());
-        if(res == null) obj.addProperty("message", "작성한 공지가 없습니다.");
-        else obj.addProperty("message", "공지 리스트 목록 불러오기 성공!");
 
-        return obj.toString();
+        if(res == null) {
+            obj.addProperty("message", "작성한 공지가 없습니다.");
+            //return obj.toString();
+        }
+        return res;
+
     }
 }

@@ -1,9 +1,9 @@
 package com.example.narshaback.service;
 
 import com.example.narshaback.dto.CreateNoticeDTO;
-import com.example.narshaback.dto.GetNoticeListDTO;
 import com.example.narshaback.entity.GroupEntity;
 import com.example.narshaback.entity.NoticeEntity;
+import com.example.narshaback.projection.GetNoticeList;
 import com.example.narshaback.repository.GroupRepository;
 import com.example.narshaback.repository.NoticeRepository;
 import lombok.RequiredArgsConstructor;
@@ -35,9 +35,9 @@ public class NoticeServiceImpl implements NoticeService{
     }
 
     @Override
-    public List<GetNoticeListDTO> getNoticeList(String GroupId) {
+    public List<GetNoticeList> getNoticeList(String GroupId) {
         GroupEntity group = groupRepository.findByGroupCode(GroupId);
-        List<GetNoticeListDTO> noticeList = noticeRepository.findByGroupId(group);
+        List<GetNoticeList> noticeList = noticeRepository.findByGroupId(group);
 
         return noticeList;
     }
