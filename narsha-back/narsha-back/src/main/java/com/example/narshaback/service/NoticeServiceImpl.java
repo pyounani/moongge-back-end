@@ -3,13 +3,14 @@ package com.example.narshaback.service;
 import com.example.narshaback.dto.CreateNoticeDTO;
 import com.example.narshaback.entity.GroupEntity;
 import com.example.narshaback.entity.NoticeEntity;
-import com.example.narshaback.projection.GetNoticeList;
+import com.example.narshaback.projection.GetNotice;
 import com.example.narshaback.repository.GroupRepository;
 import com.example.narshaback.repository.NoticeRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -35,10 +36,18 @@ public class NoticeServiceImpl implements NoticeService{
     }
 
     @Override
-    public List<GetNoticeList> getNoticeList(String GroupId) {
+    public List<GetNotice> getNoticeList(String GroupId) {
         GroupEntity group = groupRepository.findByGroupCode(GroupId);
-        List<GetNoticeList> noticeList = noticeRepository.findByGroupId(group);
+        List<GetNotice> noticeList = noticeRepository.findByGroupId(group);
 
         return noticeList;
+    }
+
+    @Override
+    public Optional<NoticeEntity> getNoticeDetail(Integer NoticeId) {
+        Optional<NoticeEntity> notice = noticeRepository.findById(NoticeId);
+
+        if (notice == null) return null;
+        else return notice;
     }
 }

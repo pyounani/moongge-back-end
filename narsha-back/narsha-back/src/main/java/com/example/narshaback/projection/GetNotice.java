@@ -1,11 +1,11 @@
 package com.example.narshaback.projection;
 
-import com.sun.istack.NotNull;
-
-public interface GetNoticeList {
+public interface GetNotice {
 
     String getNoticeTitle();
 
     String getNoticeContent();
+
+    String getCreateAt();
 
 }
