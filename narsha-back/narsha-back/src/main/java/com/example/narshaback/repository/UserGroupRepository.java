@@ -1,10 +1,13 @@
 package com.example.narshaback.repository;
 
+import com.example.narshaback.entity.GroupEntity;
 import com.example.narshaback.entity.UserEntity;
 import com.example.narshaback.entity.User_Group;
+import com.example.narshaback.projection.GetUserInGroup;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface UserGroupRepository extends JpaRepository<User_Group, Integer> {
+import java.util.List;
 
-    UserEntity findByUserId(String userId);
+public interface UserGroupRepository extends JpaRepository<User_Group, Integer> {
+    List<GetUserInGroup> findByGroup(GroupEntity group);
 }
