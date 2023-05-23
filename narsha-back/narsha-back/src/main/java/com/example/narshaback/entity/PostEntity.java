@@ -1,5 +1,6 @@
 package com.example.narshaback.entity;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
@@ -11,6 +12,7 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
+@Builder
 public class PostEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
