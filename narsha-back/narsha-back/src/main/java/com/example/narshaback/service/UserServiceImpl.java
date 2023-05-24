@@ -28,7 +28,6 @@ public class UserServiceImpl implements UserService {
                     .userType(userRegisterDTO.getUserType())
                     .password(userRegisterDTO.getPassword())
                     .name(userRegisterDTO.getName())
-                    .nikname(userRegisterDTO.getNikname())
                     .build();
             return userRepository.save(user).getUserId();
         } else return null;

@@ -15,8 +15,6 @@ public class UserRegisterDTO {
     @NotNull
     private String userType;
     @NotNull
-    private String nikname;
-    @NotNull
     private String name;
 
 }

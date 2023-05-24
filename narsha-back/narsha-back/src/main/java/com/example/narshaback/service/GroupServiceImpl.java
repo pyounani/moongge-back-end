@@ -2,8 +2,10 @@ package com.example.narshaback.service;
 
 import com.example.narshaback.dto.CreateGroupDTO;
 import com.example.narshaback.entity.GroupEntity;
+import com.example.narshaback.entity.ProfileEntity;
 import com.example.narshaback.entity.User_Group;
 import com.example.narshaback.repository.GroupRepository;
+import com.example.narshaback.repository.ProfileRepository;
 import com.example.narshaback.repository.UserGroupRepository;
 import com.example.narshaback.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +20,8 @@ public class GroupServiceImpl implements GroupService {
     private final GroupRepository groupRepository;
     private final UserGroupRepository userGroupRepository;
     private final UserRepository userRepository;
+
+    private final ProfileRepository profileRepository;
 
     @Override
     public Integer createGroup(CreateGroupDTO createGroupDTO) {
@@ -46,6 +50,13 @@ public class GroupServiceImpl implements GroupService {
                     .user(userRepository.findByUserId(createGroupDTO.getUserId()))
                     .group(createGroup)
                     .build();
+
+            // profile 생성
+            ProfileEntity profile = ProfileEntity.builder()
+                .user_group(userToGroup)
+                .build();
+            profileRepository.save(profile);
+
         return userGroupRepository.save(userToGroup).getId();
     }
 
