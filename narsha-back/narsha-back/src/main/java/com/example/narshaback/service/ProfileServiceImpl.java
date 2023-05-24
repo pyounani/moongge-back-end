@@ -15,7 +15,7 @@ public class ProfileServiceImpl implements ProfileService{
     @Override
     public ProfileEntity updateProfile(UpdateUserProfileDTO updateUserProfileDTO) {
         // 특정 프로필 객체 업데이트
-        ProfileEntity profile = profileRepository.findByProfile(updateUserProfileDTO.getUserGroupId());
+        ProfileEntity profile = profileRepository.findByUserGroup(updateUserProfileDTO.getUserGroupId());
         profile.setProfileImage(updateUserProfileDTO.getProfileImage());
         profile.setBirth(updateUserProfileDTO.getBirth());
         profile.setIntro(updateUserProfileDTO.getIntro());

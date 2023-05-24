@@ -38,7 +38,7 @@ public class GroupServiceImpl implements GroupService {
                 .school(createGroupDTO.getSchool())
                 .grade(createGroupDTO.getGrade())
                 .groupCode(groupCode)
-                .group_class(createGroupDTO.getGroup_class())
+                .groupClass(createGroupDTO.getGroup_class())
                 .build();
         // DB에 그룹 생성, 코드 return
         GroupEntity createGroup = groupRepository.save(group);
@@ -53,7 +53,7 @@ public class GroupServiceImpl implements GroupService {
 
             // profile 생성
             ProfileEntity profile = ProfileEntity.builder()
-                .user_group(userToGroup)
+                .userGroup(userToGroup)
                 .build();
             profileRepository.save(profile);
 
