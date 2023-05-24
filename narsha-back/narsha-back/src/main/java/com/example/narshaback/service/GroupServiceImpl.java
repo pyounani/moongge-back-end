@@ -50,6 +50,7 @@ public class GroupServiceImpl implements GroupService {
                     .user(userRepository.findByUserId(createGroupDTO.getUserId()))
                     .group(createGroup)
                     .build();
+        User_Group createUserGroup = userGroupRepository.save(userToGroup);
 
             // profile 생성
             ProfileEntity profile = ProfileEntity.builder()
@@ -57,7 +58,7 @@ public class GroupServiceImpl implements GroupService {
                 .build();
             profileRepository.save(profile);
 
-        return userGroupRepository.save(userToGroup).getId();
+        return createUserGroup.getId();
     }
 
     // 랜덤 코드 생성
