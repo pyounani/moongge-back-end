@@ -1,6 +1,6 @@
 package com.example.narshaback.service;
 
-import com.example.narshaback.dto.UploadPostDTO;
+import com.example.narshaback.dto.post.UploadPostDTO;
 import com.example.narshaback.entity.GroupEntity;
 import com.example.narshaback.entity.PostEntity;
 import com.example.narshaback.entity.UserEntity;

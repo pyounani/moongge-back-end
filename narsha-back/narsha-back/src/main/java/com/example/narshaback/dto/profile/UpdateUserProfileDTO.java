@@ -1,4 +1,4 @@
-package com.example.narshaback.dto;
+package com.example.narshaback.dto.profile;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

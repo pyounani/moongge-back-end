@@ -1,7 +1,7 @@
 package com.example.narshaback.controller;
 
-import com.example.narshaback.dto.UserLoginDTO;
-import com.example.narshaback.dto.UserRegisterDTO;
+import com.example.narshaback.dto.user.UserLoginDTO;
+import com.example.narshaback.dto.user.UserRegisterDTO;
 import com.example.narshaback.service.UserService;
 import com.google.gson.JsonObject;
 import lombok.RequiredArgsConstructor;

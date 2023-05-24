@@ -1,7 +1,7 @@
 package com.example.narshaback.controller;
 
-import com.example.narshaback.dto.JoinGroupDTO;
-import com.example.narshaback.projection.GetUserInGroup;
+import com.example.narshaback.dto.group.JoinGroupDTO;
+import com.example.narshaback.projection.user.GetUserInGroup;
 import com.example.narshaback.service.UserGroupService;
 import com.google.gson.JsonObject;
 import lombok.RequiredArgsConstructor;

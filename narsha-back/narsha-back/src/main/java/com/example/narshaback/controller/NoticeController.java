@@ -1,8 +1,8 @@
 package com.example.narshaback.controller;
 
-import com.example.narshaback.dto.CreateNoticeDTO;
+import com.example.narshaback.dto.notice.CreateNoticeDTO;
 import com.example.narshaback.entity.NoticeEntity;
-import com.example.narshaback.projection.GetNotice;
+import com.example.narshaback.projection.notice.GetNotice;
 import com.example.narshaback.service.NoticeService;
 import com.google.gson.JsonObject;
 import lombok.RequiredArgsConstructor;

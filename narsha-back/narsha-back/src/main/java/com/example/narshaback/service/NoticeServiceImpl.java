@@ -1,9 +1,9 @@
 package com.example.narshaback.service;
 
-import com.example.narshaback.dto.CreateNoticeDTO;
+import com.example.narshaback.dto.notice.CreateNoticeDTO;
 import com.example.narshaback.entity.GroupEntity;
 import com.example.narshaback.entity.NoticeEntity;
-import com.example.narshaback.projection.GetNotice;
+import com.example.narshaback.projection.notice.GetNotice;
 import com.example.narshaback.repository.GroupRepository;
 import com.example.narshaback.repository.NoticeRepository;
 import lombok.RequiredArgsConstructor;

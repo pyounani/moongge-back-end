@@ -1,4 +1,4 @@
-package com.example.narshaback.projection;
+package com.example.narshaback.projection.user;
 
 import com.example.narshaback.entity.UserEntity;
 

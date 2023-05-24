@@ -1,4 +1,4 @@
-package com.example.narshaback.projection;
+package com.example.narshaback.projection.notice;
 
 public interface GetNotice {
 

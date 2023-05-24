@@ -1,7 +1,7 @@
 package com.example.narshaback.controller;
 
-import com.example.narshaback.dto.S3FileDTO;
-import com.example.narshaback.dto.UpdateUserProfileDTO;
+import com.example.narshaback.dto.s3.S3FileDTO;
+import com.example.narshaback.dto.profile.UpdateUserProfileDTO;
 import com.example.narshaback.entity.ProfileEntity;
 import com.example.narshaback.service.AmazonS3Service;
 import com.example.narshaback.service.ProfileService;
@@ -15,9 +15,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @RestController // JSON 형태의 결과값 반환
 @Controller

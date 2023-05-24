@@ -1,6 +1,6 @@
 package com.example.narshaback.service;
 
-import com.example.narshaback.dto.S3FileDTO;
+import com.example.narshaback.dto.s3.S3FileDTO;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;

@@ -1,4 +1,4 @@
-package com.example.narshaback.dto;
+package com.example.narshaback.dto.group;
 
 import com.sun.istack.NotNull;
 import lombok.AllArgsConstructor;
@@ -8,9 +8,10 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserLoginDTO {
+public class JoinGroupDTO {
     @NotNull
-    public String userId;
+    private String userId; // 유저 id
+
     @NotNull
-    public String password;
+    private String groupCode; // 그룹 코드
 }

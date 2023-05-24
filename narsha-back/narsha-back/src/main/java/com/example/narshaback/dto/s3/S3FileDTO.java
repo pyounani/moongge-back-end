@@ -1,4 +1,4 @@
-package com.example.narshaback.dto;
+package com.example.narshaback.dto.s3;
 
 import lombok.Builder;
 import lombok.Getter;

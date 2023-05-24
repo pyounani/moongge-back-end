@@ -1,4 +1,4 @@
-package com.example.narshaback.dto;
+package com.example.narshaback.dto.group;
 
 import com.sun.istack.NotNull;
 import lombok.AllArgsConstructor;
