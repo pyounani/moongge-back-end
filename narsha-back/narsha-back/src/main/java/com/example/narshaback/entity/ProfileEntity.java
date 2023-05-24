@@ -16,7 +16,7 @@ public class ProfileEntity {
     private Integer id; // 프로필 고유 id
 
     @OneToOne
-    private User_Group user_group; // 유저-그룹 id
+    private User_Group userGroup; // 유저-그룹 id
 
     @Column(length=20)
     private String nikname; // 닉네임

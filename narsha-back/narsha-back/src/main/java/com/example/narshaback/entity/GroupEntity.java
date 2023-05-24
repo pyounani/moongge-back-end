@@ -27,7 +27,7 @@ public class GroupEntity {
     private Integer grade; // 학년
 
     @Column(nullable = false)
-    private Integer group_class; // 반
+    private Integer groupClass; // 반
 
     @CreatedDate
     private LocalDateTime createAt; // 생성일
