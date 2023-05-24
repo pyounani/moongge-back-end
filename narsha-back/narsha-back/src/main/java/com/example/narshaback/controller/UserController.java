@@ -6,10 +6,7 @@ import com.example.narshaback.service.UserService;
 import com.google.gson.JsonObject;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController // JSON 형태의 결과값 반환
 @Controller
@@ -49,6 +46,5 @@ public class UserController {
         return obj.toString();
 
     }
-
 
 }

@@ -1,7 +1,5 @@
 package com.example.narshaback.entity;
 
-import com.example.narshaback.entity.GroupEntity;
-import com.example.narshaback.entity.UserEntity;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 

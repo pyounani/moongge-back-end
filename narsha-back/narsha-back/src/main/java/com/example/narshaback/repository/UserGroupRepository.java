@@ -1,7 +1,6 @@
 package com.example.narshaback.repository;
 
 import com.example.narshaback.entity.GroupEntity;
-import com.example.narshaback.entity.UserEntity;
 import com.example.narshaback.entity.User_Group;
 import com.example.narshaback.projection.GetUserInGroup;
 import org.springframework.data.jpa.repository.JpaRepository;

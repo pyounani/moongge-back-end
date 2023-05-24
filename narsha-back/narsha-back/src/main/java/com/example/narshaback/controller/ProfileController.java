@@ -2,7 +2,6 @@ package com.example.narshaback.controller;
 
 import com.example.narshaback.dto.S3FileDTO;
 import com.example.narshaback.dto.UpdateUserProfileDTO;
-import com.example.narshaback.dto.UploadPostDTO;
 import com.example.narshaback.entity.ProfileEntity;
 import com.example.narshaback.service.AmazonS3Service;
 import com.example.narshaback.service.ProfileService;

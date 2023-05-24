@@ -1,7 +1,5 @@
 package com.example.narshaback.dto;
 
-import com.example.narshaback.entity.GroupEntity;
-import com.example.narshaback.entity.UserEntity;
 import com.sun.istack.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;

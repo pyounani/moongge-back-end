@@ -6,7 +6,6 @@ import com.example.narshaback.dto.UserTypeReturnDTO;
 import com.example.narshaback.entity.UserEntity;
 import com.example.narshaback.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.apache.catalina.User;
 import org.springframework.stereotype.Service;
 
 @Service
