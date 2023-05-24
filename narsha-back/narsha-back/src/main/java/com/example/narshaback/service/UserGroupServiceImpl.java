@@ -2,9 +2,11 @@ package com.example.narshaback.service;
 
 import com.example.narshaback.dto.group.JoinGroupDTO;
 import com.example.narshaback.entity.GroupEntity;
+import com.example.narshaback.entity.ProfileEntity;
 import com.example.narshaback.entity.User_Group;
 import com.example.narshaback.projection.user.GetUserInGroup;
 import com.example.narshaback.repository.GroupRepository;
+import com.example.narshaback.repository.ProfileRepository;
 import com.example.narshaback.repository.UserGroupRepository;
 import com.example.narshaback.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +21,7 @@ public class UserGroupServiceImpl implements UserGroupService{
     private final UserGroupRepository userGroupRepository;
     private final UserRepository userRepository;
     private final GroupRepository groupRepository;
+    private final ProfileRepository profileRepository;
 
     @Override
     public Boolean joinUser(JoinGroupDTO joinGroupDTO) {
@@ -29,6 +32,13 @@ public class UserGroupServiceImpl implements UserGroupService{
                 .group(groupRepository.findByGroupCode(joinGroupDTO.getGroupCode())) // // 그룹으로 넣어주기
                 .build();
         userGroupRepository.save(user_group);
+
+        // profile 생성
+        ProfileEntity profile = ProfileEntity.builder()
+                .userGroup(user_group)
+                .build();
+        profileRepository.save(profile);
+
         return true;
     }
 
