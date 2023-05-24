@@ -43,9 +43,9 @@ public class PostController {
         for(S3FileDTO url: uploadFiles){
             imageUrlArray.add(url.getUploadFileUrl());
         }
-        System.out.println(imageUrlArray.size());
+
         mapperUploadPostDTO.setImageArray(imageUrlArray.toString());
-        System.out.println(mapperUploadPostDTO.getImageArray());
+
 
         // 포스팅 내용 + 이미지 배열 저장
         Integer res = postService.uploadPost(mapperUploadPostDTO);
