@@ -24,7 +24,7 @@ public class GroupServiceImpl implements GroupService {
         // 그룹 코드 생성
         String groupCode;
         do{
-            groupCode = getRandomCode(20);
+            groupCode = getRandomCode(10);
         }while(groupRepository.findByGroupCode(groupCode) != null);
         // 동일한 그룹 코드가 나오지 않도록
 
@@ -38,7 +38,7 @@ public class GroupServiceImpl implements GroupService {
                 .build();
         // DB에 그룹 생성, 코드 return
         GroupEntity createGroup = groupRepository.save(group);
-        if (createGroupDTO.getUserId() == null || createGroup == null){
+        if (createGroupDTO.getUserId() == null || createGroup.getGroupCode() == null){
             return null;
         }
             // user, group 연결
