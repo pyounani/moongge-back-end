@@ -7,8 +7,7 @@ public interface GetUserInGroup {
 
     interface UserEntity{
         String getUserId();
-        String getNikname();
+        String getName();
         String getPassword();
-        String getBirth();
     }
 }
