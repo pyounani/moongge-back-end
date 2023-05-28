@@ -17,4 +17,7 @@ public class CreateNoticeDTO {
 
     @NotNull
     private String noticeContent;
+
+    @NotNull
+    private String writer;
 }

@@ -1,11 +1,22 @@
 package com.example.narshaback.projection.notice;
 
+import com.example.narshaback.entity.UserEntity;
+
+import java.time.LocalDateTime;
+
 public interface GetNotice {
 
     String getNoticeTitle();
 
     String getNoticeContent();
 
-    String getCreateAt();
+    LocalDateTime getCreateAt();
+
+    UserEntity getWriter();
+
+    interface UserEntity{
+        String getUserId();
+        String getName();
+    }
 
 }
