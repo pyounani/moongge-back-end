@@ -1,13 +1,14 @@
 package com.example.narshaback.controller;
 
 import com.example.narshaback.dto.comment.CreateCommentDTO;
+import com.example.narshaback.projection.comment.GetComment;
 import com.example.narshaback.service.CommentService;
 import com.google.gson.JsonObject;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController // JSON 형태의 결과값 반환
 @Controller
@@ -29,6 +30,13 @@ public class CommentController {
         }
 
         return obj.toString();
+    }
+
+    @GetMapping("/getCommentList")
+    public List<GetComment> getCommentList(@RequestParam Integer postId){
+        List<GetComment> commentList = commentService.getCommentList(postId);
+
+        return commentList;
     }
 
 }

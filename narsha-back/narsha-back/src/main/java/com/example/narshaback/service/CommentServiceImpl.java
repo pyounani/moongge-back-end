@@ -3,11 +3,13 @@ package com.example.narshaback.service;
 import com.example.narshaback.dto.comment.CreateCommentDTO;
 import com.example.narshaback.entity.CommentEntity;
 import com.example.narshaback.entity.PostEntity;
+import com.example.narshaback.projection.comment.GetComment;
 import com.example.narshaback.repository.CommentRepository;
 import com.example.narshaback.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -29,5 +31,14 @@ public class CommentServiceImpl implements CommentService {
                 .build();
 
         return commentRepository.save(comment).getId();
+    }
+
+    @Override
+    public List<GetComment> getCommentList(Integer postId) {
+        Optional<PostEntity> findPost = postRepository.findById(postId);
+
+        List<GetComment> commentList = commentRepository.findByPost(findPost.get());
+
+        return commentList;
     }
 }
