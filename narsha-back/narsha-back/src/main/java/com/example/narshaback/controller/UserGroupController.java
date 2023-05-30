@@ -31,7 +31,7 @@ public class UserGroupController {
     @GetMapping("/getUserListInGroup")
     public List<GetUserInGroup> getUserListInGroup(@RequestParam(value="groupId")String groupId){
         List<GetUserInGroup> res = userGroupService.getUserListInGroup(groupId);
-
         return res;
     }
+
 }
