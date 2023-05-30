@@ -1,5 +1,6 @@
 package com.example.narshaback.service;
 
+import com.example.narshaback.dto.profile.GetUserProfileDTO;
 import com.example.narshaback.dto.profile.UpdateUserProfileDTO;
 import com.example.narshaback.entity.ProfileEntity;
 import com.example.narshaback.entity.User_Group;
@@ -34,4 +35,12 @@ public class ProfileServiceImpl implements ProfileService{
 
         return profile;
     }
+
+    @Override
+    public Optional<ProfileEntity> getProfile(Integer ProfileId) {
+        Optional<ProfileEntity> profile = profileRepository.findById(ProfileId);
+
+        return profile;
+    }
+
 }
