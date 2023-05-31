@@ -4,12 +4,14 @@ import com.example.narshaback.dto.like.CreateLikeDTO;
 import com.example.narshaback.entity.LikeEntity;
 import com.example.narshaback.entity.PostEntity;
 import com.example.narshaback.entity.UserEntity;
+import com.example.narshaback.projection.like.GetLikeList;
 import com.example.narshaback.repository.LikeRepository;
 import com.example.narshaback.repository.PostRepository;
 import com.example.narshaback.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 
@@ -34,5 +36,14 @@ public class LikeServiceImpl implements LikeService{
                 .build();
 
         return likeRepository.save(like).getId();
+    }
+
+    @Override
+    public List<GetLikeList> getLikeList(Integer postId) {
+        Optional<PostEntity> findPost = postRepository.findById(postId);
+
+        List<GetLikeList> likeList = likeRepository.findByLikePost(findPost.get());
+
+        return likeList;
     }
 }

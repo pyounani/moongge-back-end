@@ -1,13 +1,14 @@
 package com.example.narshaback.controller;
 
 import com.example.narshaback.dto.like.CreateLikeDTO;
+import com.example.narshaback.projection.like.GetLikeList;
 import com.example.narshaback.service.LikeService;
 import com.google.gson.JsonObject;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController // JSON 형태의 결과값 반환
 @Controller
@@ -28,5 +29,12 @@ public class LikeController {
 
 
         return obj.toString();
+    }
+
+    @GetMapping("/getLikeList")
+    public List<GetLikeList> getLikeList(@RequestParam(value="postId") Integer postId){
+        List<GetLikeList> list = likeService.getLikeList(postId);
+
+        return list;
     }
 }
