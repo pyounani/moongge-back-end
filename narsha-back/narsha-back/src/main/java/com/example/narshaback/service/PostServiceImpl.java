@@ -4,14 +4,22 @@ import com.example.narshaback.dto.post.UploadPostDTO;
 import com.example.narshaback.entity.GroupEntity;
 import com.example.narshaback.entity.PostEntity;
 import com.example.narshaback.entity.UserEntity;
+import com.example.narshaback.projection.post.GetPostDetail;
 import com.example.narshaback.repository.GroupRepository;
 import com.example.narshaback.repository.PostRepository;
 import com.example.narshaback.repository.UserRepository;
+import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityNotFoundException;
+import java.time.LocalDateTime;
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
+@Builder
+
 public class PostServiceImpl implements PostService{
 
     private final UserRepository userRepository;
@@ -36,4 +44,48 @@ public class PostServiceImpl implements PostService{
         if (uploadPost == null) return null;
         return uploadPost.getId();
     }
+
+    @Override
+    public GetPostDetail getPostDetail(Integer postId) {
+        Optional<PostEntity> post = postRepository.findById(postId);
+
+        if(post.isPresent()) {
+
+            // repository에서 projection으로 반환받아서 못 가져오기에 service 내부에 mapping 코드 필요...
+            GetPostDetail res = new GetPostDetail() {
+                @Override
+                public Integer getId() {
+                    return post.get().getId();
+                }
+
+                @Override
+                public String getContent() {
+                    return post.get().getContent();
+                }
+
+                @Override
+                public String getImageArray() {
+                    return post.get().getImageArray();
+                }
+
+                @Override
+                public LocalDateTime getCreateAt() {
+                    return post.get().getCreateAt();
+                }
+
+                @Override
+                public UserEntity getWriter() {
+                    return post.get().getWriter();
+                }
+            };
+
+            return res;
+        } else {
+            throw new EntityNotFoundException(String.format("포스트 아이디 %d로 조회되지 않았습니다", postId));
+        }
+
+    }
+
+
+
 }

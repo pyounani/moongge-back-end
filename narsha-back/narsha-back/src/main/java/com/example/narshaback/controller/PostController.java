@@ -2,12 +2,16 @@ package com.example.narshaback.controller;
 
 import com.example.narshaback.dto.s3.S3FileDTO;
 import com.example.narshaback.dto.post.UploadPostDTO;
+import com.example.narshaback.entity.PostEntity;
+import com.example.narshaback.projection.post.GetPostDetail;
 import com.example.narshaback.service.AmazonS3Service;
 import com.example.narshaback.service.PostService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.JsonObject;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -60,4 +64,12 @@ public class PostController {
 
         return obj.toString();
     }
+
+    @GetMapping("/getPostDetail")
+    public ResponseEntity<GetPostDetail> getPost(@RequestParam(value = "postId")Integer postId) {
+        GetPostDetail res =  postService.getPostDetail(postId);
+        return new ResponseEntity<>(res, HttpStatus.OK);
+    }
+
+
 }

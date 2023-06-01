@@ -1,8 +1,7 @@
 package com.example.narshaback.entity;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
@@ -13,6 +12,8 @@ import java.util.List;
 @Setter
 @Entity
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class PostEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,4 +37,5 @@ public class PostEntity {
     // Comment 엔티티: post 객체로만 관리 가능, 이 클래스는 조회만
     @OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE)
     private List<CommentEntity> commentList; // 댓글 목록
+
 }
