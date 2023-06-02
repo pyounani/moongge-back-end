@@ -1,8 +1,11 @@
 package com.example.narshaback.controller;
 
+import com.example.narshaback.dto.profile.GetUserProfileDTO;
 import com.example.narshaback.dto.s3.S3FileDTO;
 import com.example.narshaback.dto.profile.UpdateUserProfileDTO;
+import com.example.narshaback.entity.NoticeEntity;
 import com.example.narshaback.entity.ProfileEntity;
+import com.example.narshaback.repository.ProfileRepository;
 import com.example.narshaback.service.AmazonS3Service;
 import com.example.narshaback.service.ProfileService;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -10,11 +13,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.JsonObject;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RequestPart;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.security.Principal;
+import java.util.Optional;
 
 @RestController // JSON 형태의 결과값 반환
 @Controller
@@ -56,4 +60,13 @@ public class ProfileController {
 
         return obj.toString();
     }
+
+
+    @GetMapping("/getProfile")
+    public Optional<ProfileEntity> getProfile(@RequestParam(value = "profileId")Integer profileId){
+        Optional<ProfileEntity> res = profileService.getProfile(profileId);
+
+        return res;
+    }
+
 }
