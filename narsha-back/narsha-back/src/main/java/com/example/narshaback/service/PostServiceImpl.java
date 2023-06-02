@@ -5,10 +5,13 @@ import com.example.narshaback.entity.GroupEntity;
 import com.example.narshaback.entity.PostEntity;
 import com.example.narshaback.entity.UserEntity;
 import com.example.narshaback.repository.GroupRepository;
+import com.example.narshaback.projection.post.GetUserPost;
 import com.example.narshaback.repository.PostRepository;
 import com.example.narshaback.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -35,5 +38,13 @@ public class PostServiceImpl implements PostService{
         PostEntity uploadPost = postRepository.save(post);
         if (uploadPost == null) return null;
         return uploadPost.getId();
+    }
+
+    @Override
+    public List<GetUserPost> getUserPost(String userId) {
+        UserEntity writer = userRepository.findByUserId(userId);
+        List<GetUserPost> postList = postRepository.findByWriter(writer);
+
+        return postList;
     }
 }

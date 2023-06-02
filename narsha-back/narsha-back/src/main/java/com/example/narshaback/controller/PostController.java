@@ -13,6 +13,11 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
+import com.example.narshaback.projection.post.GetUserPost;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
 import java.util.List;
 
 @RestController // JSON 형태의 결과값 반환
@@ -24,8 +29,8 @@ public class PostController {
     private final AmazonS3Service amazonS3Service;
 
     @PostMapping("/uploadPost")
-    public String uploadPost(@RequestParam(value="fileType") String fileType, @RequestPart("images") List<MultipartFile> multipartFiles,
-                             @RequestParam(value="info")String uploadPostDTO) throws JsonProcessingException {
+    public String uploadPost(@RequestParam(value = "fileType") String fileType, @RequestPart("images") List<MultipartFile> multipartFiles,
+                             @RequestParam(value = "info") String uploadPostDTO) throws JsonProcessingException {
 
         // mapper
         ObjectMapper mapper = new ObjectMapper();
@@ -37,7 +42,7 @@ public class PostController {
         // S3에서 받은 URL String Array
         List<String> imageUrlArray = new ArrayList<>();
 
-        for(S3FileDTO url: uploadFiles){
+        for (S3FileDTO url : uploadFiles) {
             imageUrlArray.add(url.getUploadFileUrl());
         }
 
@@ -53,11 +58,18 @@ public class PostController {
         if (res == null) {
             obj.addProperty("success", false);
             obj.addProperty("message", "포스트 업로드 실패");
-        } else{
+        } else {
             obj.addProperty("success", true);
             obj.addProperty("success", "포스트 업로드 완료!");
         }
 
         return obj.toString();
+    }
+
+    @GetMapping("/getUserPostList")
+    public List<GetUserPost> getUserPostList(@RequestParam(value = "userId") String userId) {
+        List<GetUserPost> res = postService.getUserPost(userId);
+
+        return res;
     }
 }
