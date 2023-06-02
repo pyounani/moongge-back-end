@@ -49,8 +49,8 @@ public class NoticeController {
         Optional<NoticeEntity> res = noticeService.getNoticeDetail(noticeId);
         JsonObject obj = new JsonObject();
 
-//        if (res == null) obj.addProperty("message", "해당 공지를 찾을 수 없습니다.");
-//        else obj.addProperty("message", "해당 공지를 찾을 수 없습니다.");
+//       if (res == null) obj.addProperty("message", "해당 공지를 찾을 수 없습니다.");
+//       else obj.addProperty("message", "해당 공지를 찾을 수 없습니다.");
 
         return res;
     }
