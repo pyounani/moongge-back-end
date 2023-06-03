@@ -64,4 +64,10 @@ public class ProfileController {
         return res;
     }
 
+    @GetMapping("/getBadgeList")
+    public String getBadgeList(@RequestParam(value = "profileId")Integer profileId){
+
+        return null;
+    }
+
 }

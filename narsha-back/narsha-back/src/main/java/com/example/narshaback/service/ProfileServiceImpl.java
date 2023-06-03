@@ -8,6 +8,7 @@ import com.example.narshaback.repository.UserGroupRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -40,6 +41,11 @@ public class ProfileServiceImpl implements ProfileService{
         Optional<ProfileEntity> profile = profileRepository.findById(ProfileId);
 
         return profile;
+    }
+
+    @Override
+    public List<Boolean> getBadgeList(Integer profileId) {
+        return null;
     }
 
 }
