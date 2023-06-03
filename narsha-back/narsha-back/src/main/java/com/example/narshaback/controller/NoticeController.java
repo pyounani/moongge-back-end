@@ -15,11 +15,12 @@ import java.util.Optional;
 @RestController // JSON 형태의 결과값 반환
 @Controller
 @RequiredArgsConstructor
+@RequestMapping("/api/notice")
 public class NoticeController {
 
     private final NoticeService noticeService;
 
-    @PostMapping("/createNotice")
+    @PostMapping("/create")
     public String createNotice(@RequestBody CreateNoticeDTO createNoticeDTO){
         Boolean res = noticeService.createNotice(createNoticeDTO);
         JsonObject obj = new JsonObject();
@@ -31,7 +32,7 @@ public class NoticeController {
         return obj.toString();
     }
 
-    @GetMapping("/getNoticeList")
+    @GetMapping("/list")
     public List<GetNotice> getNoticeList(@RequestParam(value = "groupId")String groupId){
         List<GetNotice> res = noticeService.getNoticeList(groupId);
         JsonObject obj = new JsonObject();
@@ -44,7 +45,7 @@ public class NoticeController {
 
     }
 
-    @GetMapping("/getNoticeDetail")
+    @GetMapping("/detail")
     public Optional<NoticeEntity> getNoticeDetail(@RequestParam(value = "noticeId")Integer noticeId){
         Optional<NoticeEntity> res = noticeService.getNoticeDetail(noticeId);
         JsonObject obj = new JsonObject();

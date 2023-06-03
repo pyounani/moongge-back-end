@@ -13,11 +13,12 @@ import java.util.List;
 @RestController // JSON 형태의 결과값 반환
 @Controller
 @RequiredArgsConstructor
+@RequestMapping("/api/comment")
 public class CommentController {
 
     private final CommentService commentService;
 
-    @PostMapping("/createComment")
+    @PostMapping("/create")
     public String createComment(@RequestBody CreateCommentDTO createCommentDTO){
         Integer commentId = commentService.createComment(createCommentDTO);
         JsonObject obj = new JsonObject();
@@ -32,7 +33,7 @@ public class CommentController {
         return obj.toString();
     }
 
-    @GetMapping("/getCommentList")
+    @GetMapping("/list")
     public List<GetComment> getCommentList(@RequestParam Integer postId){
         List<GetComment> commentList = commentService.getCommentList(postId);
 

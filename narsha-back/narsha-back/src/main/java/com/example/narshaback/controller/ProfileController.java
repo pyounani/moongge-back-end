@@ -18,13 +18,14 @@ import java.util.Optional;
 @RestController // JSON 형태의 결과값 반환
 @Controller
 @RequiredArgsConstructor
+@RequestMapping("/api/profile")
 public class ProfileController {
 
     private final ProfileService profileService;
 
     private final AmazonS3Service amazonS3Service;
 
-    @PutMapping("/updateProfile")
+    @PutMapping("/update")
     public String updateProfile(@RequestPart(value="image") MultipartFile profileImage,
                                 @RequestParam(value="content") String updateUserProfileDTO) throws JsonProcessingException {
 
@@ -57,14 +58,14 @@ public class ProfileController {
     }
 
 
-    @GetMapping("/getProfile")
+    @GetMapping("/detail")
     public Optional<ProfileEntity> getProfile(@RequestParam(value = "profileId")Integer profileId){
         Optional<ProfileEntity> res = profileService.getProfile(profileId);
 
         return res;
     }
 
-    @GetMapping("/getBadgeList")
+    @GetMapping("/badge-list")
     public String getBadgeList(@RequestParam(value = "profileId")Integer profileId){
 
         return null;

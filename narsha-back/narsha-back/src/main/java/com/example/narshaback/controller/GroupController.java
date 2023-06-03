@@ -10,11 +10,12 @@ import org.springframework.web.bind.annotation.*;
 @RestController // JSON 형태의 결과값 반환
 @Controller
 @RequiredArgsConstructor
+@RequestMapping("/api/group")
 public class GroupController {
 
     private final GroupService groupService;
 
-    @PostMapping("/createGroup")
+    @PostMapping("/create")
     public String createGroup(@RequestBody CreateGroupDTO createGroupDTO){
         Integer res = groupService.createGroup(createGroupDTO);
         JsonObject obj = new JsonObject();

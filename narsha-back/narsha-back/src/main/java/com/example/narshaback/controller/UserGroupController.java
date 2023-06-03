@@ -13,10 +13,11 @@ import java.util.List;
 @RestController // JSON 형태의 결과값 반환
 @Controller
 @RequiredArgsConstructor
+@RequestMapping("/api/user-group")
 public class UserGroupController {
     private final UserGroupService userGroupService;
 
-    @PostMapping("/joinGroup")
+    @PostMapping("/join")
     public String joinGroup(@RequestBody JoinGroupDTO joinGroupDTO){
         Boolean res = userGroupService.joinUser(joinGroupDTO);
         JsonObject obj = new JsonObject();
@@ -28,7 +29,7 @@ public class UserGroupController {
         return obj.toString();
     }
 
-    @GetMapping("/getUserListInGroup")
+    @GetMapping("/user-list-in")
     public List<GetUserInGroup> getUserListInGroup(@RequestParam(value="groupId")String groupId){
         List<GetUserInGroup> res = userGroupService.getUserListInGroup(groupId);
         return res;

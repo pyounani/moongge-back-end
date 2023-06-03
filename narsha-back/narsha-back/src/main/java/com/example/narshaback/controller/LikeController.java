@@ -13,11 +13,12 @@ import java.util.List;
 @RestController // JSON 형태의 결과값 반환
 @Controller
 @RequiredArgsConstructor
+@RequestMapping("/api/like")
 public class LikeController {
 
     private final LikeService likeService;
 
-    @PostMapping("/createLike")
+    @PostMapping("/create")
     public String createLike(@RequestBody CreateLikeDTO createLikeDTO){
         Integer res = likeService.createLike(createLikeDTO);
         JsonObject obj = new JsonObject();
@@ -31,7 +32,7 @@ public class LikeController {
         return obj.toString();
     }
 
-    @GetMapping("/getLikeList")
+    @GetMapping("/list")
     public List<GetLikeList> getLikeList(@RequestParam(value="postId") Integer postId){
         List<GetLikeList> list = likeService.getLikeList(postId);
 

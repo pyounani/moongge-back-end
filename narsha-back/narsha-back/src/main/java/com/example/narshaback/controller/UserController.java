@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController // JSON 형태의 결과값 반환
 @Controller
 @RequiredArgsConstructor
+@RequestMapping("/api/user")
 public class UserController {
     private final UserService userService;
 

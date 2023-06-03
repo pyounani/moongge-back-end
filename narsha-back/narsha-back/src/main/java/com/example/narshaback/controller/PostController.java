@@ -2,6 +2,7 @@ package com.example.narshaback.controller;
 
 import com.example.narshaback.dto.s3.S3FileDTO;
 import com.example.narshaback.dto.post.UploadPostDTO;
+import com.example.narshaback.projection.post.GetPostDetail;
 import com.example.narshaback.projection.post.GetUserPost;
 import com.example.narshaback.service.AmazonS3Service;
 import com.example.narshaback.service.PostService;
@@ -9,6 +10,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.JsonObject;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -19,12 +22,13 @@ import java.util.List;
 @RestController // JSON 형태의 결과값 반환
 @Controller
 @RequiredArgsConstructor
+@RequestMapping("/api/post")
 public class PostController {
     private final PostService postService;
 
     private final AmazonS3Service amazonS3Service;
 
-    @PostMapping("/uploadPost")
+    @PostMapping("/upload")
     public String uploadPost(@RequestParam(value="fileType") String fileType, @RequestPart("images") List<MultipartFile> multipartFiles,
                              @RequestParam(value="info")String uploadPostDTO) throws JsonProcessingException {
 
@@ -62,10 +66,16 @@ public class PostController {
         return obj.toString();
     }
 
-    @GetMapping("/getUserPostList")
+    @GetMapping("/user-list")
     public List<GetUserPost> getUserPostList(@RequestParam(value = "userId") String userId) {
         List<GetUserPost> res = postService.getUserPost(userId);
 
         return res;
+    }
+
+    @GetMapping("/detail")
+    public ResponseEntity<GetPostDetail> getPost(@RequestParam(value = "postId")Integer postId) {
+        GetPostDetail res =  postService.getPostDetail(postId);
+        return new ResponseEntity<>(res, HttpStatus.OK);
     }
 }
