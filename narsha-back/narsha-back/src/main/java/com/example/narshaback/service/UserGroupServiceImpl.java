@@ -12,6 +12,8 @@ import com.example.narshaback.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -34,8 +36,14 @@ public class UserGroupServiceImpl implements UserGroupService{
         userGroupRepository.save(user_group);
 
         // profile 생성
+        List<Boolean> newBadgeList = new ArrayList<>(10);
+        for (int i = 0; i < 10; i++) {
+            newBadgeList.add(false);
+        }
+
         ProfileEntity profile = ProfileEntity.builder()
                 .userGroup(user_group)
+                .badgeList(newBadgeList.toString())
                 .build();
         profileRepository.save(profile);
 
