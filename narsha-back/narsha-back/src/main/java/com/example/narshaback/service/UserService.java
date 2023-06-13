@@ -8,4 +8,6 @@ public interface UserService {
     String register(UserRegisterDTO userRegisterDTO);
     Integer login(UserLoginDTO userLoginDTO);
     String userType(UserTypeReturnDTO userTypeReturnDTO);
+
+    Boolean checkUserId(String userId);
 }
