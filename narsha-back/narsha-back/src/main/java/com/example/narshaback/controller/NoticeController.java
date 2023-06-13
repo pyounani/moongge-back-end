@@ -3,6 +3,7 @@ package com.example.narshaback.controller;
 import com.example.narshaback.dto.notice.CreateNoticeDTO;
 import com.example.narshaback.entity.NoticeEntity;
 import com.example.narshaback.projection.notice.GetNotice;
+import com.example.narshaback.projection.notice.GetRecentNotice;
 import com.example.narshaback.service.NoticeService;
 import com.google.gson.JsonObject;
 import lombok.RequiredArgsConstructor;
@@ -52,6 +53,13 @@ public class NoticeController {
 
 //       if (res == null) obj.addProperty("message", "해당 공지를 찾을 수 없습니다.");
 //       else obj.addProperty("message", "해당 공지를 찾을 수 없습니다.");
+
+        return res;
+    }
+
+    @GetMapping("/recent-one")
+    public Optional<GetRecentNotice> getRecentNoticeOne(@RequestParam(value = "groupId")String groupId){
+        Optional<GetRecentNotice> res = noticeService.getRecentNoticeOne(groupId);
 
         return res;
     }

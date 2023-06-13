@@ -5,6 +5,7 @@ import com.example.narshaback.entity.GroupEntity;
 import com.example.narshaback.entity.NoticeEntity;
 import com.example.narshaback.entity.UserEntity;
 import com.example.narshaback.projection.notice.GetNotice;
+import com.example.narshaback.projection.notice.GetRecentNotice;
 import com.example.narshaback.repository.GroupRepository;
 import com.example.narshaback.repository.NoticeRepository;
 import com.example.narshaback.repository.UserRepository;
@@ -52,6 +53,15 @@ public class NoticeServiceImpl implements NoticeService{
     @Override
     public Optional<NoticeEntity> getNoticeDetail(Integer NoticeId) {
         Optional<NoticeEntity> notice = noticeRepository.findById(NoticeId);
+
+        if (notice == null) return null;
+        else return notice;
+    }
+
+    @Override
+    public Optional<GetRecentNotice> getRecentNoticeOne(String groupId) {
+        GroupEntity group = groupRepository.findByGroupCode(groupId);
+        Optional<GetRecentNotice> notice = noticeRepository.findTopByGroupIdOrderByCreateAtDesc(group);
 
         if (notice == null) return null;
         else return notice;
