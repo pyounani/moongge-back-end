@@ -8,6 +8,7 @@ import com.example.narshaback.repository.UserGroupRepository;
 import lombok.RequiredArgsConstructor;
 import org.apache.tomcat.util.json.JSONParser;
 import org.apache.tomcat.util.json.ParseException;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -51,5 +52,29 @@ public class ProfileServiceImpl implements ProfileService{
         String badgeList = profile.get().getBadgeList();
 
         return badgeList;
+    }
+
+    @Override
+    public String updateBadgeList(Integer profileId, Integer achNum) {
+        Optional<ProfileEntity> profile = profileRepository.findById(profileId);
+        ProfileEntity userProfile = profile.get();
+
+        // parse object
+        String badgeListStr = userProfile.getBadgeList();
+        JSONParser parser = new JSONParser(badgeListStr);
+
+        try {
+            // string parse & convert array
+            List<Boolean> badgeList = (List<Boolean>) parser.parse();
+            badgeList.set(achNum - 1, true);
+
+            // update
+            userProfile.setBadgeList(badgeList.toString());
+            profileRepository.save(userProfile);
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
+
+        return userProfile.getBadgeList();
     }
 }

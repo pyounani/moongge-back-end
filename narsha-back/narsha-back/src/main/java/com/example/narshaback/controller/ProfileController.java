@@ -73,4 +73,9 @@ public class ProfileController {
         return res;
     }
 
+    @PutMapping("/check-achieve")
+    public String updateCheckAchieve(@RequestParam(value="profileId")Integer profileId, @RequestParam(value="achieveNum")Integer achNum){
+        String res = profileService.updateBadgeList(profileId, achNum);
+        return res;
+    }
 }

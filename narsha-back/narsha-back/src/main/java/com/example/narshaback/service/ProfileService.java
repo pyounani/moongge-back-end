@@ -12,4 +12,6 @@ public interface ProfileService {
     Optional<ProfileEntity> getProfile(Integer ProfileId);
 
     String getBadgeList(Integer profileId);
+
+    String updateBadgeList(Integer profileId, Integer achNum);
 }
