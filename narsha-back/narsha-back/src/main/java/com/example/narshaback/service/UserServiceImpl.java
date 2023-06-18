@@ -53,4 +53,12 @@ public class UserServiceImpl implements UserService {
 
         return user.getUserType();
     }
+
+    @Override
+    public Boolean checkUserId(String userId) {
+        UserEntity user = userRepository.findByUserId(userId);
+
+        if (user == null) return true;
+        else return false;
+    }
 }
