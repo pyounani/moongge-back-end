@@ -27,22 +27,25 @@ public class ProfileController {
     private final AmazonS3Service amazonS3Service;
 
     @PutMapping("/update")
-    public String updateProfile(@RequestPart(value="image") MultipartFile profileImage,
+    public String updateProfile(@RequestParam(value="image", required = false) MultipartFile profileImage,
                                 @RequestParam(value="content") String updateUserProfileDTO) throws JsonProcessingException {
 
         // res json object
         JsonObject obj = new JsonObject();
 
-        // 예전 유저의 프로필 이미지 삭제
-
-        // 이미지 등록
         // mapper
         ObjectMapper mapper = new ObjectMapper();
         UpdateUserProfileDTO mapperUpdateUserProfileDTO = mapper.readValue(updateUserProfileDTO, UpdateUserProfileDTO.class);
 
-        S3FileDTO uploadFiles = amazonS3Service.uploadFile(profileImage);
+        // 이미지 등록
+        if (profileImage != null){
+            // 예전 유저의 프로필 이미지 삭제
 
-        mapperUpdateUserProfileDTO.setProfileImage(uploadFiles.getUploadFileUrl());
+            // 이미지 업로드
+            S3FileDTO uploadFiles = amazonS3Service.uploadFile(profileImage);
+            // updateUserProfileDTO 객체에 프로필 정보 설정
+            mapperUpdateUserProfileDTO.setProfileImage(uploadFiles.getUploadFileUrl());
+        }
 
         // 정보 업데이트
         ProfileEntity profile = profileService.updateProfile(mapperUpdateUserProfileDTO);
