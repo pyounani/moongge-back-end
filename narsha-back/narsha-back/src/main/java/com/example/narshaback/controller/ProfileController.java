@@ -13,6 +13,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController // JSON 형태의 결과값 반환
@@ -67,8 +68,9 @@ public class ProfileController {
 
     @GetMapping("/badge-list")
     public String getBadgeList(@RequestParam(value = "profileId")Integer profileId){
+        String res = profileService.getBadgeList(profileId);
 
-        return null;
+        return res;
     }
 
 }

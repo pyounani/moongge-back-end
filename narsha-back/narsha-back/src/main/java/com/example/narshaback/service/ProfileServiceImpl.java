@@ -6,6 +6,8 @@ import com.example.narshaback.entity.User_Group;
 import com.example.narshaback.repository.ProfileRepository;
 import com.example.narshaback.repository.UserGroupRepository;
 import lombok.RequiredArgsConstructor;
+import org.apache.tomcat.util.json.JSONParser;
+import org.apache.tomcat.util.json.ParseException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -44,8 +46,10 @@ public class ProfileServiceImpl implements ProfileService{
     }
 
     @Override
-    public List<Boolean> getBadgeList(Integer profileId) {
-        return null;
-    }
+    public String getBadgeList(Integer profileId) {
+        Optional<ProfileEntity> profile = profileRepository.findById(profileId);
+        String badgeList = profile.get().getBadgeList();
 
+        return badgeList;
+    }
 }

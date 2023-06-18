@@ -11,5 +11,5 @@ public interface ProfileService {
 
     Optional<ProfileEntity> getProfile(Integer ProfileId);
 
-    List<Boolean> getBadgeList(Integer profileId);
+    String getBadgeList(Integer profileId);
 }
