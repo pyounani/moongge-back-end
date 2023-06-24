@@ -2,6 +2,7 @@ package com.example.narshaback.controller;
 
 import com.example.narshaback.dto.group.JoinGroupDTO;
 import com.example.narshaback.projection.user.GetUserInGroup;
+import com.example.narshaback.projection.user_group.GetJoinGroupList;
 import com.example.narshaback.service.UserGroupService;
 import com.google.gson.JsonObject;
 import lombok.RequiredArgsConstructor;
@@ -35,4 +36,10 @@ public class UserGroupController {
         return res;
     }
 
+    @GetMapping("/join-group-list")
+    public List <GetJoinGroupList> joinGroupList(@RequestParam(value="userId")String userId){
+        List <GetJoinGroupList> res = userGroupService.getJoinGroupList(userId);
+
+        return res;
+    }
 }

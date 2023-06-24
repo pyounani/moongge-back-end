@@ -3,8 +3,10 @@ package com.example.narshaback.service;
 import com.example.narshaback.dto.group.JoinGroupDTO;
 import com.example.narshaback.entity.GroupEntity;
 import com.example.narshaback.entity.ProfileEntity;
+import com.example.narshaback.entity.UserEntity;
 import com.example.narshaback.entity.User_Group;
 import com.example.narshaback.projection.user.GetUserInGroup;
+import com.example.narshaback.projection.user_group.GetJoinGroupList;
 import com.example.narshaback.repository.GroupRepository;
 import com.example.narshaback.repository.ProfileRepository;
 import com.example.narshaback.repository.UserGroupRepository;
@@ -56,5 +58,13 @@ public class UserGroupServiceImpl implements UserGroupService{
         List<GetUserInGroup> userList = userGroupRepository.findByGroup(group);
 
         return userList;
+    }
+
+    @Override
+    public List<GetJoinGroupList> getJoinGroupList(String userId) {
+        UserEntity user = userRepository.findByUserId(userId);
+        List<GetJoinGroupList> groupList = userGroupRepository.findByUser(user);
+
+        return groupList;
     }
 }
