@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -56,5 +57,12 @@ public class UserGroupServiceImpl implements UserGroupService{
         List<GetUserInGroup> userList = userGroupRepository.findByGroup(group);
 
         return userList;
+    }
+
+    @Override
+    public String getUserGroupCode(Integer id) {
+        Optional<User_Group> groupCode = userGroupRepository.findById(id);
+
+        return groupCode.get().getGroup().getGroupCode();
     }
 }
