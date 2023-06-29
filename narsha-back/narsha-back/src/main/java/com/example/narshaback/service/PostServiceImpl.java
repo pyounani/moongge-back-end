@@ -53,9 +53,10 @@ public class PostServiceImpl implements PostService{
     }
 
     @Override
-    public GetPostDetail getPostDetail(Integer postId) {
-        Optional<PostEntity> post = postRepository.findById(postId);
-
+    public GetPostDetail getPostDetail(Integer postId, String groupCode) {
+        GroupEntity group = groupRepository.findByGroupCode(groupCode);
+        Optional<PostEntity> post = postRepository.findByIdAndGroupId(postId, group);
+        System.out.println(post);
         if(post.isPresent()) {
 
             // repository에서 projection으로 반환받아서 못 가져오기에 service 내부에 mapping 코드 필요...

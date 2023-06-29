@@ -21,7 +21,7 @@ public class PostEntity {
     private Integer id; // 포스트 id
 
     @ManyToOne
-    private GroupEntity groupId; // 그룹 id
+    private GroupEntity groupId; // 그룹 code
 
     @Column(nullable = false, columnDefinition = "TEXT")
     private String content; // 포스트 내용

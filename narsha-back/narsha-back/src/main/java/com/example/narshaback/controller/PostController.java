@@ -74,8 +74,8 @@ public class PostController {
     }
 
     @GetMapping("/detail")
-    public ResponseEntity<GetPostDetail> getPost(@RequestParam(value = "postId")Integer postId) {
-        GetPostDetail res =  postService.getPostDetail(postId);
+    public ResponseEntity<GetPostDetail> getPost(@RequestParam(value = "postId")Integer postId, @RequestParam(value = "groupCode")String groupCode) {
+        GetPostDetail res =  postService.getPostDetail(postId, groupCode);
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
 }

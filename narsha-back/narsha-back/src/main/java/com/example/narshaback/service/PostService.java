@@ -11,6 +11,6 @@ public interface PostService {
     Integer uploadPost(UploadPostDTO uploadPostDTO);
     List<GetUserPost> getUserPost(String userId);
 
-    GetPostDetail getPostDetail(Integer postId);
+    GetPostDetail getPostDetail(Integer postId, String groupCode);
 
 }
