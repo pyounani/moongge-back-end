@@ -3,7 +3,7 @@ package com.example.narshaback.projection.user_group;
 import com.example.narshaback.entity.GroupEntity;
 
 public interface GetJoinGroupList {
-    GroupEntity getGroup();
+    GroupEntity getGroupCode();
 
     interface GroupEntity{
         String getGroupCode();
