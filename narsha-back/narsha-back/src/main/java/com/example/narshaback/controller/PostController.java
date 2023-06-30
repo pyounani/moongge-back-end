@@ -67,15 +67,15 @@ public class PostController {
     }
 
     @GetMapping("/user-list")
-    public List<GetUserPost> getUserPostList(@RequestParam(value = "userId") String userId) {
-        List<GetUserPost> res = postService.getUserPost(userId);
+    public List<GetUserPost> getUserPostList(@RequestParam(value = "userGroupId") Integer userGroupId) {
+        List<GetUserPost> res = postService.getUserPost(userGroupId);
 
         return res;
     }
 
     @GetMapping("/detail")
-    public ResponseEntity<GetPostDetail> getPost(@RequestParam(value = "postId")Integer postId, @RequestParam(value = "groupCode")String groupCode) {
-        GetPostDetail res =  postService.getPostDetail(postId, groupCode);
+    public ResponseEntity<GetPostDetail> getPost(@RequestParam(value = "postId")Integer postId, @RequestParam(value = "userGroupId")Integer userGroupId) {
+        GetPostDetail res =  postService.getPostDetail(postId, userGroupId);
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
 }

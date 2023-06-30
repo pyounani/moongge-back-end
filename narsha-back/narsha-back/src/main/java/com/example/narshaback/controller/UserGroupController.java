@@ -33,13 +33,13 @@ public class UserGroupController {
     }
 
     @GetMapping("/user-list-in")
-    public List<GetUserInGroup> getUserListInGroup(@RequestParam(value="groupId")String groupId){
-        List<GetUserInGroup> res = userGroupService.getUserListInGroup(groupId);
+    public List<GetUserInGroup> getUserListInGroup(@RequestParam(value = "groupCode")String groupCode){
+        List<GetUserInGroup> res = userGroupService.getUserListInGroup(groupCode);
         return res;
     }
 
     @GetMapping("/group-code")
-    public String getUserGroupCode(@RequestParam(value = "user-groupId")Integer id){
+    public String getUserGroupCode(@RequestParam(value = "user-groupCode")Integer id){
         String res = userGroupService.getUserGroupCode(id);
 
         return res;
