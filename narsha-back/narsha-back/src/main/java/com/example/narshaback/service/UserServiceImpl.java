@@ -1,13 +1,13 @@
 package com.example.narshaback.service;
 
-import com.example.narshaback.dto.user.UserLoginDTO;
-import com.example.narshaback.dto.user.UserRegisterDTO;
-import com.example.narshaback.dto.user.UserTypeReturnDTO;
+import com.example.narshaback.base.dto.user.UserLoginDTO;
+import com.example.narshaback.base.dto.user.UserRegisterDTO;
+import com.example.narshaback.base.dto.user.UserTypeReturnDTO;
 import com.example.narshaback.entity.UserEntity;
-import com.example.narshaback.exception.ErrorCode;
-import com.example.narshaback.exception.LoginIdNotFoundException;
-import com.example.narshaback.exception.LoginPasswordNotMatchException;
-import com.example.narshaback.exception.RegisterException;
+import com.example.narshaback.base.code.ErrorCode;
+import com.example.narshaback.base.exception.LoginIdNotFoundException;
+import com.example.narshaback.base.exception.LoginPasswordNotMatchException;
+import com.example.narshaback.base.exception.RegisterException;
 import com.example.narshaback.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

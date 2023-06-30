@@ -1,10 +1,10 @@
 package com.example.narshaback.service;
 
-import com.example.narshaback.dto.comment.CreateCommentDTO;
+import com.example.narshaback.base.dto.comment.CreateCommentDTO;
 import com.example.narshaback.entity.CommentEntity;
 import com.example.narshaback.entity.PostEntity;
 import com.example.narshaback.entity.User_Group;
-import com.example.narshaback.projection.comment.GetComment;
+import com.example.narshaback.base.projection.comment.GetComment;
 import com.example.narshaback.repository.CommentRepository;
 import com.example.narshaback.repository.PostRepository;
 import com.example.narshaback.repository.UserGroupRepository;

@@ -1,15 +1,13 @@
 package com.example.narshaback.service;
 
-import com.example.narshaback.dto.like.CreateLikeDTO;
+import com.example.narshaback.base.dto.like.CreateLikeDTO;
 import com.example.narshaback.entity.LikeEntity;
 import com.example.narshaback.entity.PostEntity;
-import com.example.narshaback.entity.UserEntity;
 import com.example.narshaback.entity.User_Group;
-import com.example.narshaback.projection.like.GetLikeList;
+import com.example.narshaback.base.projection.like.GetLikeList;
 import com.example.narshaback.repository.LikeRepository;
 import com.example.narshaback.repository.PostRepository;
 import com.example.narshaback.repository.UserGroupRepository;
-import com.example.narshaback.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

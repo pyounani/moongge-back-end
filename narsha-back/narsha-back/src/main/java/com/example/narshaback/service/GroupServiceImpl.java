@@ -1,6 +1,6 @@
 package com.example.narshaback.service;
 
-import com.example.narshaback.dto.group.CreateGroupDTO;
+import com.example.narshaback.base.dto.group.CreateGroupDTO;
 import com.example.narshaback.entity.GroupEntity;
 import com.example.narshaback.entity.ProfileEntity;
 import com.example.narshaback.entity.User_Group;

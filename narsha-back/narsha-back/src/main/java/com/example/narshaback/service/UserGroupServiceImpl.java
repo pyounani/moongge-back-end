@@ -1,12 +1,12 @@
 package com.example.narshaback.service;
 
-import com.example.narshaback.dto.group.JoinGroupDTO;
+import com.example.narshaback.base.dto.group.JoinGroupDTO;
 import com.example.narshaback.entity.GroupEntity;
 import com.example.narshaback.entity.ProfileEntity;
 import com.example.narshaback.entity.UserEntity;
 import com.example.narshaback.entity.User_Group;
-import com.example.narshaback.projection.user.GetUserInGroup;
-import com.example.narshaback.projection.user_group.GetJoinGroupList;
+import com.example.narshaback.base.projection.user.GetUserInGroup;
+import com.example.narshaback.base.projection.user_group.GetJoinGroupList;
 import com.example.narshaback.repository.GroupRepository;
 import com.example.narshaback.repository.ProfileRepository;
 import com.example.narshaback.repository.UserGroupRepository;
@@ -15,7 +15,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 

@@ -1,6 +1,6 @@
 package com.example.narshaback.controller;
 
-import com.example.narshaback.dto.group.CreateGroupDTO;
+import com.example.narshaback.base.dto.group.CreateGroupDTO;
 import com.example.narshaback.service.GroupService;
 import com.google.gson.JsonObject;
 import lombok.RequiredArgsConstructor;

@@ -1,9 +1,8 @@
 package com.example.narshaback.service;
 
-import com.example.narshaback.dto.profile.UpdateUserProfileDTO;
+import com.example.narshaback.base.dto.profile.UpdateUserProfileDTO;
 import com.example.narshaback.entity.ProfileEntity;
 
-import java.util.List;
 import java.util.Optional;
 
 public interface ProfileService {

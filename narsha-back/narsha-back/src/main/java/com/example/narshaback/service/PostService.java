@@ -1,9 +1,9 @@
 package com.example.narshaback.service;
 
-import com.example.narshaback.dto.post.UploadPostDTO;
+import com.example.narshaback.base.dto.post.UploadPostDTO;
 
-import com.example.narshaback.projection.post.GetPostDetail;
-import com.example.narshaback.projection.post.GetUserPost;
+import com.example.narshaback.base.projection.post.GetPostDetail;
+import com.example.narshaback.base.projection.post.GetUserPost;
 
 import java.util.List;
 

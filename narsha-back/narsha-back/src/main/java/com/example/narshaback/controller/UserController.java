@@ -1,9 +1,9 @@
 package com.example.narshaback.controller;
 
-import com.example.narshaback.api.ResponseCode;
-import com.example.narshaback.dto.response.ResponseDTO;
-import com.example.narshaback.dto.user.UserLoginDTO;
-import com.example.narshaback.dto.user.UserRegisterDTO;
+import com.example.narshaback.base.code.ResponseCode;
+import com.example.narshaback.base.dto.response.ResponseDTO;
+import com.example.narshaback.base.dto.user.UserLoginDTO;
+import com.example.narshaback.base.dto.user.UserRegisterDTO;
 import com.example.narshaback.entity.UserEntity;
 import com.example.narshaback.service.UserService;
 import com.google.gson.JsonObject;
