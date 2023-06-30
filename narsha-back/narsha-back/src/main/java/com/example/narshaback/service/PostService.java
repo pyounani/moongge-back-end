@@ -9,8 +9,8 @@ import java.util.List;
 
 public interface PostService {
     Integer uploadPost(UploadPostDTO uploadPostDTO);
-    List<GetUserPost> getUserPost(String userId);
+    List<GetUserPost> getUserPost(Integer userGroupId);
 
-    GetPostDetail getPostDetail(Integer postId, String groupCode);
+    GetPostDetail getPostDetail(Integer postId, Integer groupCode);
 
 }
