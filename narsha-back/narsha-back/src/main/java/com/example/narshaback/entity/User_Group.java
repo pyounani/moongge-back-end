@@ -13,11 +13,11 @@ import javax.persistence.*;
 public class User_Group {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id; // 유저-그룹 id
+    private Integer userGroupId; // 유저-그룹 id
 
     @ManyToOne
-    private UserEntity user; // 유저 id
+    private UserEntity userId; // 유저 id
 
     @ManyToOne
-    private GroupEntity group; // 그룹 id
+    private GroupEntity groupCode; // 그룹 id
 }

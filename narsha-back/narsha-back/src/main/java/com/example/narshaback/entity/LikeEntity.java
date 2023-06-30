@@ -17,14 +17,14 @@ import java.time.LocalDateTime;
 public class LikeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id; // 좋아요 id
+    private Integer likeId; // 좋아요 id
 
     @CreatedDate
     private LocalDateTime createAt; // 생성일
 
     @ManyToOne
-    private UserEntity likeUser; // 유저 id
+    private User_Group userGroupId; // 좋아요를 누른 유저-그룹
 
     @ManyToOne
-    private PostEntity likePost; // 포스트 id
+    private PostEntity postId; // 포스트 id
 }

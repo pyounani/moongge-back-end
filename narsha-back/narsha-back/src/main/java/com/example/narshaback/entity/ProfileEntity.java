@@ -13,10 +13,10 @@ import javax.persistence.*;
 public class ProfileEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id; // 프로필 고유 id
+    private Integer profileId; // 프로필 고유 id
 
     @OneToOne
-    private User_Group userGroup; // 유저-그룹 id
+    private User_Group userGroupId; // 유저-그룹 id
 
     @Column(length=20)
     private String nikname; // 닉네임

@@ -17,10 +17,13 @@ import java.time.LocalDateTime;
 public class NoticeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id; // 공지 id
+    private Integer noticeId; // 공지 id
 
     @ManyToOne
-    private GroupEntity groupId; // 그룹 id
+    private GroupEntity groupCode; // 그룹 code
+
+    @ManyToOne
+    private UserEntity writer; // 작성자
 
     @Column(nullable = false, length=100)
     private String noticeTitle; // 공지 제목
@@ -30,7 +33,4 @@ public class NoticeEntity {
 
     @CreatedDate
     private LocalDateTime createAt; // 생성일
-
-    @ManyToOne
-    private UserEntity writer; // 작성자
 }
