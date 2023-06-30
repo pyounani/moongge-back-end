@@ -54,7 +54,7 @@ public class ProfileController {
             obj.addProperty("id", "null");
             obj.addProperty("message", "프로필 수정 실패");
         } else {
-            obj.addProperty("id", profile.getId());
+            obj.addProperty("id", profile.getProfileId());
             obj.addProperty("message", "프로필 수정 성공!");
         }
 

@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 public interface GetUserPost {
 
     // UserEntity getWriter();
-    Integer getId();
+    Integer getPostId();
     String getContent();
     String getImageArray();
     LocalDateTime getCreateAt();

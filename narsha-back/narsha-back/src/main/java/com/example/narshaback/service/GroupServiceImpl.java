@@ -49,8 +49,8 @@ public class GroupServiceImpl implements GroupService {
         }
             // user, group 연결
             User_Group userToGroup = User_Group.builder()
-                    .user(userRepository.findByUserId(createGroupDTO.getUserId()))
-                    .group(createGroup)
+                    .userId(userRepository.findByUserId(createGroupDTO.getUserId()))
+                    .groupCode(createGroup)
                     .build();
         User_Group createUserGroup = userGroupRepository.save(userToGroup);
 
@@ -61,17 +61,17 @@ public class GroupServiceImpl implements GroupService {
         }
 
         ProfileEntity profile = ProfileEntity.builder()
-            .userGroup(userToGroup)
+            .userGroupId(userToGroup)
                 .badgeList(newBadgeList.toString())
             .build();
         profileRepository.save(profile);
 
-        return createUserGroup.getId();
+        return createUserGroup.getUserGroupId();
     }
 
     // 랜덤 코드 생성
     public String getRandomCode(int length) {
-        String alphaNum = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*";
+        String alphaNum = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$^*";
         int alphaNumLength = alphaNum.length();
 
         Random random = new Random();

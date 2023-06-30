@@ -18,10 +18,10 @@ import java.util.List;
 public class PostEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id; // 포스트 id
+    private Integer postId; // 포스트 id
 
     @ManyToOne
-    private GroupEntity groupId; // 그룹 code
+    private User_Group userGroupId; // user-group id
 
     @Column(nullable = false, columnDefinition = "TEXT")
     private String content; // 포스트 내용
@@ -32,10 +32,8 @@ public class PostEntity {
     @CreatedDate
     private LocalDateTime createAt; // 생성일
 
-    @ManyToOne
-    private UserEntity writer; // 작성자(User)
-
+    // 사용 여부 추후에 결정
     // Comment 엔티티: post 객체로만 관리 가능, 이 클래스는 조회만
-    @OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE)
-    private List<CommentEntity> commentList; // 댓글 목록
+    // @OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE)
+    // private List<CommentEntity> commentList; // 댓글 목록
 }

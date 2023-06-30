@@ -17,7 +17,10 @@ import java.time.LocalDateTime;
 public class CommentEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id; // 댓글 id
+    private Integer commentId; // 댓글 id
+
+    @ManyToOne
+    private User_Group userGroupId; // 유저-그룹 id
 
     @Column(columnDefinition = "TEXT")
     private String content; // 댓글 내용
@@ -26,5 +29,5 @@ public class CommentEntity {
     private LocalDateTime createAt; // 생성일
 
     @ManyToOne
-    private PostEntity post; // 포스트 id
+    private PostEntity postId; // 포스트
  }

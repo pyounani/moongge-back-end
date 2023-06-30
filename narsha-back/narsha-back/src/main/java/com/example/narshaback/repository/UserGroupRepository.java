@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface UserGroupRepository extends JpaRepository<User_Group, Integer> {
-    List<GetUserInGroup> findByGroup(GroupEntity group);
-    Optional<User_Group> findById(Integer id);
-    List<GetJoinGroupList> findByUser(UserEntity user);
+    List<GetUserInGroup> findByGroupCode(GroupEntity groupCode);
+    Optional<User_Group> findByUserGroupId(Integer userGroupId);
+    List<GetJoinGroupList> findByUserId(UserEntity userId);
 }

@@ -25,10 +25,10 @@ public class ProfileServiceImpl implements ProfileService{
     @Override
     public ProfileEntity updateProfile(UpdateUserProfileDTO updateUserProfileDTO) {
         // 유저-그룹 객체 가져오기
-        Optional<User_Group> findUserGroup = userGroupRepository.findById(updateUserProfileDTO.getUserGroupId());
+        Optional<User_Group> findUserGroup = userGroupRepository.findByUserGroupId(updateUserProfileDTO.getUserGroupId());
 
         // 특정 프로필 객체 업데이트
-        ProfileEntity profile = profileRepository.findByUserGroup(findUserGroup.get());
+        ProfileEntity profile = profileRepository.findByUserGroupId(findUserGroup.get());
         profile.setProfileImage(updateUserProfileDTO.getProfileImage());
         profile.setBirth(updateUserProfileDTO.getBirth());
         profile.setIntro(updateUserProfileDTO.getIntro());
@@ -48,7 +48,7 @@ public class ProfileServiceImpl implements ProfileService{
 
     @Override
     public String getBadgeList(Integer profileId) {
-        Optional<ProfileEntity> profile = profileRepository.findById(profileId);
+        Optional<ProfileEntity> profile = profileRepository.findByProfileId(profileId);
         String badgeList = profile.get().getBadgeList();
 
         return badgeList;
@@ -56,7 +56,7 @@ public class ProfileServiceImpl implements ProfileService{
 
     @Override
     public String updateBadgeList(Integer profileId, Integer achNum) {
-        Optional<ProfileEntity> profile = profileRepository.findById(profileId);
+        Optional<ProfileEntity> profile = profileRepository.findByProfileId(profileId);
         ProfileEntity userProfile = profile.get();
 
         // parse object

@@ -33,8 +33,8 @@ public class LikeController {
     }
 
     @GetMapping("/list")
-    public List<GetLikeList> getLikeList(@RequestParam(value="postId") Integer postId){
-        List<GetLikeList> list = likeService.getLikeList(postId);
+    public List<GetLikeList> getLikeList(@RequestParam(value="postId") Integer postId, @RequestParam(value="userGroupId") Integer userGroupId){
+        List<GetLikeList> list = likeService.getLikeList(postId, userGroupId);
 
         return list;
     }

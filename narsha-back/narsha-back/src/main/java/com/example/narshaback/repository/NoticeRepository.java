@@ -10,8 +10,8 @@ import java.util.List;
 import java.util.Optional;
 
 public interface NoticeRepository extends JpaRepository<NoticeEntity ,Integer> {
-    List<GetNotice> findByGroupId(GroupEntity GroupId);
-    Optional<NoticeEntity> findById(Integer NoticeId);
+    List<GetNotice> findByGroupCode(GroupEntity GroupId);
+    Optional<NoticeEntity> findByNoticeId(Integer NoticeId);
 
-    Optional<GetRecentNotice> findTopByGroupIdOrderByCreateAtDesc(GroupEntity GroupId);
+    Optional<GetRecentNotice> findTopByGroupCodeOrderByCreateAtDesc(GroupEntity GroupId);
 }

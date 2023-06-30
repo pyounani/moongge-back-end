@@ -7,6 +7,6 @@ import java.util.List;
 
 public interface LikeService {
     Integer createLike(CreateLikeDTO createLikeDTO);
-    List<GetLikeList> getLikeList(Integer postId);
+    List<GetLikeList> getLikeList(Integer postId, Integer userGroupId);
 }
 

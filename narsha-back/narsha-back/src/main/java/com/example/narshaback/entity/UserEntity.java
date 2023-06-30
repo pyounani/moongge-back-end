@@ -12,9 +12,6 @@ import javax.persistence.*;
 @NoArgsConstructor
 public class UserEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id; // 유저 고유 num
-
     @Column(nullable = false, length=100)
     private String userId; // 유저 id
 
@@ -25,5 +22,5 @@ public class UserEntity {
     private String userType; // 유저 타입: teacher | student
 
     @Column(nullable = false, length=20)
-    private String name; // 이름
+    private String userName; // 이름
 }

@@ -34,8 +34,8 @@ public class NoticeController {
     }
 
     @GetMapping("/list")
-    public List<GetNotice> getNoticeList(@RequestParam(value = "groupId")String groupId){
-        List<GetNotice> res = noticeService.getNoticeList(groupId);
+    public List<GetNotice> getNoticeList(@RequestParam(value = "groupCode")String groupCode){
+        List<GetNotice> res = noticeService.getNoticeList(groupCode);
         JsonObject obj = new JsonObject();
 
         if(res == null) {
@@ -58,8 +58,8 @@ public class NoticeController {
     }
 
     @GetMapping("/recent-one")
-    public Optional<GetRecentNotice> getRecentNoticeOne(@RequestParam(value = "groupId")String groupId){
-        Optional<GetRecentNotice> res = noticeService.getRecentNoticeOne(groupId);
+    public Optional<GetRecentNotice> getRecentNoticeOne(@RequestParam(value = "groupCode")String groupCode){
+        Optional<GetRecentNotice> res = noticeService.getRecentNoticeOne(groupCode);
 
         return res;
     }

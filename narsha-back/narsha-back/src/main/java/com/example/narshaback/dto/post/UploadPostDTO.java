@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class UploadPostDTO {
     @NotNull
-    private String groupId; // 그룹 id
+    private Integer userGroupId; // 유저-그룹 id
 
     @NotNull
     private String writer; // 작성자(userId)

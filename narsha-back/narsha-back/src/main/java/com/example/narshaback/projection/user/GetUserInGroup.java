@@ -3,11 +3,11 @@ package com.example.narshaback.projection.user;
 import com.example.narshaback.entity.UserEntity;
 
 public interface GetUserInGroup {
-    UserEntity getUser();
+    UserEntity getUserId();
 
     interface UserEntity{
         String getUserId();
-        String getName();
+        String getUserName();
         String getPassword();
     }
 }

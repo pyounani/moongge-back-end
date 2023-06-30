@@ -33,8 +33,8 @@ public class UserGroupServiceImpl implements UserGroupService{
         // 해당 그룹이 없을 때 return null
         if (groupRepository.findByGroupCode(joinGroupDTO.getGroupCode()) == null) return false;
         User_Group user_group = User_Group.builder()
-                .user(userRepository.findByUserId(joinGroupDTO.getUserId())) // 유저로 넣어주기
-                .group(groupRepository.findByGroupCode(joinGroupDTO.getGroupCode())) // // 그룹으로 넣어주기
+                .userId(userRepository.findByUserId(joinGroupDTO.getUserId())) // 유저로 넣어주기
+                .groupCode(groupRepository.findByGroupCode(joinGroupDTO.getGroupCode())) // // 그룹으로 넣어주기
                 .build();
         userGroupRepository.save(user_group);
 
@@ -45,7 +45,7 @@ public class UserGroupServiceImpl implements UserGroupService{
         }
 
         ProfileEntity profile = ProfileEntity.builder()
-                .userGroup(user_group)
+                .userGroupId(user_group)
                 .badgeList(newBadgeList.toString())
                 .build();
         profileRepository.save(profile);
@@ -54,24 +54,24 @@ public class UserGroupServiceImpl implements UserGroupService{
     }
 
     @Override
-    public List<GetUserInGroup> getUserListInGroup(String groupId) {
-        GroupEntity group = groupRepository.findByGroupCode(groupId);
-        List<GetUserInGroup> userList = userGroupRepository.findByGroup(group);
+    public List<GetUserInGroup> getUserListInGroup(String groupCode) {
+        GroupEntity group = groupRepository.findByGroupCode(groupCode);
+        List<GetUserInGroup> userList = userGroupRepository.findByGroupCode(group);
 
         return userList;
     }
 
     @Override
     public String getUserGroupCode(Integer id) {
-        Optional<User_Group> groupCode = userGroupRepository.findById(id);
+        Optional<User_Group> groupCode = userGroupRepository.findByUserGroupId(id);
 
-        return groupCode.get().getGroup().getGroupCode();
+        return groupCode.get().getGroupCode().getGroupCode();
     }
 
     @Override
     public List<GetJoinGroupList> getJoinGroupList(String userId) {
         UserEntity user = userRepository.findByUserId(userId);
-        List<GetJoinGroupList> groupList = userGroupRepository.findByUser(user);
+        List<GetJoinGroupList> groupList = userGroupRepository.findByUserId(user);
 
         return groupList;
     }

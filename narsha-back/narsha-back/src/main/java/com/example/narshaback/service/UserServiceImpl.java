@@ -26,7 +26,7 @@ public class UserServiceImpl implements UserService {
                     .userId(userRegisterDTO.getUserId())
                     .userType(userRegisterDTO.getUserType())
                     .password(userRegisterDTO.getPassword())
-                    .name(userRegisterDTO.getName())
+                    .userName(userRegisterDTO.getName())
                     .build();
             return userRepository.save(user).getUserId();
         } else return null;

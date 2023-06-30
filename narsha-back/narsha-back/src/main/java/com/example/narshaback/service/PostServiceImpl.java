@@ -4,10 +4,12 @@ import com.example.narshaback.dto.post.UploadPostDTO;
 import com.example.narshaback.entity.GroupEntity;
 import com.example.narshaback.entity.PostEntity;
 import com.example.narshaback.entity.UserEntity;
+import com.example.narshaback.entity.User_Group;
 import com.example.narshaback.projection.post.GetPostDetail;
 import com.example.narshaback.repository.GroupRepository;
 import com.example.narshaback.projection.post.GetUserPost;
 import com.example.narshaback.repository.PostRepository;
+import com.example.narshaback.repository.UserGroupRepository;
 import com.example.narshaback.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -25,37 +27,35 @@ public class PostServiceImpl implements PostService{
     private final PostRepository postRepository;
     private final GroupRepository groupRepository;
 
+    private final UserGroupRepository userGroupRepository;
+
     @Override
     public Integer uploadPost(UploadPostDTO uploadPostDTO) {
-        // 해당 그룹 찾기
-        GroupEntity group = groupRepository.findByGroupCode(uploadPostDTO.getGroupId());
-
-        // 해당 유저 찾기
-        UserEntity user = userRepository.findByUserId(uploadPostDTO.getWriter());
+        // 해당 유저-그룹 찾기
+        Optional<User_Group> user_group = userGroupRepository.findByUserGroupId(uploadPostDTO.getUserGroupId());
 
         PostEntity post = PostEntity.builder()
                 .content(uploadPostDTO.getContent())
                 .imageArray(uploadPostDTO.getImageArray())
-                .groupId(group)
-                .writer(user)
+                .userGroupId(user_group.get())
                 .build();
         PostEntity uploadPost = postRepository.save(post);
         if (uploadPost == null) return null;
-        return uploadPost.getId();
+        return uploadPost.getPostId();
     }
 
     @Override
-    public List<GetUserPost> getUserPost(String userId) {
-        UserEntity writer = userRepository.findByUserId(userId);
-        List<GetUserPost> postList = postRepository.findByWriter(writer);
+    public List<GetUserPost> getUserPost(Integer userGroupId) {
+        Optional<User_Group> user_group = userGroupRepository.findByUserGroupId(userGroupId);
+        List<GetUserPost> postList = postRepository.findByUserGroupId(user_group.get());
 
         return postList;
     }
 
     @Override
-    public GetPostDetail getPostDetail(Integer postId, String groupCode) {
-        GroupEntity group = groupRepository.findByGroupCode(groupCode);
-        Optional<PostEntity> post = postRepository.findByIdAndGroupId(postId, group);
+    public GetPostDetail getPostDetail(Integer postId, Integer userGroupCode) {
+        Optional<User_Group> user_group = userGroupRepository.findById(userGroupCode);
+        Optional<PostEntity> post = postRepository.findByPostIdAndUserGroupId(postId, user_group.get());
         System.out.println(post);
         if(post.isPresent()) {
 
@@ -63,7 +63,7 @@ public class PostServiceImpl implements PostService{
             GetPostDetail res = new GetPostDetail() {
                 @Override
                 public Integer getId() {
-                    return post.get().getId();
+                    return post.get().getPostId();
                 }
 
                 @Override
@@ -83,7 +83,7 @@ public class PostServiceImpl implements PostService{
 
                 @Override
                 public UserEntity getWriter() {
-                    return post.get().getWriter();
+                    return post.get().getUserGroupId().getUserId();
                 }
             };
 
