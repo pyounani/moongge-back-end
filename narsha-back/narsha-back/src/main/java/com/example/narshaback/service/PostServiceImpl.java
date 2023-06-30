@@ -1,13 +1,12 @@
 package com.example.narshaback.service;
 
-import com.example.narshaback.dto.post.UploadPostDTO;
-import com.example.narshaback.entity.GroupEntity;
+import com.example.narshaback.base.dto.post.UploadPostDTO;
 import com.example.narshaback.entity.PostEntity;
 import com.example.narshaback.entity.UserEntity;
 import com.example.narshaback.entity.User_Group;
-import com.example.narshaback.projection.post.GetPostDetail;
+import com.example.narshaback.base.projection.post.GetPostDetail;
 import com.example.narshaback.repository.GroupRepository;
-import com.example.narshaback.projection.post.GetUserPost;
+import com.example.narshaback.base.projection.post.GetUserPost;
 import com.example.narshaback.repository.PostRepository;
 import com.example.narshaback.repository.UserGroupRepository;
 import com.example.narshaback.repository.UserRepository;

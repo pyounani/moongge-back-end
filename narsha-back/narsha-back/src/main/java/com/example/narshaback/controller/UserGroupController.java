@@ -1,9 +1,8 @@
 package com.example.narshaback.controller;
 
-import com.example.narshaback.dto.group.JoinGroupDTO;
-import com.example.narshaback.entity.User_Group;
-import com.example.narshaback.projection.user.GetUserInGroup;
-import com.example.narshaback.projection.user_group.GetJoinGroupList;
+import com.example.narshaback.base.dto.group.JoinGroupDTO;
+import com.example.narshaback.base.projection.user.GetUserInGroup;
+import com.example.narshaback.base.projection.user_group.GetJoinGroupList;
 import com.example.narshaback.service.UserGroupService;
 import com.google.gson.JsonObject;
 import lombok.RequiredArgsConstructor;
@@ -11,7 +10,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController // JSON 형태의 결과값 반환
 @Controller

@@ -1,11 +1,11 @@
 package com.example.narshaback.service;
 
-import com.example.narshaback.dto.notice.CreateNoticeDTO;
+import com.example.narshaback.base.dto.notice.CreateNoticeDTO;
 import com.example.narshaback.entity.GroupEntity;
 import com.example.narshaback.entity.NoticeEntity;
 import com.example.narshaback.entity.UserEntity;
-import com.example.narshaback.projection.notice.GetNotice;
-import com.example.narshaback.projection.notice.GetRecentNotice;
+import com.example.narshaback.base.projection.notice.GetNotice;
+import com.example.narshaback.base.projection.notice.GetRecentNotice;
 import com.example.narshaback.repository.GroupRepository;
 import com.example.narshaback.repository.NoticeRepository;
 import com.example.narshaback.repository.UserRepository;

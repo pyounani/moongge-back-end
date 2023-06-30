@@ -1,7 +1,7 @@
 package com.example.narshaback.controller;
 
-import com.example.narshaback.dto.s3.S3FileDTO;
-import com.example.narshaback.dto.profile.UpdateUserProfileDTO;
+import com.example.narshaback.base.dto.s3.S3FileDTO;
+import com.example.narshaback.base.dto.profile.UpdateUserProfileDTO;
 import com.example.narshaback.entity.ProfileEntity;
 import com.example.narshaback.service.AmazonS3Service;
 import com.example.narshaback.service.ProfileService;
@@ -13,7 +13,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.List;
 import java.util.Optional;
 
 @RestController // JSON 형태의 결과값 반환

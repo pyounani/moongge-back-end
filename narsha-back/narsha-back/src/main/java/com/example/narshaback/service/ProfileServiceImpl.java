@@ -1,6 +1,6 @@
 package com.example.narshaback.service;
 
-import com.example.narshaback.dto.profile.UpdateUserProfileDTO;
+import com.example.narshaback.base.dto.profile.UpdateUserProfileDTO;
 import com.example.narshaback.entity.ProfileEntity;
 import com.example.narshaback.entity.User_Group;
 import com.example.narshaback.repository.ProfileRepository;
@@ -8,7 +8,6 @@ import com.example.narshaback.repository.UserGroupRepository;
 import lombok.RequiredArgsConstructor;
 import org.apache.tomcat.util.json.JSONParser;
 import org.apache.tomcat.util.json.ParseException;
-import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

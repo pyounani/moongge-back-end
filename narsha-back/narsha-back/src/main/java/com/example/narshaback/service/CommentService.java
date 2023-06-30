@@ -1,7 +1,7 @@
 package com.example.narshaback.service;
 
-import com.example.narshaback.dto.comment.CreateCommentDTO;
-import com.example.narshaback.projection.comment.GetComment;
+import com.example.narshaback.base.dto.comment.CreateCommentDTO;
+import com.example.narshaback.base.projection.comment.GetComment;
 
 import java.util.List;
 

@@ -1,7 +1,7 @@
 package com.example.narshaback.controller;
 
-import com.example.narshaback.dto.like.CreateLikeDTO;
-import com.example.narshaback.projection.like.GetLikeList;
+import com.example.narshaback.base.dto.like.CreateLikeDTO;
+import com.example.narshaback.base.projection.like.GetLikeList;
 import com.example.narshaback.service.LikeService;
 import com.google.gson.JsonObject;
 import lombok.RequiredArgsConstructor;

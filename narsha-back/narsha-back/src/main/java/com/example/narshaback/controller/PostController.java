@@ -1,9 +1,9 @@
 package com.example.narshaback.controller;
 
-import com.example.narshaback.dto.s3.S3FileDTO;
-import com.example.narshaback.dto.post.UploadPostDTO;
-import com.example.narshaback.projection.post.GetPostDetail;
-import com.example.narshaback.projection.post.GetUserPost;
+import com.example.narshaback.base.dto.s3.S3FileDTO;
+import com.example.narshaback.base.dto.post.UploadPostDTO;
+import com.example.narshaback.base.projection.post.GetPostDetail;
+import com.example.narshaback.base.projection.post.GetUserPost;
 import com.example.narshaback.service.AmazonS3Service;
 import com.example.narshaback.service.PostService;
 import com.fasterxml.jackson.core.JsonProcessingException;

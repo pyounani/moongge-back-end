@@ -1,10 +1,14 @@
 package com.example.narshaback.controller;
 
-import com.example.narshaback.dto.user.UserLoginDTO;
-import com.example.narshaback.dto.user.UserRegisterDTO;
+import com.example.narshaback.base.code.ResponseCode;
+import com.example.narshaback.base.dto.response.ResponseDTO;
+import com.example.narshaback.base.dto.user.UserLoginDTO;
+import com.example.narshaback.base.dto.user.UserRegisterDTO;
+import com.example.narshaback.entity.UserEntity;
 import com.example.narshaback.service.UserService;
 import com.google.gson.JsonObject;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,28 +25,21 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public String register(@RequestBody UserRegisterDTO userRegisterDTO){
+    public ResponseEntity<ResponseDTO> register(@RequestBody UserRegisterDTO userRegisterDTO){
         String res = userService.register(userRegisterDTO);
-        JsonObject obj = new JsonObject();
-        obj.addProperty("res", res);
-        obj.addProperty("message", "회원가입 완료");
 
-        return obj.toString();
+        return ResponseEntity
+                .status(ResponseCode.SUCCESS_REGISTER.getStatus().value())
+                .body(new ResponseDTO(ResponseCode.SUCCESS_REGISTER, res));
     }
 
     @PostMapping("/login")
-    public String login(@RequestBody UserLoginDTO userLoginDTO){
-        Integer res = userService.login(userLoginDTO);
-        JsonObject obj = new JsonObject();
-        obj.addProperty("res", res);
+    public ResponseEntity<ResponseDTO> login(@RequestBody UserLoginDTO userLoginDTO){
+        UserEntity res = userService.login(userLoginDTO);
 
-        switch(res){
-            case 1: obj.addProperty("message", "아이디가 존재하지 않습니다."); break;
-            case 2: obj.addProperty("message", "비밀번호가 틀렸습니다."); break;
-            case 3: obj.addProperty("message", "로그인 성공"); break;
-        }
-
-        return obj.toString();
+        return ResponseEntity
+                .status(ResponseCode.SUCCESS_LOGIN.getStatus().value())
+                .body(new ResponseDTO(ResponseCode.SUCCESS_LOGIN, res));
 
     }
 

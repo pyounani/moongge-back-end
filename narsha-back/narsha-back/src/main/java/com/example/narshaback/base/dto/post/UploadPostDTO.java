@@ -1,0 +1,24 @@
+package com.example.narshaback.base.dto.post;
+
+import com.sun.istack.NotNull;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+public class UploadPostDTO {
+    @NotNull
+    private Integer userGroupId; // 유저-그룹 id
+
+    @NotNull
+    private String writer; // 작성자(userId)
+
+    @NotNull
+    private String imageArray; // 이미지 목록(이미지 링크 배열)
+
+    @NotNull
+    private String content; // 작성 내용
+
+}

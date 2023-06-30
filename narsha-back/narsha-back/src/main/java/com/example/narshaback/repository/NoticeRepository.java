@@ -2,8 +2,8 @@ package com.example.narshaback.repository;
 
 import com.example.narshaback.entity.GroupEntity;
 import com.example.narshaback.entity.NoticeEntity;
-import com.example.narshaback.projection.notice.GetNotice;
-import com.example.narshaback.projection.notice.GetRecentNotice;
+import com.example.narshaback.base.projection.notice.GetNotice;
+import com.example.narshaback.base.projection.notice.GetRecentNotice;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
