@@ -14,12 +14,31 @@ public class GlobalExceptionHandler {
      * Developer Custom Exception
      */
 
+    // 회원가입: 아이디 중복 확인
     @ExceptionHandler(RegisterException.class)
     protected ResponseEntity<ErrorResponseDTO> handleRegisterException(final RegisterException e) {
         log.error("handleRegisterException : {}", e.getMessage());
         return ResponseEntity
                 .status(ErrorCode.DUPLICATE_ID_REQUEST.getStatus().value())
                 .body(new ErrorResponseDTO(ErrorCode.DUPLICATE_ID_REQUEST));
+    }
+
+    // 로그인: 존재하는 아이디가 없을 때
+    @ExceptionHandler(LoginIdNotFoundException.class)
+    protected ResponseEntity<ErrorResponseDTO> handleLoginIdNotFoundException(final LoginIdNotFoundException e) {
+        log.error("LoginIdNotFoundException : {}", e.getMessage());
+        return ResponseEntity
+                .status(ErrorCode.USERID_NOT_FOUND.getStatus().value())
+                .body(new ErrorResponseDTO(ErrorCode.USERID_NOT_FOUND));
+    }
+
+    // 로그인: 비밀번호가 일치하지 않을 때
+    @ExceptionHandler(LoginPasswordNotMatchException.class)
+    protected ResponseEntity<ErrorResponseDTO> handleLoginPasswordNotMatchException(final LoginPasswordNotMatchException e) {
+        log.error("LoginPasswordNotMatchException : {}", e.getMessage());
+        return ResponseEntity
+                .status(ErrorCode.PASSWORD_NOT_MATCH.getStatus().value())
+                .body(new ErrorResponseDTO(ErrorCode.PASSWORD_NOT_MATCH));
     }
 
     /*

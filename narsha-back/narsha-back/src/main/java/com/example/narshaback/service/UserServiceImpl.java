@@ -5,6 +5,8 @@ import com.example.narshaback.dto.user.UserRegisterDTO;
 import com.example.narshaback.dto.user.UserTypeReturnDTO;
 import com.example.narshaback.entity.UserEntity;
 import com.example.narshaback.exception.ErrorCode;
+import com.example.narshaback.exception.LoginIdNotFoundException;
+import com.example.narshaback.exception.LoginPasswordNotMatchException;
 import com.example.narshaback.exception.RegisterException;
 import com.example.narshaback.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -36,15 +38,16 @@ public class UserServiceImpl implements UserService {
 
     // 로그인
     @Override
-    public Integer login(UserLoginDTO userLoginDTO) {
-        // 아이디가 존재하는지 확인
+    public UserEntity login(UserLoginDTO userLoginDTO) {
         UserEntity findUser = userRepository.findByUserId(userLoginDTO.userId);
 
-        if(findUser == null) return 1;
+        // 아이디가 존재하는지 확인
+        if(findUser == null) throw new LoginIdNotFoundException(ErrorCode.USERID_NOT_FOUND);
         // 비밀번호가 같은지 확인
-        else if(!findUser.getPassword().equals(userLoginDTO.password)) return 2;
+        else if(!findUser.getPassword().equals(userLoginDTO.password)) throw new LoginPasswordNotMatchException(ErrorCode.PASSWORD_NOT_MATCH);
 
-        return 3;
+        // 아이디, 비밀번호가 일치
+        return findUser;
     }
 
     // return userType
