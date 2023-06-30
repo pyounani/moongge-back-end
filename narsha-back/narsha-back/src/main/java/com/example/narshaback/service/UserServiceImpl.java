@@ -4,6 +4,8 @@ import com.example.narshaback.dto.user.UserLoginDTO;
 import com.example.narshaback.dto.user.UserRegisterDTO;
 import com.example.narshaback.dto.user.UserTypeReturnDTO;
 import com.example.narshaback.entity.UserEntity;
+import com.example.narshaback.exception.ErrorCode;
+import com.example.narshaback.exception.RegisterException;
 import com.example.narshaback.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -17,11 +19,11 @@ public class UserServiceImpl implements UserService {
     // 회원가입
     @Override
     public String register(UserRegisterDTO userRegisterDTO) {
-        // 중복된 아이디 존재 여부 확인
         UserEntity findUser = userRepository.findByUserId(userRegisterDTO.getUserId());
 
-        if(findUser == null){
-            // 유저 생성
+        if(findUser != null){ // 중복된 유저 있을 때
+            throw new RegisterException(ErrorCode.DUPLICATE_ID_REQUEST);
+        } else {
             UserEntity user = UserEntity.builder()
                     .userId(userRegisterDTO.getUserId())
                     .userType(userRegisterDTO.getUserType())
@@ -29,8 +31,7 @@ public class UserServiceImpl implements UserService {
                     .userName(userRegisterDTO.getName())
                     .build();
             return userRepository.save(user).getUserId();
-        } else return null;
-
+        }
     }
 
     // 로그인
