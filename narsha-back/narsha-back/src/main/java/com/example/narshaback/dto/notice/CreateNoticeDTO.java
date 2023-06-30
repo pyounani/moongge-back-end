@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class CreateNoticeDTO {
     @NotNull
-    private String groupId;
+    private String groupCode;
 
     @NotNull
     private String noticeTitle;

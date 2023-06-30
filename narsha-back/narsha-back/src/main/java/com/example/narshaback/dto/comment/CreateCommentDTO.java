@@ -13,5 +13,8 @@ public class CreateCommentDTO {
     private Integer postId;
 
     @NotNull
+    private Integer userGroupId;
+
+    @NotNull
     private String content;
 }
