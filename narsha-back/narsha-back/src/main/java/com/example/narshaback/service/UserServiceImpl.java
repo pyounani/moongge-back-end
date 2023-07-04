@@ -62,7 +62,7 @@ public class UserServiceImpl implements UserService {
     public Boolean checkUserId(String userId) {
         UserEntity user = userRepository.findByUserId(userId);
 
-        if (user == null) return true;
-        else return false;
+        if (user == null) throw new RegisterException(ErrorCode.DUPLICATE_ID_REQUEST);
+        return true;
     }
 }
