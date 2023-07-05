@@ -1,13 +1,13 @@
 package com.example.narshaback.service;
 
 import com.example.narshaback.base.dto.like.CreateLikeDTO;
+import com.example.narshaback.entity.GroupEntity;
 import com.example.narshaback.entity.LikeEntity;
 import com.example.narshaback.entity.PostEntity;
-import com.example.narshaback.entity.User_Group;
 import com.example.narshaback.base.projection.like.GetLikeList;
+import com.example.narshaback.repository.GroupRepository;
 import com.example.narshaback.repository.LikeRepository;
 import com.example.narshaback.repository.PostRepository;
-import com.example.narshaback.repository.UserGroupRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -22,28 +22,27 @@ public class LikeServiceImpl implements LikeService{
     private final LikeRepository likeRepository;
 
     private final PostRepository postRepository;
-
-    private final UserGroupRepository userGroupRepository;
+    private final GroupRepository groupRepository;
 
     @Override
     public Integer createLike(CreateLikeDTO createLikeDTO) {
-        Optional<User_Group> user_group = userGroupRepository.findByUserGroupId(createLikeDTO.getUserGroupId());
-        Optional<PostEntity> findPost = postRepository.findByPostIdAndUserGroupId(createLikeDTO.getPostId(), user_group.get());
+        Optional<GroupEntity> group = groupRepository.findByGroupCode(createLikeDTO.getGroupCode());
+        Optional<PostEntity> findPost = postRepository.findByPostIdAndGroupCode(createLikeDTO.getPostId(), group.get());
 
         LikeEntity like = LikeEntity.builder()
                 .postId(findPost.get())
-                .userGroupId(user_group.get())
+                .groupCode(group.get())
                 .build();
 
         return likeRepository.save(like).getLikeId();
     }
 
     @Override
-    public List<GetLikeList> getLikeList(Integer postId, Integer userGroupId) {
-        Optional<User_Group> user_group = userGroupRepository.findByUserGroupId(userGroupId);
-        Optional<PostEntity> findPost = postRepository.findByPostIdAndUserGroupId(postId, user_group.get());
+    public List<GetLikeList> getLikeList(Integer postId, String groupCode) {
+        Optional<GroupEntity> user_group = groupRepository.findByGroupCode(groupCode);
+        Optional<PostEntity> findPost = postRepository.findByPostIdAndGroupCode(postId, user_group.get());
 
-        List<GetLikeList> likeList = likeRepository.findByPostIdAndUserGroupId(findPost.get(), user_group.get());
+        List<GetLikeList> likeList = likeRepository.findByPostIdAndGroupCode(findPost.get(), user_group.get());
 
         return likeList;
     }

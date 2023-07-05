@@ -1,18 +1,22 @@
 package com.example.narshaback.service;
 
+import com.example.narshaback.base.code.ErrorCode;
 import com.example.narshaback.base.dto.group.CreateGroupDTO;
+import com.example.narshaback.base.dto.group.JoinGroupDTO;
+import com.example.narshaback.base.exception.GroupNotFoundException;
+import com.example.narshaback.base.exception.LoginPasswordNotMatchException;
+import com.example.narshaback.base.projection.user.GetUserInGroup;
+import com.example.narshaback.base.projection.user_group.GetJoinGroupList;
 import com.example.narshaback.entity.GroupEntity;
-import com.example.narshaback.entity.ProfileEntity;
-import com.example.narshaback.entity.User_Group;
+import com.example.narshaback.entity.UserEntity;
 import com.example.narshaback.repository.GroupRepository;
-import com.example.narshaback.repository.ProfileRepository;
-import com.example.narshaback.repository.UserGroupRepository;
 import com.example.narshaback.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 
 @Service
@@ -20,18 +24,15 @@ import java.util.Random;
 public class GroupServiceImpl implements GroupService {
 
     private final GroupRepository groupRepository;
-    private final UserGroupRepository userGroupRepository;
     private final UserRepository userRepository;
 
-    private final ProfileRepository profileRepository;
-
     @Override
-    public Integer createGroup(CreateGroupDTO createGroupDTO) {
+    public UserEntity createGroup(CreateGroupDTO createGroupDTO) {
         // 그룹 코드 생성
         String groupCode;
         do{
             groupCode = getRandomCode(10);
-        }while(groupRepository.findByGroupCode(groupCode) != null);
+        }while(groupRepository.findByGroupCode(groupCode).isPresent());
         // 동일한 그룹 코드가 나오지 않도록
 
         // 그룹 생성
@@ -47,26 +48,18 @@ public class GroupServiceImpl implements GroupService {
         if (createGroupDTO.getUserId() == null || createGroup.getGroupCode() == null){
             return null;
         }
-            // user, group 연결
-            User_Group userToGroup = User_Group.builder()
-                    .userId(userRepository.findByUserId(createGroupDTO.getUserId()))
-                    .groupCode(createGroup)
-                    .build();
-        User_Group createUserGroup = userGroupRepository.save(userToGroup);
 
-            // profile 생성
+        // profile badge update
         List<Boolean> newBadgeList = new ArrayList<>(10);
         for (int i = 0; i < 10; i++) {
             newBadgeList.add(false);
         }
 
-        ProfileEntity profile = ProfileEntity.builder()
-            .userGroupId(userToGroup)
-                .badgeList(newBadgeList.toString())
-            .build();
-        profileRepository.save(profile);
+        Optional<UserEntity> user = userRepository.findByUserId(createGroupDTO.getUserId());
+        user.get().setBadgeList(newBadgeList.toString());
+        user.get().setGroupCode(group);
 
-        return createUserGroup.getUserGroupId();
+        return userRepository.save(user.get());
     }
 
     // 랜덤 코드 생성
@@ -82,6 +75,14 @@ public class GroupServiceImpl implements GroupService {
         }
 
         return code.toString();
+    }
+
+    @Override
+    public String getUserGroupCode(String userId) {
+        String group = userRepository.findByUserId(userId).get().getGroupCode().getGroupCode();
+        Optional<GroupEntity> groupCode = groupRepository.findByGroupCode(group);
+
+        return groupCode.get().getGroupCode();
     }
 }
 
