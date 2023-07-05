@@ -27,15 +27,15 @@ public class NoticeServiceImpl implements NoticeService{
     @Override
     public Boolean createNotice(CreateNoticeDTO createNoticeDTO) {
 
-        GroupEntity findGroup = groupRepository.findByGroupCode(createNoticeDTO.getGroupCode());
-        UserEntity findUser = userRepository.findByUserId(createNoticeDTO.getWriter());
+        Optional<GroupEntity> group = groupRepository.findByGroupCode(createNoticeDTO.getGroupCode());
+        Optional<UserEntity> user = userRepository.findByUserId(createNoticeDTO.getWriter());
 
-        if (findGroup != null){
+        if (group.isPresent()){
             NoticeEntity notice = NoticeEntity.builder()
-                    .groupCode(findGroup)
+                    .groupCode(group.get())
                     .noticeTitle(createNoticeDTO.getNoticeTitle())
                     .noticeContent(createNoticeDTO.getNoticeContent())
-                    .writer(findUser)
+                    .writer(user.get())
                     .build();
             noticeRepository.save(notice).getNoticeId();
             return true;
@@ -44,8 +44,8 @@ public class NoticeServiceImpl implements NoticeService{
 
     @Override
     public List<GetNotice> getNoticeList(String GroupId) {
-        GroupEntity group = groupRepository.findByGroupCode(GroupId);
-        List<GetNotice> noticeList = noticeRepository.findByGroupCode(group);
+        Optional<GroupEntity> group = groupRepository.findByGroupCode(GroupId);
+        List<GetNotice> noticeList = noticeRepository.findByGroupCode(group.get());
 
         return noticeList;
     }
@@ -60,8 +60,8 @@ public class NoticeServiceImpl implements NoticeService{
 
     @Override
     public Optional<GetRecentNotice> getRecentNoticeOne(String groupId) {
-        GroupEntity group = groupRepository.findByGroupCode(groupId);
-        Optional<GetRecentNotice> notice = noticeRepository.findTopByGroupCodeOrderByCreateAtDesc(group);
+        Optional<GroupEntity> group = groupRepository.findByGroupCode(groupId);
+        Optional<GetRecentNotice> notice = noticeRepository.findTopByGroupCodeOrderByCreateAtDesc(group.get());
 
         if (notice == null) return null;
         else return notice;

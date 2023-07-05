@@ -78,11 +78,11 @@ public class GlobalExceptionHandler {
     /*
      * HTTP 500 Exception
      */
-    @ExceptionHandler(Exception.class)
-    protected ResponseEntity<ErrorResponseDTO> handleException(final Exception e) {
-        log.error("handleException: {}", e.getMessage());
-        return ResponseEntity
-                .status(ErrorCode.INTERNAL_SERVER_ERROR.getStatus().value())
-                .body(new ErrorResponseDTO(ErrorCode.INTERNAL_SERVER_ERROR));
-    }
+//    @ExceptionHandler(Exception.class)
+//    protected ResponseEntity<ErrorResponseDTO> handleException(final Exception e) {
+//        log.error("handleException: {}", e.getMessage());
+//        return ResponseEntity
+//                .status(ErrorCode.INTERNAL_SERVER_ERROR.getStatus().value())
+//                .body(new ErrorResponseDTO(ErrorCode.INTERNAL_SERVER_ERROR));
+//    }
 }

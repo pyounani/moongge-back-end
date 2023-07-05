@@ -1,4 +1,4 @@
-package com.example.narshaback.base.dto.profile;
+package com.example.narshaback.base.dto.user;
 
 import lombok.*;
 

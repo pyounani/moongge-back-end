@@ -8,5 +8,5 @@ import java.util.List;
 public interface CommentService {
     Integer createComment(CreateCommentDTO createCommentDTO);
 
-    List<GetComment> getCommentList(Integer postId, Integer userGroupId);
+    List<GetComment> getCommentList(Integer postId, String groupCode);
 }

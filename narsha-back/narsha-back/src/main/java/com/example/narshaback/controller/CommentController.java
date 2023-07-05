@@ -34,8 +34,8 @@ public class CommentController {
     }
 
     @GetMapping("/list")
-    public List<GetComment> getCommentList(@RequestParam(value = "postId") Integer postId, @RequestParam(value="userGroupId")Integer userGroupId){
-        List<GetComment> commentList = commentService.getCommentList(postId, userGroupId);
+    public List<GetComment> getCommentList(@RequestParam(value = "postId") Integer postId, @RequestParam(value="groupCode")String groupCode){
+        List<GetComment> commentList = commentService.getCommentList(postId, groupCode);
 
         return commentList;
     }

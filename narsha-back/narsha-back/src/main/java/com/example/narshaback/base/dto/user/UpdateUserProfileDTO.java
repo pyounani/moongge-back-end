@@ -1,4 +1,4 @@
-package com.example.narshaback.base.dto.profile;
+package com.example.narshaback.base.dto.user;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class UpdateUserProfileDTO {
 
-    private Integer userGroupId; // 유저-그룹 id
+    private String userId; // 유저 id
 
     private String profileImage; // 프로필 이미지
 

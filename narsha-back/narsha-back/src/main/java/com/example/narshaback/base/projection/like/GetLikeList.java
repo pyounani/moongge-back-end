@@ -1,13 +1,12 @@
 package com.example.narshaback.base.projection.like;
 
-import com.example.narshaback.entity.UserEntity;
-import com.example.narshaback.entity.User_Group;
+import com.example.narshaback.entity.GroupEntity;
 
 public interface GetLikeList {
-    User_Group getUserGroupId();
+    GroupEntity getGroupCode();
 
-    interface UserEntity{
-        String getUserId();
+    interface GroupEntity{
         String getGroupCode();
+        String createAt();
     }
 }

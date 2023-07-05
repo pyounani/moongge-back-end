@@ -23,7 +23,7 @@ public class LikeEntity {
     private LocalDateTime createAt; // 생성일
 
     @ManyToOne
-    private User_Group userGroupId; // 좋아요를 누른 유저-그룹
+    private GroupEntity groupCode; // 좋아요를 누른 유저의 그룹
 
     @ManyToOne
     private PostEntity postId; // 포스트 id

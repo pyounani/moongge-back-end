@@ -2,12 +2,12 @@ package com.example.narshaback.service;
 
 import com.example.narshaback.base.dto.comment.CreateCommentDTO;
 import com.example.narshaback.entity.CommentEntity;
+import com.example.narshaback.entity.GroupEntity;
 import com.example.narshaback.entity.PostEntity;
-import com.example.narshaback.entity.User_Group;
 import com.example.narshaback.base.projection.comment.GetComment;
 import com.example.narshaback.repository.CommentRepository;
+import com.example.narshaback.repository.GroupRepository;
 import com.example.narshaback.repository.PostRepository;
-import com.example.narshaback.repository.UserGroupRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -22,16 +22,17 @@ public class CommentServiceImpl implements CommentService {
 
     private final PostRepository postRepository;
 
-    private final UserGroupRepository userGroupRepository;
+    private final GroupRepository groupRepository;
+
 
     @Override
     public Integer createComment(CreateCommentDTO createCommentDTO) {
-        Optional<User_Group> user_group = userGroupRepository.findByUserGroupId(createCommentDTO.getUserGroupId());
-        Optional<PostEntity> findPost = postRepository.findByPostIdAndUserGroupId(createCommentDTO.getPostId(), user_group.get());
+        Optional<GroupEntity> group = groupRepository.findByGroupCode(createCommentDTO.getGroupCode());
+        PostEntity findPost = postRepository.findByPostIdAndGroupCode(createCommentDTO.getPostId(), group.get()).orElse(null);
 
         CommentEntity comment = CommentEntity.builder()
-                .postId(findPost.get())
-                .userGroupId(user_group.get())
+                .postId(findPost)
+                .groupCode(group.get())
                 .content(createCommentDTO.getContent())
                 .build();
 
@@ -39,11 +40,11 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public List<GetComment> getCommentList(Integer postId, Integer userGroupId) {
-        Optional<User_Group> user_group = userGroupRepository.findByUserGroupId(userGroupId);
-        Optional<PostEntity> findPost = postRepository.findByPostIdAndUserGroupId(postId, user_group.get());
+    public List<GetComment> getCommentList(Integer postId, String groupCode) {
+        Optional<GroupEntity> group = groupRepository.findByGroupCode(groupCode);
+        Optional<PostEntity> findPost = postRepository.findByPostIdAndGroupCode(postId, group.get());
 
-        List<GetComment> commentList = commentRepository.findByPostIdAndUserGroupId(findPost.get(), user_group.get());
+        List<GetComment> commentList = commentRepository.findByPostIdAndGroupCode(findPost.get(), group.get());
 
         return commentList;
     }
