@@ -44,15 +44,12 @@ public class UserController {
     }
 
     @GetMapping("/check-userId")
-    public String checkUserId(@RequestParam(value="userId")String userId){
+    public ResponseEntity<ResponseDTO> checkUserId(@RequestParam(value="userId")String userId){
         Boolean res = userService.checkUserId(userId);
-        JsonObject obj =  new JsonObject();
-        obj.addProperty("res", res);
 
-        if (res) obj.addProperty("message", "사용 가능한 아이디입니다.");
-        else obj.addProperty("message", "이미 존재하는 아이디입니다.");
-
-        return obj.toString();
+        return ResponseEntity
+                .status(ResponseCode.SUCCESS_LOGIN.getStatus().value())
+                .body(new ResponseDTO(ResponseCode.SUCCESS_UNIQUE_ID, res));
     }
 
 }

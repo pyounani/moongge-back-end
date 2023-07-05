@@ -1,6 +1,9 @@
 package com.example.narshaback.service;
 
+import com.example.narshaback.base.code.ErrorCode;
 import com.example.narshaback.base.dto.group.JoinGroupDTO;
+import com.example.narshaback.base.exception.GroupNotFoundException;
+import com.example.narshaback.base.exception.LoginPasswordNotMatchException;
 import com.example.narshaback.entity.GroupEntity;
 import com.example.narshaback.entity.ProfileEntity;
 import com.example.narshaback.entity.UserEntity;
@@ -29,20 +32,26 @@ public class UserGroupServiceImpl implements UserGroupService{
 
     @Override
     public Boolean joinUser(JoinGroupDTO joinGroupDTO) {
-        // 해당 그룹이 없을 때 return null
-        if (groupRepository.findByGroupCode(joinGroupDTO.getGroupCode()) == null) return false;
+        if (groupRepository.findByGroupCode(joinGroupDTO.getGroupCode()) == null)
+            throw new LoginPasswordNotMatchException(ErrorCode.GROUPCODE_NOT_FOUND);
+
+        // create group
         User_Group user_group = User_Group.builder()
                 .userId(userRepository.findByUserId(joinGroupDTO.getUserId())) // 유저로 넣어주기
                 .groupCode(groupRepository.findByGroupCode(joinGroupDTO.getGroupCode())) // // 그룹으로 넣어주기
                 .build();
-        userGroupRepository.save(user_group);
+        User_Group create = userGroupRepository.save(user_group);
 
-        // profile 생성
+        if(create == null)
+            throw new GroupNotFoundException(ErrorCode.GROUP_NOT_FOUND);
+
+        // badgeList 생성
         List<Boolean> newBadgeList = new ArrayList<>(10);
         for (int i = 0; i < 10; i++) {
             newBadgeList.add(false);
         }
 
+        // profile 생성
         ProfileEntity profile = ProfileEntity.builder()
                 .userGroupId(user_group)
                 .badgeList(newBadgeList.toString())

@@ -19,6 +19,8 @@ public enum ErrorCode {
      */
     USERID_NOT_FOUND(HttpStatus.NOT_FOUND, "아이디가 존재하지 않습니다."),
     PASSWORD_NOT_MATCH(HttpStatus.NOT_FOUND, "비밀번호가 올바르지 않습니다."),
+    GROUPCODE_NOT_FOUND(HttpStatus.NOT_FOUND, "그룹 코드에 해당하는 그룹을 찾을 수 없습니다."),
+    GROUP_NOT_FOUND(HttpStatus.NOT_FOUND, "그룹이 생성되지 않았습니다."),
     POSTS_NOT_FOUND(HttpStatus.NOT_FOUND, "게시글 정보를 찾을 수 없습니다."),
     COMMENTS_NOT_FOUND(HttpStatus.NOT_FOUND, "댓글 정보를 찾을 수 없습니다."),
 
