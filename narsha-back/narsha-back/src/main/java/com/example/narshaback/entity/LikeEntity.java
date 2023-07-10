@@ -21,6 +21,9 @@ public class LikeEntity {
     @ManyToOne
     private UserEntity likeUser; // 유저 id
 
+    @OneToOne
+    private UserEntity userId;
+
     @ManyToOne
     private PostEntity likePost; // 포스트 id
 }
