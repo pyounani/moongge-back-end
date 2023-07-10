@@ -1,5 +1,6 @@
 package com.example.narshaback.controller;
 
+import com.example.narshaback.base.code.ErrorCode;
 import com.example.narshaback.base.code.ResponseCode;
 import com.example.narshaback.base.dto.group.JoinGroupDTO;
 import com.example.narshaback.base.dto.user.UpdateUserProfileDTO;
@@ -7,6 +8,7 @@ import com.example.narshaback.base.dto.response.ResponseDTO;
 import com.example.narshaback.base.dto.s3.S3FileDTO;
 import com.example.narshaback.base.dto.user.UserLoginDTO;
 import com.example.narshaback.base.dto.user.UserRegisterDTO;
+import com.example.narshaback.base.exception.ProfileNotFoundException;
 import com.example.narshaback.entity.UserEntity;
 import com.example.narshaback.service.AmazonS3Service;
 import com.example.narshaback.service.UserService;
@@ -73,12 +75,8 @@ public class UserController {
 
 
     @PutMapping("/update")
-    public String updateProfile(@RequestParam(value="image", required = false) MultipartFile profileImage,
+    public ResponseEntity<ResponseDTO> updateProfile(@RequestParam(value="image", required = false) MultipartFile profileImage,
                                 @RequestParam(value="content") String updateUserProfileDTO) throws JsonProcessingException {
-
-        // res json object
-        JsonObject obj = new JsonObject();
-
         // mapper
         ObjectMapper mapper = new ObjectMapper();
         UpdateUserProfileDTO mapperUpdateUserProfileDTO = mapper.readValue(updateUserProfileDTO, UpdateUserProfileDTO.class);
@@ -94,17 +92,11 @@ public class UserController {
         }
 
         // 정보 업데이트
-        UserEntity profile = userService.updateProfile(mapperUpdateUserProfileDTO);
+        UserEntity res = userService.updateProfile(mapperUpdateUserProfileDTO);
 
-        if (profile == null) {
-            obj.addProperty("id", "null");
-            obj.addProperty("message", "프로필 수정 실패");
-        } else {
-            obj.addProperty("id", profile.getUserId());
-            obj.addProperty("message", "프로필 수정 성공!");
-        }
-
-        return obj.toString();
+        return ResponseEntity
+                .status(ResponseCode.SUCCESS_UPDATE_PROFILE.getStatus().value())
+                .body(new ResponseDTO(ResponseCode.SUCCESS_UPDATE_PROFILE, res));
     }
 
 
@@ -125,6 +117,7 @@ public class UserController {
     @PutMapping("/check-achieve")
     public String updateCheckAchieve(@RequestParam(value="userId")String userId, @RequestParam(value="achieveNum")Integer achNum){
         String res = userService.updateBadgeList(userId, achNum);
+
         return res;
     }
 

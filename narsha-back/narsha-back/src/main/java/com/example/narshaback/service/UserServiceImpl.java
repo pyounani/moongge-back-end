@@ -5,13 +5,10 @@ import com.example.narshaback.base.dto.user.UpdateUserProfileDTO;
 import com.example.narshaback.base.dto.user.UserLoginDTO;
 import com.example.narshaback.base.dto.user.UserRegisterDTO;
 import com.example.narshaback.base.dto.user.UserTypeReturnDTO;
-import com.example.narshaback.base.exception.GroupNotFoundException;
+import com.example.narshaback.base.exception.*;
 import com.example.narshaback.entity.GroupEntity;
 import com.example.narshaback.entity.UserEntity;
 import com.example.narshaback.base.code.ErrorCode;
-import com.example.narshaback.base.exception.LoginIdNotFoundException;
-import com.example.narshaback.base.exception.LoginPasswordNotMatchException;
-import com.example.narshaback.base.exception.RegisterException;
 import com.example.narshaback.repository.GroupRepository;
 import com.example.narshaback.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -97,11 +94,16 @@ public class UserServiceImpl implements UserService {
     }
     //
 
+    //프로필 수정(프로필 최초 설정)
     @Override
     public UserEntity updateProfile(UpdateUserProfileDTO updateUserProfileDTO) {
 
         // 특정 프로필 객체 업데이트
         Optional<UserEntity> profile = userRepository.findByUserId(updateUserProfileDTO.getUserId());
+
+        if(!profile.isPresent())
+            throw new ProfileNotFoundException(ErrorCode.PROFILE_NOT_FOUND);
+
         profile.get().setProfileImage(updateUserProfileDTO.getProfileImage());
         profile.get().setBirth(updateUserProfileDTO.getBirth());
         profile.get().setIntro(updateUserProfileDTO.getIntro());
@@ -110,24 +112,40 @@ public class UserServiceImpl implements UserService {
         return userRepository.save(profile.get());
     }
 
+    // 프로필 가져오기
     @Override
     public Optional<UserEntity> getProfile(String userId) {
         Optional<UserEntity> profile = userRepository.findById(userId);
 
+        // 프로필이 존재하지 않는 경우(잘못된 userId 입력)
+        if(!profile.isPresent())
+            throw new ProfileNotFoundException(ErrorCode.PROFILE_NOT_FOUND);
+
         return profile;
     }
 
+    //뱃지 리스트 가져오기
     @Override
     public String getBadgeList(String userId) {
         Optional<UserEntity> profile = userRepository.findByUserId(userId);
+
+        // 뱃지리스트(프로필)가 존재하지 않는 경우(잘못된 userId 입력)
+        if(!profile.isPresent())
+            throw new ProfileNotFoundException(ErrorCode.PROFILE_NOT_FOUND);
+
         String badgeList = profile.get().getBadgeList();
 
         return badgeList;
     }
 
+    //뱃지 추가
     @Override
     public String updateBadgeList(String userId, Integer achNum) {
         Optional<UserEntity> profile = userRepository.findByUserId(userId);
+
+        if(!profile.isPresent())
+            throw new ProfileNotFoundException(ErrorCode.PROFILE_NOT_FOUND);
+
         UserEntity userProfile = profile.get();
 
         // parse object

@@ -6,7 +6,6 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public class UserNotFoundException extends RuntimeException{
-
+public class ProfileNotFoundException extends RuntimeException {
     private final ErrorCode errorCode;
 }
