@@ -4,7 +4,9 @@ import com.example.narshaback.base.code.ErrorCode;
 import com.example.narshaback.base.dto.group.CreateGroupDTO;
 import com.example.narshaback.base.dto.group.JoinGroupDTO;
 import com.example.narshaback.base.exception.GroupNotFoundException;
+import com.example.narshaback.base.exception.LoginIdNotFoundException;
 import com.example.narshaback.base.exception.LoginPasswordNotMatchException;
+import com.example.narshaback.base.exception.RegisterException;
 import com.example.narshaback.base.projection.user.GetUserInGroup;
 import com.example.narshaback.base.projection.user_group.GetJoinGroupList;
 import com.example.narshaback.entity.GroupEntity;
@@ -12,8 +14,10 @@ import com.example.narshaback.entity.UserEntity;
 import com.example.narshaback.repository.GroupRepository;
 import com.example.narshaback.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.apache.tomcat.util.json.ParseException;
 import org.springframework.stereotype.Service;
 
+import javax.security.auth.login.LoginException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -56,10 +60,14 @@ public class GroupServiceImpl implements GroupService {
         }
 
         Optional<UserEntity> user = userRepository.findByUserId(createGroupDTO.getUserId());
-        user.get().setBadgeList(newBadgeList.toString());
-        user.get().setGroupCode(group);
+        if (!user.isPresent()){
+            throw new LoginIdNotFoundException(ErrorCode.USERID_NOT_FOUND);
+        } else {
+            user.get().setBadgeList(newBadgeList.toString());
+            user.get().setGroupCode(group);
 
-        return userRepository.save(user.get());
+            return userRepository.save(user.get());
+        }
     }
 
     // 랜덤 코드 생성
@@ -79,10 +87,22 @@ public class GroupServiceImpl implements GroupService {
 
     @Override
     public String getUserGroupCode(String userId) {
-        String group = userRepository.findByUserId(userId).get().getGroupCode().getGroupCode();
-        Optional<GroupEntity> groupCode = groupRepository.findByGroupCode(group);
 
-        return groupCode.get().getGroupCode();
+        Optional<UserEntity> user = userRepository.findByUserId(userId);
+
+        if(!user.isPresent()){
+            throw new LoginIdNotFoundException(ErrorCode.USERID_NOT_FOUND);
+        }
+
+        try{
+            String group = userRepository.findByUserId(userId).get().getGroupCode().getGroupCode();
+            Optional<GroupEntity> groupCode = groupRepository.findByGroupCode(group);
+            return groupCode.get().getGroupCode();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+
     }
 }
 

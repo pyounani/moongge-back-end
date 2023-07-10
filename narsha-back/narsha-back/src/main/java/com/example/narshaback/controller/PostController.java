@@ -1,5 +1,7 @@
 package com.example.narshaback.controller;
 
+import com.example.narshaback.base.code.ResponseCode;
+import com.example.narshaback.base.dto.response.ResponseDTO;
 import com.example.narshaback.base.dto.s3.S3FileDTO;
 import com.example.narshaback.base.dto.post.UploadPostDTO;
 import com.example.narshaback.base.projection.post.GetPostDetail;
@@ -29,12 +31,13 @@ public class PostController {
     private final AmazonS3Service amazonS3Service;
 
     @PostMapping("/upload")
-    public String uploadPost(@RequestParam(value="fileType") String fileType, @RequestPart("images") List<MultipartFile> multipartFiles,
-                             @RequestParam(value="info")String uploadPostDTO) throws JsonProcessingException {
+    public ResponseEntity<ResponseDTO> uploadPost(@RequestParam(value="fileType") String fileType, @RequestPart("images") List<MultipartFile> multipartFiles,
+                                                  @RequestParam(value="info")String uploadPostDTO) throws JsonProcessingException {
 
         // mapper
         ObjectMapper mapper = new ObjectMapper();
         UploadPostDTO mapperUploadPostDTO = mapper.readValue(uploadPostDTO, UploadPostDTO.class);
+
 
         // S3에 이미지 저장
         List<S3FileDTO> uploadFiles = amazonS3Service.uploadFiles(fileType, multipartFiles);
@@ -51,33 +54,46 @@ public class PostController {
 
         // 포스팅 내용 + 이미지 배열 저장
         Integer res = postService.uploadPost(mapperUploadPostDTO);
-        JsonObject obj = new JsonObject();
+//        JsonObject obj = new JsonObject();
+//
+//        obj.addProperty("postId", res);
+//
+//        // 저장 여부 확인
+//        if (res == null) {
+//            obj.addProperty("success", false);
+//            obj.addProperty("message", "포스트 업로드 실패");
+//        } else{
+//            obj.addProperty("success", true);
+//            obj.addProperty("success", "포스트 업로드 완료!");
+//        }
+//
+//        return obj.toString();
 
-        obj.addProperty("postId", res);
-        // 저장 여부 확인
-        if (res == null) {
-            obj.addProperty("success", false);
-            obj.addProperty("message", "포스트 업로드 실패");
-        } else{
-            obj.addProperty("success", true);
-            obj.addProperty("success", "포스트 업로드 완료!");
-        }
-
-        return obj.toString();
+        return ResponseEntity
+                .status(ResponseCode.SUCCESS_UPLOAD_POST.getStatus().value())
+                .body(new ResponseDTO(ResponseCode.SUCCESS_UPLOAD_POST, res));
     }
 
     @GetMapping("/user-list")
-    public List<GetUserPost> getUserPostList(@RequestParam(value = "groupCode") String groupCode) {
+    public ResponseEntity<ResponseDTO> getUserPostList(@RequestParam(value = "groupCode") String groupCode) {
+
         List<GetUserPost> res = postService.getUserPost(groupCode);
 
-        return res;
+        return ResponseEntity
+                .status(ResponseCode.SUCCESS_GET_POST_LIST.getStatus().value())
+                .body(new ResponseDTO(ResponseCode.SUCCESS_GET_POST_LIST, res));
     }
 
     @GetMapping("/detail")
-    public ResponseEntity<GetPostDetail> getPost(@RequestParam(value = "postId")Integer postId,
+    public ResponseEntity<ResponseDTO> getPost(@RequestParam(value = "postId")Integer postId,
                                                  @RequestParam(value = "groupCode")String groupCode,
                                                  @RequestParam(value = "userId")String userId) {
         GetPostDetail res =  postService.getPostDetail(postId, groupCode, userId);
-        return new ResponseEntity<>(res, HttpStatus.OK);
+
+//        return new ResponseEntity<>(res, HttpStatus.OK);
+
+        return ResponseEntity
+                .status(ResponseCode.SUCCESS_DETAIL_POST.getStatus().value())
+                .body(new ResponseDTO(ResponseCode.SUCCESS_DETAIL_POST, res));
     }
 }
