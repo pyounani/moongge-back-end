@@ -1,6 +1,11 @@
 package com.example.narshaback.service;
 
+import com.example.narshaback.base.code.ErrorCode;
 import com.example.narshaback.base.dto.post.UploadPostDTO;
+import com.example.narshaback.base.exception.GroupNotFoundException;
+import com.example.narshaback.base.exception.LoginIdNotFoundException;
+import com.example.narshaback.base.exception.PostNotFoundException;
+import com.example.narshaback.base.exception.RegisterException;
 import com.example.narshaback.entity.GroupEntity;
 import com.example.narshaback.entity.PostEntity;
 import com.example.narshaback.entity.UserEntity;
@@ -30,19 +35,33 @@ public class PostServiceImpl implements PostService{
         // 해당 유저-그룹 찾기
         Optional<GroupEntity> group = groupRepository.findByGroupCode(uploadPostDTO.getGroupCode());
 
-        PostEntity post = PostEntity.builder()
-                .content(uploadPostDTO.getContent())
-                .imageArray(uploadPostDTO.getImageArray())
-                .groupCode(group.get())
-                .build();
-        PostEntity uploadPost = postRepository.save(post);
-        if (uploadPost == null) return null;
-        return uploadPost.getPostId();
+        Optional<UserEntity> user = userRepository.findByUserId(uploadPostDTO.getWriter());
+
+        if(!user.isPresent()){
+            throw new LoginIdNotFoundException(ErrorCode.USERID_NOT_FOUND);
+        }
+
+        if(!group.isPresent()){
+            throw new GroupNotFoundException(ErrorCode.GROUPCODE_NOT_FOUND);
+        } else {
+            PostEntity post = PostEntity.builder()
+                    .content(uploadPostDTO.getContent())
+                    .imageArray(uploadPostDTO.getImageArray())
+                    .groupCode(group.get())
+                    .build();
+            PostEntity uploadPost = postRepository.save(post);
+            if (uploadPost == null) return null;
+            return uploadPost.getPostId();
+        }
     }
 
     @Override
     public List<GetUserPost> getUserPost(String groupCode) {
         Optional<GroupEntity> user_group = groupRepository.findByGroupCode(groupCode);
+        if(!user_group.isPresent()){
+            throw new GroupNotFoundException(ErrorCode.GROUPCODE_NOT_FOUND);
+        }
+
         List<GetUserPost> postList = postRepository.findByGroupCode(user_group.get());
 
         return postList;
@@ -51,8 +70,24 @@ public class PostServiceImpl implements PostService{
     @Override
     public GetPostDetail getPostDetail(Integer postId, String groupCode, String userId) {
         Optional<GroupEntity> group = groupRepository.findByGroupCode(groupCode);
+
+        if(!group.isPresent()){
+            throw new GroupNotFoundException(ErrorCode.GROUPCODE_NOT_FOUND);
+        }
+
         Optional<UserEntity> user = userRepository.findByUserId(userId);
+Q
+
+        if(!user.isPresent()){
+            throw new LoginIdNotFoundException(ErrorCode.USERID_NOT_FOUND);
+        }
+
         Optional<PostEntity> post = postRepository.findByPostIdAndGroupCode(postId, group.get());
+
+        if(!post.isPresent()){
+            throw new PostNotFoundException(ErrorCode.POSTS_NOT_FOUND);
+        }
+
         System.out.println(post);
         if(post.isPresent()) {
 

@@ -15,6 +15,22 @@ public enum ResponseCode {
 
     SUCCESS_JOIN_GROUP(HttpStatus.OK, "그룹에 가입되었습니다."),
 
+    SUCCESS_CREATE_GROUP(HttpStatus.OK, "그룹 생성 성공"),
+
+    SUCCESS_GET_GROUP_CODE(HttpStatus.OK,"그룹 코드 가져오기 성공"),
+
+    SUCCESS_UPLOAD_POST(HttpStatus.OK, "포스트 업로드 완료!"),
+
+    SUCCESS_GET_POST_LIST(HttpStatus.OK,"사용자 게시글 목록 불러오기 성공"),
+
+    SUCCESS_DETAIL_POST(HttpStatus.OK, "포스트 상세 불러오기 성공"),
+
+
+
+
+
+
+
 
     ;
 

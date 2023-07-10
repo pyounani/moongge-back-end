@@ -23,21 +23,29 @@ public class GroupController {
     private final UserService userService;
 
     @PostMapping("/create")
-    public String createGroup(@RequestBody CreateGroupDTO createGroupDTO){
+    public ResponseEntity<ResponseDTO> createGroup(@RequestBody CreateGroupDTO createGroupDTO){
         UserEntity res = groupService.createGroup(createGroupDTO);
-        JsonObject obj = new JsonObject();
-        obj.addProperty("user-groupId", res.toString());
-        if (res == null) obj.addProperty("message", "그룹 생성 실패");
-        else obj.addProperty("message", "그룹 생성 성공");
 
-        return obj.toString();
+//        JsonObject obj = new JsonObject();
+//        obj.addProperty("user-groupId", res.toString());
+//        if (res == null) obj.addProperty("message", "그룹 생성 실패");
+//        else obj.addProperty("message", "그룹 생성 성공");
+//
+//        return obj.toString();
+
+
+        return ResponseEntity
+                .status(ResponseCode.SUCCESS_CREATE_GROUP.getStatus().value())
+                .body(new ResponseDTO(ResponseCode.SUCCESS_CREATE_GROUP, res.toString()));
     }
 
     @GetMapping("/group-code")
-    public String getUserGroupCode(@RequestParam(value = "userId")String userId){
+    public ResponseEntity<ResponseDTO> getUserGroupCode(@RequestParam(value = "userId")String userId){
         String res = groupService.getUserGroupCode(userId);
 
-        return res;
+        return ResponseEntity
+                .status(ResponseCode.SUCCESS_GET_GROUP_CODE.getStatus().value())
+                .body(new ResponseDTO(ResponseCode.SUCCESS_GET_GROUP_CODE, res));
     }
 
 }

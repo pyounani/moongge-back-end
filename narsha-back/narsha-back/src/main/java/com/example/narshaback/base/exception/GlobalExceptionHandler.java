@@ -44,6 +44,7 @@ public class GlobalExceptionHandler {
                 .body(new ErrorResponseDTO(ErrorCode.PASSWORD_NOT_MATCH));
     }
 
+
     /* UserGroup */
 
     // 그룹: 그룹 코드에 해당하는 그룹이 존재하지 않을 때
@@ -73,6 +74,15 @@ public class GlobalExceptionHandler {
         return ResponseEntity
                 .status(ErrorCode.METHOD_NOT_ALLOWED.getStatus().value())
                 .body(new ErrorResponseDTO(ErrorCode.METHOD_NOT_ALLOWED));
+    }
+
+    /* Post */
+    @ExceptionHandler(PostNotFoundException.class)
+    protected ResponseEntity<ErrorResponseDTO> handlePostNotFoundException(final PostNotFoundException e) {
+        log.error("PostNotFoundException : {}", e.getMessage());
+        return ResponseEntity
+                .status(ErrorCode.POSTS_NOT_FOUND.getStatus().value())
+                .body(new ErrorResponseDTO(ErrorCode.POSTS_NOT_FOUND));
     }
 
     /*
