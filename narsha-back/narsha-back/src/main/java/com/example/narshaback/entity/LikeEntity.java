@@ -25,6 +25,9 @@ public class LikeEntity {
     @ManyToOne
     private GroupEntity groupCode; // 좋아요를 누른 유저의 그룹
 
+    @OneToOne
+    private UserEntity userId;
+
     @ManyToOne
     private PostEntity postId; // 포스트 id
 }

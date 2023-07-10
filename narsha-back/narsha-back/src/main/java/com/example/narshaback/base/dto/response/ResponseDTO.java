@@ -1,5 +1,4 @@
 package com.example.narshaback.base.dto.response;
-
 import com.example.narshaback.base.code.ResponseCode;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -19,4 +18,5 @@ public class ResponseDTO<T> {
         this.message = responseCode.getMessage();
         this.data = data;
     }
+
 }

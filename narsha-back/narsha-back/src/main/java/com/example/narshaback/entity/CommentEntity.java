@@ -20,7 +20,10 @@ public class CommentEntity {
     private Integer commentId; // 댓글 id
 
     @ManyToOne
-    private GroupEntity groupCode; // 그룹 id
+    private GroupEntity groupCode;
+
+    @ManyToOne
+    private UserEntity userId; // 유저 id
 
     @Column(columnDefinition = "TEXT")
     private String content; // 댓글 내용

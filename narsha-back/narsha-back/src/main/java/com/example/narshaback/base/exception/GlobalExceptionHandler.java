@@ -64,6 +64,33 @@ public class GlobalExceptionHandler {
                 .body(new ErrorResponseDTO(ErrorCode.GROUP_NOT_FOUND));
     }
 
+    // 포스트: 포스트 아이디에 해당하는 포스트가 존재하지 않을 때
+    @ExceptionHandler(PostNotFoundException.class)
+    protected ResponseEntity<ErrorResponseDTO> hanglePostNotFoundException(final PostNotFoundException e) {
+        log.error("PostNotFoundException : {}", e.getMessage());
+        return ResponseEntity
+                .status(ErrorCode.POSTS_NOT_FOUND.getStatus().value())
+                .body(new ErrorResponseDTO(ErrorCode.POSTS_NOT_FOUND));
+    }
+
+    // 사용자: 댓글 불러올 때 사용자가 존재하지 않을 때
+    @ExceptionHandler(UserNotFoundException.class)
+    protected ResponseEntity<ErrorResponseDTO> handleUserNotFoundException(final UserNotFoundException e) {
+        log.error("UserNotFoundException : {}", e.getMessage());
+        return ResponseEntity
+                .status(ErrorCode.USERID_NOT_FOUND.getStatus().value())
+                .body(new ErrorResponseDTO(ErrorCode.USERID_NOT_FOUND));
+    }
+
+    // 댓글: 댓글이 비어있을 때
+    @ExceptionHandler(EmptyCommentContentException.class)
+    protected ResponseEntity<ErrorResponseDTO> handleEmptyCommentContentException(final EmptyCommentContentException e) {
+        log.error("EmptyCommentContentException : {}", e.getMessage());
+        return ResponseEntity
+                .status(ErrorCode.EMPTY_COMMENT_CONTENT.getStatus().value())
+                .body(new ErrorResponseDTO(ErrorCode.EMPTY_COMMENT_CONTENT));
+    }
+
     /*
      * HTTP 405 Exception
      */

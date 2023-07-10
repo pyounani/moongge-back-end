@@ -9,5 +9,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface LikeRepository extends JpaRepository<LikeEntity, Integer> {
+
     List<GetLikeList> findByPostIdAndGroupCode(PostEntity postId, GroupEntity groupCode);
+
+    List<GetLikeList> findByPostId(PostEntity postId);
+
 }

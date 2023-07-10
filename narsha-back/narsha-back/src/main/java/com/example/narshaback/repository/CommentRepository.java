@@ -10,4 +10,7 @@ import java.util.List;
 
 public interface CommentRepository extends JpaRepository<CommentEntity, Integer> {
     List<GetComment> findByPostIdAndGroupCode(PostEntity postId, GroupEntity groupCode);
+
+    List<GetComment> findByPostId(PostEntity postId);
+
 }
