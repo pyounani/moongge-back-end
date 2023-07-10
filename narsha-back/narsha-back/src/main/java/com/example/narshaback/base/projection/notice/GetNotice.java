@@ -16,7 +16,7 @@ public interface GetNotice {
 
     interface UserEntity{
         String getUserId();
-        String getName();
+        String getUserName();
     }
 
 }

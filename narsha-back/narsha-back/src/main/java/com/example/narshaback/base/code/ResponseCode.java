@@ -15,6 +15,10 @@ public enum ResponseCode {
 
     SUCCESS_JOIN_GROUP(HttpStatus.OK, "그룹에 가입되었습니다."),
 
+    SUCCESS_CREATE_NOTICE(HttpStatus.OK, "공지 작성에 성공했습니다."),
+
+    SUCCESS_UPDATE_PROFILE(HttpStatus.OK, "프로필 수정에 성공했습니다."),
+
 
     ;
 

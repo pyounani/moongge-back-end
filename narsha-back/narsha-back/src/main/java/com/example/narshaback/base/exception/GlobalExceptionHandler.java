@@ -75,6 +75,31 @@ public class GlobalExceptionHandler {
                 .body(new ErrorResponseDTO(ErrorCode.METHOD_NOT_ALLOWED));
     }
 
+    //프로필
+    @ExceptionHandler(ProfileNotFoundException.class)
+    protected ResponseEntity<ErrorResponseDTO> handleProfileNotFoundException(final ProfileNotFoundException e) {
+        log.error("ProfileNotFoundException : { }", e.getMessage());
+        return ResponseEntity
+                .status(ErrorCode.PROFILE_NOT_FOUND.getStatus().value())
+                .body(new ErrorResponseDTO(ErrorCode.PROFILE_NOT_FOUND));
+    }
+
+    @ExceptionHandler(UserNotFoundException.class)
+    protected ResponseEntity<ErrorResponseDTO> handleUserIdNotFoundException(final UserNotFoundException e) {
+        log.error("UserNotFoundException : {}", e.getMessage());
+        return ResponseEntity
+                .status(ErrorCode.USER_NOT_FOUND.getStatus().value())
+                .body(new ErrorResponseDTO(ErrorCode.USER_NOT_FOUND));
+    }
+
+    @ExceptionHandler(NoticeNotFoundException.class)
+    protected ResponseEntity<ErrorResponseDTO>  handleNoticeNotFoundException(final NoticeNotFoundException e) {
+        log.error("NoticeNotFoundException : {}", e.getMessage());
+        return ResponseEntity
+                .status(ErrorCode.NOTICE_NOT_FOUND.getStatus().value())
+                .body(new ErrorResponseDTO(ErrorCode.NOTICE_NOT_FOUND));
+    }
+
     /*
      * HTTP 500 Exception
      */

@@ -1,12 +1,15 @@
 package com.example.narshaback.controller;
 
+import com.example.narshaback.base.code.ResponseCode;
 import com.example.narshaback.base.dto.notice.CreateNoticeDTO;
+import com.example.narshaback.base.dto.response.ResponseDTO;
 import com.example.narshaback.entity.NoticeEntity;
 import com.example.narshaback.base.projection.notice.GetNotice;
 import com.example.narshaback.base.projection.notice.GetRecentNotice;
 import com.example.narshaback.service.NoticeService;
 import com.google.gson.JsonObject;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,15 +25,12 @@ public class NoticeController {
     private final NoticeService noticeService;
 
     @PostMapping("/create")
-    public String createNotice(@RequestBody CreateNoticeDTO createNoticeDTO){
+    public ResponseEntity<ResponseDTO> createNotice(@RequestBody CreateNoticeDTO createNoticeDTO){
         Boolean res = noticeService.createNotice(createNoticeDTO);
-        JsonObject obj = new JsonObject();
-        obj.addProperty("success", res);
 
-        if (res) obj.addProperty("message", "공지 등록에 성공했습니다!");
-        else obj.addProperty("message", "해당 그룹코드는 존재하지 않습니다.");
-
-        return obj.toString();
+        return ResponseEntity
+                .status(ResponseCode.SUCCESS_CREATE_NOTICE.getStatus().value())
+                .body(new ResponseDTO(ResponseCode.SUCCESS_CREATE_NOTICE, res));
     }
 
     @GetMapping("/list")
