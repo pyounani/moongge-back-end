@@ -1,6 +1,4 @@
-package com.example.narshaback.base.projection.user_group;
-
-import com.example.narshaback.entity.GroupEntity;
+package com.example.narshaback.base.projection.group;
 
 public interface GetJoinGroupList {
     GroupEntity getGroupCode();
