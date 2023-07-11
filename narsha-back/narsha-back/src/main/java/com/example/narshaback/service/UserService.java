@@ -4,14 +4,14 @@ import com.example.narshaback.base.dto.group.JoinGroupDTO;
 import com.example.narshaback.base.dto.user.UpdateUserProfileDTO;
 import com.example.narshaback.base.dto.user.UserLoginDTO;
 import com.example.narshaback.base.dto.user.UserRegisterDTO;
-import com.example.narshaback.base.dto.user.UserTypeReturnDTO;
+import com.example.narshaback.base.projection.user.GetUserProfile;
 import com.example.narshaback.entity.UserEntity;
 
 import java.util.Optional;
 
 public interface UserService {
-    String register(UserRegisterDTO userRegisterDTO);
-    UserEntity login(UserLoginDTO userLoginDTO);
+    GetUserProfile register(UserRegisterDTO userRegisterDTO);
+    GetUserProfile login(UserLoginDTO userLoginDTO);
 
     UserEntity joinUser(JoinGroupDTO joinGroupDTO);
 

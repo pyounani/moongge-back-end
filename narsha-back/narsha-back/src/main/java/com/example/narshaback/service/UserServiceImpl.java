@@ -4,8 +4,8 @@ import com.example.narshaback.base.dto.group.JoinGroupDTO;
 import com.example.narshaback.base.dto.user.UpdateUserProfileDTO;
 import com.example.narshaback.base.dto.user.UserLoginDTO;
 import com.example.narshaback.base.dto.user.UserRegisterDTO;
-import com.example.narshaback.base.dto.user.UserTypeReturnDTO;
 import com.example.narshaback.base.exception.*;
+import com.example.narshaback.base.projection.user.GetUserProfile;
 import com.example.narshaback.entity.GroupEntity;
 import com.example.narshaback.entity.UserEntity;
 import com.example.narshaback.base.code.ErrorCode;
@@ -16,7 +16,6 @@ import org.apache.tomcat.util.json.JSONParser;
 import org.apache.tomcat.util.json.ParseException;
 import org.springframework.stereotype.Service;
 
-import javax.swing.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -31,7 +30,7 @@ public class UserServiceImpl implements UserService {
 
     // 회원가입
     @Override
-    public String register(UserRegisterDTO userRegisterDTO) {
+    public GetUserProfile register(UserRegisterDTO userRegisterDTO) {
         Optional<UserEntity> findUser = userRepository.findByUserId(userRegisterDTO.getUserId());
         if(findUser.isPresent()){ // 중복된 유저 있을 때
             throw new RegisterException(ErrorCode.DUPLICATE_ID_REQUEST);
@@ -42,13 +41,14 @@ public class UserServiceImpl implements UserService {
                     .password(userRegisterDTO.getPassword())
                     .userName(userRegisterDTO.getName())
                     .build();
-            return userRepository.save(user).getUserId();
+            UserEntity createUser = userRepository.save(user);
+            return EntityToProjectionUser(createUser);
         }
     }
 
     // 로그인
     @Override
-    public UserEntity login(UserLoginDTO userLoginDTO) {
+    public GetUserProfile login(UserLoginDTO userLoginDTO) {
         Optional<UserEntity> findUser = userRepository.findByUserId(userLoginDTO.userId);
 
         // 아이디가 존재하는지 확인
@@ -57,7 +57,9 @@ public class UserServiceImpl implements UserService {
         else if(!findUser.get().getPassword().equals(userLoginDTO.password)) throw new LoginPasswordNotMatchException(ErrorCode.PASSWORD_NOT_MATCH);
 
         // 아이디, 비밀번호가 일치
-        return findUser.get();
+        GetUserProfile userProfile = EntityToProjectionUser(findUser.get());
+
+        return userProfile;
     }
 
     @Override
@@ -165,5 +167,51 @@ public class UserServiceImpl implements UserService {
         }
 
         return userProfile.getBadgeList();
+    }
+
+    private GetUserProfile EntityToProjectionUser(UserEntity findUser){
+        GetUserProfile userProfile = new GetUserProfile() {
+            @Override
+            public String getUserId() {
+                return findUser.getUserId();
+            }
+
+            @Override
+            public GroupEntity getGroupCode() {
+                return findUser.getGroupCode();
+            }
+
+            @Override
+            public String getUserName() {
+                return findUser.getUserName();
+            }
+
+            @Override
+            public String getNikName() {
+                return  findUser.getNikname();
+            }
+
+            @Override
+            public String getProfileImage() {
+                return  findUser.getProfileImage();
+            }
+
+            @Override
+            public String getBirth() {
+                return  findUser.getBirth();
+            }
+
+            @Override
+            public String getIntro() {
+                return  findUser.getIntro();
+            }
+
+            @Override
+            public String getBadgeList() {
+                return  findUser.getBadgeList();
+            }
+        };
+
+        return userProfile;
     }
 }
