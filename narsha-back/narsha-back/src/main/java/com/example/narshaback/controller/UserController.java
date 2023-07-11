@@ -9,6 +9,7 @@ import com.example.narshaback.base.dto.s3.S3FileDTO;
 import com.example.narshaback.base.dto.user.UserLoginDTO;
 import com.example.narshaback.base.dto.user.UserRegisterDTO;
 import com.example.narshaback.base.exception.ProfileNotFoundException;
+import com.example.narshaback.base.projection.user.GetUserProfile;
 import com.example.narshaback.entity.UserEntity;
 import com.example.narshaback.service.AmazonS3Service;
 import com.example.narshaback.service.UserService;
@@ -38,7 +39,7 @@ public class UserController {
 
     @PostMapping("/register")
     public ResponseEntity<ResponseDTO> register(@RequestBody UserRegisterDTO userRegisterDTO){
-        String res = userService.register(userRegisterDTO);
+        GetUserProfile res = userService.register(userRegisterDTO);
 
         return ResponseEntity
                 .status(ResponseCode.SUCCESS_REGISTER.getStatus().value())
@@ -47,7 +48,7 @@ public class UserController {
 
     @PostMapping("/login")
     public ResponseEntity<ResponseDTO> login(@RequestBody UserLoginDTO userLoginDTO){
-        UserEntity res = userService.login(userLoginDTO);
+        GetUserProfile res = userService.login(userLoginDTO);
 
         return ResponseEntity
                 .status(ResponseCode.SUCCESS_LOGIN.getStatus().value())
