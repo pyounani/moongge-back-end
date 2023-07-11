@@ -65,15 +65,6 @@ public class GlobalExceptionHandler {
                 .body(new ErrorResponseDTO(ErrorCode.GROUP_NOT_FOUND));
     }
 
-    // 포스트: 포스트 아이디에 해당하는 포스트가 존재하지 않을 때
-    @ExceptionHandler(PostNotFoundException.class)
-    protected ResponseEntity<ErrorResponseDTO> hanglePostNotFoundException(final PostNotFoundException e) {
-        log.error("PostNotFoundException : {}", e.getMessage());
-        return ResponseEntity
-                .status(ErrorCode.POSTS_NOT_FOUND.getStatus().value())
-                .body(new ErrorResponseDTO(ErrorCode.POSTS_NOT_FOUND));
-    }
-
     // 사용자: 댓글 불러올 때 사용자가 존재하지 않을 때
     @ExceptionHandler(UserNotFoundException.class)
     protected ResponseEntity<ErrorResponseDTO> handleUserNotFoundException(final UserNotFoundException e) {
@@ -120,9 +111,9 @@ public class GlobalExceptionHandler {
                 .body(new ErrorResponseDTO(ErrorCode.PROFILE_NOT_FOUND));
     }
 
-    @ExceptionHandler(UserNotFoundException.class)
-    protected ResponseEntity<ErrorResponseDTO> handleUserIdNotFoundException(final UserNotFoundException e) {
-        log.error("UserNotFoundException : {}", e.getMessage());
+    @ExceptionHandler(UserIdNotFoundException.class)
+    protected ResponseEntity<ErrorResponseDTO> handleUserIdNotFoundException(final UserIdNotFoundException e) {
+        log.error("UserIdNotFoundException : {}", e.getMessage());
         return ResponseEntity
                 .status(ErrorCode.USER_NOT_FOUND.getStatus().value())
                 .body(new ErrorResponseDTO(ErrorCode.USER_NOT_FOUND));
