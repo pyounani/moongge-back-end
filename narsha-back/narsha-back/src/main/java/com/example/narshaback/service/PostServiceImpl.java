@@ -47,6 +47,7 @@ public class PostServiceImpl implements PostService{
             PostEntity post = PostEntity.builder()
                     .content(uploadPostDTO.getContent())
                     .imageArray(uploadPostDTO.getImageArray())
+                    .user(user.get())
                     .groupCode(group.get())
                     .build();
             PostEntity uploadPost = postRepository.save(post);
@@ -76,7 +77,7 @@ public class PostServiceImpl implements PostService{
         }
 
         Optional<UserEntity> user = userRepository.findByUserId(userId);
-Q
+
 
         if(!user.isPresent()){
             throw new LoginIdNotFoundException(ErrorCode.USERID_NOT_FOUND);

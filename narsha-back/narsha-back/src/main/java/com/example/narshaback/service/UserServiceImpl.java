@@ -4,8 +4,8 @@ import com.example.narshaback.base.dto.group.JoinGroupDTO;
 import com.example.narshaback.base.dto.user.UpdateUserProfileDTO;
 import com.example.narshaback.base.dto.user.UserLoginDTO;
 import com.example.narshaback.base.dto.user.UserRegisterDTO;
-import com.example.narshaback.base.dto.user.UserTypeReturnDTO;
 import com.example.narshaback.base.exception.GroupNotFoundException;
+import com.example.narshaback.base.projection.user.GetFriendsList;
 import com.example.narshaback.entity.GroupEntity;
 import com.example.narshaback.entity.UserEntity;
 import com.example.narshaback.base.code.ErrorCode;
@@ -19,7 +19,6 @@ import org.apache.tomcat.util.json.JSONParser;
 import org.apache.tomcat.util.json.ParseException;
 import org.springframework.stereotype.Service;
 
-import javax.swing.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -147,5 +146,18 @@ public class UserServiceImpl implements UserService {
         }
 
         return userProfile.getBadgeList();
+    }
+
+    @Override
+    public List<GetFriendsList> getFriendsList(String groupCode) {
+        Optional<GroupEntity> user_group = groupRepository.findByGroupCode(groupCode);
+
+        if(!user_group.isPresent()){
+            throw new GroupNotFoundException(ErrorCode.GROUPCODE_NOT_FOUND);
+        }
+
+        List<GetFriendsList> friend = userRepository.findByGroupCode(user_group.get());
+
+        return friend;
     }
 }

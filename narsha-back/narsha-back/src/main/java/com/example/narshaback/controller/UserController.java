@@ -7,6 +7,7 @@ import com.example.narshaback.base.dto.response.ResponseDTO;
 import com.example.narshaback.base.dto.s3.S3FileDTO;
 import com.example.narshaback.base.dto.user.UserLoginDTO;
 import com.example.narshaback.base.dto.user.UserRegisterDTO;
+import com.example.narshaback.base.projection.user.GetFriendsList;
 import com.example.narshaback.entity.UserEntity;
 import com.example.narshaback.service.AmazonS3Service;
 import com.example.narshaback.service.UserService;
@@ -19,6 +20,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController // JSON 형태의 결과값 반환
@@ -126,6 +128,15 @@ public class UserController {
     public String updateCheckAchieve(@RequestParam(value="userId")String userId, @RequestParam(value="achieveNum")Integer achNum){
         String res = userService.updateBadgeList(userId, achNum);
         return res;
+    }
+
+    @GetMapping("/friends-list")
+    public ResponseEntity<ResponseDTO> getFriendsList(@RequestParam(value = "groupCode")String groupCode){
+        List<GetFriendsList> res = userService.getFriendsList(groupCode);
+
+        return ResponseEntity
+                .status(ResponseCode.SUCCESS_FRIENDS_LIST.getStatus().value())
+                .body(new ResponseDTO(ResponseCode.SUCCESS_FRIENDS_LIST, res));
     }
 
 }

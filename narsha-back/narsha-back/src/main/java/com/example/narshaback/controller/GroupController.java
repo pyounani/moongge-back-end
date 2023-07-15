@@ -13,6 +13,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+import java.util.Optional;
+
 @RestController // JSON 형태의 결과값 반환
 @Controller
 @RequiredArgsConstructor
@@ -47,5 +50,4 @@ public class GroupController {
                 .status(ResponseCode.SUCCESS_GET_GROUP_CODE.getStatus().value())
                 .body(new ResponseDTO(ResponseCode.SUCCESS_GET_GROUP_CODE, res));
     }
-
 }
