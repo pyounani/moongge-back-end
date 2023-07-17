@@ -46,7 +46,7 @@ public class PostServiceImpl implements PostService{
         } else {
             PostEntity post = PostEntity.builder()
                     .content(uploadPostDTO.getContent())
-                    .imageArray(uploadPostDTO.getImageArray())
+                    .imageArray(uploadPostDTO.getImageArray().toString())
                     .user(user.get())
                     .groupCode(group.get())
                     .build();
