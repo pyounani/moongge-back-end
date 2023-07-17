@@ -14,6 +14,7 @@ public interface GetComment {
     interface UserEntity{
         String getUserId();
 
+        String getProfileImage();
 
     }
 

@@ -24,7 +24,7 @@ public class GroupController {
 
     @PostMapping("/create")
     public ResponseEntity<ResponseDTO> createGroup(@RequestBody CreateGroupDTO createGroupDTO){
-        UserEntity res = groupService.createGroup(createGroupDTO);
+        String userId = groupService.createGroup(createGroupDTO);
 
 //        JsonObject obj = new JsonObject();
 //        obj.addProperty("user-groupId", res.toString());
@@ -36,7 +36,7 @@ public class GroupController {
 
         return ResponseEntity
                 .status(ResponseCode.SUCCESS_CREATE_GROUP.getStatus().value())
-                .body(new ResponseDTO(ResponseCode.SUCCESS_CREATE_GROUP, res.toString()));
+                .body(new ResponseDTO(ResponseCode.SUCCESS_CREATE_GROUP, userId));
     }
 
     @GetMapping("/group-code")

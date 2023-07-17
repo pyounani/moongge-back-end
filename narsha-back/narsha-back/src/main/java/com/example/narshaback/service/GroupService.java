@@ -9,6 +9,6 @@ import com.example.narshaback.entity.UserEntity;
 import java.util.List;
 
 public interface GroupService {
-    UserEntity createGroup(CreateGroupDTO createGroupDTO);
+    String createGroup(CreateGroupDTO createGroupDTO);
     String getUserGroupCode(String userId);
 }
