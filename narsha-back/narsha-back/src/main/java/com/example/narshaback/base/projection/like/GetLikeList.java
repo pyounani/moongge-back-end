@@ -10,5 +10,7 @@ public interface GetLikeList {
 
         String getUserName();
 
+        String getProfileImage();
+
     }
 }

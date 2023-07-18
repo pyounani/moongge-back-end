@@ -65,6 +65,7 @@ public class GlobalExceptionHandler {
                 .body(new ErrorResponseDTO(ErrorCode.GROUP_NOT_FOUND));
     }
 
+
     // 사용자: 댓글 불러올 때 사용자가 존재하지 않을 때
     @ExceptionHandler(UserNotFoundException.class)
     protected ResponseEntity<ErrorResponseDTO> handleUserNotFoundException(final UserNotFoundException e) {
@@ -75,6 +76,7 @@ public class GlobalExceptionHandler {
     }
 
     // 댓글: 댓글이 비어있을 때
+
     @ExceptionHandler(EmptyCommentContentException.class)
     protected ResponseEntity<ErrorResponseDTO> handleEmptyCommentContentException(final EmptyCommentContentException e) {
         log.error("EmptyCommentContentException : {}", e.getMessage());

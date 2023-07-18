@@ -23,7 +23,7 @@ public class GroupServiceImpl implements GroupService {
     private final UserRepository userRepository;
 
     @Override
-    public UserEntity createGroup(CreateGroupDTO createGroupDTO) {
+    public String createGroup(CreateGroupDTO createGroupDTO) {
         // 그룹 코드 생성
         String groupCode;
         do{
@@ -58,7 +58,7 @@ public class GroupServiceImpl implements GroupService {
             user.get().setBadgeList(newBadgeList.toString());
             user.get().setGroupCode(group);
 
-            return userRepository.save(user.get());
+            return userRepository.save(user.get()).getUserId();
         }
     }
 
