@@ -15,9 +15,17 @@ public enum ResponseCode {
 
     SUCCESS_JOIN_GROUP(HttpStatus.OK, "그룹에 가입되었습니다."),
 
+    SUCCESS_GET_USER_LIST(HttpStatus.OK, "그룹의 유저 목록을 성공적으로 가져왔습니다."),
+
     SUCCESS_CREATE_NOTICE(HttpStatus.OK, "공지 작성에 성공했습니다."),
+    SUCCESS_GET_NOTICE_LIST(HttpStatus.OK, "공지 목록을 성공적으로 가져왔습니다."),
+    SUCCESS_GET_NOTICE_DETAIL(HttpStatus.OK, "공지 상세를 성공적으로 가져왔습니다."),
+    SUCCESS_GET_NOTICE_RECENT_ONE(HttpStatus.OK, "가장 최근 공지를 성공적으로 가져왔습니다."),
 
     SUCCESS_UPDATE_PROFILE(HttpStatus.OK, "프로필 수정에 성공했습니다."),
+    SUCCESS_GET_PROFILE(HttpStatus.OK, "프로필을 성공적으로 가져왔습니다."),
+    SUCCESS_GET_BADGE_LIST(HttpStatus.OK, "뱃지 목록을 성공적으로 가져왔습니다."),
+    SUCCESS_UPDATE_BADGE_LIST(HttpStatus.OK, "뱃지 목록을 성공적으로 업데이트했습니다."),
 
 
     SUCCESS_CREATE_COMMENT(HttpStatus.OK, "댓글 작성을 성공했습니다."),
