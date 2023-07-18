@@ -23,6 +23,9 @@ public class PostEntity {
     @ManyToOne
     private GroupEntity groupCode; // group code
 
+    @ManyToOne
+    private UserEntity user; // group code
+
     @Column(nullable = false, columnDefinition = "TEXT")
     private String content; // 포스트 내용
 

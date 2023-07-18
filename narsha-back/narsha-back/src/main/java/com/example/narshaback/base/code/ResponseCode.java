@@ -12,6 +12,7 @@ public enum ResponseCode {
     SUCCESS_LOGIN(HttpStatus.OK, "로그인을 성공했습니다."),
 
     SUCCESS_UNIQUE_ID(HttpStatus.OK, "중복된 아이디가 없습니다."),
+//    SUCCESS_FRIENDS_LIST(HttpStatus.OK, "그룹 사용자 목록 가져오기 성공"),
 
     SUCCESS_JOIN_GROUP(HttpStatus.OK, "그룹에 가입되었습니다."),
 

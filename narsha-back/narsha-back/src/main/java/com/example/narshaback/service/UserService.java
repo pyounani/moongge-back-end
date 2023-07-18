@@ -8,7 +8,10 @@ import com.example.narshaback.base.projection.notice.GetNotice;
 import com.example.narshaback.base.projection.user.GetUser;
 import com.example.narshaback.base.projection.user.GetUserInGroup;
 import com.example.narshaback.base.projection.user.GetUserProfile;
+
+//import com.example.narshaback.base.dto.user.UserTypeReturnDTO;
 import com.example.narshaback.entity.UserEntity;
+import org.apache.catalina.User;
 
 import java.util.List;
 import java.util.Optional;
@@ -30,4 +33,5 @@ public interface UserService {
     String updateBadgeList(String userId, Integer achNum);
 
     List<GetUser> getStudentList(String GroupId);
+
 }
