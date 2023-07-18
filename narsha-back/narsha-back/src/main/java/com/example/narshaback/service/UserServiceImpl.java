@@ -201,6 +201,11 @@ public class UserServiceImpl implements UserService {
             }
 
             @Override
+            public String getUserType(){
+                return findUser.getUserType();
+            }
+
+            @Override
             public String getNikName() {
                 return  findUser.getNikname();
             }
