@@ -9,6 +9,8 @@ import com.example.narshaback.base.dto.s3.S3FileDTO;
 import com.example.narshaback.base.dto.user.UserLoginDTO;
 import com.example.narshaback.base.dto.user.UserRegisterDTO;
 import com.example.narshaback.base.exception.ProfileNotFoundException;
+import com.example.narshaback.base.projection.user.GetUser;
+import com.example.narshaback.base.projection.user.GetUserInGroup;
 import com.example.narshaback.base.projection.user.GetUserProfile;
 import com.example.narshaback.entity.UserEntity;
 import com.example.narshaback.service.AmazonS3Service;
@@ -22,6 +24,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController // JSON 형태의 결과값 반환
@@ -102,24 +105,45 @@ public class UserController {
 
 
     @GetMapping("/detail")
-    public Optional<UserEntity> getProfile(@RequestParam(value = "userId")String userId){
+    public ResponseEntity<ResponseDTO> getProfile(@RequestParam(value = "userId")String userId){
         Optional<UserEntity> res = userService.getProfile(userId);
 
-        return res;
+        return ResponseEntity
+                .status(ResponseCode.SUCCESS_GET_PROFILE.getStatus().value())
+                .body(new ResponseDTO(ResponseCode.SUCCESS_GET_PROFILE, res));
     }
 
     @GetMapping("/badge-list")
-    public String getBadgeList(@RequestParam(value = "userId")String userId){
+    public ResponseEntity<ResponseDTO> getBadgeList(@RequestParam(value = "userId")String userId){
         String res = userService.getBadgeList(userId);
 
-        return res;
+        return ResponseEntity
+                .status(ResponseCode.SUCCESS_GET_BADGE_LIST.getStatus().value())
+                .body(new ResponseDTO(ResponseCode.SUCCESS_GET_BADGE_LIST, res));
     }
 
     @PutMapping("/check-achieve")
-    public String updateCheckAchieve(@RequestParam(value="userId")String userId, @RequestParam(value="achieveNum")Integer achNum){
+    public ResponseEntity<ResponseDTO> updateCheckAchieve(@RequestParam(value="userId")String userId, @RequestParam(value="achieveNum")Integer achNum){
         String res = userService.updateBadgeList(userId, achNum);
 
-        return res;
+        return ResponseEntity
+                .status(ResponseCode.SUCCESS_UPDATE_BADGE_LIST.getStatus().value())
+                .body(new ResponseDTO(ResponseCode.SUCCESS_UPDATE_BADGE_LIST, res));
+    }
+
+    @GetMapping("/student-list")
+    public ResponseEntity<ResponseDTO> getStudentList(@RequestParam(value = "groupCode")String groupCode){
+        List<GetUser> res = userService.getStudentList(groupCode);
+        JsonObject obj = new JsonObject();
+
+        if(res == null) {
+            obj.addProperty("message", "유저가 없습니다.");
+            //return obj.toString();
+        }
+        return ResponseEntity
+                .status(ResponseCode.SUCCESS_GET_USER_LIST.getStatus().value())
+                .body(new ResponseDTO(ResponseCode.SUCCESS_GET_USER_LIST, res));
+
     }
 
 }

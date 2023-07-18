@@ -34,7 +34,7 @@ public class NoticeController {
     }
 
     @GetMapping("/list")
-    public List<GetNotice> getNoticeList(@RequestParam(value = "groupCode")String groupCode){
+    public ResponseEntity<ResponseDTO> getNoticeList(@RequestParam(value = "groupCode")String groupCode){
         List<GetNotice> res = noticeService.getNoticeList(groupCode);
         JsonObject obj = new JsonObject();
 
@@ -42,25 +42,31 @@ public class NoticeController {
             obj.addProperty("message", "작성한 공지가 없습니다.");
             //return obj.toString();
         }
-        return res;
+        return ResponseEntity
+                .status(ResponseCode.SUCCESS_GET_NOTICE_LIST.getStatus().value())
+                .body(new ResponseDTO(ResponseCode.SUCCESS_GET_NOTICE_LIST, res));
 
     }
 
     @GetMapping("/detail")
-    public Optional<NoticeEntity> getNoticeDetail(@RequestParam(value = "noticeId")Integer noticeId){
+    public ResponseEntity<ResponseDTO> getNoticeDetail(@RequestParam(value = "noticeId")Integer noticeId){
         Optional<NoticeEntity> res = noticeService.getNoticeDetail(noticeId);
         JsonObject obj = new JsonObject();
 
 //       if (res == null) obj.addProperty("message", "해당 공지를 찾을 수 없습니다.");
 //       else obj.addProperty("message", "해당 공지를 찾을 수 없습니다.");
 
-        return res;
+        return ResponseEntity
+                .status(ResponseCode.SUCCESS_GET_NOTICE_DETAIL.getStatus().value())
+                .body(new ResponseDTO(ResponseCode.SUCCESS_GET_NOTICE_DETAIL, res));
     }
 
     @GetMapping("/recent-one")
-    public Optional<GetRecentNotice> getRecentNoticeOne(@RequestParam(value = "groupCode")String groupCode){
+    public ResponseEntity<ResponseDTO> getRecentNoticeOne(@RequestParam(value = "groupCode")String groupCode){
         Optional<GetRecentNotice> res = noticeService.getRecentNoticeOne(groupCode);
 
-        return res;
+        return ResponseEntity
+                .status(ResponseCode.SUCCESS_GET_NOTICE_RECENT_ONE.getStatus().value())
+                .body(new ResponseDTO(ResponseCode.SUCCESS_GET_NOTICE_RECENT_ONE, res));
     }
 }
