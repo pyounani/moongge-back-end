@@ -7,11 +7,15 @@ import com.example.narshaback.base.projection.like.GetLikeList;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface LikeRepository extends JpaRepository<LikeEntity, Integer> {
 
     List<GetLikeList> findByPostIdAndGroupCode(PostEntity postId, GroupEntity groupCode);
 
     List<GetLikeList> findByPostId(PostEntity postId);
+
+
+    Optional<LikeEntity> deleteByGroupCode(GroupEntity groupCode);
 
 }

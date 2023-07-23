@@ -16,4 +16,6 @@ public interface PostRepository extends JpaRepository<PostEntity, Integer> {
 
     Optional<PostEntity> findByPostId(Integer postId);
 
+    Optional<PostEntity> deleteByGroupCode(GroupEntity groupCode);
+
 }

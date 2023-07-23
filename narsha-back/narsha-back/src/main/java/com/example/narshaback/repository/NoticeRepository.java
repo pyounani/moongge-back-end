@@ -14,4 +14,6 @@ public interface NoticeRepository extends JpaRepository<NoticeEntity ,Integer> {
     Optional<NoticeEntity> findByNoticeId(Integer NoticeId);
 
     Optional<GetRecentNotice> findTopByGroupCodeOrderByCreateAtDesc(GroupEntity GroupId);
+
+    Optional<NoticeEntity> deleteByGroupCode(GroupEntity groupCode);
 }
