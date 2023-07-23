@@ -22,7 +22,7 @@ public class LikeEntity {
     @CreatedDate
     private LocalDateTime createAt; // 생성일
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.REMOVE)
     private GroupEntity groupCode; // 좋아요를 누른 유저의 그룹
 
     @OneToOne

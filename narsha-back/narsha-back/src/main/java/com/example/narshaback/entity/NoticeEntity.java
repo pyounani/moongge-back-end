@@ -19,7 +19,7 @@ public class NoticeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer noticeId; // 공지 id
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.REMOVE)
     private GroupEntity groupCode; // 그룹 code
 
     @ManyToOne

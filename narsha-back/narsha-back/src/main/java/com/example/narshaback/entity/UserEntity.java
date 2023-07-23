@@ -15,7 +15,7 @@ public class UserEntity {
     @Column(nullable = false, length=100)
     private String userId; // 유저 id
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.REMOVE)
     private GroupEntity groupCode; // userId
 
     @Column(nullable = false, length=100)

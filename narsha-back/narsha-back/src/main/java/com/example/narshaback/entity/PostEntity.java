@@ -20,7 +20,7 @@ public class PostEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer postId; // 포스트 id
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.REMOVE)
     private GroupEntity groupCode; // group code
 
     @Column(nullable = false, columnDefinition = "TEXT")

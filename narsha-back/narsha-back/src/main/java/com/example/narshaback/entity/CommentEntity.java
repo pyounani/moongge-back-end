@@ -19,7 +19,7 @@ public class CommentEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer commentId; // 댓글 id
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.REMOVE)
     private GroupEntity groupCode;
 
     @ManyToOne
