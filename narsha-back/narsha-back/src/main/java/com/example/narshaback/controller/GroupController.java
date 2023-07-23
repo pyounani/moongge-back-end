@@ -48,4 +48,15 @@ public class GroupController {
                 .body(new ResponseDTO(ResponseCode.SUCCESS_GET_GROUP_CODE, res));
     }
 
+    @DeleteMapping("/delete")
+    public ResponseEntity<ResponseDTO> deleteGroup(@RequestParam(value = "groupCode")String groupCode){
+
+        String res = groupService.deleteGroup(groupCode);
+
+
+        return ResponseEntity
+                .status(ResponseCode.SUCCESS_DELETE_GROUP.getStatus().value())
+                .body(new ResponseDTO(ResponseCode.SUCCESS_DELETE_GROUP, res));
+    }
+
 }

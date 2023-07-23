@@ -2,10 +2,7 @@ package com.example.narshaback.service;
 
 import com.example.narshaback.base.code.ErrorCode;
 import com.example.narshaback.base.dto.like.CreateLikeDTO;
-import com.example.narshaback.base.exception.GroupCodeNotFoundException;
-import com.example.narshaback.base.exception.LikeNotFoundException;
-import com.example.narshaback.base.exception.PostNotFoundException;
-import com.example.narshaback.base.exception.UserNotFoundException;
+import com.example.narshaback.base.exception.*;
 import com.example.narshaback.entity.GroupEntity;
 import com.example.narshaback.entity.LikeEntity;
 import com.example.narshaback.entity.PostEntity;
@@ -47,8 +44,14 @@ public class LikeServiceImpl implements LikeService{
             throw new PostNotFoundException(ErrorCode.POSTS_NOT_FOUND);
         }
 
+        Optional<GroupEntity> group = groupRepository.findByGroupCode(createLikeDTO.getGroupCode());
+        if(!group.isPresent()){
+            throw new GroupNotFoundException(ErrorCode.GROUP_NOT_FOUND);
+        }
+
         LikeEntity like = LikeEntity.builder()
                 .postId(post.get())
+                .groupCode(group.get())
                 .userId(user.get())
                 .build();
 

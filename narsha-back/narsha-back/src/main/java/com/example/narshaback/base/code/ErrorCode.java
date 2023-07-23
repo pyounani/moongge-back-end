@@ -15,6 +15,8 @@ public enum ErrorCode {
     DUPLICATE_ID_REQUEST(HttpStatus.BAD_REQUEST, "중복된 아이디가 있습니다."),
     EMPTY_COMMENT_CONTENT(HttpStatus.BAD_REQUEST, "댓글 내용이 비어있습니다."),
 
+    DELETE_FAILED_ENTITY_RELATED_GROUPCODE(HttpStatus.BAD_REQUEST, "해당 그룹코드로 모든 엔티티 삭제를 실패했습니다."),
+
     /*
      * 404 NOT_FOUND: 리소스를 찾을 수 없음
      */

@@ -2,14 +2,15 @@ package com.example.narshaback.service;
 
 import com.example.narshaback.base.code.ErrorCode;
 import com.example.narshaback.base.dto.group.CreateGroupDTO;
+import com.example.narshaback.base.exception.DeleteFailedEntityRelatedGroupCodeException;
+import com.example.narshaback.base.exception.GroupNotFoundException;
 import com.example.narshaback.base.exception.LoginIdNotFoundException;
-import com.example.narshaback.entity.GroupEntity;
-import com.example.narshaback.entity.UserEntity;
-import com.example.narshaback.repository.GroupRepository;
-import com.example.narshaback.repository.UserRepository;
+import com.example.narshaback.entity.*;
+import com.example.narshaback.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -21,6 +22,11 @@ public class GroupServiceImpl implements GroupService {
 
     private final GroupRepository groupRepository;
     private final UserRepository userRepository;
+
+    private final LikeRepository likeRepository;
+    private final CommentRepository commentRepository;
+    private final PostRepository postRepository;
+    private final NoticeRepository noticeRepository;
 
     @Override
     public UserEntity createGroup(CreateGroupDTO createGroupDTO) {
@@ -64,7 +70,7 @@ public class GroupServiceImpl implements GroupService {
 
     // 랜덤 코드 생성
     public String getRandomCode(int length) {
-        String alphaNum = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$^*";
+        String alphaNum = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
         int alphaNumLength = alphaNum.length();
 
         Random random = new Random();
@@ -95,6 +101,31 @@ public class GroupServiceImpl implements GroupService {
         }
 
 
+    }
+
+    @Transactional
+    @Override
+    public String deleteGroup(String groupCode) {
+
+        Optional<GroupEntity> group = groupRepository.findByGroupCode(groupCode);
+
+        if(group.isPresent()){
+            try{
+                // delete
+                Optional<GroupEntity> delGroup = groupRepository.deleteByGroupCode(groupCode);
+                Optional<LikeEntity> delLike =  likeRepository.deleteByGroupCode(group.get());
+                Optional<CommentEntity> delComment =  commentRepository.deleteByGroupCode(group.get());
+                Optional<NoticeEntity> delNotice =  noticeRepository.deleteByGroupCode(group.get());
+                Optional<PostEntity> delPost =  postRepository.deleteByGroupCode(group.get());
+                Optional<UserEntity> delUser =  userRepository.deleteByGroupCode(group.get());
+            } catch(Exception e){
+                throw new DeleteFailedEntityRelatedGroupCodeException(ErrorCode.DELETE_FAILED_ENTITY_RELATED_GROUPCODE);
+            }
+        } else{
+            throw new GroupNotFoundException(ErrorCode.GROUP_NOT_FOUND);
+        }
+
+        return group.get().getGroupCode();
     }
 }
 

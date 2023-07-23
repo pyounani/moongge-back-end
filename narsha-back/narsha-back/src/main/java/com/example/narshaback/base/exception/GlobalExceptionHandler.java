@@ -45,7 +45,7 @@ public class GlobalExceptionHandler {
     }
 
 
-    /* UserGroup */
+    /* Group */
 
     // 그룹: 그룹 코드에 해당하는 그룹이 존재하지 않을 때
     @ExceptionHandler(GroupCodeNotFoundException.class)
@@ -64,6 +64,17 @@ public class GlobalExceptionHandler {
                 .status(ErrorCode.GROUP_NOT_FOUND.getStatus().value())
                 .body(new ErrorResponseDTO(ErrorCode.GROUP_NOT_FOUND));
     }
+
+    // 그룹: 모든 그룹을 삭제하지 못했을 때
+    @ExceptionHandler(DeleteFailedEntityRelatedGroupCodeException.class)
+    protected ResponseEntity<ErrorResponseDTO> handleDeleteFailedEntityRelatedGroupCodeException(final DeleteFailedEntityRelatedGroupCodeException e) {
+        log.error("DeleteFailedEntityRelatedGroupCodeException : {}", e.getMessage());
+        return ResponseEntity
+                .status(ErrorCode.DELETE_FAILED_ENTITY_RELATED_GROUPCODE.getStatus().value())
+                .body(new ErrorResponseDTO(ErrorCode.DELETE_FAILED_ENTITY_RELATED_GROUPCODE));
+    }
+
+    /*Comment*/
 
     // 사용자: 댓글 불러올 때 사용자가 존재하지 않을 때
     @ExceptionHandler(UserNotFoundException.class)
@@ -102,7 +113,7 @@ public class GlobalExceptionHandler {
                 .status(ErrorCode.POSTS_NOT_FOUND.getStatus().value())
                 .body(new ErrorResponseDTO(ErrorCode.POSTS_NOT_FOUND));
     }
-    //프로필
+
     @ExceptionHandler(ProfileNotFoundException.class)
     protected ResponseEntity<ErrorResponseDTO> handleProfileNotFoundException(final ProfileNotFoundException e) {
         log.error("ProfileNotFoundException : { }", e.getMessage());
