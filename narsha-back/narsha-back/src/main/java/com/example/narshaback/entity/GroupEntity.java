@@ -31,6 +31,12 @@ public class GroupEntity {
     @Column(nullable = false)
     private Integer groupClass; // 반
 
+    @Column(length=30)
+    private String startTime;
+
+    @Column(length=30)
+    private String endTime;
+
     @CreatedDate
     private LocalDateTime createAt; // 생성일
 }
