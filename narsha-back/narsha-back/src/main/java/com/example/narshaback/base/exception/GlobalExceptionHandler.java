@@ -86,6 +86,7 @@ public class GlobalExceptionHandler {
     }
 
     // 댓글: 댓글이 비어있을 때
+
     @ExceptionHandler(EmptyCommentContentException.class)
     protected ResponseEntity<ErrorResponseDTO> handleEmptyCommentContentException(final EmptyCommentContentException e) {
         log.error("EmptyCommentContentException : {}", e.getMessage());

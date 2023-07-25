@@ -9,6 +9,8 @@ public interface GetUserProfile {
 
     String getUserName();
 
+    String getUserType();
+
     String getNikName();
 
     String getProfileImage();

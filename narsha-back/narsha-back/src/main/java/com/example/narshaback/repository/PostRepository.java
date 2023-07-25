@@ -2,8 +2,9 @@ package com.example.narshaback.repository;
 
 import com.example.narshaback.entity.GroupEntity;
 import com.example.narshaback.entity.PostEntity;
-
 import com.example.narshaback.base.projection.post.GetUserPost;
+import com.example.narshaback.base.projection.post.GetPostDetail;
+import com.example.narshaback.entity.UserEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

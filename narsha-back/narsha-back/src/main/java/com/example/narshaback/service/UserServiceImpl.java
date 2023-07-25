@@ -5,7 +5,10 @@ import com.example.narshaback.base.dto.user.UpdateUserProfileDTO;
 import com.example.narshaback.base.dto.user.UserLoginDTO;
 import com.example.narshaback.base.dto.user.UserRegisterDTO;
 import com.example.narshaback.base.exception.*;
+import com.example.narshaback.base.projection.user.GetUser;
 import com.example.narshaback.base.projection.user.GetUserProfile;
+import com.example.narshaback.base.exception.GroupNotFoundException;
+
 import com.example.narshaback.entity.GroupEntity;
 import com.example.narshaback.entity.UserEntity;
 import com.example.narshaback.base.code.ErrorCode;
@@ -169,6 +172,17 @@ public class UserServiceImpl implements UserService {
         return userProfile.getBadgeList();
     }
 
+    @Override
+    public List<GetUser> getStudentList(String GroupId) {
+        Optional<GroupEntity> group = groupRepository.findByGroupCode(GroupId);
+        if(!group.isPresent())
+            throw new GroupCodeNotFoundException(ErrorCode.GROUPCODE_NOT_FOUND);
+
+        List<GetUser> studentList = userRepository.findByGroupCode(group.get());
+
+        return studentList;
+    }
+
     private GetUserProfile EntityToProjectionUser(UserEntity findUser){
         GetUserProfile userProfile = new GetUserProfile() {
             @Override
@@ -184,6 +198,11 @@ public class UserServiceImpl implements UserService {
             @Override
             public String getUserName() {
                 return findUser.getUserName();
+            }
+
+            @Override
+            public String getUserType(){
+                return findUser.getUserType();
             }
 
             @Override

@@ -13,6 +13,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+import java.util.Optional;
+
 @RestController // JSON 형태의 결과값 반환
 @Controller
 @RequiredArgsConstructor
@@ -24,7 +27,7 @@ public class GroupController {
 
     @PostMapping("/create")
     public ResponseEntity<ResponseDTO> createGroup(@RequestBody CreateGroupDTO createGroupDTO){
-        UserEntity res = groupService.createGroup(createGroupDTO);
+        String userId = groupService.createGroup(createGroupDTO);
 
 //        JsonObject obj = new JsonObject();
 //        obj.addProperty("user-groupId", res.toString());
@@ -36,7 +39,7 @@ public class GroupController {
 
         return ResponseEntity
                 .status(ResponseCode.SUCCESS_CREATE_GROUP.getStatus().value())
-                .body(new ResponseDTO(ResponseCode.SUCCESS_CREATE_GROUP, res.toString()));
+                .body(new ResponseDTO(ResponseCode.SUCCESS_CREATE_GROUP, userId));
     }
 
     @GetMapping("/group-code")
@@ -47,7 +50,6 @@ public class GroupController {
                 .status(ResponseCode.SUCCESS_GET_GROUP_CODE.getStatus().value())
                 .body(new ResponseDTO(ResponseCode.SUCCESS_GET_GROUP_CODE, res));
     }
-
     @DeleteMapping("/delete")
     public ResponseEntity<ResponseDTO> deleteGroup(@RequestParam(value = "groupCode")String groupCode){
 
