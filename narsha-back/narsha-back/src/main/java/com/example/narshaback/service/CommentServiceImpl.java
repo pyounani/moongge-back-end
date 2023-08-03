@@ -15,9 +15,11 @@ import com.example.narshaback.repository.CommentRepository;
 import com.example.narshaback.repository.GroupRepository;
 import com.example.narshaback.repository.PostRepository;
 import com.example.narshaback.repository.UserRepository;
+import com.sun.tools.jconsole.JConsoleContext;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
+import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import java.util.List;
@@ -83,7 +85,7 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public Integer createAIComment(CreateCommentDTO createCommentDTO) {
+    public Integer createAIComment(Integer postId) {
 
         //유저 검색
 //        Optional<UserEntity> user = userRepository.findByUserId(createCommentDTO.getUserId());
@@ -92,41 +94,49 @@ public class CommentServiceImpl implements CommentService {
 //        }
 
         //포스트 검색
-        Optional<PostEntity> post = postRepository.findByPostId(createCommentDTO.getPostId());
+        Optional<PostEntity> post = postRepository.findByPostId(postId);
 
         // 게시물이 존재하지 않은 경우
         if (!post.isPresent()) {
             throw new PostNotFoundException(ErrorCode.POSTS_NOT_FOUND);
         }
 
-        // 댓글에 아무 내용이 없을 경우
-//        String content = createCommentDTO.getContent();
-//        if(content == null || content.trim().isEmpty()) {
-//            throw new EmptyCommentContentException(ErrorCode.EMPTY_COMMENT_CONTENT);
-//        }
         Random rand = new Random();
         WebClient webClient = WebClient.create("http://localhost:8000");
 
-        String post_content = "{\"post_content\": \"안녕\"}";
+        String post_content = "{\"post_content\": \"오늘은 첫 등교날 너무 설레.\"}";
 
-        int teacher = rand.nextInt(1);
+        int teacher =1;
+//        int teacher = rand.nextInt(1);
         if (teacher == 1) {
-            // user 받아와야 함 user =??
+
+            Optional<UserEntity> user = userRepository.findByUserId("narsha1111");
+
             int num = rand.nextInt(2);
             if(num == 0){
-                try {
-                    Thread.sleep(rand.nextInt(100)*10000); // 시간 늦추기
-                } catch (InterruptedException e) {
-                }
+//                try {
+//                    Thread.sleep(rand.nextInt(100)*10000);
+//                } catch (InterruptedException e) {
+//                }
                 String res = webClient.post()
                         .uri("/chat/teacher/content")
-                        .bodyValue(post_content)
+                        .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
+                        .body(BodyInserters.fromValue(post_content))
                         .retrieve()
                         .bodyToMono(String.class)
                         .block();
-                // 내용만 하는 api
-                //post.content 넘겨주기
+
+                System.out.println(res);
+
+                //comment 저장
+                CommentEntity comment = CommentEntity.builder()
+                        .postId(post.get())
+                        .userId(user.get())
+                        .content(res)
+                        .build();
+
+                return commentRepository.save(comment).getCommentId();
             }
             else if(num == 1){
                 try {
@@ -151,8 +161,8 @@ public class CommentServiceImpl implements CommentService {
 
         CommentEntity comment = CommentEntity.builder()
                 .postId(post.get())
-                .userId(user.get())
-                .content(createCommentDTO.getContent())
+//                .userId(user.get())
+//                .content(res)
                 .build();
 
         return commentRepository.save(comment).getCommentId();
