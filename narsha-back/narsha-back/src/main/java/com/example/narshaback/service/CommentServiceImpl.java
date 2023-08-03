@@ -64,6 +64,7 @@ public class CommentServiceImpl implements CommentService {
         CommentEntity comment = CommentEntity.builder()
                 .postId(post.get())
                 .userId(user.get())
+                .groupCode(user.get().getGroupCode())
                 .content(createCommentDTO.getContent())
                 .build();
 
@@ -113,7 +114,8 @@ public class CommentServiceImpl implements CommentService {
             Optional<UserEntity> user = userRepository.findByUserId("narsha1111");
 
             int num = rand.nextInt(2);
-            if(num == 0){
+            if(num == 0){ // 글 내용만 전달 받는 api
+                //thread 지연
 //                try {
 //                    Thread.sleep(rand.nextInt(100)*10000);
 //                } catch (InterruptedException e) {
@@ -133,30 +135,28 @@ public class CommentServiceImpl implements CommentService {
                 CommentEntity comment = CommentEntity.builder()
                         .postId(post.get())
                         .userId(user.get())
+                        .groupCode(user.get().getGroupCode())
                         .content(res)
                         .build();
 
                 return commentRepository.save(comment).getCommentId();
             }
-            else if(num == 1){
+            else if(num == 1) {// 이미지만 전달 받는 api
                 try {
-                    Thread.sleep(rand.nextInt(100)*10000); // 시간 늦추기
+                    Thread.sleep(rand.nextInt(100)*10000);
                 } catch (InterruptedException e) {
                 }
-                // 이미지만 하는 api
-                //post.content 넘겨주기
+
             }
-            else if(num == 2)
-            {
+            else if(num == 2) {// 내용 & 이미지 전달 받는 api
                 try {
-                    Thread.sleep(rand.nextInt(100)*10000); // 시간 늦추기
+                    Thread.sleep(rand.nextInt(100)*10000);
                 } catch (InterruptedException e) {
                 }
-                // 내용 & 이미지 api
-                //post.content 넘겨주기
+
+
             }
-            //api 호출해서 content 넘기고 결과값을 받아옴
-            //db에 저장
+
         }
 
         CommentEntity comment = CommentEntity.builder()

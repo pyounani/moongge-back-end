@@ -14,6 +14,8 @@ public class CreateCommentDTO {
 
     private String userId;
 
+    private String groupCode;
+
     @NotNull
     private String content;
 }
