@@ -10,4 +10,6 @@ public interface CommentService {
 
     List<GetComment> getCommentList(Integer postId);
 
+    Integer createAIComment(CreateCommentDTO createCommentDTO);
+
 }
