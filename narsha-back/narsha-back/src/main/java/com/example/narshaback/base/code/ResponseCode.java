@@ -22,6 +22,7 @@ public enum ResponseCode {
     SUCCESS_GET_NOTICE_LIST(HttpStatus.OK, "공지 목록을 성공적으로 가져왔습니다."),
     SUCCESS_GET_NOTICE_DETAIL(HttpStatus.OK, "공지 상세를 성공적으로 가져왔습니다."),
     SUCCESS_GET_NOTICE_RECENT_ONE(HttpStatus.OK, "가장 최근 공지를 성공적으로 가져왔습니다."),
+    SUCCESS_GET_UNLIKED_POSTS(HttpStatus.OK, "사용자 좋아요를 누르지 않은 게시물 목록을 성공적으로 가져왔습니다."),
 
     SUCCESS_UPDATE_PROFILE(HttpStatus.OK, "프로필 수정에 성공했습니다."),
     SUCCESS_GET_PROFILE(HttpStatus.OK, "프로필을 성공적으로 가져왔습니다."),
