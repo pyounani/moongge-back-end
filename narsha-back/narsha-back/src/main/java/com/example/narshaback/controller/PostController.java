@@ -31,7 +31,7 @@ public class PostController {
     private final AmazonS3Service amazonS3Service;
 
     @PostMapping("/upload")
-    public ResponseEntity<ResponseDTO> uploadPost(@RequestParam(value="fileType") String fileType, @RequestPart("images") List<MultipartFile> multipartFiles,
+    public ResponseEntity<ResponseDTO> uploadPost(@RequestParam(value="fileType") String fileType, @RequestParam("images") List<MultipartFile> multipartFiles,
                                                   @RequestParam(value="info")String uploadPostDTO) throws JsonProcessingException {
 
         // mapper
