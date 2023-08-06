@@ -15,11 +15,16 @@ import com.example.narshaback.repository.CommentRepository;
 import com.example.narshaback.repository.GroupRepository;
 import com.example.narshaback.repository.PostRepository;
 import com.example.narshaback.repository.UserRepository;
+import com.sun.tools.jconsole.JConsoleContext;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
+import org.springframework.web.reactive.function.BodyInserters;
+import org.springframework.web.reactive.function.client.WebClient;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 
 @Service
 @RequiredArgsConstructor
@@ -59,6 +64,7 @@ public class CommentServiceImpl implements CommentService {
         CommentEntity comment = CommentEntity.builder()
                 .postId(post.get())
                 .userId(user.get())
+                .groupCode(user.get().getGroupCode())
                 .content(createCommentDTO.getContent())
                 .build();
 
@@ -78,4 +84,89 @@ public class CommentServiceImpl implements CommentService {
 
         return commentList;
     }
+
+    @Override
+    public Integer createAIComment(Integer postId) {
+
+        //유저 검색
+//        Optional<UserEntity> user = userRepository.findByUserId(createCommentDTO.getUserId());
+//        if(!user.isPresent()) {
+//            throw new UserNotFoundException(ErrorCode.USERID_NOT_FOUND);
+//        }
+
+        //포스트 검색
+        Optional<PostEntity> post = postRepository.findByPostId(postId);
+
+        // 게시물이 존재하지 않은 경우
+        if (!post.isPresent()) {
+            throw new PostNotFoundException(ErrorCode.POSTS_NOT_FOUND);
+        }
+
+        Random rand = new Random();
+        WebClient webClient = WebClient.create("http://localhost:8000");
+
+        String post_content = "{\"post_content\": \"오늘은 첫 등교날 너무 설레.\"}";
+
+        int teacher =1;
+//        int teacher = rand.nextInt(1);
+        if (teacher == 1) {
+
+            Optional<UserEntity> user = userRepository.findByUserId("narsha1111");
+
+            int num = rand.nextInt(2);
+            if(num == 0){ // 글 내용만 전달 받는 api
+                //thread 지연
+//                try {
+//                    Thread.sleep(rand.nextInt(100)*10000);
+//                } catch (InterruptedException e) {
+//                }
+                String res = webClient.post()
+                        .uri("/chat/teacher/content")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .body(BodyInserters.fromValue(post_content))
+                        .retrieve()
+                        .bodyToMono(String.class)
+                        .block();
+
+                System.out.println(res);
+
+                //comment 저장
+                CommentEntity comment = CommentEntity.builder()
+                        .postId(post.get())
+                        .userId(user.get())
+                        .groupCode(user.get().getGroupCode())
+                        .content(res)
+                        .build();
+
+                return commentRepository.save(comment).getCommentId();
+            }
+            else if(num == 1) {// 이미지만 전달 받는 api
+                try {
+                    Thread.sleep(rand.nextInt(100)*10000);
+                } catch (InterruptedException e) {
+                }
+
+            }
+            else if(num == 2) {// 내용 & 이미지 전달 받는 api
+                try {
+                    Thread.sleep(rand.nextInt(100)*10000);
+                } catch (InterruptedException e) {
+                }
+
+
+            }
+
+        }
+
+        CommentEntity comment = CommentEntity.builder()
+                .postId(post.get())
+//                .userId(user.get())
+//                .content(res)
+                .build();
+
+        return commentRepository.save(comment).getCommentId();
+    }
+
+
 }
