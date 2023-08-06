@@ -2,25 +2,27 @@ package com.example.narshaback.service;
 
 import com.example.narshaback.base.code.ErrorCode;
 import com.example.narshaback.base.dto.post.UploadPostDTO;
-import com.example.narshaback.base.exception.GroupNotFoundException;
-import com.example.narshaback.base.exception.LoginIdNotFoundException;
-import com.example.narshaback.base.exception.PostNotFoundException;
-import com.example.narshaback.base.exception.RegisterException;
+import com.example.narshaback.base.exception.*;
+import com.example.narshaback.base.projection.post.GetMainPost;
 import com.example.narshaback.entity.GroupEntity;
+import com.example.narshaback.entity.LikeEntity;
 import com.example.narshaback.entity.PostEntity;
 import com.example.narshaback.entity.UserEntity;
 import com.example.narshaback.base.projection.post.GetPostDetail;
 import com.example.narshaback.repository.GroupRepository;
 import com.example.narshaback.base.projection.post.GetUserPost;
+import com.example.narshaback.repository.LikeRepository;
 import com.example.narshaback.repository.PostRepository;
 import com.example.narshaback.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import net.bytebuddy.asm.Advice;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Optional;
+import java.time.temporal.ChronoUnit;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -29,6 +31,8 @@ public class PostServiceImpl implements PostService{
     private final UserRepository userRepository;
     private final PostRepository postRepository;
     private final GroupRepository groupRepository;
+
+    private final LikeRepository likeRepository;
 
     @Override
     public Integer uploadPost(UploadPostDTO uploadPostDTO) {
@@ -123,5 +127,35 @@ public class PostServiceImpl implements PostService{
         } else {
             throw new EntityNotFoundException(String.format("포스트 아이디 %d로 조회되지 않았습니다", postId));
         }
+    }
+
+    @Override
+    public List<GetMainPost> getMainPost(String userId, String groupCode) {
+        Optional<GroupEntity> group = groupRepository.findByGroupCode(groupCode);
+        if(group == null) {
+            throw new GroupNotFoundException(ErrorCode.GROUP_NOT_FOUND);
+        }
+        Optional<UserEntity> user = userRepository.findByUserId(userId);
+        if(user == null) {
+            throw new UserNotFoundException(ErrorCode.USER_NOT_FOUND);
+        }
+
+        // 24시간 내 게시물 불러오고
+        LocalDateTime endTime = LocalDateTime.now();
+        LocalDateTime startTime = LocalDateTime.now().minus(24, ChronoUnit.HOURS);
+
+        List<GetMainPost> allPost = postRepository.findByCreateAtBetween(startTime, endTime);
+
+        // 그 중에서 사용자가 좋아요를 누르지 않은 게시물 보여주기
+        List<LikeEntity> userLike = likeRepository.findByUserId(user.get());
+        List<Integer> postIdList = userLike.stream()
+                .map(likeEntity -> likeEntity.getPostId().getPostId())
+                .collect(Collectors.toList());
+
+        List<GetMainPost> nonLikedPost = allPost.stream()
+                .filter(post -> !postIdList.contains(post.getPostId()))
+                .collect(Collectors.toList());
+
+        return nonLikedPost;
     }
 }

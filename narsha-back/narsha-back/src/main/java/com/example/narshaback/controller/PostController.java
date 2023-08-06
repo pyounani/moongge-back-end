@@ -4,15 +4,15 @@ import com.example.narshaback.base.code.ResponseCode;
 import com.example.narshaback.base.dto.response.ResponseDTO;
 import com.example.narshaback.base.dto.s3.S3FileDTO;
 import com.example.narshaback.base.dto.post.UploadPostDTO;
+import com.example.narshaback.base.projection.post.GetMainPost;
 import com.example.narshaback.base.projection.post.GetPostDetail;
 import com.example.narshaback.base.projection.post.GetUserPost;
+import com.example.narshaback.entity.PostEntity;
 import com.example.narshaback.service.AmazonS3Service;
 import com.example.narshaback.service.PostService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.gson.JsonObject;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -96,4 +96,15 @@ public class PostController {
                 .status(ResponseCode.SUCCESS_DETAIL_POST.getStatus().value())
                 .body(new ResponseDTO(ResponseCode.SUCCESS_DETAIL_POST, res));
     }
+
+    @GetMapping("/main-list")
+    public ResponseEntity<ResponseDTO> getUnlikedPosts(@RequestParam(value = "userId")String userId,
+                                                       @RequestParam(value = "groupCode")String groupCode) {
+        List<GetMainPost> res = postService.getMainPost(userId, groupCode);
+
+        return ResponseEntity
+                .status(ResponseCode.SUCCESS_GET_UNLIKED_POSTS.getStatus().value())
+                .body(new ResponseDTO(ResponseCode.SUCCESS_GET_UNLIKED_POSTS, res));
+    }
+
 }
