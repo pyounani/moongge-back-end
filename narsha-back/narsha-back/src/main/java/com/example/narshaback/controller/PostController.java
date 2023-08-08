@@ -4,6 +4,7 @@ import com.example.narshaback.base.code.ResponseCode;
 import com.example.narshaback.base.dto.response.ResponseDTO;
 import com.example.narshaback.base.dto.s3.S3FileDTO;
 import com.example.narshaback.base.dto.post.UploadPostDTO;
+import com.example.narshaback.base.dto.s3.S3urlDTO;
 import com.example.narshaback.base.projection.post.GetMainPost;
 import com.example.narshaback.base.projection.post.GetOneUserPost;
 import com.example.narshaback.base.projection.post.GetPostDetail;
@@ -35,19 +36,22 @@ public class PostController {
     public ResponseEntity<ResponseDTO> uploadPost(@RequestParam(value="fileType") String fileType, @RequestParam("images") List<MultipartFile> multipartFiles,
                                                   @RequestParam(value="info")String uploadPostDTO) throws JsonProcessingException {
 
+        // setting
+        List<S3urlDTO> urlResArray = new ArrayList<>();
+
         // mapper
         ObjectMapper mapper = new ObjectMapper();
         UploadPostDTO mapperUploadPostDTO = mapper.readValue(uploadPostDTO, UploadPostDTO.class);
 
 
         // S3에 이미지 저장
-        List<S3FileDTO> uploadFiles = amazonS3Service.uploadFiles(fileType, multipartFiles);
-
+        List<S3FileDTO> uploadFiles = amazonS3Service.uploadFiles("post", multipartFiles);
         // S3에서 받은 URL String Array
         List<String> imageUrlArray = new ArrayList<>();
 
         for(S3FileDTO url: uploadFiles){
             imageUrlArray.add(url.getUploadFileUrl());
+            urlResArray.add(new S3urlDTO(url.getUploadFilePath(), url.getUploadFileName()));
         }
 
         mapperUploadPostDTO.setImageArray(imageUrlArray.toString());
@@ -55,24 +59,11 @@ public class PostController {
 
         // 포스팅 내용 + 이미지 배열 저장
         Integer res = postService.uploadPost(mapperUploadPostDTO);
-//        JsonObject obj = new JsonObject();
-//
-//        obj.addProperty("postId", res);
-//
-//        // 저장 여부 확인
-//        if (res == null) {
-//            obj.addProperty("success", false);
-//            obj.addProperty("message", "포스트 업로드 실패");
-//        } else{
-//            obj.addProperty("success", true);
-//            obj.addProperty("success", "포스트 업로드 완료!");
-//        }
-//
-//        return obj.toString();
+
 
         return ResponseEntity
                 .status(ResponseCode.SUCCESS_UPLOAD_POST.getStatus().value())
-                .body(new ResponseDTO(ResponseCode.SUCCESS_UPLOAD_POST, res));
+                .body(new ResponseDTO(ResponseCode.SUCCESS_UPLOAD_POST, urlResArray));
     }
 
     @GetMapping("/user-list")
