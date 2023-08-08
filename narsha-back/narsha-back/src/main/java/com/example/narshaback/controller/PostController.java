@@ -5,6 +5,7 @@ import com.example.narshaback.base.dto.response.ResponseDTO;
 import com.example.narshaback.base.dto.s3.S3FileDTO;
 import com.example.narshaback.base.dto.post.UploadPostDTO;
 import com.example.narshaback.base.projection.post.GetMainPost;
+import com.example.narshaback.base.projection.post.GetOneUserPost;
 import com.example.narshaback.base.projection.post.GetPostDetail;
 import com.example.narshaback.base.projection.post.GetUserPost;
 import com.example.narshaback.entity.PostEntity;
@@ -105,6 +106,16 @@ public class PostController {
         return ResponseEntity
                 .status(ResponseCode.SUCCESS_GET_UNLIKED_POSTS.getStatus().value())
                 .body(new ResponseDTO(ResponseCode.SUCCESS_GET_UNLIKED_POSTS, res));
+    }
+
+    @GetMapping("/user-post-list")
+    public ResponseEntity<ResponseDTO> getOneUserPostList(@RequestParam(value = "userId") String userId) {
+
+        List<GetOneUserPost> res = postService.getOneUserPost(userId);
+
+        return ResponseEntity
+                .status(ResponseCode.SUCCESS_GET_POST_LIST.getStatus().value())
+                .body(new ResponseDTO(ResponseCode.SUCCESS_GET_POST_LIST, res));
     }
 
 }

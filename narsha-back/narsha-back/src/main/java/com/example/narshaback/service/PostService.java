@@ -2,6 +2,7 @@ package com.example.narshaback.service;
 
 import com.example.narshaback.base.dto.post.UploadPostDTO;
 
+import com.example.narshaback.base.projection.post.GetOneUserPost;
 import com.example.narshaback.base.projection.post.GetPostDetail;
 import com.example.narshaback.base.projection.post.GetMainPost;
 import com.example.narshaback.base.projection.post.GetUserPost;
@@ -16,5 +17,7 @@ public interface PostService {
     GetPostDetail getPostDetail(Integer postId, String groupCode, String userId);
 
     List<GetMainPost> getMainPost(String userId, String groupCode);
+
+    List<GetOneUserPost> getOneUserPost(String userId);
 
 }

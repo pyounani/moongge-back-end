@@ -4,6 +4,7 @@ import com.example.narshaback.base.code.ErrorCode;
 import com.example.narshaback.base.dto.post.UploadPostDTO;
 import com.example.narshaback.base.exception.*;
 import com.example.narshaback.base.projection.post.GetMainPost;
+import com.example.narshaback.base.projection.post.GetOneUserPost;
 import com.example.narshaback.entity.GroupEntity;
 import com.example.narshaback.entity.LikeEntity;
 import com.example.narshaback.entity.PostEntity;
@@ -157,5 +158,18 @@ public class PostServiceImpl implements PostService{
                 .collect(Collectors.toList());
 
         return nonLikedPost;
+    }
+
+    @Override
+    public List<GetOneUserPost> getOneUserPost(String userId) {
+
+        Optional<UserEntity> user = userRepository.findByUserId(userId);
+        if(!user.isPresent()){
+            throw new LoginIdNotFoundException(ErrorCode.USERID_NOT_FOUND);
+        }
+
+        List<GetOneUserPost> userPostList = postRepository.findByUser(user.get());
+
+        return userPostList;
     }
 }
