@@ -168,7 +168,7 @@ public class PostServiceImpl implements PostService{
             throw new LoginIdNotFoundException(ErrorCode.USERID_NOT_FOUND);
         }
 
-        List<GetOneUserPost> userPostList = postRepository.findByUser(user.get());
+        List<GetOneUserPost> userPostList = postRepository.findByUserOrderByCreateAtDesc(user.get());
 
         return userPostList;
     }

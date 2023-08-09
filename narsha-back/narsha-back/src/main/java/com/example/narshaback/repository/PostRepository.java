@@ -19,7 +19,7 @@ public interface PostRepository extends JpaRepository<PostEntity, Integer> {
 
     List<GetUserPost> findByGroupCode(GroupEntity groupCode);
 
-    List<GetOneUserPost> findByUser(UserEntity userId);
+    List<GetOneUserPost> findByUserOrderByCreateAtDesc(UserEntity userId);
     Optional<PostEntity> findByPostIdAndGroupCode(Integer postId, GroupEntity groupCode);
 
     Optional<PostEntity> findByPostId(Integer postId);
