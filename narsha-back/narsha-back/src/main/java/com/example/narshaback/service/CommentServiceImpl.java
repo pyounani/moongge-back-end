@@ -116,9 +116,10 @@ public class CommentServiceImpl implements CommentService {
 //        int teacher = rand.nextInt(1);
         if (teacher == 1) { //선생님 AI봇
 
-            Optional<UserEntity> user = userRepository.findByUserId("narsha1111");
+            Optional<UserEntity> user = userRepository.findByUserId("ai_2");
 
-            int num = rand.nextInt(2);
+            int num = 0;
+//            int num = rand.nextInt(2);
 
             if(num == 0){ // 글 내용만 전달 받는 api
                 //thread 지연
@@ -126,7 +127,8 @@ public class CommentServiceImpl implements CommentService {
 //                    Thread.sleep(rand.nextInt(100)*10000);
 //                } catch (InterruptedException e) {
 //                }
-                String res = postContent(post_content);
+                String uri = "/chat/teacher/content";
+                String res = postContent(post_content, uri);
 
                 //comment 저장
                 CommentEntity comment = CommentEntity.builder()
@@ -136,7 +138,7 @@ public class CommentServiceImpl implements CommentService {
                         .content(res)
                         .build();
 
-                return commentRepository.save(comment).getCommentId();
+                commentRepository.save(comment).getCommentId();
             }
             else if(num == 1) {// 이미지만 전달 받는 api
 //                try {
@@ -144,11 +146,12 @@ public class CommentServiceImpl implements CommentService {
 //                } catch (InterruptedException e) {
 //                }
 
+                String uri = "/chat/teacher/image";
                 String aws_image = awsImage(post);
                 String post_image = "{\"post_image\": \""+ aws_image +"\"}";
                 System.out.println(post_image);
 
-                String res = postImage(post_image);
+                String res = postImage(post_image, uri);
 
                 CommentEntity comment = CommentEntity.builder()
                         .postId(post.get())
@@ -165,12 +168,13 @@ public class CommentServiceImpl implements CommentService {
 //                } catch (InterruptedException e) {
 //                }
 
+                String uri = "/chat/teacher/image/content";
                 String aws_image = awsImage(post);
                 String post_image_content = "{\"post_content\": \""+ post.get().getContent() +"\",\n \"post_image\": \""+aws_image+"\"}";
 
                 System.out.println(post_image_content);
 
-                String res = postImageContent(post_image_content);
+                String res = postImageContent(post_image_content, uri);
 
                 CommentEntity comment = CommentEntity.builder()
                         .postId(post.get())
@@ -184,6 +188,85 @@ public class CommentServiceImpl implements CommentService {
 
         }
 
+        int friend = 1;
+        if (friend == 1){ // 친구 AI봇
+            Optional<UserEntity> user = userRepository.findByUserId("ai_1");
+
+            int num = 0;
+            if(num == 0){ // 글 내용만 전달 받는 api
+                //thread 지연
+//                try {
+//                    Thread.sleep(rand.nextInt(100)*10000);
+//                } catch (InterruptedException e) {
+//                }
+                String uri = "/chat/friend/content";
+                String res = postContent(post_content, uri);
+
+                //comment 저장
+                CommentEntity comment = CommentEntity.builder()
+                        .postId(post.get())
+                        .userId(user.get())
+                        .groupCode(user.get().getGroupCode())
+                        .content(res)
+                        .build();
+
+                commentRepository.save(comment).getCommentId();
+            }
+        }
+
+        int disgust = 1;
+        if (disgust == 1){ // 까칠한 친구 AI봇
+            Optional<UserEntity> user = userRepository.findByUserId("ai_3");
+
+            int num = 0;
+            if(num == 0){ // 글 내용만 전달 받는 api
+                //thread 지연
+//                try {
+//                    Thread.sleep(rand.nextInt(100)*10000);
+//                } catch (InterruptedException e) {
+//                }
+                String uri = "/chat/disgust/content";
+                String res = postContent(post_content, uri);
+
+                //comment 저장
+                CommentEntity comment = CommentEntity.builder()
+                        .postId(post.get())
+                        .userId(user.get())
+                        .groupCode(user.get().getGroupCode())
+                        .content(res)
+                        .build();
+
+                commentRepository.save(comment).getCommentId();
+            }
+        }
+
+        int senior = 1;
+        if (senior == 1){ // 선배 AI봇
+            Optional<UserEntity> user = userRepository.findByUserId("ai_4");
+
+            int num = 0;
+            if(num == 0){ // 글 내용만 전달 받는 api
+//                thread 지연
+                try {
+//                    Thread.sleep(rand.nextInt(100)*10000);
+                    Thread.sleep(30000);
+                } catch (InterruptedException e) {
+                }
+                String uri = "/chat/senior/content";
+                String res = postContent(post_content, uri);
+
+                //comment 저장
+                CommentEntity comment = CommentEntity.builder()
+                        .postId(post.get())
+                        .userId(user.get())
+                        .groupCode(user.get().getGroupCode())
+                        .content(res)
+                        .build();
+
+                return commentRepository.save(comment).getCommentId();
+            }
+        }
+
         CommentEntity comment = CommentEntity.builder()
                 .postId(post.get())
 //                .userId(user.get())
@@ -193,10 +276,10 @@ public class CommentServiceImpl implements CommentService {
         return commentRepository.save(comment).getCommentId();
     }
 
-    public String postContent (String post_content){ //포스트 내용 댓글
+    public String postContent (String post_content, String uri){ //포스트 내용 댓글
 
         String res = webClient.post()
-                .uri("/chat/teacher/content")
+                .uri(uri)
                 .acceptCharset(StandardCharsets.UTF_8)
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .accept(MediaType.APPLICATION_JSON_UTF8)
@@ -210,10 +293,10 @@ public class CommentServiceImpl implements CommentService {
         return uniToKor(res);
     }
 
-    public String postImage (String post_image){ // 포스트 이미지 댓글
+    public String postImage (String post_image, String uri){ // 포스트 이미지 댓글
 
         String res = webClient.post()
-                .uri("/chat/teacher/image")
+                .uri(uri)
                 .acceptCharset(StandardCharsets.UTF_8)
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .accept(MediaType.APPLICATION_JSON_UTF8)
@@ -227,10 +310,10 @@ public class CommentServiceImpl implements CommentService {
         return uniToKor(res);
     }
 
-    public String postImageContent (String post_image_content){ // 포스트 이미지 댓글
+    public String postImageContent (String post_image_content, String uri){ // 포스트 이미지 댓글
 
         String res = webClient.post()
-                .uri("/chat/teacher/image/content")
+                .uri(uri)
                 .acceptCharset(StandardCharsets.UTF_8)
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
