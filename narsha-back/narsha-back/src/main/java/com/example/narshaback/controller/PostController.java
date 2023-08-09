@@ -4,6 +4,7 @@ import com.example.narshaback.base.code.ResponseCode;
 import com.example.narshaback.base.dto.response.ResponseDTO;
 import com.example.narshaback.base.dto.s3.S3FileDTO;
 import com.example.narshaback.base.dto.post.UploadPostDTO;
+import com.example.narshaback.base.dto.s3.S3PathDTO;
 import com.example.narshaback.base.dto.s3.S3urlDTO;
 import com.example.narshaback.base.projection.post.GetMainPost;
 import com.example.narshaback.base.projection.post.GetOneUserPost;
@@ -14,6 +15,7 @@ import com.example.narshaback.service.AmazonS3Service;
 import com.example.narshaback.service.PostService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.JsonObject;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -63,7 +65,7 @@ public class PostController {
 
         return ResponseEntity
                 .status(ResponseCode.SUCCESS_UPLOAD_POST.getStatus().value())
-                .body(new ResponseDTO(ResponseCode.SUCCESS_UPLOAD_POST, urlResArray));
+                .body(new ResponseDTO(ResponseCode.SUCCESS_UPLOAD_POST, new S3PathDTO(res, urlResArray)));
     }
 
     @GetMapping("/user-list")
