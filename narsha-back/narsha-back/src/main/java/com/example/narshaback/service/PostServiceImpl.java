@@ -145,7 +145,7 @@ public class PostServiceImpl implements PostService{
         LocalDateTime endTime = LocalDateTime.now();
         LocalDateTime startTime = LocalDateTime.now().minus(24, ChronoUnit.HOURS);
 
-        List<GetMainPost> allPost = postRepository.findByCreateAtBetween(startTime, endTime);
+        List<GetMainPost> allPost = postRepository.findByCreateAtBetweenOrderByCreateAtDesc(startTime, endTime);
 
         // 그 중에서 사용자가 좋아요를 누르지 않은 게시물 보여주기
         List<LikeEntity> userLike = likeRepository.findByUserId(user.get());
