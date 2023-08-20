@@ -133,11 +133,13 @@ public class AmazonS3ServiceImpl implements AmazonS3Service{
         Optional<UserEntity> findUser = userRepository.findByUserId(userId);
         String uploadFilePath = findUser.get().getProfileImage();
 
-        // split
-        Pattern pattern = Pattern.compile("com/");
-        String[] list = pattern.split(uploadFilePath);
 
-        if(uploadFilePath != "") {
+
+        if(uploadFilePath != null) {
+            // split
+            Pattern pattern = Pattern.compile("com/");
+            String[] list = pattern.split(uploadFilePath);
+
             try {
                 // s3에 저장된 파일이름 대신 url로 가져오는 방법 찾기
                 boolean isObjectExist = amazonS3Client.doesObjectExist(bucketName, list[list.length-1]);

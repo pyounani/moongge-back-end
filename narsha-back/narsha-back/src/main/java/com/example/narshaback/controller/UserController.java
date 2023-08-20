@@ -85,14 +85,14 @@ public class UserController {
     @PutMapping("/update")
     public ResponseEntity<ResponseDTO> updateProfile(@RequestParam(value="image", required = false) MultipartFile profileImage,
                                 @RequestParam(value="content") String updateUserProfileDTO) throws IOException, ParseException {
-        System.out.println();
+        // System.out.println(profileImage);
 
         // mapper
         ObjectMapper mapper = new ObjectMapper();
         UpdateUserProfileDTO mapperUpdateUserProfileDTO = mapper.readValue(updateUserProfileDTO, UpdateUserProfileDTO.class);
 
         // 이미지 등록
-        if (profileImage.getResource().contentLength() != 0){
+        if (profileImage != null && profileImage.getResource().contentLength() != 0){
             // parse
             JSONParser parser = new JSONParser();
             JSONObject object = (JSONObject) parser.parse(updateUserProfileDTO);
