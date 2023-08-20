@@ -10,7 +10,7 @@ public interface AmazonS3Service {
 
     S3FileDTO uploadFile(MultipartFile multipartFile); // 1개의 파일 업로드
 
-    String deleteFile(String uploadFilePath, String uuidFileName); // 파일 삭제
+    String deleteFile(String userId); // 파일 삭제
     String getUuidFileName(String fileName); // uuid 파일명 변환
     String getFolderName(); // 년월일 폴더명 변환
 }

@@ -19,11 +19,15 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.JsonObject;
 import lombok.RequiredArgsConstructor;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.ParseException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -80,17 +84,27 @@ public class UserController {
 
     @PutMapping("/update")
     public ResponseEntity<ResponseDTO> updateProfile(@RequestParam(value="image", required = false) MultipartFile profileImage,
-                                @RequestParam(value="content") String updateUserProfileDTO) throws JsonProcessingException {
+                                @RequestParam(value="content") String updateUserProfileDTO) throws IOException, ParseException {
+        System.out.println();
+
         // mapper
         ObjectMapper mapper = new ObjectMapper();
         UpdateUserProfileDTO mapperUpdateUserProfileDTO = mapper.readValue(updateUserProfileDTO, UpdateUserProfileDTO.class);
 
         // 이미지 등록
-        if (profileImage != null){
+        if (profileImage.getResource().contentLength() != 0){
+            // parse
+            JSONParser parser = new JSONParser();
+            JSONObject object = (JSONObject) parser.parse(updateUserProfileDTO);
+            String userId = object.get("userId").toString();
+
             // 예전 유저의 프로필 이미지 삭제
+            String res = amazonS3Service.deleteFile(userId);
+            System.out.println(res);
 
             // 이미지 업로드
             S3FileDTO uploadFiles = amazonS3Service.uploadFile(profileImage);
+
             // updateUserProfileDTO 객체에 프로필 정보 설정
             mapperUpdateUserProfileDTO.setProfileImage(uploadFiles.getUploadFileUrl());
         }
