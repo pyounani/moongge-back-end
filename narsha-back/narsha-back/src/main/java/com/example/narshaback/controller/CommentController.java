@@ -45,7 +45,7 @@ public class CommentController {
 
     @GetMapping("/create/chat")
     public ResponseEntity<ResponseDTO> createAIComment(@RequestParam(value = "postId") Integer postId){
-        Integer commentId = commentService.createAIComment(postId);
+        String commentId = commentService.createAIComment(postId);
 
         return ResponseEntity
                 .status(ResponseCode.SUCCESS_CREATE_COMMENT.getStatus().value())

@@ -50,6 +50,8 @@ public class AIController {
             ImageArr.add(imageFileString);
         }
 
+        System.out.println(imageFiles);
+
         //System.out.print(fileNameArr.toString());
 
         body.add("filename", fileNameArr.toString());
@@ -60,12 +62,13 @@ public class AIController {
 
         // 3. Message
         HttpEntity<?> requestMessage = new HttpEntity<>(body, httpHeaders);
+        System.out.println(requestMessage);
         //System.out.println(requestMessage);
         // 4. Request
         //HttpEntity<String> request = restTemplate.postForEntity("http://127.0.0.1:8000/image/object-detect/narsha_yolo5_model_ysy6", requestMessage, String.class);
 
         // 5. Result
-        String res = restTemplate.postForObject("http://127.0.0.1:8000/image/object-detect/narsha_yolo5_model_ysy", requestMessage, String.class);
+        String res = restTemplate.postForObject("http://127.0.0.1:8000/image/object-detect/nersha_yolo5_model_ysy", requestMessage, String.class);
         System.out.println(res);
         // send to flask, get result
 
