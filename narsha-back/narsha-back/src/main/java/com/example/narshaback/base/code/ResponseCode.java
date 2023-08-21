@@ -48,6 +48,9 @@ public enum ResponseCode {
 
     SUCCESS_DETAIL_POST(HttpStatus.OK, "포스트 상세 불러오기 성공"),
 
+    SUCCESS_UPDATE_TIME(HttpStatus.OK, "앱 사용시간 설정 성공"),
+
+    SUCCESS_GET_TIME(HttpStatus.OK, "앱 사용시간 불러오기 성공")
 
     ;
 

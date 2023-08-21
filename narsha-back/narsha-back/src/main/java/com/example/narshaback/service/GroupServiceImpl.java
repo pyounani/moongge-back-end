@@ -2,6 +2,7 @@ package com.example.narshaback.service;
 
 import com.example.narshaback.base.code.ErrorCode;
 import com.example.narshaback.base.dto.group.CreateGroupDTO;
+import com.example.narshaback.base.dto.group.UpdateTimeDTO;
 import com.example.narshaback.base.exception.DeleteFailedEntityRelatedGroupCodeException;
 import com.example.narshaback.base.exception.GroupNotFoundException;
 import com.example.narshaback.base.exception.LoginIdNotFoundException;
@@ -126,6 +127,60 @@ public class GroupServiceImpl implements GroupService {
         }
 
         return group.get().getGroupCode();
+    }
+
+    @Override
+    public UpdateTimeDTO updateTime(UpdateTimeDTO updateTimeDTO) {
+        Optional<GroupEntity> findGroup = groupRepository.findByGroupCode(updateTimeDTO.getGroupCode());
+
+        if(findGroup.isPresent()){
+            try{
+                // setting property
+                findGroup.get().setStartTime(updateTimeDTO.getStartTime());
+                findGroup.get().setEndTime(updateTimeDTO.getEndTime());
+
+                // save
+                groupRepository.save(findGroup.get());
+
+                // response setting
+                UpdateTimeDTO update = new UpdateTimeDTO();
+                update.setGroupCode(updateTimeDTO.getGroupCode());
+                update.setStartTime(findGroup.get().getStartTime());
+                update.setEndTime(findGroup.get().getEndTime());
+
+                return update;
+
+            } catch(Exception e){
+                throw new DeleteFailedEntityRelatedGroupCodeException(ErrorCode.DELETE_FAILED_ENTITY_RELATED_GROUPCODE);
+            }
+        } else{
+            throw new GroupNotFoundException(ErrorCode.GROUP_NOT_FOUND);
+        }
+
+    }
+
+    @Override
+    public UpdateTimeDTO getTime(String groupCode) {
+
+        Optional<GroupEntity> findGroup = groupRepository.findByGroupCode(groupCode);
+
+        if(findGroup.isPresent()){
+            try{
+                // response setting
+                UpdateTimeDTO update = new UpdateTimeDTO();
+                update.setGroupCode(findGroup.get().getGroupCode());
+                update.setStartTime(findGroup.get().getStartTime());
+                update.setEndTime(findGroup.get().getEndTime());
+
+                return update;
+
+            } catch(Exception e){
+                throw new DeleteFailedEntityRelatedGroupCodeException(ErrorCode.DELETE_FAILED_ENTITY_RELATED_GROUPCODE);
+            }
+        } else{
+            throw new GroupNotFoundException(ErrorCode.GROUP_NOT_FOUND);
+        }
+
     }
 }
 
