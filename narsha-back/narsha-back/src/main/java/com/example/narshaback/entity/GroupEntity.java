@@ -32,10 +32,10 @@ public class GroupEntity {
     private Integer groupClass; // 반
 
     @Column(length=30)
-    private String startTime;
+    private Integer startTime;
 
     @Column(length=30)
-    private String endTime;
+    private Integer endTime;
 
     @CreatedDate
     private LocalDateTime createAt; // 생성일
