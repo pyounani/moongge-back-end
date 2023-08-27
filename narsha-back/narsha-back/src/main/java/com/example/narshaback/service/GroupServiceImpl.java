@@ -4,6 +4,7 @@ import com.example.narshaback.base.code.ErrorCode;
 import com.example.narshaback.base.dto.group.CreateGroupDTO;
 import com.example.narshaback.base.dto.group.UpdateTimeDTO;
 import com.example.narshaback.base.exception.DeleteFailedEntityRelatedGroupCodeException;
+import com.example.narshaback.base.exception.GroupCodeNotFoundException;
 import com.example.narshaback.base.exception.GroupNotFoundException;
 import com.example.narshaback.base.exception.LoginIdNotFoundException;
 import com.example.narshaback.entity.*;
@@ -154,7 +155,7 @@ public class GroupServiceImpl implements GroupService {
                 throw new DeleteFailedEntityRelatedGroupCodeException(ErrorCode.DELETE_FAILED_ENTITY_RELATED_GROUPCODE);
             }
         } else{
-            throw new GroupNotFoundException(ErrorCode.GROUP_NOT_FOUND);
+            throw new GroupCodeNotFoundException(ErrorCode.GROUPCODE_NOT_FOUND);
         }
 
     }
@@ -178,7 +179,7 @@ public class GroupServiceImpl implements GroupService {
                 throw new DeleteFailedEntityRelatedGroupCodeException(ErrorCode.DELETE_FAILED_ENTITY_RELATED_GROUPCODE);
             }
         } else{
-            throw new GroupNotFoundException(ErrorCode.GROUP_NOT_FOUND);
+            throw new GroupCodeNotFoundException(ErrorCode.GROUPCODE_NOT_FOUND);
         }
 
     }

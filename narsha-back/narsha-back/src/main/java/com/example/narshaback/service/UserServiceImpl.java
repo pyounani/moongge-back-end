@@ -74,7 +74,11 @@ public class UserServiceImpl implements UserService {
         Optional<UserEntity> user = userRepository.findByUserId(joinGroupDTO.getUserId());
         Optional<GroupEntity> group = groupRepository.findByGroupCode(joinGroupDTO.getGroupCode());
 
-        if(!group.isPresent())
+        if(!user.isPresent()){
+            throw new UserIdNotFoundException(ErrorCode.USERID_NOT_FOUND);
+        }
+
+        else if(!group.isPresent())
             throw new GroupNotFoundException(ErrorCode.GROUP_NOT_FOUND);
 
         // badgeList 생성

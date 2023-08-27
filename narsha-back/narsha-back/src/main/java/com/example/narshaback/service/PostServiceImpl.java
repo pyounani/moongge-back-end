@@ -78,7 +78,7 @@ public class PostServiceImpl implements PostService{
         Optional<GroupEntity> group = groupRepository.findByGroupCode(groupCode);
 
         if(!group.isPresent()){
-            throw new GroupNotFoundException(ErrorCode.GROUPCODE_NOT_FOUND);
+            throw new GroupCodeNotFoundException(ErrorCode.GROUPCODE_NOT_FOUND);
         }
 
         Optional<UserEntity> user = userRepository.findByUserId(userId);
