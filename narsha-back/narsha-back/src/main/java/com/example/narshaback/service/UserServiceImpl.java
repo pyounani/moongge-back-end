@@ -109,7 +109,8 @@ public class UserServiceImpl implements UserService {
         if(!profile.isPresent())
             throw new ProfileNotFoundException(ErrorCode.PROFILE_NOT_FOUND);
 
-        profile.get().setProfileImage(updateUserProfileDTO.getProfileImage());
+        if(updateUserProfileDTO.getProfileImage() != null)
+            profile.get().setProfileImage(updateUserProfileDTO.getProfileImage());
         profile.get().setBirth(updateUserProfileDTO.getBirth());
         profile.get().setIntro(updateUserProfileDTO.getIntro());
         profile.get().setNikname(updateUserProfileDTO.getNikname());
