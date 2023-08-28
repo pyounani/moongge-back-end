@@ -31,11 +31,11 @@ public class GroupEntity {
     @Column(nullable = false)
     private Integer groupClass; // 반
 
-    @Column(length=30)
-    private Integer startTime;
+    @CreatedDate
+    private LocalDateTime startTime;
 
-    @Column(length=30)
-    private Integer endTime;
+    @CreatedDate
+    private LocalDateTime endTime;
 
     @CreatedDate
     private LocalDateTime createAt; // 생성일
