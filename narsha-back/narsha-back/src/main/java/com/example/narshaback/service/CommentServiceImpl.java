@@ -11,6 +11,7 @@ import com.example.narshaback.entity.GroupEntity;
 import com.example.narshaback.entity.PostEntity;
 import com.example.narshaback.base.projection.comment.GetComment;
 import com.example.narshaback.entity.UserEntity;
+import com.example.narshaback.event.CommentCreatedEvent;
 import com.example.narshaback.repository.CommentRepository;
 import com.example.narshaback.repository.GroupRepository;
 import com.example.narshaback.repository.PostRepository;
@@ -23,6 +24,7 @@ import lombok.RequiredArgsConstructor;
 import org.apache.tomcat.util.json.JSONParser;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
@@ -47,6 +49,8 @@ public class CommentServiceImpl implements CommentService {
 
 
     private final UserRepository userRepository;
+
+    private final ApplicationEventPublisher eventPublisher;
 
     WebClient webClient = WebClient.create("http://localhost:8000");
 //    WebClient webClient = WebClient.builder()
@@ -82,6 +86,11 @@ public class CommentServiceImpl implements CommentService {
                 .groupCode(user.get().getGroupCode())
                 .content(createCommentDTO.getContent())
                 .build();
+
+        commentRepository.save(comment);
+
+        CommentCreatedEvent event = new CommentCreatedEvent(this, comment);
+        eventPublisher.publishEvent(event);
 
         return commentRepository.save(comment).getCommentId();
     }

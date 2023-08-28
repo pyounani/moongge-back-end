@@ -6,6 +6,8 @@ import java.time.LocalDateTime;
 
 public interface GetNotice {
 
+    Integer getNoticeId();
+
     String getNoticeTitle();
 
     String getNoticeContent();

@@ -28,4 +28,6 @@ public interface PostRepository extends JpaRepository<PostEntity, Integer> {
 
     List<GetMainPost> findByCreateAtBetweenOrderByCreateAtDesc(LocalDateTime startTime, LocalDateTime endTime);
 
+    List<PostEntity> findByUser(UserEntity user);
+
 }

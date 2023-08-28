@@ -8,11 +8,13 @@ import com.example.narshaback.entity.LikeEntity;
 import com.example.narshaback.entity.PostEntity;
 import com.example.narshaback.base.projection.like.GetLikeList;
 import com.example.narshaback.entity.UserEntity;
+import com.example.narshaback.event.LikeCreatedEvent;
 import com.example.narshaback.repository.GroupRepository;
 import com.example.narshaback.repository.LikeRepository;
 import com.example.narshaback.repository.PostRepository;
 import com.example.narshaback.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -29,6 +31,8 @@ public class LikeServiceImpl implements LikeService{
     private final GroupRepository groupRepository;
 
     private final UserRepository userRepository;
+
+    private final ApplicationEventPublisher eventPublisher;
 
     @Override
     public Integer createLike(CreateLikeDTO createLikeDTO) {
@@ -54,6 +58,11 @@ public class LikeServiceImpl implements LikeService{
                 .groupCode(group.get())
                 .userId(user.get())
                 .build();
+
+        likeRepository.save(like);
+
+        LikeCreatedEvent event = new LikeCreatedEvent(this, like);
+        eventPublisher.publishEvent(event);
 
         return likeRepository.save(like).getLikeId();
     }

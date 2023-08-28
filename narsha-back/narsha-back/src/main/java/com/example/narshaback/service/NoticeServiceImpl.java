@@ -10,10 +10,12 @@ import com.example.narshaback.entity.NoticeEntity;
 import com.example.narshaback.entity.UserEntity;
 import com.example.narshaback.base.projection.notice.GetNotice;
 import com.example.narshaback.base.projection.notice.GetRecentNotice;
+import com.example.narshaback.event.NoticeCreatedEvent;
 import com.example.narshaback.repository.GroupRepository;
 import com.example.narshaback.repository.NoticeRepository;
 import com.example.narshaback.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -27,6 +29,8 @@ public class NoticeServiceImpl implements NoticeService{
     private final GroupRepository groupRepository;
 
     private final UserRepository userRepository;
+
+    private final ApplicationEventPublisher eventPublisher;
 
     //공지 작성
     @Override
@@ -48,9 +52,15 @@ public class NoticeServiceImpl implements NoticeService{
                     .noticeContent(createNoticeDTO.getNoticeContent())
                     .writer(user.get())
                     .build();
-            noticeRepository.save(notice).getNoticeId();
+
+            noticeRepository.save(notice);
+
+            NoticeCreatedEvent event = new NoticeCreatedEvent(this, notice);
+            eventPublisher.publishEvent(event);
+
             return true;
         } else return false;
+
     }
 
     //공지 목록
