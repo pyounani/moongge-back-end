@@ -31,6 +31,8 @@ public enum ErrorCode {
     PROFILE_NOT_FOUND(HttpStatus.NOT_FOUND, "프로필 정보를 찾을 수 없습니다."),
     USER_NOT_FOUND(HttpStatus.NOT_FOUND, "아이디에 해당하는 유저를 찾을 수 없습니다."),
     NOTICE_NOT_FOUND(HttpStatus.NOT_FOUND, "공지사항을 찾을 수 없습니다."),
+
+    ALARM_NOT_FOUND(HttpStatus.NOT_FOUND, "알람에 대한 정보를 찾을 수 없습니다."),
     /*
      * 405 METHOD_NOT_ALLOWED: 허용되지 않은 Request Method 호출
      */

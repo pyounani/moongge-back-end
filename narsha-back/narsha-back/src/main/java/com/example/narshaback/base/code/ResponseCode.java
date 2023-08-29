@@ -50,7 +50,9 @@ public enum ResponseCode {
 
     SUCCESS_UPDATE_TIME(HttpStatus.OK, "앱 사용시간 설정 성공"),
 
-    SUCCESS_GET_TIME(HttpStatus.OK, "앱 사용시간 불러오기 성공")
+    SUCCESS_GET_TIME(HttpStatus.OK, "앱 사용시간 불러오기 성공"),
+    SUCCESS_GET_ALARM_LIST(HttpStatus.OK, "알람 목록을 성공적으로 가져왔습니다."),
+    SUCCESS_DELETE_ALARM(HttpStatus.OK, "알람을 성공적으로 삭제했습니다."),
 
     ;
 
