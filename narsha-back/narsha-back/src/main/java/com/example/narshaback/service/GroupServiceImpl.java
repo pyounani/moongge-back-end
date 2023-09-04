@@ -29,6 +29,7 @@ public class GroupServiceImpl implements GroupService {
     private final CommentRepository commentRepository;
     private final PostRepository postRepository;
     private final NoticeRepository noticeRepository;
+    private final AlarmRepository alarmRepository;
 
     @Override
     public String createGroup(CreateGroupDTO createGroupDTO) {
@@ -114,12 +115,13 @@ public class GroupServiceImpl implements GroupService {
         if(group.isPresent()){
             try{
                 // delete
-                Optional<GroupEntity> delGroup = groupRepository.deleteByGroupCode(groupCode);
+                Optional<AlarmEntity> delAlarm = alarmRepository.deleteByGroupCode(group.get());
                 Optional<LikeEntity> delLike =  likeRepository.deleteByGroupCode(group.get());
                 Optional<CommentEntity> delComment =  commentRepository.deleteByGroupCode(group.get());
                 Optional<NoticeEntity> delNotice =  noticeRepository.deleteByGroupCode(group.get());
                 Optional<PostEntity> delPost =  postRepository.deleteByGroupCode(group.get());
                 Optional<UserEntity> delUser =  userRepository.deleteByGroupCode(group.get());
+                Optional<GroupEntity> delGroup = groupRepository.deleteByGroupCode(groupCode);
             } catch(Exception e){
                 throw new DeleteFailedEntityRelatedGroupCodeException(ErrorCode.DELETE_FAILED_ENTITY_RELATED_GROUPCODE);
             }

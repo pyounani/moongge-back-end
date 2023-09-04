@@ -20,4 +20,10 @@ public interface LikeRepository extends JpaRepository<LikeEntity, Integer> {
 
     List<LikeEntity> findByUserId(UserEntity userId);
 
+    Optional<LikeEntity> findByGroupCodeAndUserIdAndPostId(GroupEntity groupCode, UserEntity userId, PostEntity postId);
+
+    Optional<LikeEntity> deleteByGroupCodeAndUserIdAndPostId(GroupEntity groupCode, UserEntity userId, PostEntity postId);
+
+    Long countByGroupCodeAndPostId(GroupEntity groupCode, PostEntity postId);
+
 }

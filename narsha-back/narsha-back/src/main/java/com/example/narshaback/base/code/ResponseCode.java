@@ -34,6 +34,9 @@ public enum ResponseCode {
     SUCCESS_GET_COMMENT_LIST(HttpStatus.OK, "댓글 목록을 성공적으로 가져왔습니다."),
     SUCCESS_CREATE_LIKE(HttpStatus.OK, "좋아요 생성을 성공했습니다."),
     SUCCESS_GET_LIKE_LIST(HttpStatus.OK, "좋아요 목록을 성공적으로 가져왔습니다."),
+    SUCCESS_CHECK_LIKE_POST(HttpStatus.OK, "좋아요 여부를 성공적으로 가져왔습니다."),
+    SUCCESS_DELETE_LIKE(HttpStatus.OK, "좋아요를 성공적으로 취소했습니다."),
+    SUCCESS_COUNT_LIKE(HttpStatus.OK, "좋아요 개수를 성공적으로 가져왔습니다."),
 
     SUCCESS_CREATE_GROUP(HttpStatus.OK, "그룹 생성 성공"),
 
