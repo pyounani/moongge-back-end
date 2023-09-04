@@ -41,4 +41,34 @@ public class LikeController {
                 .body(new ResponseDTO(ResponseCode.SUCCESS_GET_LIKE_LIST, likeList));
 
     }
+
+    @GetMapping("/check")
+    public ResponseEntity<ResponseDTO> checkLike(@RequestParam(value="userId") String userId, @RequestParam(value="groupCode") String groupCode,
+                                                 @RequestParam(value="postId") Integer postId){
+        boolean checkLike = likeService.checkLikePost(userId, groupCode, postId);
+
+        return ResponseEntity
+                .status(ResponseCode.SUCCESS_CHECK_LIKE_POST.getStatus().value())
+                .body(new ResponseDTO(ResponseCode.SUCCESS_CHECK_LIKE_POST, checkLike));
+    }
+
+    @DeleteMapping("/delete")
+    public ResponseEntity<ResponseDTO> deleteLike(@RequestParam(value="userId") String userId, @RequestParam(value="groupCode") String groupCode,
+                                                  @RequestParam(value="postId") Integer postId){
+        String deleteLike = likeService.deleteLike(userId, groupCode, postId);
+
+        return ResponseEntity
+                .status(ResponseCode.SUCCESS_DELETE_LIKE.getStatus().value())
+                .body(new ResponseDTO(ResponseCode.SUCCESS_DELETE_LIKE, deleteLike));
+    }
+
+    @GetMapping("/count")
+    public ResponseEntity<ResponseDTO> countLike(@RequestParam(value="groupCode") String groupCode, @RequestParam(value="postId") Integer postId){
+
+        Long like = likeService.countLike(groupCode, postId);
+
+        return ResponseEntity
+                .status(ResponseCode.SUCCESS_COUNT_LIKE.getStatus().value())
+                .body(new ResponseDTO(ResponseCode.SUCCESS_COUNT_LIKE, like));
+    }
 }

@@ -9,14 +9,12 @@ import com.example.narshaback.entity.PostEntity;
 import com.example.narshaback.base.projection.like.GetLikeList;
 import com.example.narshaback.entity.UserEntity;
 import com.example.narshaback.event.LikeCreatedEvent;
-import com.example.narshaback.repository.GroupRepository;
-import com.example.narshaback.repository.LikeRepository;
-import com.example.narshaback.repository.PostRepository;
-import com.example.narshaback.repository.UserRepository;
+import com.example.narshaback.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 
@@ -31,6 +29,7 @@ public class LikeServiceImpl implements LikeService{
     private final GroupRepository groupRepository;
 
     private final UserRepository userRepository;
+    private final AlarmRepository alarmRepository;
 
     private final ApplicationEventPublisher eventPublisher;
 
@@ -80,5 +79,83 @@ public class LikeServiceImpl implements LikeService{
         List<GetLikeList> likeList = likeRepository.findByPostId(findPost.get());
 
         return likeList;
+    }
+
+    @Override
+    public Boolean checkLikePost(String userId, String groupCode, Integer postId) {
+
+        Optional<UserEntity> user = userRepository.findByUserId(userId);
+        if(!user.isPresent()) {
+            throw new UserNotFoundException(ErrorCode.USERID_NOT_FOUND);
+        }
+
+        Optional<PostEntity> post = postRepository.findByPostId(postId);
+        // 게시물이 존재하지 않은 경우
+        if (!post.isPresent()) {
+            throw new PostNotFoundException(ErrorCode.POSTS_NOT_FOUND);
+        }
+
+        Optional<GroupEntity> group = groupRepository.findByGroupCode(groupCode);
+        if(!group.isPresent()){
+            throw new GroupNotFoundException(ErrorCode.GROUP_NOT_FOUND);
+        }
+
+        Optional<LikeEntity> like = likeRepository.findByGroupCodeAndUserIdAndPostId(group.get(), user.get(), post.get());
+
+        if(!like.isPresent()){
+            return false;
+        }else {
+            return true;
+        }
+    }
+
+    @Transactional
+    @Override
+    public String deleteLike(String userId, String groupCode, Integer postId){
+
+        Optional<UserEntity> user = userRepository.findByUserId(userId);
+        if(!user.isPresent()) {
+            throw new UserNotFoundException(ErrorCode.USERID_NOT_FOUND);
+        }
+
+        Optional<PostEntity> post = postRepository.findByPostId(postId);
+        // 게시물이 존재하지 않은 경우
+        if (!post.isPresent()) {
+            throw new PostNotFoundException(ErrorCode.POSTS_NOT_FOUND);
+        }
+
+        Optional<GroupEntity> group = groupRepository.findByGroupCode(groupCode);
+        if(!group.isPresent()){
+            throw new GroupNotFoundException(ErrorCode.GROUP_NOT_FOUND);
+        }
+
+        Optional<LikeEntity> like = likeRepository.findByGroupCodeAndUserIdAndPostId(group.get(), user.get(), post.get());
+
+        if(like.isPresent()){
+            alarmRepository.deleteByLikeId(like.get());
+            likeRepository.deleteByGroupCodeAndUserIdAndPostId(group.get(), user.get(), post.get());
+        }
+
+        return "success";
+    }
+
+    @Override
+    public Long countLike(String groupCode, Integer postId){
+
+        Optional<GroupEntity> group = groupRepository.findByGroupCode(groupCode);
+        if(!group.isPresent()){
+            throw new GroupNotFoundException(ErrorCode.GROUP_NOT_FOUND);
+        }
+
+        Optional<PostEntity> post = postRepository.findByPostId(postId);
+        // 게시물이 존재하지 않은 경우
+        if (!post.isPresent()) {
+            throw new PostNotFoundException(ErrorCode.POSTS_NOT_FOUND);
+        }
+
+        Long like = likeRepository.countByGroupCodeAndPostId(group.get(), post.get());
+
+        return like;
+
     }
 }
