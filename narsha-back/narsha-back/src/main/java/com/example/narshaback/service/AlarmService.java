@@ -9,5 +9,6 @@ public interface AlarmService {
     List<GetAlarmList> getAlarmList(String userId, String groupCode);
 
     void deleteAlarm(Integer alarmId);
+
 }
 

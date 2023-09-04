@@ -1,5 +1,7 @@
 package com.example.narshaback.listener;
+import com.example.narshaback.event.AlarmCreatedEvent;
 import com.example.narshaback.event.CommentCreatedEvent;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,9 +15,11 @@ import java.time.LocalDateTime;
 public class CommentEventListener {
 
     private final AlarmRepository alarmRepository;
+    private final ApplicationEventPublisher eventPublisher;
 
-    public CommentEventListener(AlarmRepository alarmRepository) {
+    public CommentEventListener(AlarmRepository alarmRepository, ApplicationEventPublisher eventPublisher) {
         this.alarmRepository = alarmRepository;
+        this.eventPublisher = eventPublisher;
     }
 
     @EventListener
@@ -33,6 +37,11 @@ public class CommentEventListener {
 
         // 알림 엔티티 저장
         alarmRepository.save(alarm);
+
+        AlarmCreatedEvent alarmEvent = new AlarmCreatedEvent(this, alarm);
+        eventPublisher.publishEvent(alarmEvent);
+
+
     }
 }
 

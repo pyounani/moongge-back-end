@@ -1,14 +1,15 @@
 package com.example.narshaback.controller;
 
 import com.example.narshaback.base.code.ResponseCode;
+import com.example.narshaback.base.dto.alarm.FcmTokenRequestDTO;
 import com.example.narshaback.base.dto.response.ResponseDTO;
 import com.example.narshaback.base.projection.alarm.GetAlarmList;
 import com.example.narshaback.service.AlarmService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController // JSON 형태의 결과값 반환
@@ -34,4 +35,6 @@ public class AlarmController {
                 .status(ResponseCode.SUCCESS_DELETE_ALARM.getStatus().value())
                 .body(new ResponseDTO(ResponseCode.SUCCESS_DELETE_ALARM, null));
     }
+
+
 }

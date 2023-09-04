@@ -188,6 +188,17 @@ public class UserServiceImpl implements UserService {
         return studentList;
     }
 
+    @Override
+    public void saveUserFcmToken(String userId, String fcmToken) {
+        Optional<UserEntity> user = userRepository.findByUserId(userId);
+
+        if(user.isPresent()) {
+           UserEntity userEntity = user.get();
+           userEntity.setFcmToken(fcmToken);
+           userRepository.save(userEntity);
+        }
+     }
+
     private GetUserProfile EntityToProjectionUser(UserEntity findUser){
         GetUserProfile userProfile = new GetUserProfile() {
             @Override

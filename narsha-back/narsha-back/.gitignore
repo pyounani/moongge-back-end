@@ -38,3 +38,6 @@ out/
 
 ### application ###
 /src/main/resources/application.yml
+
+### firebase ###
+/src/main/resources/firebase/serviceAccountKey.json

@@ -5,11 +5,12 @@ import com.example.narshaback.base.exception.AlarmNotFoundException;
 import com.example.narshaback.base.exception.GroupNotFoundException;
 import com.example.narshaback.base.exception.UserNotFoundException;
 import com.example.narshaback.base.projection.alarm.GetAlarmList;
-import com.example.narshaback.base.projection.comment.GetComment;
-import com.example.narshaback.base.projection.like.GetLikeList;
-import com.example.narshaback.base.projection.notice.GetNotice;
 import com.example.narshaback.entity.*;
 import com.example.narshaback.repository.*;
+import com.google.firebase.messaging.FirebaseMessaging;
+import com.google.firebase.messaging.FirebaseMessagingException;
+import com.google.firebase.messaging.Message;
+import com.google.firebase.messaging.Notification;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -29,6 +30,7 @@ public class AlarmServiceImpl implements AlarmService{
     private final GroupRepository groupRepository;
 
     private final PostRepository postRepository;
+    private final FirebaseMessaging firebaseMessaging;
 
 
     @Override
@@ -77,6 +79,8 @@ public class AlarmServiceImpl implements AlarmService{
 
         alarmRepository.delete(alarm.get());
     }
+
+
 
 
 }
