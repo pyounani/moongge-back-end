@@ -2,8 +2,10 @@ package com.example.narshaback.listener;
 
 import com.example.narshaback.entity.AlarmEntity;
 import com.example.narshaback.entity.NoticeEntity;
+import com.example.narshaback.event.AlarmCreatedEvent;
 import com.example.narshaback.event.NoticeCreatedEvent;
 import com.example.narshaback.repository.AlarmRepository;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,8 +16,11 @@ import java.time.LocalDateTime;
 public class NoticeEventListener  {
 
     private final AlarmRepository alarmRepository;
+    private final ApplicationEventPublisher eventPublisher;
 
-    public NoticeEventListener(AlarmRepository alarmRepository) {this.alarmRepository = alarmRepository;}
+    public NoticeEventListener(AlarmRepository alarmRepository, ApplicationEventPublisher eventPublisher) {this.alarmRepository = alarmRepository;
+        this.eventPublisher = eventPublisher;
+    }
 
     @EventListener
     @Transactional
@@ -32,5 +37,8 @@ public class NoticeEventListener  {
 
         // 알림 엔티티 저장
         alarmRepository.save(alarm);
+
+        AlarmCreatedEvent alarmEvent = new AlarmCreatedEvent(this, alarm);
+        eventPublisher.publishEvent(alarmEvent);
     }
 }

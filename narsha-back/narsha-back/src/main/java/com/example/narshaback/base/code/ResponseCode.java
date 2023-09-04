@@ -57,6 +57,8 @@ public enum ResponseCode {
     SUCCESS_GET_ALARM_LIST(HttpStatus.OK, "알람 목록을 성공적으로 가져왔습니다."),
     SUCCESS_DELETE_ALARM(HttpStatus.OK, "알람을 성공적으로 삭제했습니다."),
 
+    SUCCESS_SAVE_FCM_TOKEN(HttpStatus.OK, "Fcm 토큰을 성공적으로 가져왔습니다."),
+
     ;
 
     private final HttpStatus status;

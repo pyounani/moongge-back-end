@@ -34,4 +34,6 @@ public interface UserService {
 
     List<GetUser> getStudentList(String GroupId);
 
+    void saveUserFcmToken(String userId, String fcmToken);
+
 }

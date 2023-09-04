@@ -1,21 +1,18 @@
 package com.example.narshaback.controller;
 
-import com.example.narshaback.base.code.ErrorCode;
 import com.example.narshaback.base.code.ResponseCode;
+import com.example.narshaback.base.dto.alarm.FcmTokenRequestDTO;
 import com.example.narshaback.base.dto.group.JoinGroupDTO;
 import com.example.narshaback.base.dto.user.UpdateUserProfileDTO;
 import com.example.narshaback.base.dto.response.ResponseDTO;
 import com.example.narshaback.base.dto.s3.S3FileDTO;
 import com.example.narshaback.base.dto.user.UserLoginDTO;
 import com.example.narshaback.base.dto.user.UserRegisterDTO;
-import com.example.narshaback.base.exception.ProfileNotFoundException;
 import com.example.narshaback.base.projection.user.GetUser;
-import com.example.narshaback.base.projection.user.GetUserInGroup;
 import com.example.narshaback.base.projection.user.GetUserProfile;
 import com.example.narshaback.entity.UserEntity;
 import com.example.narshaback.service.AmazonS3Service;
 import com.example.narshaback.service.UserService;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.JsonObject;
 import lombok.RequiredArgsConstructor;
@@ -158,6 +155,13 @@ public class UserController {
                 .status(ResponseCode.SUCCESS_GET_USER_LIST.getStatus().value())
                 .body(new ResponseDTO(ResponseCode.SUCCESS_GET_USER_LIST, res));
 
+    }
+
+    @PostMapping("/save-fcm-token")
+    public ResponseEntity<String> saveFcmToken(@RequestBody FcmTokenRequestDTO requestDTO) {
+        userService.saveUserFcmToken(requestDTO.getUserId(), requestDTO.getFcmToken());
+
+        return ResponseEntity.ok("FCM token saved successfully");
     }
 
 }

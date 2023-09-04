@@ -37,4 +37,7 @@ out/
 .vscode/
 
 ### application ###
-#/src/main/resources/application.yml
+/src/main/resources/application.yml
+
+### firebase ###
+/src/main/resources/firebase/serviceAccountKey.json
