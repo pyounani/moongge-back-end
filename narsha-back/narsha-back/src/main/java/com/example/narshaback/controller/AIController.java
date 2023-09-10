@@ -2,6 +2,7 @@ package com.example.narshaback.controller;
 
 import com.example.narshaback.base.code.ResponseCode;
 import com.example.narshaback.base.dto.response.ResponseDTO;
+import com.example.narshaback.service.TextService;
 import com.google.gson.JsonObject;
 import lombok.RequiredArgsConstructor;
 import org.apache.tomcat.util.json.JSONParser;
@@ -13,10 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -30,6 +28,9 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/api/ai-flask")
 public class AIController {
+
+    private final TextService textService;
+
     @PostMapping("/object-detect")
     public ResponseEntity<ResponseDTO> objectDetect(@RequestParam("images") List<MultipartFile> imageFiles) throws Exception {
         // request setting //
@@ -86,5 +87,15 @@ public class AIController {
     private String getBase64String(MultipartFile multipartFile) throws Exception {
         byte[] bytes = multipartFile.getBytes();
         return Base64.getEncoder().encodeToString(bytes);
+    }
+
+    @GetMapping("/text-filter")
+    public ResponseEntity<ResponseDTO> textFilter(@RequestParam("text") String text){
+
+        String res = textService.getTextFiltering(text);
+
+        return ResponseEntity
+                .status(ResponseCode.SUCCESS_TEXT_FILTERING.getStatus().value())
+                .body(new ResponseDTO(ResponseCode.SUCCESS_TEXT_FILTERING, res));
     }
 }
