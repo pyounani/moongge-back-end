@@ -26,7 +26,7 @@ public interface PostRepository extends JpaRepository<PostEntity, Integer> {
 
     Optional<PostEntity> deleteByGroupCode(GroupEntity groupCode);
 
-    List<GetMainPost> findByCreateAtBetweenOrderByCreateAtDesc(LocalDateTime startTime, LocalDateTime endTime);
+    List<GetMainPost> findByGroupCodeAndCreateAtBetweenOrderByCreateAtDesc(GroupEntity groupCode, LocalDateTime startTime, LocalDateTime endTime);
 
     List<PostEntity> findByUser(UserEntity user);
 

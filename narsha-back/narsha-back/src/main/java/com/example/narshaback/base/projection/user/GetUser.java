@@ -13,4 +13,6 @@ public interface GetUser {
     String getBirth();
 
     String getProfileImage();
+
+    String getFcmToken();
 }
