@@ -4,6 +4,7 @@ import com.example.narshaback.base.dto.comment.CreateCommentDTO;
 import com.example.narshaback.base.projection.comment.GetComment;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface CommentService {
     Integer createComment(CreateCommentDTO createCommentDTO);
@@ -11,5 +12,7 @@ public interface CommentService {
     List<GetComment> getCommentList(Integer postId);
 
     String createAIComment(Integer postId);
+
+    Optional<GetComment> getRecentComment(Integer postId);
 
 }

@@ -16,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
+import java.util.Optional;
 
 @RestController // JSON 형태의 결과값 반환
 @Controller
@@ -50,6 +51,15 @@ public class CommentController {
         return ResponseEntity
                 .status(ResponseCode.SUCCESS_CREATE_COMMENT.getStatus().value())
                 .body(new ResponseDTO(ResponseCode.SUCCESS_CREATE_COMMENT, commentId));
+    }
+
+    @GetMapping("/recent")
+    public ResponseEntity<ResponseDTO> getRecentComment(@RequestParam(value = "postId") Integer postId){
+        Optional<GetComment> recentComment = commentService.getRecentComment(postId);
+
+        return ResponseEntity
+                .status(ResponseCode.SUCCESS_GET_RECENT_COMMENT.getStatus().value())
+                .body(new ResponseDTO(ResponseCode.SUCCESS_GET_RECENT_COMMENT, recentComment));
     }
 
 }
