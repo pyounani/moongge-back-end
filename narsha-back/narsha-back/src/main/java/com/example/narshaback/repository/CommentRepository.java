@@ -16,6 +16,6 @@ public interface CommentRepository extends JpaRepository<CommentEntity, Integer>
 
     Optional<CommentEntity> deleteByGroupCode(GroupEntity groupCode);
 
-    Optional<GetComment> findTopByPostIdOrderByCreateAtDesc(PostEntity postId);
+    Optional<GetComment> findTopByPostIdOrderByCreateAtDesc(PostEntity post);
 
 }

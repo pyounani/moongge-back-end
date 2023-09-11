@@ -8,6 +8,7 @@ import com.example.narshaback.base.exception.EmptyCommentContentException;
 import com.example.narshaback.base.exception.GroupCodeNotFoundException;
 import com.example.narshaback.base.exception.PostNotFoundException;
 import com.example.narshaback.base.projection.comment.GetComment;
+import com.example.narshaback.entity.CommentEntity;
 import com.example.narshaback.service.CommentService;
 import com.google.gson.JsonObject;
 import lombok.RequiredArgsConstructor;
