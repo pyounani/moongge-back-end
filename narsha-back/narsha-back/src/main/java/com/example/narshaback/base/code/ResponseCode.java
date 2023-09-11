@@ -51,8 +51,6 @@ public enum ResponseCode {
     SUCCESS_GET_POST_LIST(HttpStatus.OK,"사용자 게시글 목록 불러오기 성공"),
     SUCCESS_TEXT_FILTERING(HttpStatus.OK,"텍스트 필터링 성공"),
 
-    SUCCESS_TEXT_FILTERING(HttpStatus.OK, "텍스트 필터링 성공"),
-
     SUCCESS_DETAIL_POST(HttpStatus.OK, "포스트 상세 불러오기 성공"),
 
     SUCCESS_UPDATE_TIME(HttpStatus.OK, "앱 사용시간 설정 성공"),
