@@ -110,6 +110,20 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
+    public Optional<GetComment> getRecentComment(Integer postId) {
+
+        Optional<PostEntity> findPost = postRepository.findByPostId(postId);
+        // 게시물이 존재하지 않은 경우
+        if (!findPost.isPresent()) {
+            throw new PostNotFoundException(ErrorCode.POSTS_NOT_FOUND);
+        }
+
+        Optional<GetComment> recentComment = commentRepository.findTopByPostIdOrderByCreateAtDesc(findPost.get());
+
+        return recentComment;
+    }
+
+    @Override
     public String createAIComment(Integer postId) {
 
         //포스트 검색
