@@ -20,7 +20,7 @@ public class TextServiceImpl implements TextService {
         String textInput = "{\"input\": \""+ text +"\"}";
 
         String res = webClient.post()
-                .uri("/lime/curse-filter")
+                .uri("/lime/text-filter")
                 .acceptCharset(StandardCharsets.UTF_8)
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
