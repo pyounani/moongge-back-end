@@ -4,6 +4,7 @@ import com.example.narshaback.entity.CommentEntity;
 import com.example.narshaback.entity.GroupEntity;
 import com.example.narshaback.entity.PostEntity;
 import com.example.narshaback.base.projection.comment.GetComment;
+import com.example.narshaback.entity.UserEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
@@ -17,5 +18,8 @@ public interface CommentRepository extends JpaRepository<CommentEntity, Integer>
     Optional<CommentEntity> deleteByGroupCode(GroupEntity groupCode);
 
     Optional<GetComment> findTopByPostIdOrderByCreateAtDesc(PostEntity post);
+
+//    List<GetComment> findByUserId(String userId);
+    Long countByUserId(UserEntity userId);
 
 }

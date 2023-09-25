@@ -15,5 +15,7 @@ public interface CommentService {
     String createAIComment(Integer postId);
 
     Optional<GetComment> getRecentComment(Integer postId);
+    Long countComment(String userId);
+
 
 }

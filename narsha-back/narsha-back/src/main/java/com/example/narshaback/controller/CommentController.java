@@ -63,4 +63,13 @@ public class CommentController {
                 .body(new ResponseDTO(ResponseCode.SUCCESS_GET_RECENT_COMMENT, recentComment));
     }
 
+    @GetMapping("/count")
+    public ResponseEntity<ResponseDTO> getCommentCount(@RequestParam(value = "userId") String userId){
+
+        Long commentCount = commentService.countComment(userId);
+
+        return ResponseEntity
+                .status(ResponseCode.SUCCESS_GET_COMMENT_COUNT.getStatus().value())
+                .body(new ResponseDTO(ResponseCode.SUCCESS_GET_COMMENT_COUNT, commentCount));
+    }
 }
