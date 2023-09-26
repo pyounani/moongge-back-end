@@ -30,45 +30,45 @@ import java.util.List;
 public class AIController {
     private final TextService textService;
 
-    @PostMapping("/image-mask")
-    public ResponseEntity<ResponseDTO> imageMask(@RequestParam("images") List<MultipartFile> imageFiles) throws Exception {
-        // request setting //
-        RestTemplate restTemplate = new RestTemplate(); // req set
-        MultiValueMap<String, String> body = new LinkedMultiValueMap<>(); // body set
-
-        List<String> fileNameArr = new ArrayList<>();
-        List<String> ImageArr = new ArrayList<>();
-
-        // 1. Header set
-        HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.setContentType(MediaType.APPLICATION_JSON);
-
-        // 2. Body set
-        for (MultipartFile image : imageFiles){
-            String fileName = image.getOriginalFilename();
-            String imageFileString = getBase64String(image);
-            fileNameArr.add(fileName);
-            ImageArr.add(imageFileString);
-        }
-
-        body.add("filename", fileNameArr.toString());
-        body.add("images", ImageArr.toString());
-
-        // 3. Message
-        HttpEntity<?> requestMessage = new HttpEntity<>(body, httpHeaders);
-        System.out.println(requestMessage);
-
-        // 4. Request
-        String res = restTemplate.postForObject("http://127.0.0.1:8000/image/mask-image", requestMessage, String.class);
-        System.out.println(res);
-
-        // 5. Result
-        //JSONParser parser = new JSONParser(res);
-
-        return ResponseEntity
-                .status(ResponseCode.SUCCESS_IMAGE_MASKING.getStatus().value())
-                .body(new ResponseDTO(ResponseCode.SUCCESS_IMAGE_MASKING, res));
-    }
+//    @PostMapping("/image-mask")
+//    public ResponseEntity<ResponseDTO> imageMask(@RequestParam("images") List<MultipartFile> imageFiles) throws Exception {
+//        // request setting //
+//        RestTemplate restTemplate = new RestTemplate(); // req set
+//        MultiValueMap<String, String> body = new LinkedMultiValueMap<>(); // body set
+//
+//        List<String> fileNameArr = new ArrayList<>();
+//        List<String> ImageArr = new ArrayList<>();
+//
+//        // 1. Header set
+//        HttpHeaders httpHeaders = new HttpHeaders();
+//        httpHeaders.setContentType(MediaType.APPLICATION_JSON);
+//
+//        // 2. Body set
+//        for (MultipartFile image : imageFiles){
+//            String fileName = image.getOriginalFilename();
+//            String imageFileString = getBase64String(image);
+//            fileNameArr.add(fileName);
+//            ImageArr.add(imageFileString);
+//        }
+//
+//        body.add("filename", fileNameArr.toString());
+//        body.add("images", ImageArr.toString());
+//
+//        // 3. Message
+//        HttpEntity<?> requestMessage = new HttpEntity<>(body, httpHeaders);
+//        System.out.println(requestMessage);
+//
+//        // 4. Request
+//        String res = restTemplate.postForObject("http://127.0.0.1:8000/image/mask-image", requestMessage, String.class);
+//        System.out.println(res);
+//
+//        // 5. Result
+//        //JSONParser parser = new JSONParser(res);
+//
+//        return ResponseEntity
+//                .status(ResponseCode.SUCCESS_IMAGE_MASKING.getStatus().value())
+//                .body(new ResponseDTO(ResponseCode.SUCCESS_IMAGE_MASKING, res));
+//    }
 
 
     @PostMapping("/object-detect")
@@ -111,6 +111,7 @@ public class AIController {
         // 5. Result
         String res = restTemplate.postForObject("http://127.0.0.1:8000/image/object-detect/nersha_yolo5_model_ysy", requestMessage, String.class);
         System.out.println(res);
+
         // send to flask, get result
 
         JSONParser parser = new JSONParser(res);
