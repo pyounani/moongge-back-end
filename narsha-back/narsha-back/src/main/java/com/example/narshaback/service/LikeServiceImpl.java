@@ -3,6 +3,7 @@ package com.example.narshaback.service;
 import com.example.narshaback.base.code.ErrorCode;
 import com.example.narshaback.base.dto.like.CreateLikeDTO;
 import com.example.narshaback.base.exception.*;
+import com.example.narshaback.base.projection.post.GetOneUserPost;
 import com.example.narshaback.entity.GroupEntity;
 import com.example.narshaback.entity.LikeEntity;
 import com.example.narshaback.entity.PostEntity;
@@ -156,6 +157,35 @@ public class LikeServiceImpl implements LikeService{
         Long like = likeRepository.countByGroupCodeAndPostId(group.get(), post.get());
 
         return like;
+
+    }
+
+    @Override
+    public Boolean checkTenLikes(String userId, String groupCode) {
+
+        Optional<UserEntity> user = userRepository.findByUserId(userId);
+        if(!user.isPresent()) {
+            throw new UserNotFoundException(ErrorCode.USERID_NOT_FOUND);
+        }
+
+        Optional<GroupEntity> group = groupRepository.findByGroupCode(groupCode);
+        if(!group.isPresent()){
+            throw new GroupNotFoundException(ErrorCode.GROUP_NOT_FOUND);
+        }
+
+        List<GetOneUserPost> userPostList = postRepository.findByUserOrderByCreateAtDesc(user.get());
+
+        for (int i=0;i<userPostList.size();i++){
+            GetOneUserPost post = userPostList.get(i);
+            Integer postId = post.getPostId();
+
+            Integer count = Math.toIntExact(countLike(groupCode, postId));
+            if (count>=10){
+                return true;
+            }
+        }
+
+        return false;
 
     }
 }

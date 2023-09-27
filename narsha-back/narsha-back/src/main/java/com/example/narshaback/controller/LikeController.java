@@ -71,4 +71,14 @@ public class LikeController {
                 .status(ResponseCode.SUCCESS_COUNT_LIKE.getStatus().value())
                 .body(new ResponseDTO(ResponseCode.SUCCESS_COUNT_LIKE, like));
     }
+
+    @GetMapping("/check-tenLikes")
+    public ResponseEntity<ResponseDTO> checkTenLikes(@RequestParam(value = "userId") String userId, @RequestParam(value="groupCode") String groupCode){
+
+        Boolean isTen = likeService.checkTenLikes(userId, groupCode);
+
+        return ResponseEntity
+                .status(ResponseCode.SUCCESS_COUNT_TEN_LIKE.getStatus().value())
+                .body(new ResponseDTO(ResponseCode.SUCCESS_COUNT_TEN_LIKE, isTen));
+    }
 }

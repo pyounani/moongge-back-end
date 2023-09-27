@@ -12,5 +12,6 @@ public interface LikeService {
     String deleteLike(String userId, String groupCode, Integer postId);
     Long countLike(String groupCode, Integer postId);
 
+    Boolean checkTenLikes(String userId, String groupCode);
 }
 

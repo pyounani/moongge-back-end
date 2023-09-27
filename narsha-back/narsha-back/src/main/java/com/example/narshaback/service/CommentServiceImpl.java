@@ -2,10 +2,7 @@ package com.example.narshaback.service;
 
 import com.example.narshaback.base.code.ErrorCode;
 import com.example.narshaback.base.dto.comment.CreateCommentDTO;
-import com.example.narshaback.base.exception.EmptyCommentContentException;
-import com.example.narshaback.base.exception.GroupCodeNotFoundException;
-import com.example.narshaback.base.exception.PostNotFoundException;
-import com.example.narshaback.base.exception.UserNotFoundException;
+import com.example.narshaback.base.exception.*;
 import com.example.narshaback.entity.CommentEntity;
 import com.example.narshaback.entity.GroupEntity;
 import com.example.narshaback.entity.PostEntity;
@@ -17,6 +14,7 @@ import com.example.narshaback.repository.GroupRepository;
 import com.example.narshaback.repository.PostRepository;
 import com.example.narshaback.repository.UserRepository;
 import com.fasterxml.jackson.core.json.UTF8DataInputJsonParser;
+import com.google.api.services.storage.Storage;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.sun.tools.jconsole.JConsoleContext;
@@ -527,5 +525,18 @@ public class CommentServiceImpl implements CommentService {
         return result.toString();
     }
 
+    @Override
+    public Long countComment(String userId){
+
+        Optional<UserEntity> user = userRepository.findByUserId(userId);
+        if(!user.isPresent()) {
+            throw new UserNotFoundException(ErrorCode.USER_NOT_FOUND);
+        }
+
+        Long count = commentRepository.countByUserId(user.get());
+
+        return count;
+
+    }
 
 }
