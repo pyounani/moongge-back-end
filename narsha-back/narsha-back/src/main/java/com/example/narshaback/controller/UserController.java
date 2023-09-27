@@ -143,8 +143,8 @@ public class UserController {
     }
 
     @GetMapping("/student-list")
-    public ResponseEntity<ResponseDTO> getStudentList(@RequestParam(value = "groupCode")String groupCode){
-        List<GetUser> res = userService.getStudentList(groupCode);
+    public ResponseEntity<ResponseDTO> getStudentList(@RequestParam(value = "groupCode")String groupCode, @RequestParam(value = "userId")String userId){
+        List<GetUser> res = userService.getStudentList(groupCode, userId);
         JsonObject obj = new JsonObject();
 
         if(res == null) {

@@ -178,12 +178,17 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<GetUser> getStudentList(String GroupId) {
+    public List<GetUser> getStudentList(String GroupId, String userId) {
         Optional<GroupEntity> group = groupRepository.findByGroupCode(GroupId);
         if(!group.isPresent())
             throw new GroupCodeNotFoundException(ErrorCode.GROUPCODE_NOT_FOUND);
 
-        List<GetUser> studentList = userRepository.findByGroupCode(group.get());
+        Optional<UserEntity> profile = userRepository.findByUserId(userId);
+        if(!profile.isPresent())
+            throw new ProfileNotFoundException(ErrorCode.PROFILE_NOT_FOUND);
+
+//        List<GetUser> studentList = userRepository.findByGroupCode(group.get());
+        List<GetUser> studentList = userRepository.findByGroupCodeAndUserIdNotLike(group.get(), userId);
 
         return studentList;
     }
