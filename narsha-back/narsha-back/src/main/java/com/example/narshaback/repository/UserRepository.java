@@ -12,5 +12,7 @@ public interface UserRepository extends JpaRepository<UserEntity, String> {
     Optional<UserEntity> deleteByGroupCode(GroupEntity groupCode);
     List<GetUser> findByGroupCode(GroupEntity GroupId);
 
+    List<GetUser> findByGroupCodeAndUserIdNotLike(GroupEntity GroupId, String userId);
+
 //    Optional<UserEntity> findByGroupCode(String groupCode);
 }
