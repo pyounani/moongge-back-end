@@ -63,10 +63,17 @@ public class AlarmServiceImpl implements AlarmService{
          //리스트를 합치고 createdAt으로 정렬하여 최대 7개로 제한
         List<GetAlarmList> combinedAlarms = Stream.concat(commentAndLikeAlarm.stream(), noticeAlarm.stream())
                 .sorted(Comparator.comparing(GetAlarmList::getCreatedAt).reversed())
+                .limit(20)
+                .collect(Collectors.toList());
+
+
+        // 알림 userID에서 파라미터로 들어온 userID 같은건 생략
+        List<GetAlarmList> filteredAlarms = combinedAlarms.stream()
+                .filter(alarm -> !alarm.getUserId().getUserId().equals(userId))
                 .limit(8)
                 .collect(Collectors.toList());
 
-        return combinedAlarms;
+        return filteredAlarms;
 
     }
 
