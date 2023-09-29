@@ -101,13 +101,10 @@ For building and running the application you need:
 - Python 3.10.0
 - Npm 8.15.0
 
-### Client
+### Spring boot server
 ```
-$ git clone https://github.com/DS-Narsha/front-end.git
-$ cd narsha_front
-$ nvm install 16.17.0
-$ npm i
-$ npm start:dev
+$ git clone https://github.com/DS-Narsha/back-end.git
+$ cd narsha-back
 ```
 
 ## Project Structure
