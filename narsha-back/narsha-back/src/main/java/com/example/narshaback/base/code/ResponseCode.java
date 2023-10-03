@@ -39,7 +39,8 @@ public enum ResponseCode {
     SUCCESS_CHECK_LIKE_POST(HttpStatus.OK, "좋아요 여부를 성공적으로 가져왔습니다."),
     SUCCESS_DELETE_LIKE(HttpStatus.OK, "좋아요를 성공적으로 취소했습니다."),
     SUCCESS_COUNT_LIKE(HttpStatus.OK, "좋아요 개수를 성공적으로 가져왔습니다."),
-    SUCCESS_COUNT_TEN_LIKE(HttpStatus.OK, "좋아요 10개 달성 여부를 성공적으로 가져왔습니다."),
+    SUCCESS_RECEIVE_TEN_LIKE(HttpStatus.OK, "좋아요 10개 받기 달성 여부를 성공적으로 가져왔습니다."),
+    SUCCESS_GIVE_TEN_LIKE(HttpStatus.OK, "좋아요 10개 주기 달성 여부를 성공적으로 가져왔습니다."),
 
     SUCCESS_CREATE_GROUP(HttpStatus.OK, "그룹 생성 성공"),
 

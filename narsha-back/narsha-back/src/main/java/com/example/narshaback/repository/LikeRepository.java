@@ -26,4 +26,7 @@ public interface LikeRepository extends JpaRepository<LikeEntity, Integer> {
 
     Long countByGroupCodeAndPostId(GroupEntity groupCode, PostEntity postId);
 
+    Long countByUserId(UserEntity userId);
+
+
 }
