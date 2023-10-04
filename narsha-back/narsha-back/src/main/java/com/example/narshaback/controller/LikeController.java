@@ -72,13 +72,24 @@ public class LikeController {
                 .body(new ResponseDTO(ResponseCode.SUCCESS_COUNT_LIKE, like));
     }
 
-    @GetMapping("/check-tenLikes")
+    @GetMapping("/receive-tenLikes")
     public ResponseEntity<ResponseDTO> checkTenLikes(@RequestParam(value = "userId") String userId, @RequestParam(value="groupCode") String groupCode){
 
-        Boolean isTen = likeService.checkTenLikes(userId, groupCode);
+        Boolean isTen = likeService.receiveTenLikes(userId, groupCode);
 
         return ResponseEntity
-                .status(ResponseCode.SUCCESS_COUNT_TEN_LIKE.getStatus().value())
-                .body(new ResponseDTO(ResponseCode.SUCCESS_COUNT_TEN_LIKE, isTen));
+                .status(ResponseCode.SUCCESS_RECEIVE_TEN_LIKE.getStatus().value())
+                .body(new ResponseDTO(ResponseCode.SUCCESS_RECEIVE_TEN_LIKE, isTen));
+    }
+
+    @GetMapping("/give-tenLikes")
+    public ResponseEntity<ResponseDTO> giveTenLikes(@RequestParam(value = "userId") String userId){
+
+//        Boolean isTen = likeService.giveTenLikes(userId);
+        Long isTen = likeService.giveTenLikes(userId);
+
+        return ResponseEntity
+                .status(ResponseCode.SUCCESS_GIVE_TEN_LIKE.getStatus().value())
+                .body(new ResponseDTO(ResponseCode.SUCCESS_GIVE_TEN_LIKE, isTen));
     }
 }

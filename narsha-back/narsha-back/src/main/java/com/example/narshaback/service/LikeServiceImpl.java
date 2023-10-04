@@ -161,7 +161,7 @@ public class LikeServiceImpl implements LikeService{
     }
 
     @Override
-    public Boolean checkTenLikes(String userId, String groupCode) {
+    public Boolean receiveTenLikes(String userId, String groupCode) {
 
         Optional<UserEntity> user = userRepository.findByUserId(userId);
         if(!user.isPresent()) {
@@ -186,6 +186,24 @@ public class LikeServiceImpl implements LikeService{
         }
 
         return false;
+
+    }
+
+    @Override
+    public Long giveTenLikes(String userId) {
+
+        Optional<UserEntity> user = userRepository.findByUserId(userId);
+        if(!user.isPresent()) {
+            throw new UserNotFoundException(ErrorCode.USERID_NOT_FOUND);
+        }
+
+        Long count = likeRepository.countByUserId(user.get());
+
+        return count;
+//        if (count>=10)
+//            return true;
+//        else
+//            return false;
 
     }
 }
