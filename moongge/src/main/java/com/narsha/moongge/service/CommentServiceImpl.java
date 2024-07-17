@@ -10,7 +10,7 @@ import com.narsha.moongge.entity.CommentEntity;
 import com.narsha.moongge.entity.PostEntity;
 import com.narsha.moongge.entity.UserEntity;
 import com.narsha.moongge.repository.CommentRepository;
-import com.narsha.moongge.repository.GroupRepository;
+import com.narsha.moongge.group.GroupRepository;
 import com.narsha.moongge.repository.PostRepository;
 import com.narsha.moongge.repository.UserRepository;
 import lombok.RequiredArgsConstructor;

@@ -1,5 +1,6 @@
 package com.narsha.moongge.entity;
 
+import com.narsha.moongge.group.GroupEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -42,6 +43,11 @@ public class UserEntity {
     @Column(length=500)
     private String badgeList; // 뱃지 리스트(string array)
 
-    @Column(length=200)
-    private String fcmToken; // FCM 토큰 필드
+    public void updateBadgeList(String badgeList) {
+        this.badgeList = badgeList;
+    }
+
+    public void updateGroupCode(GroupEntity groupCode) {
+        this.groupCode = groupCode;
+    }
 }

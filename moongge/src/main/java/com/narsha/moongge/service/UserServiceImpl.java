@@ -9,9 +9,9 @@ import com.narsha.moongge.base.dto.user.UserRegisterDTO;
 import com.narsha.moongge.base.exception.*;
 import com.narsha.moongge.base.projection.user.GetUser;
 import com.narsha.moongge.base.projection.user.GetUserProfile;
-import com.narsha.moongge.entity.GroupEntity;
 import com.narsha.moongge.entity.UserEntity;
-import com.narsha.moongge.repository.GroupRepository;
+import com.narsha.moongge.group.GroupEntity;
+import com.narsha.moongge.group.GroupRepository;
 import com.narsha.moongge.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.apache.tomcat.util.json.JSONParser;
@@ -198,7 +198,6 @@ public class UserServiceImpl implements UserService {
 
         if(user.isPresent()) {
            UserEntity userEntity = user.get();
-           userEntity.setFcmToken(fcmToken);
            userRepository.save(userEntity);
         }
      }

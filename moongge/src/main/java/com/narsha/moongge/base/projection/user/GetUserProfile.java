@@ -1,6 +1,7 @@
 package com.narsha.moongge.base.projection.user;
 
-import com.narsha.moongge.entity.GroupEntity;
+
+import com.narsha.moongge.group.GroupEntity;
 
 public interface GetUserProfile {
     String getUserId();

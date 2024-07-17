@@ -1,5 +1,6 @@
 package com.narsha.moongge.entity;
 
+import com.narsha.moongge.group.GroupEntity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;

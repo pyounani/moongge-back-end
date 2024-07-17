@@ -1,10 +1,9 @@
-package com.narsha.moongge.controller;
+package com.narsha.moongge.group;
 
 import com.narsha.moongge.base.code.ResponseCode;
 import com.narsha.moongge.base.dto.group.CreateGroupDTO;
 import com.narsha.moongge.base.dto.group.UpdateTimeDTO;
 import com.narsha.moongge.base.dto.response.ResponseDTO;
-import com.narsha.moongge.service.GroupService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,6 +15,9 @@ public class GroupController {
 
     private final GroupService groupService;
 
+    /**
+     * 그룹 생성 API
+     */
     @PostMapping("/create")
     public ResponseEntity<ResponseDTO> createGroup(@RequestBody CreateGroupDTO createGroupDTO){
         String userId = groupService.createGroup(createGroupDTO);

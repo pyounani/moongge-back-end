@@ -1,6 +1,5 @@
-package com.narsha.moongge.repository;
+package com.narsha.moongge.group;
 
-import com.narsha.moongge.entity.GroupEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
