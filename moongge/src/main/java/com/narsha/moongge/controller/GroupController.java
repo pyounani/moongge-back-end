@@ -5,36 +5,20 @@ import com.narsha.moongge.base.dto.group.CreateGroupDTO;
 import com.narsha.moongge.base.dto.group.UpdateTimeDTO;
 import com.narsha.moongge.base.dto.response.ResponseDTO;
 import com.narsha.moongge.service.GroupService;
-import com.narsha.moongge.service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.sql.Update;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-import java.util.Optional;
-
-@RestController // JSON 형태의 결과값 반환
-@Controller
+@RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/group")
 public class GroupController {
 
     private final GroupService groupService;
-    private final UserService userService;
 
     @PostMapping("/create")
     public ResponseEntity<ResponseDTO> createGroup(@RequestBody CreateGroupDTO createGroupDTO){
         String userId = groupService.createGroup(createGroupDTO);
-
-//        JsonObject obj = new JsonObject();
-//        obj.addProperty("user-groupId", res.toString());
-//        if (res == null) obj.addProperty("message", "그룹 생성 실패");
-//        else obj.addProperty("message", "그룹 생성 성공");
-//
-//        return obj.toString();
-
 
         return ResponseEntity
                 .status(ResponseCode.SUCCESS_CREATE_GROUP.getStatus().value())
