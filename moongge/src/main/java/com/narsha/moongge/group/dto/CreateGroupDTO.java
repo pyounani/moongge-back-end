@@ -1,4 +1,4 @@
-package com.narsha.moongge.base.dto.group;
+package com.narsha.moongge.group.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

@@ -1,8 +1,8 @@
 package com.narsha.moongge.group;
 
 import com.narsha.moongge.base.code.ResponseCode;
-import com.narsha.moongge.base.dto.group.CreateGroupDTO;
-import com.narsha.moongge.base.dto.group.UpdateTimeDTO;
+import com.narsha.moongge.group.dto.CreateGroupDTO;
+import com.narsha.moongge.group.dto.UpdateTimeDTO;
 import com.narsha.moongge.base.dto.response.ResponseDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

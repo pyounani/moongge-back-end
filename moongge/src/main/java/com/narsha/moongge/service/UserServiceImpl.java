@@ -2,7 +2,7 @@ package com.narsha.moongge.service;
 
 
 import com.narsha.moongge.base.code.ErrorCode;
-import com.narsha.moongge.base.dto.group.JoinGroupDTO;
+import com.narsha.moongge.group.dto.JoinGroupDTO;
 import com.narsha.moongge.base.dto.user.UpdateUserProfileDTO;
 import com.narsha.moongge.base.dto.user.UserLoginDTO;
 import com.narsha.moongge.base.dto.user.UserRegisterDTO;

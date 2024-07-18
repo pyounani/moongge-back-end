@@ -1,6 +1,6 @@
 package com.narsha.moongge.group;
 
-import com.narsha.moongge.base.dto.group.CreateGroupDTO;
+import com.narsha.moongge.group.dto.CreateGroupDTO;
 import com.narsha.moongge.base.dto.user.UserRegisterDTO;
 import com.narsha.moongge.entity.UserEntity;
 import com.narsha.moongge.repository.UserRepository;

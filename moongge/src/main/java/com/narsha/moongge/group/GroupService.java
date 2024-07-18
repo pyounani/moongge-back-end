@@ -1,8 +1,8 @@
 package com.narsha.moongge.group;
 
 import com.narsha.moongge.base.code.ErrorCode;
-import com.narsha.moongge.base.dto.group.CreateGroupDTO;
-import com.narsha.moongge.base.dto.group.UpdateTimeDTO;
+import com.narsha.moongge.group.dto.CreateGroupDTO;
+import com.narsha.moongge.group.dto.UpdateTimeDTO;
 import com.narsha.moongge.base.exception.DeleteFailedEntityRelatedGroupCodeException;
 import com.narsha.moongge.base.exception.GroupCodeNotFoundException;
 import com.narsha.moongge.base.exception.GroupNotFoundException;
