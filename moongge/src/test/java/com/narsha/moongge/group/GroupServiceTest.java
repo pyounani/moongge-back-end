@@ -31,23 +31,9 @@ class GroupServiceTest {
     void 그룹_생성_테스트() {
 
         // given
-        UserRegisterDTO userRegisterDTO = new UserRegisterDTO();
-        userRegisterDTO.setUserId("userId");
-        userRegisterDTO.setUserType("teacher");
-        userRegisterDTO.setPassword("password");
-        userRegisterDTO.setName("name");
-        userService.register(userRegisterDTO);
+        UserEntity user = createUser();
 
-        Optional<UserEntity> savedUser = userRepository.findByUserId("userId");
-        assertTrue(savedUser.isPresent());
-        UserEntity user = savedUser.get();
-
-        CreateGroupDTO createGroupDTO = new CreateGroupDTO();
-        createGroupDTO.setGroupName("groupName");
-        createGroupDTO.setSchool("school");
-        createGroupDTO.setGrade(3);
-        createGroupDTO.setGroup_class(5);
-        createGroupDTO.setUserId(user.getUserId());
+        CreateGroupDTO createGroupDTO = buildCreateGroupDTO(user);
 
         // when
         String userId = groupService.createGroup(createGroupDTO);
@@ -63,5 +49,29 @@ class GroupServiceTest {
         assertEquals("school", group.getSchool());
         assertEquals(3, group.getGrade());
         assertEquals(5, group.getGroupClass());
+    }
+
+    private CreateGroupDTO buildCreateGroupDTO(UserEntity user) {
+        CreateGroupDTO createGroupDTO = new CreateGroupDTO();
+        createGroupDTO.setGroupName("groupName");
+        createGroupDTO.setSchool("school");
+        createGroupDTO.setGrade(3);
+        createGroupDTO.setGroup_class(5);
+        createGroupDTO.setUserId(user.getUserId());
+        return createGroupDTO;
+    }
+
+    private UserEntity createUser() {
+        UserRegisterDTO userRegisterDTO = new UserRegisterDTO();
+        userRegisterDTO.setUserId("userId");
+        userRegisterDTO.setUserType("teacher");
+        userRegisterDTO.setPassword("password");
+        userRegisterDTO.setName("name");
+        userService.register(userRegisterDTO);
+
+        Optional<UserEntity> savedUser = userRepository.findByUserId("userId");
+        assertTrue(savedUser.isPresent());
+        UserEntity user = savedUser.get();
+        return user;
     }
 }
