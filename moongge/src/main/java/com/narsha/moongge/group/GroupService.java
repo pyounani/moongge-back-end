@@ -52,7 +52,7 @@ public class GroupService {
         // 사용자에 생성된 그룹 업데이트
         UserEntity user = userRepository.findByUserId(createGroupDTO.getUserId())
                 .orElseThrow(() -> new LoginIdNotFoundException(ErrorCode.USERID_NOT_FOUND));
-        user.updateGroupCode(group);
+        user.updateGroup(createdGroup);
 
         // profile badge update
         initialBadgeList(user);
