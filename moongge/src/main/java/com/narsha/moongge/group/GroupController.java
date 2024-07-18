@@ -4,6 +4,7 @@ import com.narsha.moongge.base.code.ResponseCode;
 import com.narsha.moongge.group.dto.CreateGroupDTO;
 import com.narsha.moongge.group.dto.UpdateTimeDTO;
 import com.narsha.moongge.base.dto.response.ResponseDTO;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,7 +20,7 @@ public class GroupController {
      * 그룹 생성 API
      */
     @PostMapping("/create")
-    public ResponseEntity<ResponseDTO> createGroup(@RequestBody CreateGroupDTO createGroupDTO){
+    public ResponseEntity<ResponseDTO> createGroup(@Valid @RequestBody CreateGroupDTO createGroupDTO){
         String userId = groupService.createGroup(createGroupDTO);
 
         return ResponseEntity
