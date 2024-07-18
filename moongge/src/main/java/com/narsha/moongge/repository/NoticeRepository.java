@@ -3,7 +3,7 @@ package com.narsha.moongge.repository;
 import com.narsha.moongge.base.projection.notice.GetNotice;
 import com.narsha.moongge.base.projection.notice.GetRecentNotice;
 import com.narsha.moongge.entity.NoticeEntity;
-import com.narsha.moongge.group.GroupEntity;
+import com.narsha.moongge.entity.GroupEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

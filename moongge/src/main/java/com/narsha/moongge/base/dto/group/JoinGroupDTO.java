@@ -1,22 +1,17 @@
-package com.narsha.moongge.group.dto;
+package com.narsha.moongge.base.dto.group;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.antlr.v4.runtime.misc.NotNull;
 
-import java.time.LocalDateTime;
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class UpdateTimeDTO {
+public class JoinGroupDTO {
 
     @NotNull
-    private LocalDateTime startTime; // 시작 시간
-
-    @NotNull
-    private LocalDateTime endTime; // 끝 시간
+    private String userId; // 유저 id
 
     @NotNull
     private String groupCode; // 그룹 코드

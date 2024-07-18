@@ -6,7 +6,7 @@ import com.narsha.moongge.base.dto.user.UserRegisterDTO;
 import com.narsha.moongge.base.projection.user.GetUser;
 import com.narsha.moongge.base.projection.user.GetUserProfile;
 import com.narsha.moongge.entity.UserEntity;
-import com.narsha.moongge.group.dto.JoinGroupDTO;
+import com.narsha.moongge.base.dto.group.JoinGroupDTO;
 
 import java.util.List;
 import java.util.Optional;

@@ -3,7 +3,7 @@ package com.narsha.moongge.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.JsonObject;
 import com.narsha.moongge.base.code.ResponseCode;
-import com.narsha.moongge.group.dto.JoinGroupDTO;
+import com.narsha.moongge.base.dto.group.JoinGroupDTO;
 import com.narsha.moongge.base.dto.response.ResponseDTO;
 import com.narsha.moongge.base.dto.user.UpdateUserProfileDTO;
 import com.narsha.moongge.base.dto.user.UserLoginDTO;

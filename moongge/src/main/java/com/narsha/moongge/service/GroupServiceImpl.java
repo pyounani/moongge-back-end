@@ -1,8 +1,8 @@
-package com.narsha.moongge.group;
+package com.narsha.moongge.service;
 
 import com.narsha.moongge.base.code.ErrorCode;
-import com.narsha.moongge.group.dto.CreateGroupDTO;
-import com.narsha.moongge.group.dto.UpdateTimeDTO;
+import com.narsha.moongge.base.dto.group.CreateGroupDTO;
+import com.narsha.moongge.base.dto.group.UpdateTimeDTO;
 import com.narsha.moongge.base.exception.DeleteFailedEntityRelatedGroupCodeException;
 import com.narsha.moongge.base.exception.GroupCodeNotFoundException;
 import com.narsha.moongge.base.exception.GroupNotFoundException;
@@ -20,7 +20,7 @@ import java.util.Random;
 
 @Service
 @RequiredArgsConstructor
-public class GroupService {
+public class GroupServiceImpl implements GroupService{
 
     private final GroupRepository groupRepository;
     private final UserRepository userRepository;
@@ -34,6 +34,7 @@ public class GroupService {
     /**
      * 그룹 생성하기
      */
+    @Override
     @Transactional
     public String createGroup(CreateGroupDTO createGroupDTO) {
 
@@ -60,6 +61,7 @@ public class GroupService {
         return user.getUserId();
     }
 
+    @Override
     public String getUserGroupCode(String userId) {
 
         Optional<UserEntity> user = userRepository.findByUserId(userId);
@@ -79,6 +81,7 @@ public class GroupService {
 
     }
 
+    @Override
     @Transactional
     public String deleteGroup(String groupCode) {
 
@@ -104,6 +107,7 @@ public class GroupService {
         return group.get().getGroupCode();
     }
 
+    @Override
     public UpdateTimeDTO updateTime(UpdateTimeDTO updateTimeDTO) {
         Optional<GroupEntity> findGroup = groupRepository.findByGroupCode(updateTimeDTO.getGroupCode());
 
@@ -133,6 +137,7 @@ public class GroupService {
 
     }
 
+    @Override
     public UpdateTimeDTO getTime(String groupCode) {
 
         Optional<GroupEntity> findGroup = groupRepository.findByGroupCode(groupCode);

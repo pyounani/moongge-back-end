@@ -1,4 +1,4 @@
-package com.narsha.moongge.group;
+package com.narsha.moongge.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

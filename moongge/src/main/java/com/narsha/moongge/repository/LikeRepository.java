@@ -5,7 +5,7 @@ import com.narsha.moongge.base.projection.like.GetLikeList;
 import com.narsha.moongge.entity.LikeEntity;
 import com.narsha.moongge.entity.PostEntity;
 import com.narsha.moongge.entity.UserEntity;
-import com.narsha.moongge.group.GroupEntity;
+import com.narsha.moongge.entity.GroupEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

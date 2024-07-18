@@ -1,9 +1,12 @@
 package com.narsha.moongge.group;
 
-import com.narsha.moongge.group.dto.CreateGroupDTO;
+import com.narsha.moongge.entity.GroupEntity;
+import com.narsha.moongge.base.dto.group.CreateGroupDTO;
 import com.narsha.moongge.base.dto.user.UserRegisterDTO;
 import com.narsha.moongge.entity.UserEntity;
+import com.narsha.moongge.repository.GroupRepository;
 import com.narsha.moongge.repository.UserRepository;
+import com.narsha.moongge.service.GroupServiceImpl;
 import com.narsha.moongge.service.UserService;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.Test;
@@ -16,10 +19,10 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @Transactional
-class GroupServiceTest {
+class GroupServiceImplTest {
 
     @Autowired
-    private GroupService groupService;
+    private GroupServiceImpl groupServiceImpl;
     @Autowired
     private UserRepository userRepository;
     @Autowired
@@ -36,7 +39,7 @@ class GroupServiceTest {
         CreateGroupDTO createGroupDTO = buildCreateGroupDTO(user);
 
         // when
-        String userId = groupService.createGroup(createGroupDTO);
+        String userId = groupServiceImpl.createGroup(createGroupDTO);
 
         // then
         assertEquals(user.getUserId(), userId);

@@ -5,7 +5,7 @@ import com.narsha.moongge.base.projection.post.GetOneUserPost;
 import com.narsha.moongge.base.projection.post.GetUserPost;
 import com.narsha.moongge.entity.PostEntity;
 import com.narsha.moongge.entity.UserEntity;
-import com.narsha.moongge.group.GroupEntity;
+import com.narsha.moongge.entity.GroupEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.time.LocalDateTime;
