@@ -6,6 +6,7 @@ import com.narsha.moongge.base.dto.group.UpdateTimeDTO;
 import com.narsha.moongge.base.dto.response.ResponseDTO;
 import com.narsha.moongge.service.GroupServiceImpl;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotEmpty;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -29,8 +30,11 @@ public class GroupController {
                 .body(new ResponseDTO(ResponseCode.SUCCESS_CREATE_GROUP, userId));
     }
 
+    /**
+     * 유저가 속해있는 그룹 코드 가져오기 API
+     */
     @GetMapping("/group-code")
-    public ResponseEntity<ResponseDTO> getUserGroupCode(@RequestParam(value = "userId")String userId){
+    public ResponseEntity<ResponseDTO> getUserGroupCode(@RequestParam @NotEmpty String userId) {
         String res = groupServiceImpl.getUserGroupCode(userId);
 
         return ResponseEntity
