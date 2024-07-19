@@ -88,7 +88,7 @@ public class UserServiceImpl implements UserService {
 
         // profile badge update
         user.get().setBadgeList(newBadgeList.toString()); // add badgeList
-        user.get().setGroupCode(group.get()); // add group code
+        user.get().setGroup(group.get()); // add group code
 
         return userRepository.save(user.get());
     }
@@ -187,7 +187,7 @@ public class UserServiceImpl implements UserService {
             throw new ProfileNotFoundException(ErrorCode.PROFILE_NOT_FOUND);
 
 //        List<GetUser> studentList = userRepository.findByGroupCode(group.get());
-        List<GetUser> studentList = userRepository.findByGroupCodeAndUserIdNotLike(group.get(), userId);
+        List<GetUser> studentList = userRepository.findByGroupAndUserIdNotLike(group.get(), userId);
 
         return studentList;
     }
@@ -211,7 +211,7 @@ public class UserServiceImpl implements UserService {
 
             @Override
             public GroupEntity getGroupCode() {
-                return findUser.getGroupCode();
+                return findUser.getGroup();
             }
 
             @Override

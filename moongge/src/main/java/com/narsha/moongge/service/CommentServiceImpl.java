@@ -74,7 +74,7 @@ public class CommentServiceImpl implements CommentService {
         CommentEntity comment = CommentEntity.builder()
                 .postId(post.get())
                 .userId(user.get())
-                .groupCode(user.get().getGroupCode())
+                .groupCode(user.get().getGroup())
                 .content(createCommentDTO.getContent())
                 .build();
 
@@ -146,7 +146,7 @@ public class CommentServiceImpl implements CommentService {
                 CommentEntity comment = CommentEntity.builder()
                         .postId(post.get())
                         .userId(user.get())
-                        .groupCode(user.get().getGroupCode())
+                        .groupCode(user.get().getGroup())
                         .content(res)
                         .build();
 
@@ -168,7 +168,7 @@ public class CommentServiceImpl implements CommentService {
                 CommentEntity comment = CommentEntity.builder()
                         .postId(post.get())
                         .userId(user.get())
-                        .groupCode(user.get().getGroupCode())
+                        .groupCode(user.get().getGroup())
                         .content(res)
                         .build();
 
@@ -190,7 +190,7 @@ public class CommentServiceImpl implements CommentService {
                 CommentEntity comment = CommentEntity.builder()
                         .postId(post.get())
                         .userId(user.get())
-                        .groupCode(user.get().getGroupCode())
+                        .groupCode(user.get().getGroup())
                         .content(res)
                         .build();
 
@@ -217,7 +217,7 @@ public class CommentServiceImpl implements CommentService {
                 CommentEntity comment = CommentEntity.builder()
                         .postId(post.get())
                         .userId(user.get())
-                        .groupCode(user.get().getGroupCode())
+                        .groupCode(user.get().getGroup())
                         .content(res)
                         .build();
 
@@ -238,7 +238,7 @@ public class CommentServiceImpl implements CommentService {
                 CommentEntity comment = CommentEntity.builder()
                         .postId(post.get())
                         .userId(user.get())
-                        .groupCode(user.get().getGroupCode())
+                        .groupCode(user.get().getGroup())
                         .content(res)
                         .build();
 
@@ -260,7 +260,7 @@ public class CommentServiceImpl implements CommentService {
                 CommentEntity comment = CommentEntity.builder()
                         .postId(post.get())
                         .userId(user.get())
-                        .groupCode(user.get().getGroupCode())
+                        .groupCode(user.get().getGroup())
                         .content(res)
                         .build();
 
@@ -286,7 +286,7 @@ public class CommentServiceImpl implements CommentService {
                 CommentEntity comment = CommentEntity.builder()
                         .postId(post.get())
                         .userId(user.get())
-                        .groupCode(user.get().getGroupCode())
+                        .groupCode(user.get().getGroup())
                         .content(res)
                         .build();
 
@@ -307,7 +307,7 @@ public class CommentServiceImpl implements CommentService {
                 CommentEntity comment = CommentEntity.builder()
                         .postId(post.get())
                         .userId(user.get())
-                        .groupCode(user.get().getGroupCode())
+                        .groupCode(user.get().getGroup())
                         .content(res)
                         .build();
 
@@ -329,7 +329,7 @@ public class CommentServiceImpl implements CommentService {
                 CommentEntity comment = CommentEntity.builder()
                         .postId(post.get())
                         .userId(user.get())
-                        .groupCode(user.get().getGroupCode())
+                        .groupCode(user.get().getGroup())
                         .content(res)
                         .build();
 
@@ -355,7 +355,7 @@ public class CommentServiceImpl implements CommentService {
                 CommentEntity comment = CommentEntity.builder()
                         .postId(post.get())
                         .userId(user.get())
-                        .groupCode(user.get().getGroupCode())
+                        .groupCode(user.get().getGroup())
                         .content(res)
                         .build();
 
@@ -376,7 +376,7 @@ public class CommentServiceImpl implements CommentService {
                 CommentEntity comment = CommentEntity.builder()
                         .postId(post.get())
                         .userId(user.get())
-                        .groupCode(user.get().getGroupCode())
+                        .groupCode(user.get().getGroup())
                         .content(res)
                         .build();
 
@@ -399,7 +399,7 @@ public class CommentServiceImpl implements CommentService {
                 CommentEntity comment = CommentEntity.builder()
                         .postId(post.get())
                         .userId(user.get())
-                        .groupCode(user.get().getGroupCode())
+                        .groupCode(user.get().getGroup())
                         .content(res)
                         .build();
 

@@ -44,7 +44,7 @@ class GroupServiceImplTest {
         // then
         assertEquals(user.getUserId(), userId);
 
-        Optional<GroupEntity> savedGroup = groupRepository.findByGroupCode(user.getGroupCode().getGroupCode());
+        Optional<GroupEntity> savedGroup = groupRepository.findByGroupCode(user.getGroup().getGroupCode());
         assertTrue(savedGroup.isPresent());
 
         GroupEntity group = savedGroup.get();

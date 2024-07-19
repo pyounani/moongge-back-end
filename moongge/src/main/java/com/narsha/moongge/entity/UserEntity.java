@@ -16,7 +16,7 @@ public class UserEntity {
     private String userId; // 유저 id
 
     @ManyToOne(cascade = CascadeType.REMOVE)
-    private GroupEntity groupCode; // userId
+    private GroupEntity group; // userId
 
     @Column(nullable = false, length=100)
     private String password; // 패스워드
@@ -50,6 +50,6 @@ public class UserEntity {
     }
 
     public void updateGroup(GroupEntity groupCode) {
-        this.groupCode = groupCode;
+        this.group = groupCode;
     }
 }

@@ -71,7 +71,7 @@ public class GroupServiceImpl implements GroupService{
         }
 
         try{
-            String group = userRepository.findByUserId(userId).get().getGroupCode().getGroupCode();
+            String group = userRepository.findByUserId(userId).get().getGroup().getGroupCode();
             Optional<GroupEntity> groupCode = groupRepository.findByGroupCode(group);
             return groupCode.get().getGroupCode();
         } catch (Exception e) {
@@ -95,7 +95,7 @@ public class GroupServiceImpl implements GroupService{
                 Optional<CommentEntity> delComment =  commentRepository.deleteByGroupCode(group.get());
                 Optional<NoticeEntity> delNotice =  noticeRepository.deleteByGroupCode(group.get());
                 Optional<PostEntity> delPost =  postRepository.deleteByGroupCode(group.get());
-                Optional<UserEntity> delUser =  userRepository.deleteByGroupCode(group.get());
+                Optional<UserEntity> delUser =  userRepository.deleteByGroup(group.get());
                 Optional<GroupEntity> delGroup = groupRepository.deleteByGroupCode(groupCode);
             } catch(Exception e){
                 throw new DeleteFailedEntityRelatedGroupCodeException(ErrorCode.DELETE_FAILED_ENTITY_RELATED_GROUPCODE);
