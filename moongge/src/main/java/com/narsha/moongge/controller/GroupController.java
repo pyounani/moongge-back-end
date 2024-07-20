@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/group")
+@RequestMapping("/api/groups")
 public class GroupController {
 
     private final GroupServiceImpl groupServiceImpl;
@@ -21,7 +21,7 @@ public class GroupController {
     /**
      * 그룹 생성 API
      */
-    @PostMapping("/create")
+    @PostMapping
     public ResponseEntity<ResponseDTO> createGroup(@Valid @RequestBody CreateGroupDTO createGroupDTO){
         String userId = groupServiceImpl.createGroup(createGroupDTO);
 
@@ -41,11 +41,13 @@ public class GroupController {
                 .status(ResponseCode.SUCCESS_GET_GROUP_CODE.getStatus().value())
                 .body(new ResponseDTO(ResponseCode.SUCCESS_GET_GROUP_CODE, groupCode));
     }
-    @DeleteMapping("/delete")
-    public ResponseEntity<ResponseDTO> deleteGroup(@RequestParam(value = "groupCode")String groupCode){
 
+    /**
+     * 그룹 삭제하기
+     */
+    @DeleteMapping("/{groupCode}")
+    public ResponseEntity<ResponseDTO> deleteGroup(@PathVariable String groupCode) {
         String res = groupServiceImpl.deleteGroup(groupCode);
-
 
         return ResponseEntity
                 .status(ResponseCode.SUCCESS_DELETE_GROUP.getStatus().value())
