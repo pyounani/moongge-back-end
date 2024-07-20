@@ -35,11 +35,11 @@ public class GroupController {
      */
     @GetMapping("/group-code")
     public ResponseEntity<ResponseDTO> getUserGroupCode(@RequestParam @NotEmpty String userId) {
-        String res = groupServiceImpl.getUserGroupCode(userId);
+        String groupCode = groupServiceImpl.getUserGroupCode(userId);
 
         return ResponseEntity
                 .status(ResponseCode.SUCCESS_GET_GROUP_CODE.getStatus().value())
-                .body(new ResponseDTO(ResponseCode.SUCCESS_GET_GROUP_CODE, res));
+                .body(new ResponseDTO(ResponseCode.SUCCESS_GET_GROUP_CODE, groupCode));
     }
     @DeleteMapping("/delete")
     public ResponseEntity<ResponseDTO> deleteGroup(@RequestParam(value = "groupCode")String groupCode){
