@@ -9,9 +9,10 @@ import com.narsha.moongge.base.exception.GroupNotFoundException;
 import com.narsha.moongge.base.exception.LoginIdNotFoundException;
 import com.narsha.moongge.entity.*;
 import com.narsha.moongge.repository.*;
-import jakarta.transaction.Transactional;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -61,24 +62,26 @@ public class GroupServiceImpl implements GroupService{
         return user.getUserId();
     }
 
+    /**
+     * 그룹 코드 가져오기
+     */
     @Override
+    @Transactional(readOnly=true)
     public String getUserGroupCode(String userId) {
 
-        Optional<UserEntity> user = userRepository.findByUserId(userId);
+        UserEntity user = userRepository.findByUserId(userId)
+                .orElseThrow(() -> new LoginIdNotFoundException(ErrorCode.USER_NOT_FOUND));
 
-        if(!user.isPresent()){
-            throw new LoginIdNotFoundException(ErrorCode.USERID_NOT_FOUND);
-        }
+        GroupEntity group = Optional.ofNullable(user.getGroup())
+                .orElseThrow(() -> new GroupNotFoundException(ErrorCode.GROUP_NOT_FOUND));
 
-        try{
-            String group = userRepository.findByUserId(userId).get().getGroup().getGroupCode();
-            Optional<GroupEntity> groupCode = groupRepository.findByGroupCode(group);
-            return groupCode.get().getGroupCode();
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        String groupCode = Optional.ofNullable(group.getGroupCode())
+                .orElseThrow(() -> new GroupCodeNotFoundException(ErrorCode.GROUPCODE_NOT_FOUND));
 
+        groupRepository.findByGroupCode(groupCode)
+                .orElseThrow(() -> new GroupNotFoundException(ErrorCode.GROUP_NOT_FOUND));
 
+        return groupCode;
     }
 
     @Override
