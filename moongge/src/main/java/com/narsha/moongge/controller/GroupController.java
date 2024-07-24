@@ -5,9 +5,7 @@ import com.narsha.moongge.base.dto.group.CreateGroupDTO;
 import com.narsha.moongge.base.dto.group.UpdateTimeDTO;
 import com.narsha.moongge.base.dto.response.ResponseDTO;
 import com.narsha.moongge.service.GroupService;
-import com.narsha.moongge.service.GroupServiceImpl;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotEmpty;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -24,15 +22,15 @@ public class GroupController {
      */
     @PostMapping
     public ResponseEntity<ResponseDTO> createGroup(@Valid @RequestBody CreateGroupDTO createGroupDTO){
-        String userId = groupService.createGroup(createGroupDTO);
+        String res = groupService.createGroup(createGroupDTO);
 
         return ResponseEntity
                 .status(ResponseCode.SUCCESS_CREATE_GROUP.getStatus().value())
-                .body(new ResponseDTO(ResponseCode.SUCCESS_CREATE_GROUP, userId));
+                .body(new ResponseDTO(ResponseCode.SUCCESS_CREATE_GROUP, res));
     }
 
     /**
-     * 그룹 삭제하기
+     * 그룹 삭제하기 API
      */
     @DeleteMapping("/{groupCode}")
     public ResponseEntity<ResponseDTO> deleteGroup(@PathVariable String groupCode) {

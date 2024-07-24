@@ -17,8 +17,6 @@ public interface LikeRepository extends JpaRepository<LikeEntity, Integer> {
 
     List<GetLikeList> findByPostId(PostEntity postId);
 
-    Optional<LikeEntity> deleteByGroupCode(GroupEntity groupCode);
-
     List<LikeEntity> findByUserId(UserEntity userId);
 
     Optional<LikeEntity> findByGroupCodeAndUserIdAndPostId(GroupEntity groupCode, UserEntity userId, PostEntity postId);

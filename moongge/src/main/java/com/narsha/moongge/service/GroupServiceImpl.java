@@ -62,30 +62,22 @@ public class GroupServiceImpl implements GroupService{
         return user.getUserId();
     }
 
+    /**
+     * 그룹 삭제하기
+     */
     @Override
     @Transactional
     public String deleteGroup(String groupCode) {
 
-        Optional<GroupEntity> group = groupRepository.findByGroupCode(groupCode);
+        GroupEntity group = groupRepository.findByGroupCode(groupCode)
+                .orElseThrow(() -> new GroupCodeNotFoundException(ErrorCode.GROUPCODE_NOT_FOUND));
 
-        if(group.isPresent()){
-            try{
-                // delete
-                Optional<AlarmEntity> delAlarm = alarmRepository.deleteByGroupCode(group.get());
-                Optional<LikeEntity> delLike =  likeRepository.deleteByGroupCode(group.get());
-                Optional<CommentEntity> delComment =  commentRepository.deleteByGroupCode(group.get());
-                Optional<NoticeEntity> delNotice =  noticeRepository.deleteByGroupCode(group.get());
-                Optional<PostEntity> delPost =  postRepository.deleteByGroupCode(group.get());
-                Optional<UserEntity> delUser =  userRepository.deleteByGroup(group.get());
-                Optional<GroupEntity> delGroup = groupRepository.deleteByGroupCode(groupCode);
-            } catch(Exception e){
-                throw new DeleteFailedEntityRelatedGroupCodeException(ErrorCode.DELETE_FAILED_ENTITY_RELATED_GROUPCODE);
-            }
-        } else{
-            throw new GroupNotFoundException(ErrorCode.GROUP_NOT_FOUND);
-        }
+        // 유저의 그룹 제거(null 값으로)
+        clearGroupForUsers(group);
 
-        return group.get().getGroupCode();
+        groupRepository.delete(group);
+
+        return groupCode;
     }
 
     @Override
@@ -182,6 +174,13 @@ public class GroupServiceImpl implements GroupService{
             newBadgeList.add(false);
         }
         user.updateBadgeList(newBadgeList.toString());
+    }
+
+    private void clearGroupForUsers(GroupEntity group) {
+        List<UserEntity> users = userRepository.findByGroup(group);
+        for (UserEntity user : users) {
+            user.clearGroup();
+        }
     }
 
 }

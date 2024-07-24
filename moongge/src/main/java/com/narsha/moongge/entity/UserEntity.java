@@ -15,8 +15,9 @@ public class UserEntity {
     @Column(nullable = false, length=100)
     private String userId; // 유저 id
 
-    @ManyToOne(cascade = CascadeType.REMOVE)
-    private GroupEntity group; // userId
+    @ManyToOne
+    @JoinColumn(name = "group_code")
+    private GroupEntity group;
 
     @Column(nullable = false, length=100)
     private String password; // 패스워드
@@ -49,7 +50,11 @@ public class UserEntity {
         this.badgeList = badgeList;
     }
 
-    public void updateGroup(GroupEntity groupCode) {
-        this.group = groupCode;
+    public void updateGroup(GroupEntity group) {
+        this.group = group;
+    }
+
+    public void clearGroup() {
+        this.group = null;
     }
 }

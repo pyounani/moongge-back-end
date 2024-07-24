@@ -10,7 +10,4 @@ import java.util.Optional;
 public interface AlarmRepository extends JpaRepository<AlarmEntity, Integer> {
 
     Optional<AlarmEntity> deleteByLikeId(LikeEntity likeId);
-
-    Optional<AlarmEntity> deleteByGroupCode(GroupEntity groupCode);
-
 }

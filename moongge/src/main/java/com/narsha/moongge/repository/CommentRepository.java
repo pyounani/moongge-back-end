@@ -11,15 +11,8 @@ import java.util.List;
 import java.util.Optional;
 
 public interface CommentRepository extends JpaRepository<CommentEntity, Integer> {
-    List<GetComment> findByPostIdAndGroupCode(PostEntity postId, GroupEntity groupCode);
 
     List<GetComment> findByPostId(PostEntity postId);
-
-    Optional<CommentEntity> deleteByGroupCode(GroupEntity groupCode);
-
     Optional<GetComment> findTopByPostIdOrderByCreateAtDesc(PostEntity post);
-
-//    List<GetComment> findByUserId(String userId);
     Long countByUserId(UserEntity userId);
-
 }
