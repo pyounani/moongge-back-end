@@ -6,9 +6,6 @@ import com.narsha.moongge.base.dto.user.UserRegisterDTO;
 import com.narsha.moongge.entity.UserEntity;
 import com.narsha.moongge.repository.GroupRepository;
 import com.narsha.moongge.repository.UserRepository;
-import com.narsha.moongge.service.GroupService;
-import com.narsha.moongge.service.GroupServiceImpl;
-import com.narsha.moongge.service.UserService;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,6 +50,30 @@ class GroupServiceImplTest {
         assertEquals("school", group.getSchool());
         assertEquals(3, group.getGrade());
         assertEquals(5, group.getGroupClass());
+    }
+
+    @Test
+    void 그룹_삭제하기() {
+        // given
+        UserEntity user = createUser();
+        CreateGroupDTO createGroupDTO = buildCreateGroupDTO(user);
+        groupService.createGroup(createGroupDTO);
+
+        String groupCode = user.getGroup().getGroupCode();
+
+        // when
+        groupService.deleteGroup(groupCode);
+
+        // then
+        // 유저를 다시 조회하여 그룹 필드가 null로 설정되었는지 확인
+        Optional<UserEntity> updatedUserOpt = userRepository.findByUserId(user.getUserId());
+        assertTrue(updatedUserOpt.isPresent(), "유저는 여전히 존재해야 합니다.");
+        UserEntity updatedUser = updatedUserOpt.get();
+        assertNull(updatedUser.getGroup(), "그룹 삭제 후 유저의 그룹은 null이어야 합니다.");
+
+        // 그룹이 실제로 삭제되었는지 확인
+        Optional<GroupEntity> deletedGroupOpt = groupRepository.findByGroupCode(groupCode);
+        assertFalse(deletedGroupOpt.isPresent(), "그룹은 삭제되어야 합니다.");
     }
 
     private CreateGroupDTO buildCreateGroupDTO(UserEntity user) {
