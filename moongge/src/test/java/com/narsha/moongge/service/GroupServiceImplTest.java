@@ -1,5 +1,6 @@
 package com.narsha.moongge.service;
 
+import com.narsha.moongge.base.dto.group.UpdateTimeDTO;
 import com.narsha.moongge.entity.GroupEntity;
 import com.narsha.moongge.base.dto.group.CreateGroupDTO;
 import com.narsha.moongge.base.dto.user.UserRegisterDTO;
@@ -7,6 +8,7 @@ import com.narsha.moongge.entity.UserEntity;
 import com.narsha.moongge.repository.GroupRepository;
 import com.narsha.moongge.repository.UserRepository;
 import jakarta.transaction.Transactional;
+import java.time.LocalTime;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -74,6 +76,34 @@ class GroupServiceImplTest {
         // 그룹이 실제로 삭제되었는지 확인
         Optional<GroupEntity> deletedGroupOpt = groupRepository.findByGroupCode(groupCode);
         assertFalse(deletedGroupOpt.isPresent(), "그룹은 삭제되어야 합니다.");
+    }
+
+    @Test
+    void 그룹_시간_등록() {
+        // given
+        UserEntity user = createUser();
+        CreateGroupDTO createGroupDTO = buildCreateGroupDTO(user);
+        groupService.createGroup(createGroupDTO);
+
+        String groupCode = user.getGroup().getGroupCode();
+
+        UpdateTimeDTO updateTimeDTO = new UpdateTimeDTO();
+        LocalTime startTime = LocalTime.of(13, 0, 0); // 13:00:00
+        LocalTime endTime = LocalTime.of(15, 0, 0);   // 15:00:00
+
+        updateTimeDTO.setStartTime(startTime);
+        updateTimeDTO.setEndTime(endTime);
+
+        // when
+        groupService.updateTime(groupCode, updateTimeDTO);
+
+        // then
+        Optional<GroupEntity> savedGroup = groupRepository.findByGroupCode(user.getGroup().getGroupCode());
+        assertTrue(savedGroup.isPresent());
+
+        GroupEntity group = savedGroup.get();
+        assertEquals(startTime, group.getStartTime());
+        assertEquals(endTime, group.getEndTime());
     }
 
     private CreateGroupDTO buildCreateGroupDTO(UserEntity user) {
