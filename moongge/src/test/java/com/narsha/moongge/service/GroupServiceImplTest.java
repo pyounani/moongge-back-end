@@ -1,4 +1,4 @@
-package com.narsha.moongge.group;
+package com.narsha.moongge.service;
 
 import com.narsha.moongge.entity.GroupEntity;
 import com.narsha.moongge.base.dto.group.CreateGroupDTO;
@@ -54,27 +54,6 @@ class GroupServiceImplTest {
         assertEquals(3, group.getGrade());
         assertEquals(5, group.getGroupClass());
     }
-
-    @Test
-    void 그룹_코드_불러오기() {
-
-        // given
-        UserEntity user = createUser();
-        CreateGroupDTO createGroupDTO = buildCreateGroupDTO(user);
-        String userId = groupService.createGroup(createGroupDTO);
-
-        assertEquals(user.getUserId(), userId);
-
-        Optional<GroupEntity> savedGroup = groupRepository.findByGroupCode(user.getGroup().getGroupCode());
-        assertTrue(savedGroup.isPresent());
-
-        // when
-        String groupCode = groupService.getUserGroupCode(userId);
-
-        // then
-        assertEquals(savedGroup.get().getGroupCode(), groupCode);
-    }
-
 
     private CreateGroupDTO buildCreateGroupDTO(UserEntity user) {
         CreateGroupDTO createGroupDTO = new CreateGroupDTO();

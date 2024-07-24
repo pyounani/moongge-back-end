@@ -4,6 +4,7 @@ import com.narsha.moongge.base.code.ResponseCode;
 import com.narsha.moongge.base.dto.group.CreateGroupDTO;
 import com.narsha.moongge.base.dto.group.UpdateTimeDTO;
 import com.narsha.moongge.base.dto.response.ResponseDTO;
+import com.narsha.moongge.service.GroupService;
 import com.narsha.moongge.service.GroupServiceImpl;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotEmpty;
@@ -16,14 +17,14 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/groups")
 public class GroupController {
 
-    private final GroupServiceImpl groupServiceImpl;
+    private final GroupService groupService;
 
     /**
      * 그룹 생성 API
      */
     @PostMapping
     public ResponseEntity<ResponseDTO> createGroup(@Valid @RequestBody CreateGroupDTO createGroupDTO){
-        String userId = groupServiceImpl.createGroup(createGroupDTO);
+        String userId = groupService.createGroup(createGroupDTO);
 
         return ResponseEntity
                 .status(ResponseCode.SUCCESS_CREATE_GROUP.getStatus().value())
@@ -31,23 +32,11 @@ public class GroupController {
     }
 
     /**
-     * 유저가 속해있는 그룹 코드 가져오기 API
-     */
-    @GetMapping("/group-code")
-    public ResponseEntity<ResponseDTO> getUserGroupCode(@RequestParam @NotEmpty String userId) {
-        String groupCode = groupServiceImpl.getUserGroupCode(userId);
-
-        return ResponseEntity
-                .status(ResponseCode.SUCCESS_GET_GROUP_CODE.getStatus().value())
-                .body(new ResponseDTO(ResponseCode.SUCCESS_GET_GROUP_CODE, groupCode));
-    }
-
-    /**
      * 그룹 삭제하기
      */
     @DeleteMapping("/{groupCode}")
     public ResponseEntity<ResponseDTO> deleteGroup(@PathVariable String groupCode) {
-        String res = groupServiceImpl.deleteGroup(groupCode);
+        String res = groupService.deleteGroup(groupCode);
 
         return ResponseEntity
                 .status(ResponseCode.SUCCESS_DELETE_GROUP.getStatus().value())
@@ -57,7 +46,7 @@ public class GroupController {
     @PutMapping("/update-time")
     public ResponseEntity<ResponseDTO> updateTime(@RequestBody UpdateTimeDTO updateTimeDTO){
 
-        UpdateTimeDTO res = groupServiceImpl.updateTime(updateTimeDTO);
+        UpdateTimeDTO res = groupService.updateTime(updateTimeDTO);
 
         return ResponseEntity
                 .status(ResponseCode.SUCCESS_UPDATE_TIME.getStatus().value())
@@ -67,7 +56,7 @@ public class GroupController {
     @GetMapping("/get-time")
     public ResponseEntity<ResponseDTO> getTime(@RequestParam(value = "groupCode") String groupCode){
 
-        UpdateTimeDTO res = groupServiceImpl.getTime(groupCode);
+        UpdateTimeDTO res = groupService.getTime(groupCode);
 
         return ResponseEntity
                 .status(ResponseCode.SUCCESS_GET_TIME.getStatus().value())

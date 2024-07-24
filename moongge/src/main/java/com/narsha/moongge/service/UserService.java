@@ -29,6 +29,8 @@ public interface UserService {
 
     List<GetUser> getStudentList(String GroupId, String userId);
 
+    String getUserGroupCode(String userId);
+
     void saveUserFcmToken(String userId, String fcmToken);
 
 }
