@@ -1,27 +1,30 @@
 package com.narsha.moongge.base.dto.group;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.antlr.v4.runtime.misc.NotNull;
 
 @Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class CreateGroupDTO {
 
-    @NotNull
+    @NotBlank(message = "groupName을 입력해주세요.")
     private String groupName;
 
-    @NotNull
+    @NotBlank(message = "userId을 입력해주세요.")
     private String userId;
 
-    @NotNull
+    @NotBlank(message = "school을 입력해주세요.")
     private String school;
 
-    @NotNull
+    @NotNull(message = "grade을 입력해주세요.")
     private Integer grade;
 
-    @NotNull
+    @NotNull(message = "group_class을 입력해주세요.")
     private Integer group_class;
 }

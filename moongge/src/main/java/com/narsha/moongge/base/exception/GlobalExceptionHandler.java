@@ -4,7 +4,10 @@ import com.narsha.moongge.base.code.ErrorCode;
 import com.narsha.moongge.base.dto.response.ErrorResponseDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -15,7 +18,26 @@ public class GlobalExceptionHandler {
      * Developer Custom Exception
      */
 
-    /* User */
+    /**
+     * 입력값 검증
+     */
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    protected ResponseEntity<ErrorResponseDTO> handleMethodArgumentNotValidException(final MethodArgumentNotValidException e) {
+        BindingResult bindingResult = e.getBindingResult();
+        StringBuilder builder = new StringBuilder();
+        for (FieldError fieldError : bindingResult.getFieldErrors()) {
+            builder.append(fieldError.getDefaultMessage());
+        }
+
+        log.error("handleMethodArgumentNotValidException : {}", builder.toString());
+        return ResponseEntity
+                .status(ErrorCode.BAD_REQUEST.getStatus().value())
+                .body(new ErrorResponseDTO(ErrorCode.BAD_REQUEST, builder.toString()));
+    }
+
+    /**
+     * User
+     */
 
     // 회원가입: 아이디 중복 확인
     @ExceptionHandler(RegisterException.class)
@@ -45,7 +67,9 @@ public class GlobalExceptionHandler {
     }
 
 
-    /* Group */
+    /**
+     * Group
+     */
 
     // 그룹: 그룹 코드에 해당하는 그룹이 존재하지 않을 때
     @ExceptionHandler(GroupCodeNotFoundException.class)
@@ -74,7 +98,9 @@ public class GlobalExceptionHandler {
                 .body(new ErrorResponseDTO(ErrorCode.DELETE_FAILED_ENTITY_RELATED_GROUPCODE));
     }
 
-    /*Comment*/
+    /**
+     * Comment
+     */
 
     // 사용자: 댓글 불러올 때 사용자가 존재하지 않을 때
     @ExceptionHandler(UserNotFoundException.class)
@@ -95,7 +121,7 @@ public class GlobalExceptionHandler {
                 .body(new ErrorResponseDTO(ErrorCode.EMPTY_COMMENT_CONTENT));
     }
 
-    /*
+    /**
      * HTTP 405 Exception
      */
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
@@ -106,7 +132,9 @@ public class GlobalExceptionHandler {
                 .body(new ErrorResponseDTO(ErrorCode.METHOD_NOT_ALLOWED));
     }
 
-    /* Post */
+    /**
+     * Post
+     */
     @ExceptionHandler(PostNotFoundException.class)
     protected ResponseEntity<ErrorResponseDTO> handlePostNotFoundException(final PostNotFoundException e) {
         log.error("PostNotFoundException : {}", e.getMessage());

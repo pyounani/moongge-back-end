@@ -9,6 +9,7 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 @Getter
 @Setter
@@ -34,12 +35,18 @@ public class GroupEntity {
     @Column(nullable = false)
     private Integer groupClass; // 반
 
-    @CreatedDate
-    private LocalDateTime startTime;
+    @Column
+    private LocalTime startTime;
 
-    @CreatedDate
-    private LocalDateTime endTime;
+    @Column
+    private LocalTime endTime;
 
     @CreatedDate
     private LocalDateTime createAt; // 생성일
+
+    public void setTime(LocalTime startTime, LocalTime endTime) {
+        this.startTime = startTime;
+        this.endTime = endTime;
+    }
+
 }

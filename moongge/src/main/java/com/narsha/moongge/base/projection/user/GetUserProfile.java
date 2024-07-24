@@ -1,5 +1,6 @@
 package com.narsha.moongge.base.projection.user;
 
+
 import com.narsha.moongge.entity.GroupEntity;
 
 public interface GetUserProfile {

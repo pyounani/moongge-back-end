@@ -9,14 +9,15 @@ import com.narsha.moongge.base.dto.user.UserRegisterDTO;
 import com.narsha.moongge.base.exception.*;
 import com.narsha.moongge.base.projection.user.GetUser;
 import com.narsha.moongge.base.projection.user.GetUserProfile;
-import com.narsha.moongge.entity.GroupEntity;
 import com.narsha.moongge.entity.UserEntity;
+import com.narsha.moongge.entity.GroupEntity;
 import com.narsha.moongge.repository.GroupRepository;
 import com.narsha.moongge.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.apache.tomcat.util.json.JSONParser;
 import org.apache.tomcat.util.json.ParseException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -88,7 +89,7 @@ public class UserServiceImpl implements UserService {
 
         // profile badge update
         user.get().setBadgeList(newBadgeList.toString()); // add badgeList
-        user.get().setGroupCode(group.get()); // add group code
+        user.get().setGroup(group.get()); // add group code
 
         return userRepository.save(user.get());
     }
@@ -187,7 +188,7 @@ public class UserServiceImpl implements UserService {
             throw new ProfileNotFoundException(ErrorCode.PROFILE_NOT_FOUND);
 
 //        List<GetUser> studentList = userRepository.findByGroupCode(group.get());
-        List<GetUser> studentList = userRepository.findByGroupCodeAndUserIdNotLike(group.get(), userId);
+        List<GetUser> studentList = userRepository.findByGroupAndUserIdNotLike(group.get(), userId);
 
         return studentList;
     }
@@ -198,10 +199,31 @@ public class UserServiceImpl implements UserService {
 
         if(user.isPresent()) {
            UserEntity userEntity = user.get();
-           userEntity.setFcmToken(fcmToken);
            userRepository.save(userEntity);
         }
      }
+
+    /**
+     * 그룹 코드 가져오기
+     */
+    @Override
+    @Transactional(readOnly=true)
+    public String getUserGroupCode(String userId) {
+
+        UserEntity user = userRepository.findByUserId(userId)
+                .orElseThrow(() -> new LoginIdNotFoundException(ErrorCode.USER_NOT_FOUND));
+
+        GroupEntity group = Optional.ofNullable(user.getGroup())
+                .orElseThrow(() -> new GroupNotFoundException(ErrorCode.GROUP_NOT_FOUND));
+
+        String groupCode = Optional.ofNullable(group.getGroupCode())
+                .orElseThrow(() -> new GroupCodeNotFoundException(ErrorCode.GROUPCODE_NOT_FOUND));
+
+        groupRepository.findByGroupCode(groupCode)
+                .orElseThrow(() -> new GroupNotFoundException(ErrorCode.GROUP_NOT_FOUND));
+
+        return groupCode;
+    }
 
     private GetUserProfile EntityToProjectionUser(UserEntity findUser){
         GetUserProfile userProfile = new GetUserProfile() {
@@ -212,7 +234,7 @@ public class UserServiceImpl implements UserService {
 
             @Override
             public GroupEntity getGroupCode() {
-                return findUser.getGroupCode();
+                return findUser.getGroup();
             }
 
             @Override

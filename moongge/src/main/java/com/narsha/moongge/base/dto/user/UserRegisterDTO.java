@@ -1,14 +1,15 @@
 package com.narsha.moongge.base.dto.user;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.antlr.v4.runtime.misc.NotNull;
 
 @Data
+@Builder
 @NoArgsConstructor
-//@NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor // 모든 필드 값을 파라미터로 받는 생성자를 만듦
+@AllArgsConstructor
 public class UserRegisterDTO {
 
     @NotNull

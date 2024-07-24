@@ -3,9 +3,9 @@ package com.narsha.moongge.repository;
 import com.narsha.moongge.base.projection.post.GetMainPost;
 import com.narsha.moongge.base.projection.post.GetOneUserPost;
 import com.narsha.moongge.base.projection.post.GetUserPost;
-import com.narsha.moongge.entity.GroupEntity;
 import com.narsha.moongge.entity.PostEntity;
 import com.narsha.moongge.entity.UserEntity;
+import com.narsha.moongge.entity.GroupEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.time.LocalDateTime;
@@ -21,10 +21,5 @@ public interface PostRepository extends JpaRepository<PostEntity, Integer> {
 
     Optional<PostEntity> findByPostId(Integer postId);
 
-    Optional<PostEntity> deleteByGroupCode(GroupEntity groupCode);
-
     List<GetMainPost> findByGroupCodeAndCreateAtBetweenOrderByCreateAtDesc(GroupEntity groupCode, LocalDateTime startTime, LocalDateTime endTime);
-
-    List<PostEntity> findByUser(UserEntity user);
-
 }

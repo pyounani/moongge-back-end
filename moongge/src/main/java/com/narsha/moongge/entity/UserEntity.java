@@ -15,8 +15,9 @@ public class UserEntity {
     @Column(nullable = false, length=100)
     private String userId; // 유저 id
 
-    @ManyToOne(cascade = CascadeType.REMOVE)
-    private GroupEntity groupCode; // userId
+    @ManyToOne
+    @JoinColumn(name = "group_code")
+    private GroupEntity group;
 
     @Column(nullable = false, length=100)
     private String password; // 패스워드
@@ -44,4 +45,16 @@ public class UserEntity {
 
     @Column(length=200)
     private String fcmToken; // FCM 토큰 필드
+
+    public void updateBadgeList(String badgeList) {
+        this.badgeList = badgeList;
+    }
+
+    public void updateGroup(GroupEntity group) {
+        this.group = group;
+    }
+
+    public void clearGroup() {
+        this.group = null;
+    }
 }
