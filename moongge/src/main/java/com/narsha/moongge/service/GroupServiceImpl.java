@@ -3,8 +3,6 @@ package com.narsha.moongge.service;
 import com.narsha.moongge.base.code.ErrorCode;
 import com.narsha.moongge.base.dto.group.CreateGroupDTO;
 import com.narsha.moongge.base.dto.group.UpdateTimeDTO;
-import com.narsha.moongge.base.exception.DeleteFailedEntityRelatedGroupCodeException;
-import com.narsha.moongge.base.exception.GroupCodeNotFoundException;
 import com.narsha.moongge.base.exception.GroupNotFoundException;
 import com.narsha.moongge.base.exception.LoginIdNotFoundException;
 import com.narsha.moongge.entity.*;
@@ -16,7 +14,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.Random;
 
 @Service
@@ -26,12 +23,6 @@ public class GroupServiceImpl implements GroupService{
 
     private final GroupRepository groupRepository;
     private final UserRepository userRepository;
-
-    private final LikeRepository likeRepository;
-    private final CommentRepository commentRepository;
-    private final PostRepository postRepository;
-    private final NoticeRepository noticeRepository;
-    private final AlarmRepository alarmRepository;
 
     /**
      * 그룹 생성하기
