@@ -6,6 +6,7 @@ import com.narsha.moongge.base.dto.group.UpdateTimeDTO;
 import com.narsha.moongge.base.dto.response.ResponseDTO;
 import com.narsha.moongge.service.GroupService;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotEmpty;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -33,7 +34,7 @@ public class GroupController {
      * 그룹 삭제하기 API
      */
     @DeleteMapping("/{groupCode}")
-    public ResponseEntity<ResponseDTO> deleteGroup(@PathVariable String groupCode) {
+    public ResponseEntity<ResponseDTO> deleteGroup(@PathVariable @NotEmpty String groupCode) {
         String res = groupService.deleteGroup(groupCode);
 
         return ResponseEntity
@@ -45,8 +46,8 @@ public class GroupController {
      * 그룹 시간 등록(수정)하기 API
      */
     @PutMapping("/{groupCode}/time")
-    public ResponseEntity<ResponseDTO> updateTime(@PathVariable String groupCode,
-                                                  @RequestBody UpdateTimeDTO updateTimeDTO){
+    public ResponseEntity<ResponseDTO> updateTime(@PathVariable @NotEmpty String groupCode,
+                                                  @Valid @RequestBody UpdateTimeDTO updateTimeDTO){
         UpdateTimeDTO res = groupService.updateTime(groupCode, updateTimeDTO);
 
         return ResponseEntity
