@@ -41,10 +41,13 @@ public class GroupController {
                 .body(new ResponseDTO(ResponseCode.SUCCESS_DELETE_GROUP, res));
     }
 
-    @PutMapping("/update-time")
-    public ResponseEntity<ResponseDTO> updateTime(@RequestBody UpdateTimeDTO updateTimeDTO){
-
-        UpdateTimeDTO res = groupService.updateTime(updateTimeDTO);
+    /**
+     * 그룹 시간 등록(수정)하기 API
+     */
+    @PutMapping("/{groupCode}/time")
+    public ResponseEntity<ResponseDTO> updateTime(@PathVariable String groupCode,
+                                                  @RequestBody UpdateTimeDTO updateTimeDTO){
+        UpdateTimeDTO res = groupService.updateTime(groupCode, updateTimeDTO);
 
         return ResponseEntity
                 .status(ResponseCode.SUCCESS_UPDATE_TIME.getStatus().value())

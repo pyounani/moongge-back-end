@@ -8,7 +8,7 @@ public interface GroupService {
     String createGroup(CreateGroupDTO createGroupDTO);
     String deleteGroup(String groupCode);
 
-    UpdateTimeDTO updateTime(UpdateTimeDTO updateTimeDTO);
+    UpdateTimeDTO updateTime(String groupCode, UpdateTimeDTO updateTimeDTO);
 
     UpdateTimeDTO getTime(String groupCode);
 }

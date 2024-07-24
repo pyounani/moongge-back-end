@@ -20,6 +20,7 @@ import java.util.Optional;
 import java.util.Random;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class GroupServiceImpl implements GroupService{
 
@@ -36,7 +37,6 @@ public class GroupServiceImpl implements GroupService{
      * 그룹 생성하기
      */
     @Override
-    @Transactional
     public String createGroup(CreateGroupDTO createGroupDTO) {
 
         // 그룹 코드 생성
@@ -66,11 +66,10 @@ public class GroupServiceImpl implements GroupService{
      * 그룹 삭제하기
      */
     @Override
-    @Transactional
     public String deleteGroup(String groupCode) {
 
         GroupEntity group = groupRepository.findByGroupCode(groupCode)
-                .orElseThrow(() -> new GroupCodeNotFoundException(ErrorCode.GROUPCODE_NOT_FOUND));
+                .orElseThrow(() -> new GroupNotFoundException(ErrorCode.GROUP_NOT_FOUND));
 
         // 유저의 그룹 제거(null 값으로)
         clearGroupForUsers(group);
@@ -80,34 +79,22 @@ public class GroupServiceImpl implements GroupService{
         return groupCode;
     }
 
+    /**
+     * 그룹 시간 등록(수정)하기
+     */
     @Override
-    public UpdateTimeDTO updateTime(UpdateTimeDTO updateTimeDTO) {
-        Optional<GroupEntity> findGroup = groupRepository.findByGroupCode(updateTimeDTO.getGroupCode());
+    public UpdateTimeDTO updateTime(String groupCode, UpdateTimeDTO updateTimeDTO) {
 
-        if(findGroup.isPresent()){
-            try{
-                // setting property
-                findGroup.get().setStartTime(updateTimeDTO.getStartTime());
-                findGroup.get().setEndTime(updateTimeDTO.getEndTime());
+        GroupEntity findGroup = groupRepository.findByGroupCode(groupCode)
+                .orElseThrow(() -> new GroupNotFoundException(ErrorCode.GROUP_NOT_FOUND));
 
-                // save
-                groupRepository.save(findGroup.get());
+        findGroup.setTime(updateTimeDTO.getStartTime(), updateTimeDTO.getEndTime());
 
-                // response setting
-                UpdateTimeDTO update = new UpdateTimeDTO();
-                update.setGroupCode(updateTimeDTO.getGroupCode());
-                update.setStartTime(findGroup.get().getStartTime());
-                update.setEndTime(findGroup.get().getEndTime());
-
-                return update;
-
-            } catch(Exception e){
-                throw new DeleteFailedEntityRelatedGroupCodeException(ErrorCode.DELETE_FAILED_ENTITY_RELATED_GROUPCODE);
-            }
-        } else{
-            throw new GroupCodeNotFoundException(ErrorCode.GROUPCODE_NOT_FOUND);
-        }
-
+        return UpdateTimeDTO.builder()
+                .groupCode(groupCode)
+                .startTime(findGroup.getStartTime())
+                .endTime(findGroup.getEndTime())
+                .build();
     }
 
     @Override
