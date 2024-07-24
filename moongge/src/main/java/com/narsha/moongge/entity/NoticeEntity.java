@@ -15,15 +15,18 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
 public class NoticeEntity {
+    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer noticeId; // 공지 id
 
     @ManyToOne(cascade = CascadeType.REMOVE)
-    private GroupEntity groupCode; // 그룹 code
+    @JoinColumn(name = "group_code")
+    private GroupEntity group; // 그룹 code
 
     @ManyToOne
-    private UserEntity writer; // 작성자
+    @JoinColumn(name = "writer")
+    private UserEntity user; // 작성자
 
     @Column(nullable = false, length=100)
     private String noticeTitle; // 공지 제목

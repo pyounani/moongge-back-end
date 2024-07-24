@@ -14,7 +14,7 @@ public interface GetNotice {
 
     LocalDateTime getCreateAt();
 
-    UserEntity getWriter();
+    UserEntity getUser();
 
     interface UserEntity{
         String getUserId();

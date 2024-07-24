@@ -46,10 +46,10 @@ public class NoticeServiceImpl implements NoticeService{
 
         if (group.isPresent()){
             NoticeEntity notice = NoticeEntity.builder()
-                    .groupCode(group.get())
+                    .group(group.get())
                     .noticeTitle(createNoticeDTO.getNoticeTitle())
                     .noticeContent(createNoticeDTO.getNoticeContent())
-                    .writer(user.get())
+                    .user(user.get())
                     .build();
 
             noticeRepository.save(notice);
@@ -66,7 +66,7 @@ public class NoticeServiceImpl implements NoticeService{
         if(!group.isPresent())
             throw new GroupCodeNotFoundException(ErrorCode.GROUPCODE_NOT_FOUND);
 
-        List<GetNotice> noticeList = noticeRepository.findByGroupCode(group.get());
+        List<GetNotice> noticeList = noticeRepository.findByGroup(group.get());
 
         return noticeList;
     }
@@ -90,7 +90,7 @@ public class NoticeServiceImpl implements NoticeService{
         if(!group.isPresent())
             throw new GroupCodeNotFoundException(ErrorCode.GROUPCODE_NOT_FOUND);
 
-        Optional<GetRecentNotice> notice = noticeRepository.findTopByGroupCodeOrderByCreateAtDesc(group.get());
+        Optional<GetRecentNotice> notice = noticeRepository.findTopByGroupOrderByCreateAtDesc(group.get());
 
         if (notice == null) return null;
         else return notice;
