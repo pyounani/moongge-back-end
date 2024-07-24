@@ -55,9 +55,8 @@ public class GroupController {
                 .body(new ResponseDTO(ResponseCode.SUCCESS_UPDATE_TIME, res));
     }
 
-    @GetMapping("/get-time")
-    public ResponseEntity<ResponseDTO> getTime(@RequestParam(value = "groupCode") String groupCode){
-
+    @GetMapping("/{groupCode}/time")
+    public ResponseEntity<ResponseDTO> getTime(@PathVariable @NotEmpty String groupCode){
         UpdateTimeDTO res = groupService.getTime(groupCode);
 
         return ResponseEntity
