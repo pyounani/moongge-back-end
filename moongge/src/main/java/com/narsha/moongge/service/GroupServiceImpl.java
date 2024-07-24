@@ -97,28 +97,20 @@ public class GroupServiceImpl implements GroupService{
                 .build();
     }
 
+    /**
+     * 그룹 시간 불러오기
+     */
     @Override
     public UpdateTimeDTO getTime(String groupCode) {
 
-        Optional<GroupEntity> findGroup = groupRepository.findByGroupCode(groupCode);
+        GroupEntity findGroup = groupRepository.findByGroupCode(groupCode)
+                .orElseThrow(() -> new GroupNotFoundException(ErrorCode.GROUP_NOT_FOUND));
 
-        if(findGroup.isPresent()){
-            try{
-                // response setting
-                UpdateTimeDTO update = new UpdateTimeDTO();
-                update.setGroupCode(findGroup.get().getGroupCode());
-                update.setStartTime(findGroup.get().getStartTime());
-                update.setEndTime(findGroup.get().getEndTime());
-
-                return update;
-
-            } catch(Exception e){
-                throw new DeleteFailedEntityRelatedGroupCodeException(ErrorCode.DELETE_FAILED_ENTITY_RELATED_GROUPCODE);
-            }
-        } else{
-            throw new GroupCodeNotFoundException(ErrorCode.GROUPCODE_NOT_FOUND);
-        }
-
+        return UpdateTimeDTO.builder()
+                .groupCode(groupCode)
+                .startTime(findGroup.getStartTime())
+                .endTime(findGroup.getEndTime())
+                .build();
     }
 
     // 랜덤 코드 생성

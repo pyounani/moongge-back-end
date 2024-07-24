@@ -55,6 +55,9 @@ public class GroupController {
                 .body(new ResponseDTO(ResponseCode.SUCCESS_UPDATE_TIME, res));
     }
 
+    /**
+     * 설정한 그룹 시간 불러오기 API
+     */
     @GetMapping("/{groupCode}/time")
     public ResponseEntity<ResponseDTO> getTime(@PathVariable @NotEmpty String groupCode){
         UpdateTimeDTO res = groupService.getTime(groupCode);
