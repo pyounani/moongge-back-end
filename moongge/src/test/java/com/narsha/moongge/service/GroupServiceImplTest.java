@@ -31,27 +31,25 @@ class GroupServiceImplTest {
     private UserService userService;
 
     @Test
-    void 그룹_생성_테스트() {
-
+    void 그룹_생성하기() {
         // given
         UserEntity user = createUser();
-
         CreateGroupDTO createGroupDTO = buildCreateGroupDTO(user);
 
         // when
         String userId = groupService.createGroup(createGroupDTO);
 
         // then
-        assertEquals(user.getUserId(), userId);
+        assertEquals(user.getUserId(), userId, "생성된 그룹의 유저 ID가 일치해야 합니다.");
 
         Optional<GroupEntity> savedGroup = groupRepository.findByGroupCode(user.getGroup().getGroupCode());
-        assertTrue(savedGroup.isPresent());
+        assertTrue(savedGroup.isPresent(), "그룹이 저장되어 있어야 합니다.");
 
         GroupEntity group = savedGroup.get();
-        assertEquals("groupName", group.getGroupName());
-        assertEquals("school", group.getSchool());
-        assertEquals(3, group.getGrade());
-        assertEquals(5, group.getGroupClass());
+        assertEquals("groupName", group.getGroupName(), "그룹 이름이 일치해야 합니다.");
+        assertEquals("school", group.getSchool(), "학교 이름이 일치해야 합니다.");
+        assertEquals(3, group.getGrade(), "학년이 일치해야 합니다.");
+        assertEquals(5, group.getGroupClass(), "반이 일치해야 합니다.");
     }
 
     @Test
@@ -67,19 +65,43 @@ class GroupServiceImplTest {
         groupService.deleteGroup(groupCode);
 
         // then
-        // 유저를 다시 조회하여 그룹 필드가 null로 설정되었는지 확인
         Optional<UserEntity> updatedUserOpt = userRepository.findByUserId(user.getUserId());
         assertTrue(updatedUserOpt.isPresent(), "유저는 여전히 존재해야 합니다.");
         UserEntity updatedUser = updatedUserOpt.get();
         assertNull(updatedUser.getGroup(), "그룹 삭제 후 유저의 그룹은 null이어야 합니다.");
 
-        // 그룹이 실제로 삭제되었는지 확인
         Optional<GroupEntity> deletedGroupOpt = groupRepository.findByGroupCode(groupCode);
         assertFalse(deletedGroupOpt.isPresent(), "그룹은 삭제되어야 합니다.");
     }
 
     @Test
-    void 그룹_시간_등록() {
+    void 그룹_시간_등록하기() {
+        // given
+        UserEntity user = createUser();
+        CreateGroupDTO createGroupDTO = buildCreateGroupDTO(user);
+        groupService.createGroup(createGroupDTO);
+
+        String groupCode = user.getGroup().getGroupCode();
+
+        UpdateTimeDTO updateTimeDTO = UpdateTimeDTO.builder()
+                .startTime(LocalTime.of(13, 0, 0))
+                .endTime(LocalTime.of(15, 0, 0))
+                .build();
+
+        // when
+        groupService.updateTime(groupCode, updateTimeDTO);
+
+        // then
+        Optional<GroupEntity> savedGroup = groupRepository.findByGroupCode(groupCode);
+        assertTrue(savedGroup.isPresent(), "그룹이 존재해야 합니다.");
+
+        GroupEntity group = savedGroup.get();
+        assertEquals(LocalTime.of(13, 0, 0), group.getStartTime(), "시작 시간이 일치해야 합니다.");
+        assertEquals(LocalTime.of(15, 0, 0), group.getEndTime(), "종료 시간이 일치해야 합니다.");
+    }
+
+    @Test
+    void 그룹_시간_조회하기() {
         // given
         UserEntity user = createUser();
         CreateGroupDTO createGroupDTO = buildCreateGroupDTO(user);
@@ -94,39 +116,40 @@ class GroupServiceImplTest {
         updateTimeDTO.setStartTime(startTime);
         updateTimeDTO.setEndTime(endTime);
 
-        // when
         groupService.updateTime(groupCode, updateTimeDTO);
 
-        // then
-        Optional<GroupEntity> savedGroup = groupRepository.findByGroupCode(user.getGroup().getGroupCode());
-        assertTrue(savedGroup.isPresent());
+        // when
+        UpdateTimeDTO retrievedTimeDTO = groupService.getTime(groupCode);
 
-        GroupEntity group = savedGroup.get();
-        assertEquals(startTime, group.getStartTime());
-        assertEquals(endTime, group.getEndTime());
+        // then
+        assertNotNull(retrievedTimeDTO, "그룹 시간 정보가 존재해야 합니다.");
+        assertEquals(startTime, retrievedTimeDTO.getStartTime(), "시작 시간이 일치해야 합니다.");
+        assertEquals(endTime, retrievedTimeDTO.getEndTime(), "종료 시간이 일치해야 합니다.");
+        assertEquals(groupCode, retrievedTimeDTO.getGroupCode(), "그룹 코드가 일치해야 합니다.");
     }
 
     private CreateGroupDTO buildCreateGroupDTO(UserEntity user) {
-        CreateGroupDTO createGroupDTO = new CreateGroupDTO();
-        createGroupDTO.setGroupName("groupName");
-        createGroupDTO.setSchool("school");
-        createGroupDTO.setGrade(3);
-        createGroupDTO.setGroup_class(5);
-        createGroupDTO.setUserId(user.getUserId());
-        return createGroupDTO;
+        return CreateGroupDTO.builder()
+                .groupName("groupName")
+                .school("school")
+                .grade(3)
+                .group_class(5)
+                .userId(user.getUserId())
+                .build();
     }
 
     private UserEntity createUser() {
-        UserRegisterDTO userRegisterDTO = new UserRegisterDTO();
-        userRegisterDTO.setUserId("userId");
-        userRegisterDTO.setUserType("teacher");
-        userRegisterDTO.setPassword("password");
-        userRegisterDTO.setName("name");
+        UserRegisterDTO userRegisterDTO = UserRegisterDTO.builder()
+                .userId("userId")
+                .userType("teacher")
+                .password("password")
+                .name("name")
+                .build();
+
         userService.register(userRegisterDTO);
 
         Optional<UserEntity> savedUser = userRepository.findByUserId("userId");
-        assertTrue(savedUser.isPresent());
-        UserEntity user = savedUser.get();
-        return user;
+        assertTrue(savedUser.isPresent(), "유저가 저장되어 있어야 합니다.");
+        return savedUser.get();
     }
 }
