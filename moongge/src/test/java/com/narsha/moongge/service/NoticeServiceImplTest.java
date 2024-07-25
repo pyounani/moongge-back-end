@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -56,7 +57,30 @@ class NoticeServiceImplTest {
         assertEquals(user.getUserId(), notice.getUser().getUserId(), "작성자가 일치해야 합니다.");
         assertEquals(group.getGroupCode(), notice.getGroup().getGroupCode(), "그룹 코드가 일치해야 합니다.");
         assertNotNull(notice.getCreateAt(), "생성일시가 존재해야 합니다.");
+    }
 
+    @Test
+    void 공지_목록_불러오기() {
+        // given
+        UserEntity user = createUser();
+        GroupEntity group = createGroup(user);
+        CreateNoticeDTO createNoticeDTO = buildCreateNoticeDTO(user, group);
+
+        NoticeDTO noticeDTO = noticeService.createNotice(group.getGroupCode(), createNoticeDTO);
+
+        // when
+        List<NoticeDTO> noticeList = noticeService.getNoticeList(group.getGroupCode());
+
+        // then
+        assertFalse(noticeList.isEmpty(), "공지 목록이 비어 있으면 안 됩니다.");
+        assertEquals(1, noticeList.size(), "공지 목록에 하나의 공지가 있어야 합니다.");
+
+        NoticeDTO retrievedNotice = noticeList.get(0);
+        assertEquals(noticeDTO.getNoticeId(), retrievedNotice.getNoticeId(), "공지 ID가 일치해야 합니다.");
+        assertEquals(createNoticeDTO.getNoticeTitle(), retrievedNotice.getNoticeTitle(), "공지 제목이 일치해야 합니다.");
+        assertEquals(createNoticeDTO.getNoticeContent(), retrievedNotice.getNoticeContent(), "공지 내용이 일치해야 합니다.");
+        assertEquals(user.getUserId(), retrievedNotice.getWriter(), "작성자가 일치해야 합니다.");
+        assertEquals(group.getGroupCode(), retrievedNotice.getGroupCode(), "그룹 코드가 일치해야 합니다.");
     }
 
     private CreateNoticeDTO buildCreateNoticeDTO(UserEntity user, GroupEntity group) {
