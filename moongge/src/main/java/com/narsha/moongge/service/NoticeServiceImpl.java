@@ -4,7 +4,6 @@ import com.narsha.moongge.base.code.ErrorCode;
 import com.narsha.moongge.base.dto.notice.CreateNoticeDTO;
 import com.narsha.moongge.base.dto.notice.NoticeDTO;
 import com.narsha.moongge.base.exception.*;
-import com.narsha.moongge.base.projection.notice.GetRecentNotice;
 import com.narsha.moongge.entity.NoticeEntity;
 import com.narsha.moongge.entity.UserEntity;
 import com.narsha.moongge.entity.GroupEntity;
@@ -87,15 +86,17 @@ public class NoticeServiceImpl implements NoticeService{
     }
 
 
+    /**
+     * 최근에 올린 공지 한 개 불러오기
+     */
     @Override
-    public Optional<GetRecentNotice> getRecentNoticeOne(String groupId) {
-        Optional<GroupEntity> group = groupRepository.findByGroupCode(groupId);
-        if(!group.isPresent())
-            throw new GroupCodeNotFoundException(ErrorCode.GROUPCODE_NOT_FOUND);
+    public NoticeDTO getRecentNoticeOne(String groupCode) {
+        GroupEntity group = groupRepository.findByGroupCode(groupCode)
+                .orElseThrow(() -> new GroupNotFoundException(ErrorCode.GROUP_NOT_FOUND));
 
-        Optional<GetRecentNotice> notice = noticeRepository.findTopByGroupOrderByCreateAtDesc(group.get());
+        NoticeEntity notice = noticeRepository.findTopByGroupOrderByCreateAtDesc(group)
+                .orElseThrow(() -> new NoticeNotFoundException(ErrorCode.NOTICE_NOT_FOUND));
 
-        if (notice == null) return null;
-        else return notice;
+        return NoticeDTO.mapToNoticeDTO(notice);
     }
 }

@@ -5,7 +5,6 @@ import com.narsha.moongge.base.code.ResponseCode;
 import com.narsha.moongge.base.dto.notice.CreateNoticeDTO;
 import com.narsha.moongge.base.dto.notice.NoticeDTO;
 import com.narsha.moongge.base.dto.response.ResponseDTO;
-import com.narsha.moongge.base.projection.notice.GetRecentNotice;
 import com.narsha.moongge.entity.NoticeEntity;
 import com.narsha.moongge.service.NoticeService;
 import jakarta.validation.Valid;
@@ -41,7 +40,7 @@ public class NoticeController {
      * 공지 목록 불러오기 API
      */
     @GetMapping("/{groupCode}")
-    public ResponseEntity<ResponseDTO> getNoticeList(@PathVariable String groupCode) {
+    public ResponseEntity<ResponseDTO> getNoticeList(@NotEmpty @PathVariable String groupCode) {
         List<NoticeDTO> res = noticeService.getNoticeList(groupCode);
 
         return ResponseEntity
@@ -62,9 +61,12 @@ public class NoticeController {
                 .body(new ResponseDTO(ResponseCode.SUCCESS_GET_NOTICE_DETAIL, res));
     }
 
-    @GetMapping("/recent-one")
-    public ResponseEntity<ResponseDTO> getRecentNoticeOne(@RequestParam(value = "groupCode")String groupCode){
-        Optional<GetRecentNotice> res = noticeService.getRecentNoticeOne(groupCode);
+    /**
+     * 최근에 올린 공지 한 개 API
+     */
+    @GetMapping("/{groupCode}/recent")
+    public ResponseEntity<ResponseDTO> getRecentNoticeOne(@NotEmpty @PathVariable String groupCode) {
+        NoticeDTO res = noticeService.getRecentNoticeOne(groupCode);
 
         return ResponseEntity
                 .status(ResponseCode.SUCCESS_GET_NOTICE_RECENT_ONE.getStatus().value())

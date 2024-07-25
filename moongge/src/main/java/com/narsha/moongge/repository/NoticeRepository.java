@@ -1,6 +1,5 @@
 package com.narsha.moongge.repository;
 
-import com.narsha.moongge.base.projection.notice.GetRecentNotice;
 import com.narsha.moongge.entity.NoticeEntity;
 import com.narsha.moongge.entity.GroupEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -12,6 +11,6 @@ public interface NoticeRepository extends JpaRepository<NoticeEntity,Integer> {
 
     List<NoticeEntity> findByGroup(GroupEntity group);
     Optional<NoticeEntity> findByNoticeId(Integer noticeId);
-    Optional<GetRecentNotice> findTopByGroupOrderByCreateAtDesc(GroupEntity group);
+    Optional<NoticeEntity> findTopByGroupOrderByCreateAtDesc(GroupEntity group);
 
 }

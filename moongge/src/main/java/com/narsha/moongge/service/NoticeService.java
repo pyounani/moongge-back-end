@@ -2,7 +2,6 @@ package com.narsha.moongge.service;
 
 import com.narsha.moongge.base.dto.notice.CreateNoticeDTO;
 import com.narsha.moongge.base.dto.notice.NoticeDTO;
-import com.narsha.moongge.base.projection.notice.GetRecentNotice;
 import com.narsha.moongge.entity.NoticeEntity;
 
 import java.util.List;
@@ -15,5 +14,5 @@ public interface NoticeService {
 
     Optional<NoticeEntity> getNoticeDetail(Integer NoticeId);
 
-    Optional<GetRecentNotice> getRecentNoticeOne(String groupId);
+    NoticeDTO getRecentNoticeOne(String groupCode);
 }
