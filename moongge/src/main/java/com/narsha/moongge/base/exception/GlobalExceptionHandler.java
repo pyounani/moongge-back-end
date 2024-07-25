@@ -168,6 +168,19 @@ public class GlobalExceptionHandler {
 
     }
 
+    /**
+     * NOTICE
+     */
+    @ExceptionHandler(StudentNoticeCreationException.class)
+    protected ResponseEntity<ErrorResponseDTO>  handleStudentNoticeCreationException(final StudentNoticeCreationException e) {
+        log.error("StudentNoticeCreationException : {}", e.getMessage());
+        return ResponseEntity
+                .status(ErrorCode.NOTICE_NOT_FOUND.getStatus().value())
+                .body(new ErrorResponseDTO(ErrorCode.NOTICE_NOT_FOUND));
+
+    }
+
+
     /*
      * HTTP 500 Exception
      */

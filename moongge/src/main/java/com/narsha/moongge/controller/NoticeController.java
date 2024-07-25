@@ -3,6 +3,7 @@ package com.narsha.moongge.controller;
 import com.google.gson.JsonObject;
 import com.narsha.moongge.base.code.ResponseCode;
 import com.narsha.moongge.base.dto.notice.CreateNoticeDTO;
+import com.narsha.moongge.base.dto.notice.NoticeDTO;
 import com.narsha.moongge.base.dto.response.ResponseDTO;
 import com.narsha.moongge.base.projection.notice.GetNotice;
 import com.narsha.moongge.base.projection.notice.GetRecentNotice;
@@ -26,8 +27,9 @@ public class NoticeController {
      * 공지 작성하기 API
      */
     @PostMapping("/{groupCode}")
-    public ResponseEntity<ResponseDTO> createNotice(@RequestBody CreateNoticeDTO createNoticeDTO){
-        Boolean res = noticeService.createNotice(createNoticeDTO);
+    public ResponseEntity<ResponseDTO> createNotice(@PathVariable String groupCode,
+                                                    @RequestBody CreateNoticeDTO createNoticeDTO){
+        NoticeDTO res = noticeService.createNotice(groupCode, createNoticeDTO);
 
         return ResponseEntity
                 .status(ResponseCode.SUCCESS_CREATE_NOTICE.getStatus().value())

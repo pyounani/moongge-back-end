@@ -2,9 +2,8 @@ package com.narsha.moongge.service;
 
 import com.narsha.moongge.base.code.ErrorCode;
 import com.narsha.moongge.base.dto.notice.CreateNoticeDTO;
-import com.narsha.moongge.base.exception.GroupCodeNotFoundException;
-import com.narsha.moongge.base.exception.NoticeNotFoundException;
-import com.narsha.moongge.base.exception.UserNotFoundException;
+import com.narsha.moongge.base.dto.notice.NoticeDTO;
+import com.narsha.moongge.base.exception.*;
 import com.narsha.moongge.base.projection.notice.GetNotice;
 import com.narsha.moongge.base.projection.notice.GetRecentNotice;
 import com.narsha.moongge.entity.NoticeEntity;
@@ -14,7 +13,6 @@ import com.narsha.moongge.repository.GroupRepository;
 import com.narsha.moongge.repository.NoticeRepository;
 import com.narsha.moongge.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -26,37 +24,36 @@ public class NoticeServiceImpl implements NoticeService{
 
     private final NoticeRepository noticeRepository;
     private final GroupRepository groupRepository;
-
     private final UserRepository userRepository;
 
-    private final ApplicationEventPublisher eventPublisher;
 
-    //공지 작성
+    /**
+     * 공지 작성하기
+     */
     @Override
-    public Boolean createNotice(CreateNoticeDTO createNoticeDTO) {
+    public NoticeDTO createNotice(String groupCode, CreateNoticeDTO createNoticeDTO) {
 
-        Optional<GroupEntity> group = groupRepository.findByGroupCode(createNoticeDTO.getGroupCode());
-        if(!group.isPresent())
-            throw new GroupCodeNotFoundException(ErrorCode.GROUPCODE_NOT_FOUND);
+        GroupEntity group = groupRepository.findByGroupCode(groupCode)
+                .orElseThrow(() -> new GroupNotFoundException(ErrorCode.GROUP_NOT_FOUND));
 
-        Optional<UserEntity> user = userRepository.findByUserId(createNoticeDTO.getWriter());
-        if(!user.isPresent())
-            throw new UserNotFoundException(ErrorCode.USER_NOT_FOUND);
+        UserEntity user = userRepository.findByUserId(createNoticeDTO.getWriter())
+                .orElseThrow(() -> new UserNotFoundException(ErrorCode.USER_NOT_FOUND));
 
+        // 학생 유형 사용자 검증
+        if ("student".equals(user.getUserType())) {
+            throw new StudentNoticeCreationException(ErrorCode.ERROR_STUDENT_NOT_ALLOWED);
+        }
 
-        if (group.isPresent()){
-            NoticeEntity notice = NoticeEntity.builder()
-                    .group(group.get())
-                    .noticeTitle(createNoticeDTO.getNoticeTitle())
-                    .noticeContent(createNoticeDTO.getNoticeContent())
-                    .user(user.get())
-                    .build();
+        NoticeEntity notice = NoticeEntity.builder()
+                .group(group)
+                .noticeTitle(createNoticeDTO.getNoticeTitle())
+                .noticeContent(createNoticeDTO.getNoticeContent())
+                .user(user)
+                .build();
 
-            noticeRepository.save(notice);
+        NoticeEntity savedNotice = noticeRepository.save(notice);
 
-            return true;
-        } else return false;
-
+        return NoticeDTO.mapToNoticeDTO(savedNotice);
     }
 
     //공지 목록
