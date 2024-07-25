@@ -14,12 +14,14 @@ import com.narsha.moongge.repository.NoticeRepository;
 import com.narsha.moongge.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class NoticeServiceImpl implements NoticeService{
 
     private final NoticeRepository noticeRepository;
@@ -31,6 +33,7 @@ public class NoticeServiceImpl implements NoticeService{
      * 공지 작성하기
      */
     @Override
+    @Transactional
     public NoticeDTO createNotice(String groupCode, CreateNoticeDTO createNoticeDTO) {
 
         GroupEntity group = groupRepository.findByGroupCode(groupCode)
