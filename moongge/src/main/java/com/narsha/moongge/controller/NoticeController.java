@@ -10,21 +10,22 @@ import com.narsha.moongge.entity.NoticeEntity;
 import com.narsha.moongge.service.NoticeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
 
-@RestController // JSON 형태의 결과값 반환
-@Controller
+@RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/notice")
+@RequestMapping("/api/notices")
 public class NoticeController {
 
     private final NoticeService noticeService;
 
-    @PostMapping("/create")
+    /**
+     * 공지 작성하기 API
+     */
+    @PostMapping("/{groupCode}")
     public ResponseEntity<ResponseDTO> createNotice(@RequestBody CreateNoticeDTO createNoticeDTO){
         Boolean res = noticeService.createNotice(createNoticeDTO);
 
