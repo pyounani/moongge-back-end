@@ -39,6 +39,7 @@ class NoticeServiceImplTest {
 
     @Test
     void 공지_작성하기() {
+
         // given
         UserEntity user = createUser();
         GroupEntity group = createGroup(user);
@@ -61,6 +62,7 @@ class NoticeServiceImplTest {
 
     @Test
     void 공지_목록_불러오기() {
+
         // given
         UserEntity user = createUser();
         GroupEntity group = createGroup(user);
@@ -81,6 +83,33 @@ class NoticeServiceImplTest {
         assertEquals(createNoticeDTO.getNoticeContent(), retrievedNotice.getNoticeContent(), "공지 내용이 일치해야 합니다.");
         assertEquals(user.getUserId(), retrievedNotice.getWriter(), "작성자가 일치해야 합니다.");
         assertEquals(group.getGroupCode(), retrievedNotice.getGroupCode(), "그룹 코드가 일치해야 합니다.");
+    }
+
+    @Test
+    void 최신_공지_목록_불러오기() {
+
+        // given
+        UserEntity user = createUser();
+        GroupEntity group = createGroup(user);
+        CreateNoticeDTO createNoticeDTO1 = buildCreateNoticeDTO(user, group);
+        noticeService.createNotice(group.getGroupCode(), createNoticeDTO1);
+
+        CreateNoticeDTO createNoticeDTO2 = buildCreateNoticeDTO(user, group);
+        NoticeDTO recentNoticeDTO = noticeService.createNotice(group.getGroupCode(), createNoticeDTO2);
+
+        // when
+        NoticeDTO noticeDTO = noticeService.getRecentNoticeOne(group.getGroupCode());
+
+        Optional<NoticeEntity> savedNotice = noticeRepository.findByNoticeId(noticeDTO.getNoticeId());
+        assertTrue(savedNotice.isPresent());
+
+        NoticeEntity notice = savedNotice.get();
+
+        // then
+        assertEquals(recentNoticeDTO.getNoticeTitle(), notice.getNoticeTitle(), "최신 공지 제목이 일치해야 합니다.");
+        assertEquals(recentNoticeDTO.getNoticeContent(), notice.getNoticeContent(), "최신 공지 내용이 일치해야 합니다.");
+        assertEquals(user.getUserId(), notice.getUser().getUserId(), "최신 공지 작성자가 일치해야 합니다.");
+        assertEquals(group.getGroupCode(), notice.getGroup().getGroupCode(), "최신 공지 그룹 코드가 일치해야 합니다.");
     }
 
     private CreateNoticeDTO buildCreateNoticeDTO(UserEntity user, GroupEntity group) {
