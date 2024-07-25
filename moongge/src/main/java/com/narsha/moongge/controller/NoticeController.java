@@ -9,6 +9,8 @@ import com.narsha.moongge.base.projection.notice.GetNotice;
 import com.narsha.moongge.base.projection.notice.GetRecentNotice;
 import com.narsha.moongge.entity.NoticeEntity;
 import com.narsha.moongge.service.NoticeService;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotEmpty;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -27,8 +29,8 @@ public class NoticeController {
      * 공지 작성하기 API
      */
     @PostMapping("/{groupCode}")
-    public ResponseEntity<ResponseDTO> createNotice(@PathVariable String groupCode,
-                                                    @RequestBody CreateNoticeDTO createNoticeDTO){
+    public ResponseEntity<ResponseDTO> createNotice(@NotEmpty @PathVariable String groupCode,
+                                                    @Valid @RequestBody CreateNoticeDTO createNoticeDTO){
         NoticeDTO res = noticeService.createNotice(groupCode, createNoticeDTO);
 
         return ResponseEntity

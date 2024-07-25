@@ -1,7 +1,7 @@
 package com.narsha.moongge.base.dto.notice;
 
+import jakarta.validation.constraints.NotEmpty;
 import lombok.*;
-import org.antlr.v4.runtime.misc.NotNull;
 
 @Getter
 @Builder
@@ -9,15 +9,15 @@ import org.antlr.v4.runtime.misc.NotNull;
 @AllArgsConstructor
 public class CreateNoticeDTO {
 
-    @NotNull
+    @NotEmpty
     private String groupCode;
 
-    @NotNull
+    @NotEmpty
     private String noticeTitle;
 
-    @NotNull
+    @NotEmpty
     private String noticeContent;
 
-    @NotNull
+    @NotEmpty
     private String writer;
 }
