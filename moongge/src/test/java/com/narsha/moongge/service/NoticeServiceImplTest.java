@@ -112,6 +112,25 @@ class NoticeServiceImplTest {
         assertEquals(group.getGroupCode(), notice.getGroup().getGroupCode(), "최신 공지 그룹 코드가 일치해야 합니다.");
     }
 
+    @Test
+    void 공지_상세_불러오기() {
+        // given
+        UserEntity user = createUser();
+        GroupEntity group = createGroup(user);
+        CreateNoticeDTO createNoticeDTO = buildCreateNoticeDTO(user, group);
+        NoticeDTO noticeDTO = noticeService.createNotice(group.getGroupCode(), createNoticeDTO);
+
+        // when
+        NoticeDTO findNoticeDTO = noticeService.getNoticeDetail(group.getGroupCode(), noticeDTO.getNoticeId());
+
+        // then
+        assertEquals(createNoticeDTO.getNoticeTitle(), findNoticeDTO.getNoticeTitle(), "공지 제목이 일치해야 합니다.");
+        assertEquals(createNoticeDTO.getNoticeContent(), findNoticeDTO.getNoticeContent(), "공지 내용이 일치해야 합니다.");
+        assertEquals(user.getUserId(), findNoticeDTO.getWriter(), "공지 작성자가 일치해야 합니다.");
+        assertEquals(group.getGroupCode(), findNoticeDTO.getGroupCode(), "공지 그룹 코드가 일치해야 합니다.");
+
+    }
+
     private CreateNoticeDTO buildCreateNoticeDTO(UserEntity user, GroupEntity group) {
         return CreateNoticeDTO.builder()
                 .groupCode(group.getGroupCode())
