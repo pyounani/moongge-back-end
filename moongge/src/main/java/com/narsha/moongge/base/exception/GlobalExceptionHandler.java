@@ -175,8 +175,17 @@ public class GlobalExceptionHandler {
     protected ResponseEntity<ErrorResponseDTO>  handleStudentNoticeCreationException(final StudentNoticeCreationException e) {
         log.error("StudentNoticeCreationException : {}", e.getMessage());
         return ResponseEntity
-                .status(ErrorCode.NOTICE_NOT_FOUND.getStatus().value())
-                .body(new ErrorResponseDTO(ErrorCode.NOTICE_NOT_FOUND));
+                .status(ErrorCode.STUDENT_NOT_ALLOWED.getStatus().value())
+                .body(new ErrorResponseDTO(ErrorCode.STUDENT_NOT_ALLOWED));
+
+    }
+
+    @ExceptionHandler(GroupMismatchException.class)
+    protected ResponseEntity<ErrorResponseDTO>  handleGroupMismatchException(final GroupMismatchException e) {
+        log.error("GroupMismatchException : {}", e.getMessage());
+        return ResponseEntity
+                .status(ErrorCode.GROUP_MISMATCH.getStatus().value())
+                .body(new ErrorResponseDTO(ErrorCode.GROUP_MISMATCH));
 
     }
 

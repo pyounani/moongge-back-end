@@ -1,20 +1,18 @@
 package com.narsha.moongge.controller;
 
-import com.google.gson.JsonObject;
 import com.narsha.moongge.base.code.ResponseCode;
 import com.narsha.moongge.base.dto.notice.CreateNoticeDTO;
 import com.narsha.moongge.base.dto.notice.NoticeDTO;
 import com.narsha.moongge.base.dto.response.ResponseDTO;
-import com.narsha.moongge.entity.NoticeEntity;
 import com.narsha.moongge.service.NoticeService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
@@ -48,13 +46,13 @@ public class NoticeController {
                 .body(new ResponseDTO(ResponseCode.SUCCESS_GET_NOTICE_LIST, res));
     }
 
-    @GetMapping("/detail")
-    public ResponseEntity<ResponseDTO> getNoticeDetail(@RequestParam(value = "noticeId")Integer noticeId){
-        Optional<NoticeEntity> res = noticeService.getNoticeDetail(noticeId);
-        JsonObject obj = new JsonObject();
-
-//       if (res == null) obj.addProperty("message", "해당 공지를 찾을 수 없습니다.");
-//       else obj.addProperty("message", "해당 공지를 찾을 수 없습니다.");
+    /**
+     * 공지 상세사항 내용 불러오기 API
+     */
+    @GetMapping("/{groupCode}/{noticeId}")
+    public ResponseEntity<ResponseDTO> getNoticeDetail(@NotEmpty @PathVariable String groupCode,
+                                                       @NotNull @PathVariable Integer noticeId) {
+        NoticeDTO res = noticeService.getNoticeDetail(groupCode, noticeId);
 
         return ResponseEntity
                 .status(ResponseCode.SUCCESS_GET_NOTICE_DETAIL.getStatus().value())

@@ -43,7 +43,7 @@ public class NoticeServiceImpl implements NoticeService{
 
         // 학생 유형 사용자 검증
         if ("student".equals(user.getUserType())) {
-            throw new StudentNoticeCreationException(ErrorCode.ERROR_STUDENT_NOT_ALLOWED);
+            throw new StudentNoticeCreationException(ErrorCode.STUDENT_NOT_ALLOWED);
         }
 
         NoticeEntity notice = NoticeEntity.builder()
@@ -73,18 +73,20 @@ public class NoticeServiceImpl implements NoticeService{
                 .collect(Collectors.toList());
     }
 
-    //공지 상세
+    /**
+     * 공지 상세 불러오기
+     */
     @Override
-    public Optional<NoticeEntity> getNoticeDetail(Integer NoticeId) {
-        Optional<NoticeEntity> notice = noticeRepository.findByNoticeId(NoticeId);
-        if(!notice.isPresent())
-            throw new NoticeNotFoundException(ErrorCode.NOTICE_NOT_FOUND);
+    public NoticeDTO getNoticeDetail(String groupCode, Integer noticeId) {
+        NoticeEntity notice = noticeRepository.findByNoticeId(noticeId)
+                .orElseThrow(() -> new NoticeNotFoundException(ErrorCode.NOTICE_NOT_FOUND));
 
+        if (!groupCode.equals(notice.getGroup().getGroupCode())) {
+            throw new GroupMismatchException(ErrorCode.GROUP_MISMATCH);
+        }
 
-        if (notice == null) return null;
-        else return notice;
+        return NoticeDTO.mapToNoticeDTO(notice);
     }
-
 
     /**
      * 최근에 올린 공지 한 개 불러오기
