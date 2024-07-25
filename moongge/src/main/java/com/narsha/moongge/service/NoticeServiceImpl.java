@@ -4,7 +4,6 @@ import com.narsha.moongge.base.code.ErrorCode;
 import com.narsha.moongge.base.dto.notice.CreateNoticeDTO;
 import com.narsha.moongge.base.dto.notice.NoticeDTO;
 import com.narsha.moongge.base.exception.*;
-import com.narsha.moongge.base.projection.notice.GetNotice;
 import com.narsha.moongge.base.projection.notice.GetRecentNotice;
 import com.narsha.moongge.entity.NoticeEntity;
 import com.narsha.moongge.entity.UserEntity;
@@ -18,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -59,16 +59,19 @@ public class NoticeServiceImpl implements NoticeService{
         return NoticeDTO.mapToNoticeDTO(savedNotice);
     }
 
-    //공지 목록
+    /**
+     * 공지 목록 불러오기
+     */
     @Override
-    public List<GetNotice> getNoticeList(String GroupId) {
-        Optional<GroupEntity> group = groupRepository.findByGroupCode(GroupId);
-        if(!group.isPresent())
-            throw new GroupCodeNotFoundException(ErrorCode.GROUPCODE_NOT_FOUND);
+    public List<NoticeDTO> getNoticeList(String groupId) {
+        GroupEntity group = groupRepository.findByGroupCode(groupId)
+                .orElseThrow(() -> new GroupNotFoundException(ErrorCode.GROUP_NOT_FOUND));
 
-        List<GetNotice> noticeList = noticeRepository.findByGroup(group.get());
+        List<NoticeEntity> noticeList = noticeRepository.findByGroup(group);
 
-        return noticeList;
+        return noticeList.stream()
+                .map(NoticeDTO::mapToNoticeDTO)
+                .collect(Collectors.toList());
     }
 
     //공지 상세

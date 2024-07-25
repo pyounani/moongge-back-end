@@ -5,7 +5,6 @@ import com.narsha.moongge.base.code.ResponseCode;
 import com.narsha.moongge.base.dto.notice.CreateNoticeDTO;
 import com.narsha.moongge.base.dto.notice.NoticeDTO;
 import com.narsha.moongge.base.dto.response.ResponseDTO;
-import com.narsha.moongge.base.projection.notice.GetNotice;
 import com.narsha.moongge.base.projection.notice.GetRecentNotice;
 import com.narsha.moongge.entity.NoticeEntity;
 import com.narsha.moongge.service.NoticeService;
@@ -38,19 +37,16 @@ public class NoticeController {
                 .body(new ResponseDTO(ResponseCode.SUCCESS_CREATE_NOTICE, res));
     }
 
-    @GetMapping("/list")
-    public ResponseEntity<ResponseDTO> getNoticeList(@RequestParam(value = "groupCode")String groupCode){
-        List<GetNotice> res = noticeService.getNoticeList(groupCode);
-        JsonObject obj = new JsonObject();
+    /**
+     * 공지 목록 불러오기 API
+     */
+    @GetMapping("/{groupCode}")
+    public ResponseEntity<ResponseDTO> getNoticeList(@PathVariable String groupCode) {
+        List<NoticeDTO> res = noticeService.getNoticeList(groupCode);
 
-        if(res == null) {
-            obj.addProperty("message", "작성한 공지가 없습니다.");
-            //return obj.toString();
-        }
         return ResponseEntity
                 .status(ResponseCode.SUCCESS_GET_NOTICE_LIST.getStatus().value())
                 .body(new ResponseDTO(ResponseCode.SUCCESS_GET_NOTICE_LIST, res));
-
     }
 
     @GetMapping("/detail")
