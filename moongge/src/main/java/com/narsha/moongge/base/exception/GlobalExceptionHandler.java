@@ -168,6 +168,28 @@ public class GlobalExceptionHandler {
 
     }
 
+    /**
+     * NOTICE
+     */
+    @ExceptionHandler(StudentNoticeCreationException.class)
+    protected ResponseEntity<ErrorResponseDTO>  handleStudentNoticeCreationException(final StudentNoticeCreationException e) {
+        log.error("StudentNoticeCreationException : {}", e.getMessage());
+        return ResponseEntity
+                .status(ErrorCode.STUDENT_NOT_ALLOWED.getStatus().value())
+                .body(new ErrorResponseDTO(ErrorCode.STUDENT_NOT_ALLOWED));
+
+    }
+
+    @ExceptionHandler(GroupMismatchException.class)
+    protected ResponseEntity<ErrorResponseDTO>  handleGroupMismatchException(final GroupMismatchException e) {
+        log.error("GroupMismatchException : {}", e.getMessage());
+        return ResponseEntity
+                .status(ErrorCode.GROUP_MISMATCH.getStatus().value())
+                .body(new ErrorResponseDTO(ErrorCode.GROUP_MISMATCH));
+
+    }
+
+
     /*
      * HTTP 500 Exception
      */

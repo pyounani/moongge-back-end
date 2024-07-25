@@ -2,6 +2,7 @@ package com.narsha.moongge.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
@@ -44,6 +45,7 @@ public class AlarmEntity {
     @JoinColumn(name = "group_code")
     private GroupEntity groupCode;
 
+    @CreatedDate
     private LocalDateTime createdAt;
 
 

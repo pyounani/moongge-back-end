@@ -92,6 +92,7 @@ public class GroupServiceImpl implements GroupService{
      * 그룹 시간 불러오기
      */
     @Override
+    @Transactional(readOnly = true)
     public UpdateTimeDTO getTime(String groupCode) {
 
         GroupEntity findGroup = groupRepository.findByGroupCode(groupCode)

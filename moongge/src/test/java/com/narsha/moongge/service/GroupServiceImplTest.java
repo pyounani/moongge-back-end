@@ -46,10 +46,10 @@ class GroupServiceImplTest {
         assertTrue(savedGroup.isPresent(), "그룹이 저장되어 있어야 합니다.");
 
         GroupEntity group = savedGroup.get();
-        assertEquals("groupName", group.getGroupName(), "그룹 이름이 일치해야 합니다.");
-        assertEquals("school", group.getSchool(), "학교 이름이 일치해야 합니다.");
-        assertEquals(3, group.getGrade(), "학년이 일치해야 합니다.");
-        assertEquals(5, group.getGroupClass(), "반이 일치해야 합니다.");
+        assertEquals(createGroupDTO.getGroupName(), group.getGroupName(), "그룹 이름이 일치해야 합니다.");
+        assertEquals(createGroupDTO.getSchool(), group.getSchool(), "학교 이름이 일치해야 합니다.");
+        assertEquals(createGroupDTO.getGrade(), group.getGrade(), "학년이 일치해야 합니다.");
+        assertEquals(createGroupDTO.getGroup_class(), group.getGroupClass(), "반이 일치해야 합니다.");
     }
 
     @Test

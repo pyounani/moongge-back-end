@@ -1,24 +1,23 @@
 package com.narsha.moongge.base.dto.notice;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import org.antlr.v4.runtime.misc.NotNull;
+import jakarta.validation.constraints.NotEmpty;
+import lombok.*;
 
-@Data
+@Getter
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class CreateNoticeDTO {
 
-    @NotNull
+    @NotEmpty
     private String groupCode;
 
-    @NotNull
+    @NotEmpty
     private String noticeTitle;
 
-    @NotNull
+    @NotEmpty
     private String noticeContent;
 
-    @NotNull
+    @NotEmpty
     private String writer;
 }

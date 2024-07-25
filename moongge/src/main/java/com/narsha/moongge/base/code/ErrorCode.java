@@ -17,6 +17,11 @@ public enum ErrorCode {
 
     DELETE_FAILED_ENTITY_RELATED_GROUPCODE(HttpStatus.BAD_REQUEST, "해당 그룹코드로 모든 엔티티 삭제를 실패했습니다."),
 
+    /**
+     * 403 FORBIDDEN
+     */
+    STUDENT_NOT_ALLOWED(HttpStatus.FORBIDDEN, "학생은 공지사항은 작성할 수 없습니다."),
+    GROUP_MISMATCH(HttpStatus.FORBIDDEN, "그룹 코드가 일치하지 않습니다."),
     /*
      * 404 NOT_FOUND: 리소스를 찾을 수 없음
      */
