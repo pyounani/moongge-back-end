@@ -1,11 +1,10 @@
 package com.narsha.moongge.base.dto.notice;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.antlr.v4.runtime.misc.NotNull;
 
-@Data
+@Getter
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class CreateNoticeDTO {
