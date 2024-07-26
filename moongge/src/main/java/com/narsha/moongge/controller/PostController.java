@@ -3,6 +3,7 @@ package com.narsha.moongge.controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.narsha.moongge.base.code.ResponseCode;
+import com.narsha.moongge.base.dto.post.PostDTO;
 import com.narsha.moongge.base.dto.post.UploadPostDTO;
 import com.narsha.moongge.base.dto.response.ResponseDTO;
 import com.narsha.moongge.base.dto.s3.S3FileDTO;
@@ -26,44 +27,22 @@ import java.util.List;
 @RestController // JSON 형태의 결과값 반환
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("/api/post")
+@RequestMapping("/api/posts")
 public class PostController {
+
     private final PostService postService;
 
-    private final AmazonS3Service amazonS3Service;
-
-    @PostMapping("/upload")
-    public ResponseEntity<ResponseDTO> uploadPost(@RequestParam(value="fileType") String fileType, @RequestParam("images") List<MultipartFile> multipartFiles,
-                                                  @RequestParam(value="info")String uploadPostDTO) throws JsonProcessingException {
-
-        // setting
-        List<S3urlDTO> urlResArray = new ArrayList<>();
-
-        // mapper
-        ObjectMapper mapper = new ObjectMapper();
-        UploadPostDTO mapperUploadPostDTO = mapper.readValue(uploadPostDTO, UploadPostDTO.class);
-
-
-        // S3에 이미지 저장
-//        List<S3FileDTO> uploadFiles = amazonS3Service.uploadFileToS3(multipartFiles, "post");
-//        // S3에서 받은 URL String Array
-//        List<String> imageUrlArray = new ArrayList<>();
-//
-//        for(S3FileDTO url: uploadFiles){
-//            imageUrlArray.add(url.getUploadFileUrl());
-//            urlResArray.add(new S3urlDTO(url.getUploadFilePath(), url.getUploadFileName()));
-//        }
-
-//        mapperUploadPostDTO.setImageArray(imageUrlArray.toString());
-
-
-        // 포스팅 내용 + 이미지 배열 저장
-        Integer res = postService.uploadPost(mapperUploadPostDTO);
-
+    /**
+     * 포스트 업로드 API
+     */
+    @PostMapping
+    public ResponseEntity<ResponseDTO> uploadPost(@RequestParam("images") MultipartFile[] multipartFiles,
+                                                  @RequestPart(value="info") UploadPostDTO uploadPostDTO) {
+        PostDTO res = postService.uploadPost(multipartFiles, uploadPostDTO);
 
         return ResponseEntity
                 .status(ResponseCode.SUCCESS_UPLOAD_POST.getStatus().value())
-                .body(new ResponseDTO(ResponseCode.SUCCESS_UPLOAD_POST, new S3PathDTO(res, urlResArray)));
+                .body(new ResponseDTO(ResponseCode.SUCCESS_UPLOAD_POST, res));
     }
 
     @GetMapping("/user-list")

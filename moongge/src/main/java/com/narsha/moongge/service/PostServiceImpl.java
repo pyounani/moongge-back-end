@@ -1,6 +1,7 @@
 package com.narsha.moongge.service;
 
 import com.narsha.moongge.base.code.ErrorCode;
+import com.narsha.moongge.base.dto.post.PostDTO;
 import com.narsha.moongge.base.dto.post.UploadPostDTO;
 import com.narsha.moongge.base.exception.*;
 import com.narsha.moongge.base.projection.post.GetMainPost;
@@ -18,6 +19,8 @@ import com.narsha.moongge.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
@@ -26,38 +29,43 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class PostServiceImpl implements PostService{
+@Transactional(readOnly = true)
+public class PostServiceImpl implements PostService {
 
+    private static final String POST_PHOTOS_FOLDER = "post/photos";
     private final UserRepository userRepository;
     private final PostRepository postRepository;
     private final GroupRepository groupRepository;
-
     private final LikeRepository likeRepository;
+    private final AmazonS3Service amazonS3Service;
 
+    /**
+     * 포스트 업로드
+     */
     @Override
-    public Integer uploadPost(UploadPostDTO uploadPostDTO) {
+    @Transactional
+    public PostDTO uploadPost(MultipartFile[] multipartFiles, UploadPostDTO uploadPostDTO) {
+
         // 해당 유저-그룹 찾기
-        Optional<GroupEntity> group = groupRepository.findByGroupCode(uploadPostDTO.getGroupCode());
+        GroupEntity group = groupRepository.findByGroupCode(uploadPostDTO.getGroupCode())
+                .orElseThrow(() -> new GroupNotFoundException(ErrorCode.GROUP_NOT_FOUND));
 
-        Optional<UserEntity> user = userRepository.findByUserId(uploadPostDTO.getWriter());
+        UserEntity user = userRepository.findByUserId(uploadPostDTO.getWriter())
+                .orElseThrow(() -> new UserNotFoundException(ErrorCode.USER_NOT_FOUND));
 
-        if(!user.isPresent()){
-            throw new LoginIdNotFoundException(ErrorCode.USERID_NOT_FOUND);
-        }
+        List<String> imageUrls = uploadImagesToS3(multipartFiles);
 
-        if(!group.isPresent()){
-            throw new GroupNotFoundException(ErrorCode.GROUPCODE_NOT_FOUND);
-        } else {
-            PostEntity post = PostEntity.builder()
-                    .content(uploadPostDTO.getContent())
-                    .imageArray(uploadPostDTO.getImageArray().toString())
-                    .user(user.get())
-                    .groupCode(group.get())
-                    .build();
-            PostEntity uploadPost = postRepository.save(post);
-            if (uploadPost == null) return null;
-            return uploadPost.getPostId();
-        }
+        // 포스트 엔티티 생성 및 저장
+        PostEntity post = PostEntity.builder()
+                .content(uploadPostDTO.getContent())
+                .imageArray(imageUrls.toString())
+                .user(user)
+                .groupCode(group)
+                .build();
+
+        PostEntity savedPost = postRepository.save(post);
+
+        return PostDTO.mapToPostDTO(savedPost);
     }
 
     @Override
@@ -171,4 +179,16 @@ public class PostServiceImpl implements PostService{
 
         return userPostList;
     }
+
+    private List<String> uploadImagesToS3(MultipartFile[] multipartFiles) {
+        List<String> imageUrls = new ArrayList<>();
+
+        // S3에 업로드 및 URL 리스트 생성
+        for (MultipartFile multipartFile : multipartFiles) {
+            String imageUrl = amazonS3Service.uploadFileToS3(multipartFile, POST_PHOTOS_FOLDER);
+            imageUrls.add(imageUrl);
+        }
+        return imageUrls;
+    }
+
 }

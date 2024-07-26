@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -23,6 +24,7 @@ import java.util.regex.Pattern;
 @Slf4j
 @RequiredArgsConstructor
 @Service
+@Transactional
 public class AmazonS3ServiceImpl implements AmazonS3Service{
 
     @Value("${cloud.aws.s3.bucket}")
@@ -43,7 +45,7 @@ public class AmazonS3ServiceImpl implements AmazonS3Service{
         }
 
         // S3에 저장된 파일 이름
-        String fileName = filePath + "/" + UUID.randomUUID();
+        String fileName = filePath + "/" + UUID.randomUUID() + "_" + multipartFile.getOriginalFilename();
 
         // s3로 업로드 후 로컬 파일 삭제
         String uploadImageUrl = putS3(uploadFile, fileName);
@@ -57,7 +59,7 @@ public class AmazonS3ServiceImpl implements AmazonS3Service{
      * @param fileName : 업로드할 파일 이름
      * @return 업로드 경로
      */
-    public String putS3(File uploadFile, String fileName) {
+    private String putS3(File uploadFile, String fileName) {
         amazonS3Client.putObject(new PutObjectRequest(bucket, fileName, uploadFile).withCannedAcl(
                 CannedAccessControlList.PublicRead));
         return amazonS3Client.getUrl(bucket, fileName).toString();
