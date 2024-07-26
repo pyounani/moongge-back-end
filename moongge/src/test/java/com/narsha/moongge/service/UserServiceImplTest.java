@@ -54,7 +54,7 @@ public class UserServiceImplTest {
         createGroupDTO.setGroupName("groupName");
         createGroupDTO.setSchool("school");
         createGroupDTO.setGrade(3);
-        createGroupDTO.setGroup_class(5);
+        createGroupDTO.setGroupClass(5);
         createGroupDTO.setUserId(user.getUserId());
         return createGroupDTO;
     }

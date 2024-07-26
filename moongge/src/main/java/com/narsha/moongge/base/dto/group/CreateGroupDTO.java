@@ -25,6 +25,6 @@ public class CreateGroupDTO {
     @NotNull(message = "grade을 입력해주세요.")
     private Integer grade;
 
-    @NotNull(message = "group_class을 입력해주세요.")
-    private Integer group_class;
+    @NotNull(message = "groupClass을 입력해주세요.")
+    private Integer groupClass;
 }

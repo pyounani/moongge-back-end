@@ -145,7 +145,7 @@ class NoticeServiceImplTest {
                 .groupName("groupName")
                 .school("school")
                 .grade(3)
-                .group_class(5)
+                .groupClass(5)
                 .userId(user.getUserId())
                 .build();
 

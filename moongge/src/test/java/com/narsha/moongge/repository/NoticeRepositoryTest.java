@@ -1,6 +1,5 @@
 package com.narsha.moongge.repository;
 
-import com.narsha.moongge.base.dto.notice.NoticeDTO;
 import com.narsha.moongge.entity.GroupEntity;
 import com.narsha.moongge.entity.NoticeEntity;
 import com.narsha.moongge.entity.UserEntity;
@@ -84,7 +83,7 @@ class NoticeRepositoryTest {
                 .groupName("groupName")
                 .school("school")
                 .grade(3)
-                .group_class(5)
+                .groupClass(5)
                 .userId(user.getUserId())
                 .build();
 

@@ -42,7 +42,7 @@ public class NoticeServiceImpl implements NoticeService{
 
         // 학생 유형 사용자 검증
         if ("student".equals(user.getUserType())) {
-            throw new StudentNoticeCreationException(ErrorCode.STUDENT_NOT_ALLOWED);
+            throw new StudentNoticeCreationException(ErrorCode.STUDENT_NOT_ALLOWED_NOTICE);
         }
 
         NoticeEntity notice = NoticeEntity.builder()

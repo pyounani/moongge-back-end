@@ -98,6 +98,14 @@ public class GlobalExceptionHandler {
                 .body(new ErrorResponseDTO(ErrorCode.DELETE_FAILED_ENTITY_RELATED_GROUPCODE));
     }
 
+    @ExceptionHandler(StudentGroupCreationException.class)
+    protected ResponseEntity<ErrorResponseDTO> handleStudentGroupCreationException(final StudentGroupCreationException e) {
+        log.error("StudentGroupCreationException : {}", e.getMessage());
+        return ResponseEntity
+                .status(ErrorCode.STUDENT_NOT_ALLOWED_GROUP.getStatus().value())
+                .body(new ErrorResponseDTO(ErrorCode.STUDENT_NOT_ALLOWED_GROUP));
+    }
+
     /**
      * Comment
      */
@@ -175,8 +183,8 @@ public class GlobalExceptionHandler {
     protected ResponseEntity<ErrorResponseDTO>  handleStudentNoticeCreationException(final StudentNoticeCreationException e) {
         log.error("StudentNoticeCreationException : {}", e.getMessage());
         return ResponseEntity
-                .status(ErrorCode.STUDENT_NOT_ALLOWED.getStatus().value())
-                .body(new ErrorResponseDTO(ErrorCode.STUDENT_NOT_ALLOWED));
+                .status(ErrorCode.STUDENT_NOT_ALLOWED_NOTICE.getStatus().value())
+                .body(new ErrorResponseDTO(ErrorCode.STUDENT_NOT_ALLOWED_NOTICE));
 
     }
 
