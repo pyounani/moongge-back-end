@@ -3,8 +3,7 @@ package com.narsha.moongge.service;
 import com.narsha.moongge.base.code.ErrorCode;
 import com.narsha.moongge.base.dto.group.CreateGroupDTO;
 import com.narsha.moongge.base.dto.group.UpdateTimeDTO;
-import com.narsha.moongge.base.exception.GroupNotFoundException;
-import com.narsha.moongge.base.exception.LoginIdNotFoundException;
+import com.narsha.moongge.base.exception.*;
 import com.narsha.moongge.entity.*;
 import com.narsha.moongge.repository.*;
 
@@ -36,6 +35,14 @@ public class GroupServiceImpl implements GroupService{
         // 그룹 생성
         GroupEntity group = buildGroupEntity(createGroupDTO, groupCode);
 
+        UserEntity user = userRepository.findByUserId(createGroupDTO.getUserId())
+                .orElseThrow(() -> new UserNotFoundException(ErrorCode.USER_NOT_FOUND));
+
+        // 학생 유형 사용자 검증
+        if ("student".equals(user.getUserType())) {
+            throw new StudentGroupCreationException(ErrorCode.STUDENT_NOT_ALLOWED_GROUP);
+        }
+
         // DB에 그룹 생성
         GroupEntity createdGroup  = groupRepository.save(group);
         if (createdGroup  == null || createdGroup .getGroupCode() == null) {
@@ -43,8 +50,6 @@ public class GroupServiceImpl implements GroupService{
         }
 
         // 사용자에 생성된 그룹 업데이트
-        UserEntity user = userRepository.findByUserId(createGroupDTO.getUserId())
-                .orElseThrow(() -> new LoginIdNotFoundException(ErrorCode.USERID_NOT_FOUND));
         user.updateGroup(createdGroup);
 
         // profile badge update
@@ -134,7 +139,7 @@ public class GroupServiceImpl implements GroupService{
                 .school(createGroupDTO.getSchool())
                 .grade(createGroupDTO.getGrade())
                 .groupCode(groupCode)
-                .groupClass(createGroupDTO.getGroup_class())
+                .groupClass(createGroupDTO.getGroupClass())
                 .build();
         return group;
     }

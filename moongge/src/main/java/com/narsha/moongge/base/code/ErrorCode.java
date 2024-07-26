@@ -20,7 +20,8 @@ public enum ErrorCode {
     /**
      * 403 FORBIDDEN
      */
-    STUDENT_NOT_ALLOWED(HttpStatus.FORBIDDEN, "학생은 공지사항은 작성할 수 없습니다."),
+    STUDENT_NOT_ALLOWED_NOTICE(HttpStatus.FORBIDDEN, "학생은 공지사항은 작성할 수 없습니다."),
+    STUDENT_NOT_ALLOWED_GROUP(HttpStatus.FORBIDDEN, "학생은 그룹을 생성할 수 없습니다."),
     GROUP_MISMATCH(HttpStatus.FORBIDDEN, "그룹 코드가 일치하지 않습니다."),
     /*
      * 404 NOT_FOUND: 리소스를 찾을 수 없음

@@ -49,7 +49,7 @@ class GroupServiceImplTest {
         assertEquals(createGroupDTO.getGroupName(), group.getGroupName(), "그룹 이름이 일치해야 합니다.");
         assertEquals(createGroupDTO.getSchool(), group.getSchool(), "학교 이름이 일치해야 합니다.");
         assertEquals(createGroupDTO.getGrade(), group.getGrade(), "학년이 일치해야 합니다.");
-        assertEquals(createGroupDTO.getGroup_class(), group.getGroupClass(), "반이 일치해야 합니다.");
+        assertEquals(createGroupDTO.getGroupClass(), group.getGroupClass(), "반이 일치해야 합니다.");
     }
 
     @Test
@@ -133,7 +133,7 @@ class GroupServiceImplTest {
                 .groupName("groupName")
                 .school("school")
                 .grade(3)
-                .group_class(5)
+                .groupClass(5)
                 .userId(user.getUserId())
                 .build();
     }
