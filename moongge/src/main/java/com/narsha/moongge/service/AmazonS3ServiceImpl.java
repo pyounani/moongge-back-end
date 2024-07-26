@@ -71,7 +71,7 @@ public class AmazonS3ServiceImpl implements AmazonS3Service{
      */
     public void deleteS3(String filePath) {
         try{
-            String key = filePath.substring(56); // 폴더/파일.확장자
+            String key = filePath.substring(61); // 폴더/파일.확장자
 
             try {
                 amazonS3Client.deleteObject(bucket, key);

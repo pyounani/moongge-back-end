@@ -58,7 +58,7 @@ public class PostServiceImpl implements PostService {
         // 포스트 엔티티 생성 및 저장
         PostEntity post = PostEntity.builder()
                 .content(uploadPostDTO.getContent())
-                .imageArray(imageUrls.toString())
+                .imageArray(String.join(",", imageUrls))
                 .user(user)
                 .groupCode(group)
                 .build();
