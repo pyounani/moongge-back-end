@@ -20,7 +20,7 @@ public class PostDTO {
     public static PostDTO mapToPostDTO(PostEntity post) {
         return PostDTO.builder()
                 .postId(post.getPostId())
-                .groupCode(post.getGroupCode().getGroupCode())
+                .groupCode(post.getGroup().getGroupCode())
                 .writer(post.getUser().getUserId())
                 .content(post.getContent())
                 .imageArray(post.getImageArray())

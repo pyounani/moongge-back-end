@@ -14,12 +14,9 @@ import java.util.Optional;
 
 public interface PostRepository extends JpaRepository<PostEntity, Integer> {
 
-    List<GetUserPost> findByGroupCode(GroupEntity groupCode);
-
-    List<GetOneUserPost> findByUserOrderByCreateAtDesc(UserEntity userId);
-    Optional<PostEntity> findByPostIdAndGroupCode(Integer postId, GroupEntity groupCode);
-
+    List<GetUserPost> findByGroup(GroupEntity group);
+    List<GetOneUserPost> findByUserOrderByCreateAtDesc(UserEntity user);
+    Optional<PostEntity> findByPostIdAndGroup(Integer postId, GroupEntity group);
     Optional<PostEntity> findByPostId(Integer postId);
-
-    List<GetMainPost> findByGroupCodeAndCreateAtBetweenOrderByCreateAtDesc(GroupEntity groupCode, LocalDateTime startTime, LocalDateTime endTime);
+    List<GetMainPost> findByGroupAndCreateAtBetweenOrderByCreateAtDesc(GroupEntity group, LocalDateTime startTime, LocalDateTime endTime);
 }

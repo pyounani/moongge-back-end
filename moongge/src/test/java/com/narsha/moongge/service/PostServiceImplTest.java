@@ -61,7 +61,7 @@ class PostServiceImplTest {
         UploadPostDTO uploadPostDTO = buildUploadPostDTO(user, group);
 
         // when
-        PostDTO postDTO = postService.uploadPost(multipartFiles, uploadPostDTO);
+        PostDTO postDTO = postService.uploadPost(uploadPostDTO.getGroupCode(), multipartFiles, uploadPostDTO);
 
         // then
         Optional<PostEntity> savedPost = postRepository.findByPostId(postDTO.getPostId());

@@ -6,7 +6,6 @@ import com.narsha.moongge.base.dto.post.UploadPostDTO;
 import com.narsha.moongge.base.exception.*;
 import com.narsha.moongge.base.projection.post.GetMainPost;
 import com.narsha.moongge.base.projection.post.GetOneUserPost;
-import com.narsha.moongge.base.projection.post.GetPostDetail;
 import com.narsha.moongge.base.projection.post.GetUserPost;
 import com.narsha.moongge.entity.LikeEntity;
 import com.narsha.moongge.entity.PostEntity;
@@ -16,7 +15,6 @@ import com.narsha.moongge.repository.GroupRepository;
 import com.narsha.moongge.repository.LikeRepository;
 import com.narsha.moongge.repository.PostRepository;
 import com.narsha.moongge.repository.UserRepository;
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -44,10 +42,10 @@ public class PostServiceImpl implements PostService {
      */
     @Override
     @Transactional
-    public PostDTO uploadPost(MultipartFile[] multipartFiles, UploadPostDTO uploadPostDTO) {
+    public PostDTO uploadPost(String groupCode, MultipartFile[] multipartFiles, UploadPostDTO uploadPostDTO) {
 
         // 해당 유저-그룹 찾기
-        GroupEntity group = groupRepository.findByGroupCode(uploadPostDTO.getGroupCode())
+        GroupEntity group = groupRepository.findByGroupCode(groupCode)
                 .orElseThrow(() -> new GroupNotFoundException(ErrorCode.GROUP_NOT_FOUND));
 
         UserEntity user = userRepository.findByUserId(uploadPostDTO.getWriter())
@@ -60,12 +58,27 @@ public class PostServiceImpl implements PostService {
                 .content(uploadPostDTO.getContent())
                 .imageArray(String.join(",", imageUrls))
                 .user(user)
-                .groupCode(group)
+                .group(group)
                 .build();
 
         PostEntity savedPost = postRepository.save(post);
 
         return PostDTO.mapToPostDTO(savedPost);
+    }
+
+    /**
+     * 포스트 상세 조회하기
+     */
+    @Override
+    public PostDTO getPostDetail(String groupCode, Integer postId) {
+
+        GroupEntity group = groupRepository.findByGroupCode(groupCode)
+                .orElseThrow(() -> new GroupNotFoundException(ErrorCode.GROUP_NOT_FOUND));
+
+        PostEntity post = postRepository.findByPostIdAndGroup(postId, group)
+                .orElseThrow(() -> new PostNotFoundException(ErrorCode.POSTS_NOT_FOUND));
+
+        return PostDTO.mapToPostDTO(post);
     }
 
     @Override
@@ -75,66 +88,9 @@ public class PostServiceImpl implements PostService {
             throw new GroupNotFoundException(ErrorCode.GROUPCODE_NOT_FOUND);
         }
 
-        List<GetUserPost> postList = postRepository.findByGroupCode(user_group.get());
+        List<GetUserPost> postList = postRepository.findByGroup(user_group.get());
 
         return postList;
-    }
-
-    @Override
-    public GetPostDetail getPostDetail(Integer postId, String groupCode, String userId) {
-        Optional<GroupEntity> group = groupRepository.findByGroupCode(groupCode);
-
-        if(!group.isPresent()){
-            throw new GroupCodeNotFoundException(ErrorCode.GROUPCODE_NOT_FOUND);
-        }
-
-        Optional<UserEntity> user = userRepository.findByUserId(userId);
-
-        if(!user.isPresent()){
-            throw new LoginIdNotFoundException(ErrorCode.USERID_NOT_FOUND);
-        }
-
-        Optional<PostEntity> post = postRepository.findByPostIdAndGroupCode(postId, group.get());
-
-        if(!post.isPresent()){
-            throw new PostNotFoundException(ErrorCode.POSTS_NOT_FOUND);
-        }
-
-        System.out.println(post);
-        if(post.isPresent()) {
-
-            // repository에서 projection으로 반환받아서 못 가져오기에 service 내부에 mapping 코드 필요...
-            GetPostDetail res = new GetPostDetail() {
-                @Override
-                public Integer getId() {
-                    return post.get().getPostId();
-                }
-
-                @Override
-                public String getContent() {
-                    return post.get().getContent();
-                }
-
-                @Override
-                public String getImageArray() {
-                    return post.get().getImageArray();
-                }
-
-                @Override
-                public LocalDateTime getCreateAt() {
-                    return post.get().getCreateAt();
-                }
-
-                @Override
-                public UserEntity getWriter() {
-                    return user.get();
-                }
-            };
-
-            return res;
-        } else {
-            throw new EntityNotFoundException(String.format("포스트 아이디 %d로 조회되지 않았습니다", postId));
-        }
     }
 
     @Override
@@ -152,7 +108,7 @@ public class PostServiceImpl implements PostService {
         LocalDateTime endTime = LocalDateTime.now();
         LocalDateTime startTime = LocalDateTime.now().minus(24, ChronoUnit.HOURS);
 
-        List<GetMainPost> allPost = postRepository.findByGroupCodeAndCreateAtBetweenOrderByCreateAtDesc(group.get(), startTime, endTime);
+        List<GetMainPost> allPost = postRepository.findByGroupAndCreateAtBetweenOrderByCreateAtDesc(group.get(), startTime, endTime);
 
         // 그 중에서 사용자가 좋아요를 누르지 않은 게시물 보여주기
         List<LikeEntity> userLike = likeRepository.findByUserId(user.get());

@@ -27,7 +27,7 @@ import java.util.List;
 @RestController // JSON 형태의 결과값 반환
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("/api/posts")
+@RequestMapping("/api/groups")
 public class PostController {
 
     private final PostService postService;
@@ -35,14 +35,28 @@ public class PostController {
     /**
      * 포스트 업로드 API
      */
-    @PostMapping
-    public ResponseEntity<ResponseDTO> uploadPost(@RequestParam("images") MultipartFile[] multipartFiles,
+    @PostMapping("/{groupCode}/posts")
+    public ResponseEntity<ResponseDTO> uploadPost(@PathVariable String groupCode,
+                                                  @RequestParam("images") MultipartFile[] multipartFiles,
                                                   @RequestPart(value="info") UploadPostDTO uploadPostDTO) {
-        PostDTO res = postService.uploadPost(multipartFiles, uploadPostDTO);
+        PostDTO res = postService.uploadPost(groupCode, multipartFiles, uploadPostDTO);
 
         return ResponseEntity
                 .status(ResponseCode.SUCCESS_UPLOAD_POST.getStatus().value())
                 .body(new ResponseDTO(ResponseCode.SUCCESS_UPLOAD_POST, res));
+    }
+
+    /**
+     * 포스트 상세 가져오기 API
+     */
+    @GetMapping("/{groupCode}/posts/{postId}")
+    public ResponseEntity<ResponseDTO> getPost(@PathVariable(value = "groupCode") String groupCode,
+                                               @PathVariable(value = "postId") Integer postId) {
+        PostDTO res = postService.getPostDetail(groupCode, postId);
+
+        return ResponseEntity
+                .status(ResponseCode.SUCCESS_DETAIL_POST.getStatus().value())
+                .body(new ResponseDTO(ResponseCode.SUCCESS_DETAIL_POST, res));
     }
 
     @GetMapping("/user-list")
@@ -53,19 +67,6 @@ public class PostController {
         return ResponseEntity
                 .status(ResponseCode.SUCCESS_GET_POST_LIST.getStatus().value())
                 .body(new ResponseDTO(ResponseCode.SUCCESS_GET_POST_LIST, res));
-    }
-
-    @GetMapping("/detail")
-    public ResponseEntity<ResponseDTO> getPost(@RequestParam(value = "postId")Integer postId,
-                                                 @RequestParam(value = "groupCode")String groupCode,
-                                                 @RequestParam(value = "userId")String userId) {
-        GetPostDetail res =  postService.getPostDetail(postId, groupCode, userId);
-
-//        return new ResponseEntity<>(res, HttpStatus.OK);
-
-        return ResponseEntity
-                .status(ResponseCode.SUCCESS_DETAIL_POST.getStatus().value())
-                .body(new ResponseDTO(ResponseCode.SUCCESS_DETAIL_POST, res));
     }
 
     @GetMapping("/main-list")
