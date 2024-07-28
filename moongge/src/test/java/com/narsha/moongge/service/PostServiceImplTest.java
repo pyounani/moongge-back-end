@@ -1,13 +1,16 @@
 package com.narsha.moongge.service;
 
 import com.narsha.moongge.base.dto.group.CreateGroupDTO;
+import com.narsha.moongge.base.dto.group.JoinGroupDTO;
 import com.narsha.moongge.base.dto.post.PostDTO;
 import com.narsha.moongge.base.dto.post.UploadPostDTO;
 import com.narsha.moongge.base.dto.user.UserRegisterDTO;
 import com.narsha.moongge.entity.GroupEntity;
+import com.narsha.moongge.entity.LikeEntity;
 import com.narsha.moongge.entity.PostEntity;
 import com.narsha.moongge.entity.UserEntity;
 import com.narsha.moongge.repository.GroupRepository;
+import com.narsha.moongge.repository.LikeRepository;
 import com.narsha.moongge.repository.PostRepository;
 import com.narsha.moongge.repository.UserRepository;
 import org.junit.jupiter.api.AfterEach;
@@ -24,6 +27,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest
 @Transactional
@@ -41,6 +45,8 @@ class PostServiceImplTest {
     private PostService postService;
     @Autowired
     private PostRepository postRepository;
+    @Autowired
+    private LikeRepository likeRepository;
     @Autowired
     private AmazonS3Service amazonS3Service;
 
@@ -140,12 +146,12 @@ class PostServiceImplTest {
         UserEntity user1 = createUser("user1");
         UserEntity user2 = createUser("user2");
         GroupEntity group1 = createGroup(user1);
-        GroupEntity group2 = createGroup(user2);
+        joinGroup(group1, user2);
 
         MultipartFile[] multipartFiles = createMultipartFile();
         UploadPostDTO uploadPostDTO1 = buildUploadPostDTO(user1, group1);
 
-        UploadPostDTO uploadPostDTO2 = buildUploadPostDTO(user2, group2);
+        UploadPostDTO uploadPostDTO2 = buildUploadPostDTO(user2, group1);
 
         PostDTO savedPostDTO1 = postService.uploadPost(uploadPostDTO1.getGroupCode(), multipartFiles, uploadPostDTO1);
         PostDTO savedPostDTO2 = postService.uploadPost(uploadPostDTO2.getGroupCode(), multipartFiles, uploadPostDTO2);
@@ -160,6 +166,62 @@ class PostServiceImplTest {
 
         uploadedFileUrls.add(savedPostDTO1.getImageArray());
         uploadedFileUrls.add(savedPostDTO2.getImageArray());
+    }
+
+    @Test
+    void 메인_포스트_불러오기() {
+        // given
+        UserEntity user = createUser("user");
+        GroupEntity group = createGroup(user);
+
+        UserEntity anotherUser = createUser("anotherUser");
+        joinGroup(group, anotherUser);
+
+        // 'anotherUser' 포스트 생성
+        MultipartFile[] multipartFiles = createMultipartFile();
+        PostDTO savedPostDTOFromAnother = uploadPost(group, anotherUser, multipartFiles);
+
+        // 'anotherUser' 포스트 하나더 생성
+        PostDTO mainPostDTO = uploadPost(group, anotherUser, multipartFiles);
+
+        // 'user' 포스트 생성
+        PostDTO savedPostDTOFromUser = uploadPost(group, user, multipartFiles);
+
+        // 'anotherUser' 포스트를 'user'가 좋아요 누르기
+        createLike(user, savedPostDTOFromAnother);
+
+        // when
+        List<PostDTO> mainPosts = postService.getMainPost(user.getUserId());
+
+        // then
+        assertFalse(mainPosts.isEmpty(), "메인 포스트 목록이 비어있으면 안됩니다.");
+        assertTrue(mainPosts.stream().noneMatch(postDTO -> postDTO.getWriter().equals(user.getUserId())), "사용자가 작성한 포스트가 포함되지 않아야 합니다.");
+        assertTrue(mainPosts.stream().noneMatch(postDTO -> postDTO.getPostId().equals(savedPostDTOFromAnother.getPostId())), "사용자가 좋아요를 누른 포스트가 포함되지 않아야 합니다.");
+        assertTrue(mainPosts.stream().anyMatch(postDTO -> postDTO.getPostId().equals(mainPostDTO.getPostId())), "첫 번째 저장된 포스트가 목록에 포함되어야 합니다.");
+
+        uploadedFileUrls.add(savedPostDTOFromAnother.getImageArray());
+        uploadedFileUrls.add(mainPostDTO.getImageArray());
+        uploadedFileUrls.add(savedPostDTOFromUser.getImageArray());
+    }
+
+    private PostEntity createLike(UserEntity user, PostDTO savedPostDTOFromAnother) {
+        Optional<PostEntity> findPost = postRepository.findByPostId(savedPostDTOFromAnother.getPostId());
+        assertTrue(findPost.isPresent());
+        PostEntity post = findPost.get();
+
+        LikeEntity likeEntity = LikeEntity.builder()
+                .postId(post)
+                .userId(user)
+                .build();
+
+        likeRepository.save(likeEntity);
+        return post;
+    }
+
+    private PostDTO uploadPost(GroupEntity group, UserEntity anotherUser, MultipartFile[] multipartFiles) {
+        UploadPostDTO anotherPostDTO1 = buildUploadPostDTO(anotherUser, group);
+        PostDTO savedPostDTOFromAnother = postService.uploadPost(group.getGroupCode(), multipartFiles, anotherPostDTO1);
+        return savedPostDTOFromAnother;
     }
 
     private MultipartFile[] createMultipartFile() {
@@ -186,11 +248,21 @@ class PostServiceImplTest {
                 .userId(user.getUserId())
                 .build();
 
-        String userId = groupService.createGroup(createGroupDTO);
+        groupService.createGroup(createGroupDTO);
 
         Optional<GroupEntity> savedGroup = groupRepository.findByGroupCode(user.getGroup().getGroupCode());
         assertTrue(savedGroup.isPresent());
         return savedGroup.get();
+    }
+
+    private GroupEntity joinGroup(GroupEntity group, UserEntity user) {
+        JoinGroupDTO joinGroupDTO = JoinGroupDTO.builder()
+                .userId(user.getUserId())
+                .groupCode(group.getGroupCode())
+                .build();
+
+        UserEntity savedUser = userService.joinUser(joinGroupDTO);
+        return savedUser.getGroup();
     }
 
     private UserEntity createUser(String userId) {
