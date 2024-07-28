@@ -15,6 +15,8 @@ import com.narsha.moongge.base.projection.post.GetPostDetail;
 import com.narsha.moongge.base.projection.post.GetUserPost;
 import com.narsha.moongge.service.AmazonS3Service;
 import com.narsha.moongge.service.PostService;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -36,7 +38,7 @@ public class PostController {
      * 포스트 업로드 API
      */
     @PostMapping("/{groupCode}/posts")
-    public ResponseEntity<ResponseDTO> uploadPost(@PathVariable String groupCode,
+    public ResponseEntity<ResponseDTO> uploadPost(@NotEmpty @PathVariable String groupCode,
                                                   @RequestParam("images") MultipartFile[] multipartFiles,
                                                   @RequestPart(value="info") UploadPostDTO uploadPostDTO) {
         PostDTO res = postService.uploadPost(groupCode, multipartFiles, uploadPostDTO);
@@ -50,8 +52,8 @@ public class PostController {
      * 포스트 상세 가져오기 API
      */
     @GetMapping("/{groupCode}/posts/{postId}")
-    public ResponseEntity<ResponseDTO> getPost(@PathVariable(value = "groupCode") String groupCode,
-                                               @PathVariable(value = "postId") Integer postId) {
+    public ResponseEntity<ResponseDTO> getPost(@NotEmpty @PathVariable(value = "groupCode") String groupCode,
+                                               @NotNull @PathVariable(value = "postId") Integer postId) {
         PostDTO res = postService.getPostDetail(groupCode, postId);
 
         return ResponseEntity
