@@ -5,8 +5,6 @@ import com.narsha.moongge.base.dto.post.PostDTO;
 import com.narsha.moongge.base.dto.post.UploadPostDTO;
 import com.narsha.moongge.base.exception.*;
 import com.narsha.moongge.base.projection.post.GetMainPost;
-import com.narsha.moongge.base.projection.post.GetOneUserPost;
-import com.narsha.moongge.base.projection.post.GetUserPost;
 import com.narsha.moongge.entity.LikeEntity;
 import com.narsha.moongge.entity.PostEntity;
 import com.narsha.moongge.entity.UserEntity;
@@ -81,6 +79,9 @@ public class PostServiceImpl implements PostService {
         return PostDTO.mapToPostDTO(post);
     }
 
+    /**
+     * 유저가 올린 포스트 목록 가져오기
+     */
     @Override
     public List<PostDTO> getUserPost(String userId) {
 
@@ -94,34 +95,34 @@ public class PostServiceImpl implements PostService {
                 .collect(Collectors.toList());
     }
 
+    /**
+     * 유저가 좋아요를 누르지 않은 최신 포스트 목록 가쟈오기
+     */
     @Override
-    public List<GetMainPost> getMainPost(String userId, String groupCode) {
-        Optional<GroupEntity> group = groupRepository.findByGroupCode(groupCode);
-        if(group == null) {
-            throw new GroupNotFoundException(ErrorCode.GROUP_NOT_FOUND);
-        }
-        Optional<UserEntity> user = userRepository.findByUserId(userId);
-        if(user == null) {
-            throw new UserNotFoundException(ErrorCode.USER_NOT_FOUND);
-        }
+    public List<PostDTO> getMainPost(String userId) {
+        UserEntity user = userRepository.findByUserId(userId)
+                .orElseThrow(() -> new UserNotFoundException(ErrorCode.USER_NOT_FOUND));
 
         // 24시간 내 게시물 불러오고
         LocalDateTime endTime = LocalDateTime.now();
         LocalDateTime startTime = LocalDateTime.now().minus(24, ChronoUnit.HOURS);
 
-        List<GetMainPost> allPost = postRepository.findByGroupAndCreateAtBetweenOrderByCreateAtDesc(group.get(), startTime, endTime);
+        List<PostEntity> allPosts = postRepository.findByGroupAndCreateAtBetweenOrderByCreateAtDesc(user.getGroup(), startTime, endTime);
 
-        // 그 중에서 사용자가 좋아요를 누르지 않은 게시물 보여주기
-        List<LikeEntity> userLike = likeRepository.findByUserId(user.get());
-        List<Integer> postIdList = userLike.stream()
+        // 유저가 좋아요를 누른 포스트 목록 가져오기
+        List<LikeEntity> userLikes = likeRepository.findByUserId(user);
+        List<Integer> likedPostIds = userLikes.stream()
                 .map(likeEntity -> likeEntity.getPostId().getPostId())
                 .collect(Collectors.toList());
 
-        List<GetMainPost> nonLikedPost = allPost.stream()
-                .filter(post -> !postIdList.contains(post.getPostId()))
+        // 유저가 작성한 포스트를 제외하고 좋아요를 누르지 않은 포스트 필터링
+        List<PostEntity> nonLikedPosts = allPosts.stream()
+                .filter(post -> !likedPostIds.contains(post.getPostId()) && !post.getUser().getUserId().equals(userId))
                 .collect(Collectors.toList());
 
-        return nonLikedPost;
+        return nonLikedPosts.stream()
+                .map(PostDTO::mapToPostDTO)
+                .collect(Collectors.toList());
     }
 
     private List<String> uploadImagesToS3(MultipartFile[] multipartFiles) {

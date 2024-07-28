@@ -1,19 +1,9 @@
 package com.narsha.moongge.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.narsha.moongge.base.code.ResponseCode;
 import com.narsha.moongge.base.dto.post.PostDTO;
 import com.narsha.moongge.base.dto.post.UploadPostDTO;
 import com.narsha.moongge.base.dto.response.ResponseDTO;
-import com.narsha.moongge.base.dto.s3.S3FileDTO;
-import com.narsha.moongge.base.dto.s3.S3PathDTO;
-import com.narsha.moongge.base.dto.s3.S3urlDTO;
-import com.narsha.moongge.base.projection.post.GetMainPost;
-import com.narsha.moongge.base.projection.post.GetOneUserPost;
-import com.narsha.moongge.base.projection.post.GetPostDetail;
-import com.narsha.moongge.base.projection.post.GetUserPost;
-import com.narsha.moongge.service.AmazonS3Service;
 import com.narsha.moongge.service.PostService;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -23,7 +13,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController // JSON 형태의 결과값 반환
@@ -73,10 +62,12 @@ public class PostController {
                 .body(new ResponseDTO(ResponseCode.SUCCESS_GET_POST_LIST, res));
     }
 
-    @GetMapping("/main-list")
-    public ResponseEntity<ResponseDTO> getUnlikedPosts(@RequestParam(value = "userId")String userId,
-                                                       @RequestParam(value = "groupCode")String groupCode) {
-        List<GetMainPost> res = postService.getMainPost(userId, groupCode);
+    /**
+     * 유저가 좋아요를 누르지 않은 최신 포스트 목록 API (메인 페이지 포스트 목록)
+     */
+    @GetMapping("/users/{userId}/posts/main-list")
+    public ResponseEntity<ResponseDTO> getMainPosts(@PathVariable(value = "userId")String userId) {
+        List<PostDTO> res = postService.getMainPost(userId);
 
         return ResponseEntity
                 .status(ResponseCode.SUCCESS_GET_UNLIKED_POSTS.getStatus().value())
