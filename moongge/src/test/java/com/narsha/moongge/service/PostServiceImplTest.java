@@ -71,9 +71,30 @@ class PostServiceImplTest {
         assertEquals(uploadPostDTO.getContent(), post.getContent(), "포스트 내용이 일치해야 합니다.");
         assertTrue(post.getImageArray().contains("testImage.jpg"), "이미지 URL이 포스트에 포함되어야 합니다.");
         assertEquals(user.getUserId(), post.getUser().getUserId(), "포스트 작성자가 일치해야 합니다.");
-        assertEquals(group.getGroupCode(), post.getGroupCode().getGroupCode(), "포스트 그룹 코드가 일치해야 합니다.");
+        assertEquals(group.getGroupCode(), post.getGroup().getGroupCode(), "포스트 그룹 코드가 일치해야 합니다.");
 
         uploadedFileUrl = postDTO.getImageArray();
+    }
+
+    @Test
+    void 포스트_상세_불러오기() {
+        UserEntity user = createUser();
+        GroupEntity group = createGroup(user);
+
+        MultipartFile[] multipartFiles = createMultipartFile();
+        UploadPostDTO uploadPostDTO = buildUploadPostDTO(user, group);
+
+        PostDTO savedPostDTO = postService.uploadPost(uploadPostDTO.getGroupCode(), multipartFiles, uploadPostDTO);
+
+        // when
+        PostDTO findPostDTO = postService.getPostDetail(savedPostDTO.getGroupCode(), savedPostDTO.getPostId());
+
+        assertEquals(uploadPostDTO.getContent(), findPostDTO.getContent(), "포스트 내용이 일치해야 합니다.");
+        assertTrue(findPostDTO.getImageArray().contains("testImage.jpg"), "이미지 URL이 포스트에 포함되어야 합니다.");
+        assertEquals(user.getUserId(), findPostDTO.getWriter(), "포스트 작성자가 일치해야 합니다.");
+        assertEquals(group.getGroupCode(), findPostDTO.getGroupCode(), "포스트 그룹 코드가 일치해야 합니다.");
+
+        uploadedFileUrl = findPostDTO.getImageArray();
     }
 
     private MultipartFile[] createMultipartFile() {
