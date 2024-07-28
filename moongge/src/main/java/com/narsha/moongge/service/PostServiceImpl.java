@@ -82,15 +82,16 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public List<GetUserPost> getUserPost(String groupCode) {
-        Optional<GroupEntity> user_group = groupRepository.findByGroupCode(groupCode);
-        if(!user_group.isPresent()){
-            throw new GroupNotFoundException(ErrorCode.GROUPCODE_NOT_FOUND);
-        }
+    public List<PostDTO> getUserPost(String userId) {
 
-        List<GetUserPost> postList = postRepository.findByGroup(user_group.get());
+        UserEntity user = userRepository.findByUserId(userId)
+                .orElseThrow(() -> new UserNotFoundException(ErrorCode.USER_NOT_FOUND));
 
-        return postList;
+        List<PostEntity> userPostList = postRepository.findByUserOrderByCreateAtDesc(user);
+
+        return userPostList.stream()
+                .map(PostDTO::mapToPostDTO)
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -121,19 +122,6 @@ public class PostServiceImpl implements PostService {
                 .collect(Collectors.toList());
 
         return nonLikedPost;
-    }
-
-    @Override
-    public List<GetOneUserPost> getOneUserPost(String userId) {
-
-        Optional<UserEntity> user = userRepository.findByUserId(userId);
-        if(!user.isPresent()){
-            throw new LoginIdNotFoundException(ErrorCode.USERID_NOT_FOUND);
-        }
-
-        List<GetOneUserPost> userPostList = postRepository.findByUserOrderByCreateAtDesc(user.get());
-
-        return userPostList;
     }
 
     private List<String> uploadImagesToS3(MultipartFile[] multipartFiles) {

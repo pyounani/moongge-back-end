@@ -29,7 +29,7 @@ import java.util.List;
 @RestController // JSON 형태의 결과값 반환
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("/api/groups")
+@RequestMapping("/api")
 public class PostController {
 
     private final PostService postService;
@@ -37,7 +37,7 @@ public class PostController {
     /**
      * 포스트 업로드 API
      */
-    @PostMapping("/{groupCode}/posts")
+    @PostMapping("/groups/{groupCode}/posts")
     public ResponseEntity<ResponseDTO> uploadPost(@NotEmpty @PathVariable String groupCode,
                                                   @RequestParam("images") MultipartFile[] multipartFiles,
                                                   @RequestPart(value="info") UploadPostDTO uploadPostDTO) {
@@ -51,7 +51,7 @@ public class PostController {
     /**
      * 포스트 상세 가져오기 API
      */
-    @GetMapping("/{groupCode}/posts/{postId}")
+    @GetMapping("/groups/{groupCode}/posts/{postId}")
     public ResponseEntity<ResponseDTO> getPost(@NotEmpty @PathVariable(value = "groupCode") String groupCode,
                                                @NotNull @PathVariable(value = "postId") Integer postId) {
         PostDTO res = postService.getPostDetail(groupCode, postId);
@@ -61,10 +61,12 @@ public class PostController {
                 .body(new ResponseDTO(ResponseCode.SUCCESS_DETAIL_POST, res));
     }
 
-    @GetMapping("/user-list")
-    public ResponseEntity<ResponseDTO> getUserPostList(@RequestParam(value = "groupCode") String groupCode) {
-
-        List<GetUserPost> res = postService.getUserPost(groupCode);
+    /**
+     * 유저가 올린 포스트 목록 API
+     */
+    @GetMapping("/users/{userId}/posts")
+    public ResponseEntity<ResponseDTO> getUserPostList(@NotEmpty @PathVariable(value = "userId") String userId) {
+        List<PostDTO> res = postService.getUserPost(userId);
 
         return ResponseEntity
                 .status(ResponseCode.SUCCESS_GET_POST_LIST.getStatus().value())
@@ -79,16 +81,6 @@ public class PostController {
         return ResponseEntity
                 .status(ResponseCode.SUCCESS_GET_UNLIKED_POSTS.getStatus().value())
                 .body(new ResponseDTO(ResponseCode.SUCCESS_GET_UNLIKED_POSTS, res));
-    }
-
-    @GetMapping("/user-post-list")
-    public ResponseEntity<ResponseDTO> getOneUserPostList(@RequestParam(value = "userId") String userId) {
-
-        List<GetOneUserPost> res = postService.getOneUserPost(userId);
-
-        return ResponseEntity
-                .status(ResponseCode.SUCCESS_GET_POST_LIST.getStatus().value())
-                .body(new ResponseDTO(ResponseCode.SUCCESS_GET_POST_LIST, res));
     }
 
 }

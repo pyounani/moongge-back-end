@@ -13,9 +13,8 @@ import java.util.List;
 public interface PostService {
     PostDTO uploadPost(String groupCode, MultipartFile[] multipartFiles, UploadPostDTO uploadPostDTO);
     PostDTO getPostDetail(String groupCode, Integer postId);
-    List<GetUserPost> getUserPost(String groupCode);
     List<GetMainPost> getMainPost(String userId, String groupCode);
 
-    List<GetOneUserPost> getOneUserPost(String userId);
+    List<PostDTO> getUserPost(String userId);
 
 }
