@@ -2,7 +2,6 @@ package com.narsha.moongge.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 
 @Getter
@@ -30,7 +29,7 @@ public class UserEntity {
     private String userName; // 이름
 
     @Column(length=20)
-    private String nikname; // 닉네임
+    private String nickname; // 닉네임
 
     @Column(length=200)
     private String profileImage; // 프로필 이미지 링크

@@ -8,7 +8,7 @@ public interface GetUser {
 
     String getPassword();
 
-    String getNikname();
+    String getNickname();
 
     String getBirth();
 

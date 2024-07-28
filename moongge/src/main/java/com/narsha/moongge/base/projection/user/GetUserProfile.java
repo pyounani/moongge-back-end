@@ -12,7 +12,7 @@ public interface GetUserProfile {
 
     String getUserType();
 
-    String getNikName();
+    String getNickName();
 
     String getProfileImage();
 
