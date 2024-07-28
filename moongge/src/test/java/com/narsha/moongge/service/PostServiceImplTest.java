@@ -11,6 +11,7 @@ import com.narsha.moongge.repository.GroupRepository;
 import com.narsha.moongge.repository.PostRepository;
 import com.narsha.moongge.repository.UserRepository;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -18,6 +19,8 @@ import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -41,20 +44,27 @@ class PostServiceImplTest {
     @Autowired
     private AmazonS3Service amazonS3Service;
 
-    private String uploadedFileUrl;
+    private List<String> uploadedFileUrls;
+
+    @BeforeEach
+    void setUp() {
+        uploadedFileUrls = new ArrayList<>();
+    }
 
     @AfterEach
     void deleteFileInS3() {
-        if (uploadedFileUrl != null) {
-            amazonS3Service.deleteS3(uploadedFileUrl);
+        if (uploadedFileUrls != null) {
+            for (String uploadedFileUrl : uploadedFileUrls) {
+                amazonS3Service.deleteS3(uploadedFileUrl);
+            }
         }
     }
 
     @Test
-    void 포스트_엄로드() {
+    void 포스트_업로드() {
 
         // given
-        UserEntity user = createUser();
+        UserEntity user = createUser("user");
         GroupEntity group = createGroup(user);
 
         MultipartFile[] multipartFiles = createMultipartFile();
@@ -73,12 +83,14 @@ class PostServiceImplTest {
         assertEquals(user.getUserId(), post.getUser().getUserId(), "포스트 작성자가 일치해야 합니다.");
         assertEquals(group.getGroupCode(), post.getGroup().getGroupCode(), "포스트 그룹 코드가 일치해야 합니다.");
 
-        uploadedFileUrl = postDTO.getImageArray();
+        uploadedFileUrls.add(postDTO.getImageArray());
     }
 
     @Test
     void 포스트_상세_불러오기() {
-        UserEntity user = createUser();
+
+        //given
+        UserEntity user = createUser("user");
         GroupEntity group = createGroup(user);
 
         MultipartFile[] multipartFiles = createMultipartFile();
@@ -89,12 +101,65 @@ class PostServiceImplTest {
         // when
         PostDTO findPostDTO = postService.getPostDetail(savedPostDTO.getGroupCode(), savedPostDTO.getPostId());
 
+        //then
         assertEquals(uploadPostDTO.getContent(), findPostDTO.getContent(), "포스트 내용이 일치해야 합니다.");
         assertTrue(findPostDTO.getImageArray().contains("testImage.jpg"), "이미지 URL이 포스트에 포함되어야 합니다.");
         assertEquals(user.getUserId(), findPostDTO.getWriter(), "포스트 작성자가 일치해야 합니다.");
         assertEquals(group.getGroupCode(), findPostDTO.getGroupCode(), "포스트 그룹 코드가 일치해야 합니다.");
 
-        uploadedFileUrl = findPostDTO.getImageArray();
+        uploadedFileUrls.add(savedPostDTO.getImageArray());
+    }
+
+    @Test
+    void 유저가_올린_포스트_목록() {
+        // given
+        UserEntity user = createUser("user");
+        GroupEntity group = createGroup(user);
+
+        MultipartFile[] multipartFiles = createMultipartFile();
+        UploadPostDTO uploadPostDTO = buildUploadPostDTO(user, group);
+
+        PostDTO savedPostDTO1 = postService.uploadPost(uploadPostDTO.getGroupCode(), multipartFiles, uploadPostDTO);
+        PostDTO savedPostDTO2 = postService.uploadPost(uploadPostDTO.getGroupCode(), multipartFiles, uploadPostDTO);
+
+        // when
+        List<PostDTO> findPostDTOList = postService.getUserPost(savedPostDTO1.getWriter());
+
+        // then
+        assertFalse(findPostDTOList.isEmpty(), "포스트 목록이 비어있으면 안됩니다.");
+        assertTrue(findPostDTOList.stream().anyMatch(postDTO -> postDTO.getPostId().equals(savedPostDTO1.getPostId())), "첫 번째 저장된 포스트가 목록에 포함되어야 합니다.");
+        assertTrue(findPostDTOList.stream().anyMatch(postDTO -> postDTO.getPostId().equals(savedPostDTO2.getPostId())), "두 번째 저장된 포스트가 목록에 포함되어야 합니다.");
+
+        uploadedFileUrls.add(savedPostDTO1.getImageArray());
+        uploadedFileUrls.add(savedPostDTO2.getImageArray());
+    }
+
+    @Test
+    void 유저가_올리지_않은_목록_포함시키지_않기() {
+        // given
+        UserEntity user1 = createUser("user1");
+        UserEntity user2 = createUser("user2");
+        GroupEntity group1 = createGroup(user1);
+        GroupEntity group2 = createGroup(user2);
+
+        MultipartFile[] multipartFiles = createMultipartFile();
+        UploadPostDTO uploadPostDTO1 = buildUploadPostDTO(user1, group1);
+
+        UploadPostDTO uploadPostDTO2 = buildUploadPostDTO(user2, group2);
+
+        PostDTO savedPostDTO1 = postService.uploadPost(uploadPostDTO1.getGroupCode(), multipartFiles, uploadPostDTO1);
+        PostDTO savedPostDTO2 = postService.uploadPost(uploadPostDTO2.getGroupCode(), multipartFiles, uploadPostDTO2);
+
+        // when
+        List<PostDTO> findPostDTOList = postService.getUserPost(savedPostDTO1.getWriter());
+
+        // then
+        assertFalse(findPostDTOList.isEmpty(), "포스트 목록이 비어있으면 안됩니다.");
+        assertTrue(findPostDTOList.stream().anyMatch(postDTO -> postDTO.getPostId().equals(savedPostDTO1.getPostId())), "첫 번째 저장된 포스트가 목록에 포함되어야 합니다.");
+        assertFalse(findPostDTOList.stream().anyMatch(postDTO -> postDTO.getPostId().equals(savedPostDTO2.getPostId())), "두 번째 저장된 포스트가 목록에 포함되지 않아야 합니다.");
+
+        uploadedFileUrls.add(savedPostDTO1.getImageArray());
+        uploadedFileUrls.add(savedPostDTO2.getImageArray());
     }
 
     private MultipartFile[] createMultipartFile() {
@@ -128,9 +193,9 @@ class PostServiceImplTest {
         return savedGroup.get();
     }
 
-    private UserEntity createUser() {
+    private UserEntity createUser(String userId) {
         UserRegisterDTO userRegisterDTO = UserRegisterDTO.builder()
-                .userId("userId")
+                .userId(userId)
                 .userType("teacher")
                 .password("password")
                 .name("name")
@@ -138,7 +203,7 @@ class PostServiceImplTest {
 
         userService.register(userRegisterDTO);
 
-        Optional<UserEntity> savedUser = userRepository.findByUserId("userId");
+        Optional<UserEntity> savedUser = userRepository.findByUserId(userId);
         assertTrue(savedUser.isPresent(), "유저가 저장되어 있어야 합니다.");
         return savedUser.get();
     }
