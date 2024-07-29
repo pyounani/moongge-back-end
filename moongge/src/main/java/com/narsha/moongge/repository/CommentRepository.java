@@ -1,6 +1,5 @@
 package com.narsha.moongge.repository;
 
-import com.narsha.moongge.base.projection.comment.GetComment;
 import com.narsha.moongge.entity.CommentEntity;
 import com.narsha.moongge.entity.PostEntity;
 import com.narsha.moongge.entity.UserEntity;

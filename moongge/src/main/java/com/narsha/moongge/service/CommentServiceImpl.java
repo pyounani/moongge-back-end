@@ -4,7 +4,6 @@ import com.narsha.moongge.base.code.ErrorCode;
 import com.narsha.moongge.base.dto.comment.CommentDTO;
 import com.narsha.moongge.base.dto.comment.CreateCommentDTO;
 import com.narsha.moongge.base.exception.*;
-import com.narsha.moongge.base.projection.comment.GetComment;
 import com.narsha.moongge.entity.CommentEntity;
 import com.narsha.moongge.entity.GroupEntity;
 import com.narsha.moongge.entity.PostEntity;
