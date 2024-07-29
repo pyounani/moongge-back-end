@@ -77,6 +77,7 @@ class CommentServiceImplTest {
         // when
         List<CommentDTO> commentList = commentService.getCommentList(group.getGroupCode(), post.getPostId());
 
+        // then
         assertNotNull(commentList, "댓글 목록은 null이 아니어야 합니다.");
         assertEquals(2, commentList.size(), "댓글 목록의 크기는 2이어야 합니다.");
 
@@ -86,6 +87,7 @@ class CommentServiceImplTest {
 
     @Test
     void 최신_댓글_1개_불러오기() {
+
         // given
         UserEntity user = createUser();
         GroupEntity group = createGroup(user);
@@ -99,9 +101,30 @@ class CommentServiceImplTest {
         // when
         CommentDTO recentFindComment = commentService.getRecentComment(group.getGroupCode(), post.getPostId());
 
+        // then
         assertEquals(commentId, recentFindComment.getCommentId());
         assertEquals(recentCreateCommentDTO.getContent(), recentFindComment.getContent());
         assertEquals(recentCreateCommentDTO.getWriter(), recentFindComment.getWriter());
+    }
+
+    @Test
+    void 댓글_갯수_가져오기() {
+
+        // given
+        UserEntity user = createUser();
+        GroupEntity group = createGroup(user);
+        PostEntity post = createPost(user, group);
+
+        CreateCommentDTO createCommentDTO1 = buildCreateCommentDTO(user, group, post);
+        CreateCommentDTO createCommentDTO2 = buildCreateCommentDTO(user, group, post);
+        commentService.createComment(group.getGroupCode(), post.getPostId(), createCommentDTO1);
+        commentService.createComment(group.getGroupCode(), post.getPostId(), createCommentDTO2);
+
+        // when
+        Long countComments = commentService.countComment(group.getGroupCode(), post.getPostId());
+
+        // then
+        assertEquals(2, countComments);
     }
 
     private void assertCommentListContains(List<CommentDTO> commentList, Integer commentId1, UserEntity user, CreateCommentDTO createCommentDTO1, String message) {
