@@ -34,12 +34,9 @@ import java.util.stream.Collectors;
 public class CommentServiceImpl implements CommentService {
 
     private final CommentRepository commentRepository;
-
     private final PostRepository postRepository;
-
     private final UserRepository userRepository;
     private final GroupRepository groupRepository;
-
 
     WebClient webClient = WebClient.create("http://localhost:8000");
     Random rand = new Random();
@@ -130,6 +127,7 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
+    @Transactional
     public String createAIComment(Integer postId) {
 
         //포스트 검색
