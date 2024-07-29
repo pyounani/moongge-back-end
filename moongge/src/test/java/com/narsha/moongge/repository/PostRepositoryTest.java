@@ -1,12 +1,8 @@
 package com.narsha.moongge.repository;
 
-import com.narsha.moongge.base.dto.group.CreateGroupDTO;
-import com.narsha.moongge.base.dto.user.UserRegisterDTO;
 import com.narsha.moongge.entity.GroupEntity;
 import com.narsha.moongge.entity.PostEntity;
 import com.narsha.moongge.entity.UserEntity;
-import com.narsha.moongge.service.GroupService;
-import com.narsha.moongge.service.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +11,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -26,13 +21,9 @@ class PostRepositoryTest {
     @Autowired
     private PostRepository postRepository;
     @Autowired
-    private UserService userService;
-    @Autowired
     private UserRepository userRepository;
     @Autowired
     private GroupRepository groupRepository;
-    @Autowired
-    private GroupService groupService;
 
     private UserEntity user;
     private GroupEntity group;
@@ -47,9 +38,9 @@ class PostRepositoryTest {
     void testFindByGroupAndCreateAtBetweenOrderByCreateAtDesc() {
         // given
         LocalDateTime now = LocalDateTime.now();
-        PostEntity post1 = createPost(group, user, "Post 1", now.minusDays(2));
-        PostEntity post2 = createPost(group, user, "Post 2", now.minusDays(1));
-        PostEntity post3 = createPost(group, user, "Post 3", now);
+        PostEntity post1 = createPost(user, group, now.minusDays(2));
+        PostEntity post2 = createPost(user, group, now.minusDays(1));
+        PostEntity post3 = createPost(user, group, now);
 
         postRepository.save(post1);
         postRepository.save(post2);
@@ -68,43 +59,41 @@ class PostRepositoryTest {
         assertEquals(post1.getPostId(), posts.get(2).getPostId(), "가장 오래된 포스트가 세 번째로 나와야 합니다.");
     }
 
-    private PostEntity createPost(GroupEntity group, UserEntity user, String content, LocalDateTime createAt) {
-        PostEntity post = new PostEntity();
-        post.setGroup(group);
-        post.setUser(user);
-        post.setContent(content);
-        post.setCreateAt(createAt);
-        return post;
+    private PostEntity createPost(UserEntity user, GroupEntity group, LocalDateTime createAt) {
+        PostEntity post = PostEntity.builder()
+                .user(user)
+                .group(group)
+                .content("content")
+                .createAt(createAt)
+                .build();
+
+        return postRepository.save(post);
     }
 
     private GroupEntity createGroup(UserEntity user) {
-        CreateGroupDTO createGroupDTO = CreateGroupDTO.builder()
+        GroupEntity group = GroupEntity.builder()
+                .groupCode("groupCode")
                 .groupName("groupName")
                 .school("school")
                 .grade(3)
                 .groupClass(5)
-                .userId(user.getUserId())
                 .build();
 
-        String userId = groupService.createGroup(createGroupDTO);
+        GroupEntity savedGroup = groupRepository.save(group);
 
-        Optional<GroupEntity> savedGroup = groupRepository.findByGroupCode(user.getGroup().getGroupCode());
-        assertTrue(savedGroup.isPresent());
-        return savedGroup.get();
+        user.setGroup(savedGroup);
+
+        return savedGroup;
     }
 
     private UserEntity createUser() {
-        UserRegisterDTO userRegisterDTO = UserRegisterDTO.builder()
+        UserEntity user = UserEntity.builder()
                 .userId("userId")
                 .userType("teacher")
                 .password("password")
-                .name("name")
+                .userName("name")
                 .build();
 
-        userService.register(userRegisterDTO);
-
-        Optional<UserEntity> savedUser = userRepository.findByUserId("userId");
-        assertTrue(savedUser.isPresent(), "유저가 저장되어 있어야 합니다.");
-        return savedUser.get();
+        return userRepository.save(user);
     }
 }

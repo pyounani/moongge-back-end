@@ -1,10 +1,7 @@
 package com.narsha.moongge.service;
 
-import com.narsha.moongge.base.dto.group.CreateGroupDTO;
-import com.narsha.moongge.base.dto.group.JoinGroupDTO;
 import com.narsha.moongge.base.dto.post.PostDTO;
 import com.narsha.moongge.base.dto.post.UploadPostDTO;
-import com.narsha.moongge.base.dto.user.UserRegisterDTO;
 import com.narsha.moongge.entity.GroupEntity;
 import com.narsha.moongge.entity.LikeEntity;
 import com.narsha.moongge.entity.PostEntity;
@@ -34,13 +31,9 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class PostServiceImplTest {
 
     @Autowired
-    private GroupService groupService;
-    @Autowired
     private UserRepository userRepository;
     @Autowired
     private GroupRepository groupRepository;
-    @Autowired
-    private UserService userService;
     @Autowired
     private PostService postService;
     @Autowired
@@ -146,7 +139,7 @@ class PostServiceImplTest {
         UserEntity user1 = createUser("user1");
         UserEntity user2 = createUser("user2");
         GroupEntity group1 = createGroup(user1);
-        joinGroup(group1, user2);
+        joinGroup(user2, group1);
 
         MultipartFile[] multipartFiles = createMultipartFile();
         UploadPostDTO uploadPostDTO1 = buildUploadPostDTO(user1, group1);
@@ -175,7 +168,7 @@ class PostServiceImplTest {
         GroupEntity group = createGroup(user);
 
         UserEntity anotherUser = createUser("anotherUser");
-        joinGroup(group, anotherUser);
+        joinGroup(anotherUser, group);
 
         // 'anotherUser' 포스트 생성
         MultipartFile[] multipartFiles = createMultipartFile();
@@ -240,43 +233,33 @@ class PostServiceImplTest {
     }
 
     private GroupEntity createGroup(UserEntity user) {
-        CreateGroupDTO createGroupDTO = CreateGroupDTO.builder()
+        GroupEntity group = GroupEntity.builder()
+                .groupCode("groupCode")
                 .groupName("groupName")
                 .school("school")
                 .grade(3)
                 .groupClass(5)
-                .userId(user.getUserId())
                 .build();
 
-        groupService.createGroup(createGroupDTO);
+        GroupEntity savedGroup = groupRepository.save(group);
 
-        Optional<GroupEntity> savedGroup = groupRepository.findByGroupCode(user.getGroup().getGroupCode());
-        assertTrue(savedGroup.isPresent());
-        return savedGroup.get();
+        user.setGroup(savedGroup);
+
+        return savedGroup;
     }
 
-    private GroupEntity joinGroup(GroupEntity group, UserEntity user) {
-        JoinGroupDTO joinGroupDTO = JoinGroupDTO.builder()
-                .userId(user.getUserId())
-                .groupCode(group.getGroupCode())
-                .build();
-
-        UserEntity savedUser = userService.joinUser(joinGroupDTO);
-        return savedUser.getGroup();
+    private void joinGroup(UserEntity user, GroupEntity group) {
+        user.setGroup(group);
     }
 
     private UserEntity createUser(String userId) {
-        UserRegisterDTO userRegisterDTO = UserRegisterDTO.builder()
+        UserEntity user = UserEntity.builder()
                 .userId(userId)
                 .userType("teacher")
                 .password("password")
-                .name("name")
+                .userName("name")
                 .build();
 
-        userService.register(userRegisterDTO);
-
-        Optional<UserEntity> savedUser = userRepository.findByUserId(userId);
-        assertTrue(savedUser.isPresent(), "유저가 저장되어 있어야 합니다.");
-        return savedUser.get();
+        return userRepository.save(user);
     }
 }

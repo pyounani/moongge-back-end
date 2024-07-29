@@ -1,9 +1,7 @@
 package com.narsha.moongge.service;
 
-import com.narsha.moongge.base.dto.group.CreateGroupDTO;
 import com.narsha.moongge.base.dto.notice.CreateNoticeDTO;
 import com.narsha.moongge.base.dto.notice.NoticeDTO;
-import com.narsha.moongge.base.dto.user.UserRegisterDTO;
 import com.narsha.moongge.entity.GroupEntity;
 import com.narsha.moongge.entity.NoticeEntity;
 import com.narsha.moongge.entity.UserEntity;
@@ -25,15 +23,11 @@ import static org.junit.jupiter.api.Assertions.*;
 class NoticeServiceImplTest {
 
     @Autowired
-    private GroupService groupService;
-    @Autowired
     private UserRepository userRepository;
     @Autowired
     private GroupRepository groupRepository;
     @Autowired
     private NoticeRepository noticeRepository;
-    @Autowired
-    private UserService userService;
     @Autowired
     private NoticeService noticeService;
 
@@ -141,33 +135,29 @@ class NoticeServiceImplTest {
     }
 
     private GroupEntity createGroup(UserEntity user) {
-        CreateGroupDTO createGroupDTO = CreateGroupDTO.builder()
+        GroupEntity group = GroupEntity.builder()
+                .groupCode("groupCode")
                 .groupName("groupName")
                 .school("school")
                 .grade(3)
                 .groupClass(5)
-                .userId(user.getUserId())
                 .build();
 
-        String userId = groupService.createGroup(createGroupDTO);
+        GroupEntity savedGroup = groupRepository.save(group);
 
-        Optional<GroupEntity> savedGroup = groupRepository.findByGroupCode(user.getGroup().getGroupCode());
-        assertTrue(savedGroup.isPresent());
-        return savedGroup.get();
+        user.setGroup(savedGroup);
+
+        return savedGroup;
     }
 
     private UserEntity createUser() {
-        UserRegisterDTO userRegisterDTO = UserRegisterDTO.builder()
+        UserEntity user = UserEntity.builder()
                 .userId("userId")
                 .userType("teacher")
                 .password("password")
-                .name("name")
+                .userName("name")
                 .build();
 
-        userService.register(userRegisterDTO);
-
-        Optional<UserEntity> savedUser = userRepository.findByUserId("userId");
-        assertTrue(savedUser.isPresent(), "유저가 저장되어 있어야 합니다.");
-        return savedUser.get();
+        return userRepository.save(user);
     }
 }
