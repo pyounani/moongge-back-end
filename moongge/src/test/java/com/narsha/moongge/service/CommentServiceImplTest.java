@@ -1,5 +1,6 @@
 package com.narsha.moongge.service;
 
+import com.narsha.moongge.base.dto.comment.CommentDTO;
 import com.narsha.moongge.base.dto.comment.CreateCommentDTO;
 import com.narsha.moongge.entity.CommentEntity;
 import com.narsha.moongge.entity.GroupEntity;
@@ -9,12 +10,12 @@ import com.narsha.moongge.repository.CommentRepository;
 import com.narsha.moongge.repository.GroupRepository;
 import com.narsha.moongge.repository.PostRepository;
 import com.narsha.moongge.repository.UserRepository;
-import org.apache.catalina.User;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -43,12 +44,7 @@ class CommentServiceImplTest {
 
         PostEntity post = createPost(user, group);
 
-        CreateCommentDTO createCommentDTO = CreateCommentDTO.builder()
-                .groupCode(group.getGroupCode())
-                .postId(post.getPostId())
-                .writer(user.getUserId())
-                .content("content")
-                .build();
+        CreateCommentDTO createCommentDTO = buildCreateCommentDTO(user, group, post);
 
         // when
         Integer commentId = commentService.createComment(group.getGroupCode(), post.getPostId(), createCommentDTO);
@@ -65,7 +61,47 @@ class CommentServiceImplTest {
         assertEquals(createCommentDTO.getWriter(), comment.getUser().getUserId());
         assertEquals(createCommentDTO.getContent(), comment.getContent());
     }
+    @Test
+    void 댓글_목록_불러오기() {
 
+        // given
+        UserEntity user = createUser();
+        GroupEntity group = createGroup(user);
+        PostEntity post = createPost(user, group);
+
+        CreateCommentDTO createCommentDTO1 = buildCreateCommentDTO(user, group, post);
+        CreateCommentDTO createCommentDTO2 = buildCreateCommentDTO(user, group, post);
+        Integer commentId1 = commentService.createComment(group.getGroupCode(), post.getPostId(), createCommentDTO1);
+        Integer commentId2 = commentService.createComment(group.getGroupCode(), post.getPostId(), createCommentDTO2);
+
+        // when
+        List<CommentDTO> commentList = commentService.getCommentList(group.getGroupCode(), post.getPostId());
+
+        assertNotNull(commentList, "댓글 목록은 null이 아니어야 합니다.");
+        assertEquals(2, commentList.size(), "댓글 목록의 크기는 2이어야 합니다.");
+
+        assertCommentListContains(commentList, commentId1, user, createCommentDTO1, "댓글 목록에 첫 번째 댓글이 포함되어 있어야 합니다.");
+        assertCommentListContains(commentList, commentId2, user, createCommentDTO2, "댓글 목록에 두 번째 댓글이 포함되어 있어야 합니다.");
+    }
+
+    private void assertCommentListContains(List<CommentDTO> commentList, Integer commentId1, UserEntity user, CreateCommentDTO createCommentDTO1, String message) {
+        boolean containsComment1 = commentList.stream()
+                .anyMatch(comment -> comment.getCommentId().equals(commentId1) &&
+                        comment.getWriter().equals(user.getUserId()) &&
+                        comment.getContent().equals(createCommentDTO1.getContent()));
+
+        assertTrue(containsComment1, message);
+    }
+
+    private CreateCommentDTO buildCreateCommentDTO(UserEntity user, GroupEntity group, PostEntity post) {
+        CreateCommentDTO createCommentDTO = CreateCommentDTO.builder()
+                .groupCode(group.getGroupCode())
+                .postId(post.getPostId())
+                .writer(user.getUserId())
+                .content("content")
+                .build();
+        return createCommentDTO;
+    }
 
     private PostEntity createPost(UserEntity user, GroupEntity group) {
         PostEntity post = PostEntity.builder()
