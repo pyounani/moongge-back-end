@@ -59,15 +59,6 @@ class PostRepositoryTest {
         assertEquals(post1.getPostId(), posts.get(2).getPostId(), "가장 오래된 포스트가 세 번째로 나와야 합니다.");
     }
 
-    private PostEntity createPost(GroupEntity group, UserEntity user, String content, LocalDateTime createAt) {
-        PostEntity post = new PostEntity();
-        post.setGroup(group);
-        post.setUser(user);
-        post.setContent(content);
-        post.setCreateAt(createAt);
-        return post;
-    }
-
     private PostEntity createPost(UserEntity user, GroupEntity group, LocalDateTime createAt) {
         PostEntity post = PostEntity.builder()
                 .user(user)
