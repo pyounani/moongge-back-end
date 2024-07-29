@@ -3,7 +3,6 @@ package com.narsha.moongge.service;
 import com.narsha.moongge.base.dto.group.UpdateTimeDTO;
 import com.narsha.moongge.entity.GroupEntity;
 import com.narsha.moongge.base.dto.group.CreateGroupDTO;
-import com.narsha.moongge.base.dto.user.UserRegisterDTO;
 import com.narsha.moongge.entity.UserEntity;
 import com.narsha.moongge.repository.GroupRepository;
 import com.narsha.moongge.repository.UserRepository;
@@ -27,8 +26,6 @@ class GroupServiceImplTest {
     private UserRepository userRepository;
     @Autowired
     private GroupRepository groupRepository;
-    @Autowired
-    private UserService userService;
 
     @Test
     void 그룹_생성하기() {
@@ -139,17 +136,13 @@ class GroupServiceImplTest {
     }
 
     private UserEntity createUser() {
-        UserRegisterDTO userRegisterDTO = UserRegisterDTO.builder()
+        UserEntity user = UserEntity.builder()
                 .userId("userId")
                 .userType("teacher")
                 .password("password")
-                .name("name")
+                .userName("name")
                 .build();
 
-        userService.register(userRegisterDTO);
-
-        Optional<UserEntity> savedUser = userRepository.findByUserId("userId");
-        assertTrue(savedUser.isPresent(), "유저가 저장되어 있어야 합니다.");
-        return savedUser.get();
+        return userRepository.save(user);
     }
 }
