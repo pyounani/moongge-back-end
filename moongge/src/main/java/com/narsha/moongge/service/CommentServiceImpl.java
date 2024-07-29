@@ -1,6 +1,7 @@
 package com.narsha.moongge.service;
 
 import com.narsha.moongge.base.code.ErrorCode;
+import com.narsha.moongge.base.dto.comment.CommentDTO;
 import com.narsha.moongge.base.dto.comment.CreateCommentDTO;
 import com.narsha.moongge.base.exception.EmptyCommentContentException;
 import com.narsha.moongge.base.exception.GroupNotFoundException;
@@ -29,6 +30,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -77,18 +79,23 @@ public class CommentServiceImpl implements CommentService {
         return savedComment.getCommentId();
     }
 
+    /**
+     * 특정 포스트 댓글 목록 불러오기
+     */
     @Override
-    public List<GetComment> getCommentList(Integer postId) {
+    public List<CommentDTO> getCommentList(String groupCode, Integer postId) {
 
-        Optional<PostEntity> findPost = postRepository.findByPostId(postId);
-        // 게시물이 존재하지 않은 경우
-        if (!findPost.isPresent()) {
-            throw new PostNotFoundException(ErrorCode.POSTS_NOT_FOUND);
-        }
+        GroupEntity group = groupRepository.findByGroupCode(groupCode)
+                .orElseThrow(() -> new GroupNotFoundException(ErrorCode.GROUP_NOT_FOUND));
 
-        List<GetComment> commentList = commentRepository.findByPost(findPost.get());
+        PostEntity post = postRepository.findByPostIdAndGroup(postId, group)
+                .orElseThrow(() -> new PostNotFoundException(ErrorCode.POSTS_NOT_FOUND));
 
-        return commentList;
+        List<CommentEntity> commentList = commentRepository.findByPost(post);
+
+        return commentList.stream()
+                .map(CommentDTO::mapToCommentDTO)
+                .collect(Collectors.toList());
     }
 
     @Override

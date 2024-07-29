@@ -1,6 +1,7 @@
 package com.narsha.moongge.controller;
 
 import com.narsha.moongge.base.code.ResponseCode;
+import com.narsha.moongge.base.dto.comment.CommentDTO;
 import com.narsha.moongge.base.dto.comment.CreateCommentDTO;
 import com.narsha.moongge.base.dto.response.ResponseDTO;
 import com.narsha.moongge.base.projection.comment.GetComment;
@@ -36,13 +37,17 @@ public class CommentController {
                 .body(new ResponseDTO(ResponseCode.SUCCESS_CREATE_COMMENT, commentId));
     }
 
-    @GetMapping("/list")
-    public ResponseEntity<ResponseDTO> getCommentList(@RequestParam(value = "postId") Integer postId){
-        List<GetComment> commentList = commentService.getCommentList(postId);
+    /**
+     * 댓글 목록 불러오기 API
+     */
+    @GetMapping("/groups/{groupCode}/posts/{postId}/comments")
+    public ResponseEntity<ResponseDTO> getCommentList(@PathVariable String groupCode,
+                                                      @PathVariable Integer postId){
+        List<CommentDTO> commentList = commentService.getCommentList(groupCode, postId);
+
         return ResponseEntity
                 .status(ResponseCode.SUCCESS_GET_COMMENT_LIST.getStatus().value())
                 .body(new ResponseDTO(ResponseCode.SUCCESS_GET_COMMENT_LIST, commentList));
-
     }
 
     @GetMapping("/create/chat")
