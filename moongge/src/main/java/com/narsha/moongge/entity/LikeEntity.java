@@ -22,12 +22,15 @@ public class LikeEntity {
     @CreatedDate
     private LocalDateTime createAt; // 생성일
 
-    @ManyToOne()
-    private GroupEntity groupCode; // 좋아요를 누른 유저의 그룹
+    @ManyToOne(cascade = CascadeType.REMOVE)
+    @JoinColumn(name = "group_code")
+    private GroupEntity group; // 좋아요를 누른 유저의 그룹
 
     @OneToOne
-    private UserEntity userId;
+    @JoinColumn(name = "writer")
+    private UserEntity user;
 
     @ManyToOne
-    private PostEntity postId; // 포스트 id
+    @JoinColumn(name = "post_id")
+    private PostEntity post; // 포스트 id
 }

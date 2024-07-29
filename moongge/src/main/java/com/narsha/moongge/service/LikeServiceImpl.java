@@ -55,9 +55,9 @@ public class LikeServiceImpl implements LikeService{
         }
 
         LikeEntity like = LikeEntity.builder()
-                .postId(post.get())
-                .groupCode(group.get())
-                .userId(user.get())
+                .post(post.get())
+                .group(group.get())
+                .user(user.get())
                 .build();
 
         likeRepository.save(like);
@@ -75,7 +75,7 @@ public class LikeServiceImpl implements LikeService{
             throw new PostNotFoundException(ErrorCode.POST_NOT_FOUND);
         }
 
-        List<GetLikeList> likeList = likeRepository.findByPostId(findPost.get());
+        List<GetLikeList> likeList = likeRepository.findByPost(findPost.get());
 
         return likeList;
     }
@@ -99,7 +99,7 @@ public class LikeServiceImpl implements LikeService{
             throw new GroupNotFoundException(ErrorCode.GROUP_NOT_FOUND);
         }
 
-        Optional<LikeEntity> like = likeRepository.findByGroupCodeAndUserIdAndPostId(group.get(), user.get(), post.get());
+        Optional<LikeEntity> like = likeRepository.findByGroupAndUserAndPost(group.get(), user.get(), post.get());
 
         if(!like.isPresent()){
             return false;
@@ -128,11 +128,11 @@ public class LikeServiceImpl implements LikeService{
             throw new GroupNotFoundException(ErrorCode.GROUP_NOT_FOUND);
         }
 
-        Optional<LikeEntity> like = likeRepository.findByGroupCodeAndUserIdAndPostId(group.get(), user.get(), post.get());
+        Optional<LikeEntity> like = likeRepository.findByGroupAndUserAndPost(group.get(), user.get(), post.get());
 
         if(like.isPresent()){
             alarmRepository.deleteByLikeId(like.get());
-            likeRepository.deleteByGroupCodeAndUserIdAndPostId(group.get(), user.get(), post.get());
+            likeRepository.deleteByGroupAndUserAndPost(group.get(), user.get(), post.get());
         }
 
         return "success";
@@ -152,7 +152,7 @@ public class LikeServiceImpl implements LikeService{
             throw new PostNotFoundException(ErrorCode.POST_NOT_FOUND);
         }
 
-        Long like = likeRepository.countByGroupCodeAndPostId(group.get(), post.get());
+        Long like = likeRepository.countByGroupAndPost(group.get(), post.get());
 
         return like;
 
@@ -195,7 +195,7 @@ public class LikeServiceImpl implements LikeService{
             throw new UserNotFoundException(ErrorCode.USERID_NOT_FOUND);
         }
 
-        Long count = likeRepository.countByUserId(user.get());
+        Long count = likeRepository.countByUser(user.get());
 
         return count;
 //        if (count>=10)

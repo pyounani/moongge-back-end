@@ -5,7 +5,7 @@ import com.narsha.moongge.entity.UserEntity;
 public interface GetLikeList {
 
     Integer getLikeId();
-    UserEntity getUserId();
+    UserEntity getUser();
 
     interface UserEntity{
         String getUserId();
