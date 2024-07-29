@@ -63,10 +63,7 @@ public class CommentServiceImpl implements CommentService {
                 .orElseThrow(() -> new UserNotFoundException(ErrorCode.USER_NOT_FOUND));
 
         // 댓글에 내용이 없을 경우
-        String content = createCommentDTO.getContent();
-        if(content == null || content.trim().isEmpty()) {
-            throw new EmptyCommentContentException(ErrorCode.EMPTY_COMMENT_CONTENT);
-        }
+        validateCommentContent(createCommentDTO);
 
         CommentEntity comment = CommentEntity.builder()
                 .post(post)
@@ -524,6 +521,13 @@ public class CommentServiceImpl implements CommentService {
 
         return count;
 
+    }
+
+    private void validateCommentContent(CreateCommentDTO createCommentDTO) {
+        String content = createCommentDTO.getContent();
+        if(content == null || content.trim().isEmpty()) {
+            throw new EmptyCommentContentException(ErrorCode.EMPTY_COMMENT_CONTENT);
+        }
     }
 
 }
