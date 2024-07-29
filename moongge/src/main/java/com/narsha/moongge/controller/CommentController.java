@@ -5,25 +5,31 @@ import com.narsha.moongge.base.dto.comment.CreateCommentDTO;
 import com.narsha.moongge.base.dto.response.ResponseDTO;
 import com.narsha.moongge.base.projection.comment.GetComment;
 import com.narsha.moongge.service.CommentService;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
 
 @RestController // JSON 형태의 결과값 반환
-@Controller
 @RequiredArgsConstructor
-@RequestMapping("/api/comment")
+@RequestMapping("/api")
 public class CommentController {
 
     private final CommentService commentService;
 
-    @PostMapping("/create")
-    public ResponseEntity<ResponseDTO> createComment(@RequestBody CreateCommentDTO createCommentDTO){
-        Integer commentId = commentService.createComment(createCommentDTO);
+    /**
+     * 댓글 작성하기 API
+     */
+    @PostMapping("/groups/{groupCode}/posts/{postId}/comments")
+    public ResponseEntity<ResponseDTO> createComment(@NotEmpty @PathVariable String groupCode,
+                                                     @NotNull @PathVariable Integer postId,
+                                                     @Valid @RequestBody CreateCommentDTO createCommentDTO){
+        Integer commentId = commentService.createComment(groupCode, postId, createCommentDTO);
 
         return ResponseEntity
                 .status(ResponseCode.SUCCESS_CREATE_COMMENT.getStatus().value())

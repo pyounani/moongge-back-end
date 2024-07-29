@@ -8,7 +8,7 @@ import java.util.Optional;
 
 public interface CommentService {
 
-    Integer createComment(CreateCommentDTO createCommentDTO);
+    Integer createComment(String groupCode, Integer postId, CreateCommentDTO createCommentDTO);
 
     List<GetComment> getCommentList(Integer postId);
 

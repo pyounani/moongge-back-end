@@ -10,16 +10,15 @@ import com.narsha.moongge.entity.CommentEntity;
 import com.narsha.moongge.entity.PostEntity;
 import com.narsha.moongge.entity.UserEntity;
 import com.narsha.moongge.repository.CommentRepository;
-import com.narsha.moongge.repository.GroupRepository;
 import com.narsha.moongge.repository.PostRepository;
 import com.narsha.moongge.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
 
@@ -30,30 +29,27 @@ import java.util.Random;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class CommentServiceImpl implements CommentService {
 
     private final CommentRepository commentRepository;
 
     private final PostRepository postRepository;
 
-    private final GroupRepository groupRepository;
-
-
     private final UserRepository userRepository;
 
-    private final ApplicationEventPublisher eventPublisher;
 
     WebClient webClient = WebClient.create("http://localhost:8000");
-//    WebClient webClient = WebClient.builder()
-//        .baseUrl("http://localhost:8000")
-//        .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-//        .build();
     Random rand = new Random();
 
+    /**
+     * 댓글 작성하기
+     */
     @Override
-    public Integer createComment(CreateCommentDTO createCommentDTO) {
+    @Transactional
+    public Integer createComment(String groupCode, Integer postId, CreateCommentDTO createCommentDTO) {
 
-        Optional<UserEntity> user = userRepository.findByUserId(createCommentDTO.getUserId());
+        Optional<UserEntity> user = userRepository.findByUserId(createCommentDTO.getWriter());
         if(!user.isPresent()) {
             throw new UserNotFoundException(ErrorCode.USERID_NOT_FOUND);
         }
