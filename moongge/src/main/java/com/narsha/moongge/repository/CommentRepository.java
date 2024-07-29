@@ -2,7 +2,6 @@ package com.narsha.moongge.repository;
 
 import com.narsha.moongge.entity.CommentEntity;
 import com.narsha.moongge.entity.PostEntity;
-import com.narsha.moongge.entity.UserEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
