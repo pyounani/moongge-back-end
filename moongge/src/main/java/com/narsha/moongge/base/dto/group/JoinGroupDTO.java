@@ -1,11 +1,10 @@
 package com.narsha.moongge.base.dto.group;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.antlr.v4.runtime.misc.NotNull;
 
-@Data
+@Builder
+@Getter
 @AllArgsConstructor
 @NoArgsConstructor
 public class JoinGroupDTO {

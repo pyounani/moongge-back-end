@@ -117,7 +117,7 @@ public class UserServiceImpl implements UserService {
             profile.get().setProfileImage(updateUserProfileDTO.getProfileImage());
         profile.get().setBirth(updateUserProfileDTO.getBirth());
         profile.get().setIntro(updateUserProfileDTO.getIntro());
-        profile.get().setNikname(updateUserProfileDTO.getNikname());
+        profile.get().setNickname(updateUserProfileDTO.getNikname());
 
         return userRepository.save(profile.get());
     }
@@ -248,8 +248,8 @@ public class UserServiceImpl implements UserService {
             }
 
             @Override
-            public String getNikName() {
-                return  findUser.getNikname();
+            public String getNickName() {
+                return  findUser.getNickname();
             }
 
             @Override

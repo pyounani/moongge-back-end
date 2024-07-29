@@ -11,8 +11,6 @@ public interface AmazonS3Service {
 
     String uploadFileToS3(MultipartFile multipartFile, String filePath);
 
-    String putS3(File uploadFile, String fileName);
-
     void deleteS3(String filePath);
 
     List<String> getAllPhotos(String folderPath);

@@ -11,7 +11,6 @@ import java.util.Optional;
 // JpaRepository<Class Type, PK Type>
 public interface UserRepository extends JpaRepository<UserEntity, String> {
     Optional<UserEntity> findByUserId(String userId);
-    Optional<UserEntity> deleteByGroup(GroupEntity group);
     List<GetUser> findByGroupAndUserIdNotLike(GroupEntity group, String userId);
     List<UserEntity> findByGroup(GroupEntity group);
 }

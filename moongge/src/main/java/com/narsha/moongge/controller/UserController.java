@@ -8,10 +8,12 @@ import com.narsha.moongge.base.dto.response.ResponseDTO;
 import com.narsha.moongge.base.dto.user.UpdateUserProfileDTO;
 import com.narsha.moongge.base.dto.user.UserLoginDTO;
 import com.narsha.moongge.base.dto.user.UserRegisterDTO;
+import com.narsha.moongge.base.projection.post.GetOneUserPost;
 import com.narsha.moongge.base.projection.user.GetUser;
 import com.narsha.moongge.base.projection.user.GetUserProfile;
 import com.narsha.moongge.entity.UserEntity;
 import com.narsha.moongge.service.AmazonS3Service;
+import com.narsha.moongge.service.PostService;
 import com.narsha.moongge.service.UserService;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.RequiredArgsConstructor;
@@ -30,7 +32,7 @@ import java.util.Optional;
 @RestController // JSON 형태의 결과값 반환
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("/api/user")
+@RequestMapping("/api/users")
 public class UserController {
     private final UserService userService;
     private final AmazonS3Service amazonS3Service;

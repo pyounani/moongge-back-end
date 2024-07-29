@@ -172,10 +172,10 @@ public class LikeServiceImpl implements LikeService{
             throw new GroupNotFoundException(ErrorCode.GROUP_NOT_FOUND);
         }
 
-        List<GetOneUserPost> userPostList = postRepository.findByUserOrderByCreateAtDesc(user.get());
+        List<PostEntity> userPostList = postRepository.findByUserOrderByCreateAtDesc(user.get());
 
         for (int i=0;i<userPostList.size();i++){
-            GetOneUserPost post = userPostList.get(i);
+            PostEntity post = userPostList.get(i);
             Integer postId = post.getPostId();
 
             Integer count = Math.toIntExact(countLike(groupCode, postId));
