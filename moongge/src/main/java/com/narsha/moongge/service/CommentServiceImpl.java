@@ -112,6 +112,23 @@ public class CommentServiceImpl implements CommentService {
         return CommentDTO.mapToCommentDTO(findComment);
     }
 
+    /**
+     * 특정 포스트 댓글 갯수 가져오기
+     */
+    @Override
+    public Long countComment(String groupCode, Integer postId){
+
+        GroupEntity group = groupRepository.findByGroupCode(groupCode)
+                .orElseThrow(() -> new GroupNotFoundException(ErrorCode.GROUP_NOT_FOUND));
+
+        PostEntity post = postRepository.findByPostIdAndGroup(postId, group)
+                .orElseThrow(() -> new PostNotFoundException(ErrorCode.POST_NOT_FOUND));
+
+        Long countComments = commentRepository.countByPost(post);
+
+        return countComments;
+    }
+
     @Override
     public String createAIComment(Integer postId) {
 
@@ -514,20 +531,6 @@ public class CommentServiceImpl implements CommentService {
             }
         }
         return result.toString();
-    }
-
-    @Override
-    public Long countComment(String userId){
-
-        Optional<UserEntity> user = userRepository.findByUserId(userId);
-        if(!user.isPresent()) {
-            throw new UserNotFoundException(ErrorCode.USER_NOT_FOUND);
-        }
-
-        Long count = commentRepository.countByUser(user.get());
-
-        return count;
-
     }
 
     private void validateCommentContent(CreateCommentDTO createCommentDTO) {

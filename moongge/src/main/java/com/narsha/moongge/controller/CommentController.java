@@ -26,11 +26,11 @@ public class CommentController {
     public ResponseEntity<ResponseDTO> createComment(@PathVariable String groupCode,
                                                      @PathVariable Integer postId,
                                                      @Valid @RequestBody CreateCommentDTO createCommentDTO){
-        Integer commentId = commentService.createComment(groupCode, postId, createCommentDTO);
+        Integer res = commentService.createComment(groupCode, postId, createCommentDTO);
 
         return ResponseEntity
                 .status(ResponseCode.SUCCESS_CREATE_COMMENT.getStatus().value())
-                .body(new ResponseDTO(ResponseCode.SUCCESS_CREATE_COMMENT, commentId));
+                .body(new ResponseDTO(ResponseCode.SUCCESS_CREATE_COMMENT, res));
     }
 
     /**
@@ -39,11 +39,11 @@ public class CommentController {
     @GetMapping("/groups/{groupCode}/posts/{postId}/comments")
     public ResponseEntity<ResponseDTO> getCommentList(@PathVariable String groupCode,
                                                       @PathVariable Integer postId){
-        List<CommentDTO> commentList = commentService.getCommentList(groupCode, postId);
+        List<CommentDTO> res = commentService.getCommentList(groupCode, postId);
 
         return ResponseEntity
                 .status(ResponseCode.SUCCESS_GET_COMMENT_LIST.getStatus().value())
-                .body(new ResponseDTO(ResponseCode.SUCCESS_GET_COMMENT_LIST, commentList));
+                .body(new ResponseDTO(ResponseCode.SUCCESS_GET_COMMENT_LIST, res));
     }
 
     /**
@@ -52,13 +52,25 @@ public class CommentController {
     @GetMapping("/groups/{groupCode}/posts/{postId}/comments/recent")
     public ResponseEntity<ResponseDTO> getRecentComment(@PathVariable String groupCode,
                                                         @PathVariable Integer postId){
-        CommentDTO recentComment = commentService.getRecentComment(groupCode, postId);
+        CommentDTO res = commentService.getRecentComment(groupCode, postId);
 
         return ResponseEntity
                 .status(ResponseCode.SUCCESS_GET_RECENT_COMMENT.getStatus().value())
-                .body(new ResponseDTO(ResponseCode.SUCCESS_GET_RECENT_COMMENT, recentComment));
+                .body(new ResponseDTO(ResponseCode.SUCCESS_GET_RECENT_COMMENT, res));
     }
 
+    /**
+     * 특정 포스트 댓글 갯수 가져오기 API
+     */
+    @GetMapping("/groups/{groupCode}/posts/{postId}/comments/count")
+    public ResponseEntity<ResponseDTO> getCommentCount(@PathVariable String groupCode,
+                                                       @PathVariable Integer postId){
+        Long res = commentService.countComment(groupCode, postId);
+
+        return ResponseEntity
+                .status(ResponseCode.SUCCESS_GET_COMMENT_COUNT.getStatus().value())
+                .body(new ResponseDTO(ResponseCode.SUCCESS_GET_COMMENT_COUNT, res));
+    }
 
     @GetMapping("/create/chat")
     public ResponseEntity<ResponseDTO> createAIComment(@RequestParam(value = "postId") Integer postId){
@@ -69,13 +81,4 @@ public class CommentController {
                 .body(new ResponseDTO(ResponseCode.SUCCESS_CREATE_COMMENT, commentId));
     }
 
-    @GetMapping("/count")
-    public ResponseEntity<ResponseDTO> getCommentCount(@RequestParam(value = "userId") String userId){
-
-        Long commentCount = commentService.countComment(userId);
-
-        return ResponseEntity
-                .status(ResponseCode.SUCCESS_GET_COMMENT_COUNT.getStatus().value())
-                .body(new ResponseDTO(ResponseCode.SUCCESS_GET_COMMENT_COUNT, commentCount));
-    }
 }
