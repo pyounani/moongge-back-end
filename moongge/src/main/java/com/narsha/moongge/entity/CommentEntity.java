@@ -20,10 +20,12 @@ public class CommentEntity {
     private Integer commentId; // 댓글 id
 
     @ManyToOne(cascade = CascadeType.REMOVE)
-    private GroupEntity groupCode;
+    @JoinColumn(name = "group_code")
+    private GroupEntity group;
 
     @ManyToOne
-    private UserEntity userId; // 유저 id
+    @JoinColumn(name = "writer")
+    private UserEntity user; // 유저 id
 
     @Column(columnDefinition = "TEXT")
     private String content; // 댓글 내용
@@ -32,5 +34,6 @@ public class CommentEntity {
     private LocalDateTime createAt; // 생성일
 
     @ManyToOne
-    private PostEntity postId; // 포스트
+    @JoinColumn(name = "post_id")
+    private PostEntity post; // 포스트
  }

@@ -72,9 +72,9 @@ public class CommentServiceImpl implements CommentService {
         }
 
         CommentEntity comment = CommentEntity.builder()
-                .postId(post.get())
-                .userId(user.get())
-                .groupCode(user.get().getGroup())
+                .post(post.get())
+                .user(user.get())
+                .group(user.get().getGroup())
                 .content(createCommentDTO.getContent())
                 .build();
 
@@ -92,7 +92,7 @@ public class CommentServiceImpl implements CommentService {
             throw new PostNotFoundException(ErrorCode.POSTS_NOT_FOUND);
         }
 
-        List<GetComment> commentList = commentRepository.findByPostId(findPost.get());
+        List<GetComment> commentList = commentRepository.findByPost(findPost.get());
 
         return commentList;
     }
@@ -106,7 +106,7 @@ public class CommentServiceImpl implements CommentService {
             throw new PostNotFoundException(ErrorCode.POSTS_NOT_FOUND);
         }
 
-        Optional<GetComment> recentComment = commentRepository.findTopByPostIdOrderByCreateAtDesc(findPost.get());
+        Optional<GetComment> recentComment = commentRepository.findTopByPostOrderByCreateAtDesc(findPost.get());
 
         return recentComment;
     }
@@ -144,9 +144,9 @@ public class CommentServiceImpl implements CommentService {
 
                 //comment 저장
                 CommentEntity comment = CommentEntity.builder()
-                        .postId(post.get())
-                        .userId(user.get())
-                        .groupCode(user.get().getGroup())
+                        .post(post.get())
+                        .user(user.get())
+                        .group(user.get().getGroup())
                         .content(res)
                         .build();
 
@@ -166,9 +166,9 @@ public class CommentServiceImpl implements CommentService {
                 String res = postImage(post_image, uri);
 
                 CommentEntity comment = CommentEntity.builder()
-                        .postId(post.get())
-                        .userId(user.get())
-                        .groupCode(user.get().getGroup())
+                        .post(post.get())
+                        .user(user.get())
+                        .group(user.get().getGroup())
                         .content(res)
                         .build();
 
@@ -188,9 +188,9 @@ public class CommentServiceImpl implements CommentService {
                 String res = postImageContent(post_image_content, uri);
 
                 CommentEntity comment = CommentEntity.builder()
-                        .postId(post.get())
-                        .userId(user.get())
-                        .groupCode(user.get().getGroup())
+                        .post(post.get())
+                        .user(user.get())
+                        .group(user.get().getGroup())
                         .content(res)
                         .build();
 
@@ -215,9 +215,9 @@ public class CommentServiceImpl implements CommentService {
 
                 //comment 저장
                 CommentEntity comment = CommentEntity.builder()
-                        .postId(post.get())
-                        .userId(user.get())
-                        .groupCode(user.get().getGroup())
+                        .post(post.get())
+                        .user(user.get())
+                        .group(user.get().getGroup())
                         .content(res)
                         .build();
 
@@ -236,9 +236,9 @@ public class CommentServiceImpl implements CommentService {
                 String res = postImage(post_image, uri);
 
                 CommentEntity comment = CommentEntity.builder()
-                        .postId(post.get())
-                        .userId(user.get())
-                        .groupCode(user.get().getGroup())
+                        .post(post.get())
+                        .user(user.get())
+                        .group(user.get().getGroup())
                         .content(res)
                         .build();
 
@@ -258,9 +258,9 @@ public class CommentServiceImpl implements CommentService {
                 String res = postImageContent(post_image_content, uri);
 
                 CommentEntity comment = CommentEntity.builder()
-                        .postId(post.get())
-                        .userId(user.get())
-                        .groupCode(user.get().getGroup())
+                        .post(post.get())
+                        .user(user.get())
+                        .group(user.get().getGroup())
                         .content(res)
                         .build();
 
@@ -284,9 +284,9 @@ public class CommentServiceImpl implements CommentService {
 
                 //comment 저장
                 CommentEntity comment = CommentEntity.builder()
-                        .postId(post.get())
-                        .userId(user.get())
-                        .groupCode(user.get().getGroup())
+                        .post(post.get())
+                        .user(user.get())
+                        .group(user.get().getGroup())
                         .content(res)
                         .build();
 
@@ -305,9 +305,9 @@ public class CommentServiceImpl implements CommentService {
                 String res = postImage(post_image, uri);
 
                 CommentEntity comment = CommentEntity.builder()
-                        .postId(post.get())
-                        .userId(user.get())
-                        .groupCode(user.get().getGroup())
+                        .post(post.get())
+                        .user(user.get())
+                        .group(user.get().getGroup())
                         .content(res)
                         .build();
 
@@ -327,9 +327,9 @@ public class CommentServiceImpl implements CommentService {
                 String res = postImageContent(post_image_content, uri);
 
                 CommentEntity comment = CommentEntity.builder()
-                        .postId(post.get())
-                        .userId(user.get())
-                        .groupCode(user.get().getGroup())
+                        .post(post.get())
+                        .user(user.get())
+                        .group(user.get().getGroup())
                         .content(res)
                         .build();
 
@@ -353,9 +353,9 @@ public class CommentServiceImpl implements CommentService {
 
                 //comment 저장
                 CommentEntity comment = CommentEntity.builder()
-                        .postId(post.get())
-                        .userId(user.get())
-                        .groupCode(user.get().getGroup())
+                        .post(post.get())
+                        .user(user.get())
+                        .group(user.get().getGroup())
                         .content(res)
                         .build();
 
@@ -374,9 +374,9 @@ public class CommentServiceImpl implements CommentService {
                 String res = postImage(post_image, uri);
 
                 CommentEntity comment = CommentEntity.builder()
-                        .postId(post.get())
-                        .userId(user.get())
-                        .groupCode(user.get().getGroup())
+                        .post(post.get())
+                        .user(user.get())
+                        .group(user.get().getGroup())
                         .content(res)
                         .build();
 
@@ -397,9 +397,9 @@ public class CommentServiceImpl implements CommentService {
                 String res = postImageContent(post_image_content, uri);
 
                 CommentEntity comment = CommentEntity.builder()
-                        .postId(post.get())
-                        .userId(user.get())
-                        .groupCode(user.get().getGroup())
+                        .post(post.get())
+                        .user(user.get())
+                        .group(user.get().getGroup())
                         .content(res)
                         .build();
 
@@ -523,7 +523,7 @@ public class CommentServiceImpl implements CommentService {
             throw new UserNotFoundException(ErrorCode.USER_NOT_FOUND);
         }
 
-        Long count = commentRepository.countByUserId(user.get());
+        Long count = commentRepository.countByUser(user.get());
 
         return count;
 

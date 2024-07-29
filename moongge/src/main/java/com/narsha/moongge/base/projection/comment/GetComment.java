@@ -10,7 +10,7 @@ public interface GetComment {
     String getContent();
     LocalDateTime getCreateAt();
 
-    GetLikeList.UserEntity getUserId();
+    GetLikeList.UserEntity getUser();
 
     interface UserEntity{
         String getUserId();
