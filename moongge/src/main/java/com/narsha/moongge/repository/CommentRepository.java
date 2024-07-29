@@ -12,6 +12,6 @@ import java.util.Optional;
 public interface CommentRepository extends JpaRepository<CommentEntity, Integer> {
 
     List<CommentEntity> findByPost(PostEntity post);
-    Optional<GetComment> findTopByPostOrderByCreateAtDesc(PostEntity post);
+    Optional<CommentEntity> findTopByPostOrderByCreateAtDesc(PostEntity post);
     Long countByUser(UserEntity user);
 }
