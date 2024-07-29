@@ -27,7 +27,7 @@ public class PostController {
      * 포스트 업로드 API
      */
     @PostMapping("/groups/{groupCode}/posts")
-    public ResponseEntity<ResponseDTO> uploadPost(@NotEmpty @PathVariable String groupCode,
+    public ResponseEntity<ResponseDTO> uploadPost(@PathVariable String groupCode,
                                                   @RequestParam("images") MultipartFile[] multipartFiles,
                                                   @RequestPart(value="info") UploadPostDTO uploadPostDTO) {
         PostDTO res = postService.uploadPost(groupCode, multipartFiles, uploadPostDTO);
@@ -41,8 +41,8 @@ public class PostController {
      * 포스트 상세 가져오기 API
      */
     @GetMapping("/groups/{groupCode}/posts/{postId}")
-    public ResponseEntity<ResponseDTO> getPost(@NotEmpty @PathVariable(value = "groupCode") String groupCode,
-                                               @NotNull @PathVariable(value = "postId") Integer postId) {
+    public ResponseEntity<ResponseDTO> getPost(@PathVariable(value = "groupCode") String groupCode,
+                                               @PathVariable(value = "postId") Integer postId) {
         PostDTO res = postService.getPostDetail(groupCode, postId);
 
         return ResponseEntity
@@ -54,7 +54,7 @@ public class PostController {
      * 유저가 올린 포스트 목록 API
      */
     @GetMapping("/users/{userId}/posts")
-    public ResponseEntity<ResponseDTO> getUserPostList(@NotEmpty @PathVariable(value = "userId") String userId) {
+    public ResponseEntity<ResponseDTO> getUserPostList(@PathVariable(value = "userId") String userId) {
         List<PostDTO> res = postService.getUserPost(userId);
 
         return ResponseEntity

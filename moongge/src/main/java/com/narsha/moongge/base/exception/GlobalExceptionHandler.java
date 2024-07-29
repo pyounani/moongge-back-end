@@ -147,8 +147,8 @@ public class GlobalExceptionHandler {
     protected ResponseEntity<ErrorResponseDTO> handlePostNotFoundException(final PostNotFoundException e) {
         log.error("PostNotFoundException : {}", e.getMessage());
         return ResponseEntity
-                .status(ErrorCode.POSTS_NOT_FOUND.getStatus().value())
-                .body(new ErrorResponseDTO(ErrorCode.POSTS_NOT_FOUND));
+                .status(ErrorCode.POST_NOT_FOUND.getStatus().value())
+                .body(new ErrorResponseDTO(ErrorCode.POST_NOT_FOUND));
     }
 
     @ExceptionHandler(ProfileNotFoundException.class)
@@ -197,15 +197,4 @@ public class GlobalExceptionHandler {
 
     }
 
-
-    /*
-     * HTTP 500 Exception
-     */
-//    @ExceptionHandler(Exception.class)
-//    protected ResponseEntity<ErrorResponseDTO> handleException(final Exception e) {
-//        log.error("handleException: {}", e.getMessage());
-//        return ResponseEntity
-//                .status(ErrorCode.INTERNAL_SERVER_ERROR.getStatus().value())
-//                .body(new ErrorResponseDTO(ErrorCode.INTERNAL_SERVER_ERROR));
-//    }
 }

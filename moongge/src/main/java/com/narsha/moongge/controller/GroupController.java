@@ -34,7 +34,7 @@ public class GroupController {
      * 그룹 삭제하기 API
      */
     @DeleteMapping("/{groupCode}")
-    public ResponseEntity<ResponseDTO> deleteGroup(@PathVariable @NotEmpty String groupCode) {
+    public ResponseEntity<ResponseDTO> deleteGroup(@PathVariable String groupCode) {
         String res = groupService.deleteGroup(groupCode);
 
         return ResponseEntity
@@ -46,7 +46,7 @@ public class GroupController {
      * 그룹 시간 등록(수정)하기 API
      */
     @PutMapping("/{groupCode}/time")
-    public ResponseEntity<ResponseDTO> updateTime(@PathVariable @NotEmpty String groupCode,
+    public ResponseEntity<ResponseDTO> updateTime(@PathVariable String groupCode,
                                                   @Valid @RequestBody UpdateTimeDTO updateTimeDTO){
         UpdateTimeDTO res = groupService.updateTime(groupCode, updateTimeDTO);
 
@@ -59,7 +59,7 @@ public class GroupController {
      * 설정한 그룹 시간 불러오기 API
      */
     @GetMapping("/{groupCode}/time")
-    public ResponseEntity<ResponseDTO> getTime(@PathVariable @NotEmpty String groupCode){
+    public ResponseEntity<ResponseDTO> getTime(@PathVariable String groupCode){
         UpdateTimeDTO res = groupService.getTime(groupCode);
 
         return ResponseEntity

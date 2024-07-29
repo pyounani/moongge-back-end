@@ -1,42 +1,75 @@
 package com.narsha.moongge.controller;
 
 import com.narsha.moongge.base.code.ResponseCode;
+import com.narsha.moongge.base.dto.comment.CommentDTO;
 import com.narsha.moongge.base.dto.comment.CreateCommentDTO;
 import com.narsha.moongge.base.dto.response.ResponseDTO;
-import com.narsha.moongge.base.projection.comment.GetComment;
 import com.narsha.moongge.service.CommentService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController // JSON 형태의 결과값 반환
-@Controller
 @RequiredArgsConstructor
-@RequestMapping("/api/comment")
+@RequestMapping("/api")
 public class CommentController {
 
     private final CommentService commentService;
 
-    @PostMapping("/create")
-    public ResponseEntity<ResponseDTO> createComment(@RequestBody CreateCommentDTO createCommentDTO){
-        Integer commentId = commentService.createComment(createCommentDTO);
+    /**
+     * 댓글 작성하기 API
+     */
+    @PostMapping("/groups/{groupCode}/posts/{postId}/comments")
+    public ResponseEntity<ResponseDTO> createComment(@PathVariable String groupCode,
+                                                     @PathVariable Integer postId,
+                                                     @Valid @RequestBody CreateCommentDTO createCommentDTO){
+        Integer res = commentService.createComment(groupCode, postId, createCommentDTO);
 
         return ResponseEntity
                 .status(ResponseCode.SUCCESS_CREATE_COMMENT.getStatus().value())
-                .body(new ResponseDTO(ResponseCode.SUCCESS_CREATE_COMMENT, commentId));
+                .body(new ResponseDTO(ResponseCode.SUCCESS_CREATE_COMMENT, res));
     }
 
-    @GetMapping("/list")
-    public ResponseEntity<ResponseDTO> getCommentList(@RequestParam(value = "postId") Integer postId){
-        List<GetComment> commentList = commentService.getCommentList(postId);
+    /**
+     * 댓글 목록 불러오기 API
+     */
+    @GetMapping("/groups/{groupCode}/posts/{postId}/comments")
+    public ResponseEntity<ResponseDTO> getCommentList(@PathVariable String groupCode,
+                                                      @PathVariable Integer postId){
+        List<CommentDTO> res = commentService.getCommentList(groupCode, postId);
+
         return ResponseEntity
                 .status(ResponseCode.SUCCESS_GET_COMMENT_LIST.getStatus().value())
-                .body(new ResponseDTO(ResponseCode.SUCCESS_GET_COMMENT_LIST, commentList));
+                .body(new ResponseDTO(ResponseCode.SUCCESS_GET_COMMENT_LIST, res));
+    }
 
+    /**
+     * 최신 댓글 1개 겨져오기 API
+     */
+    @GetMapping("/groups/{groupCode}/posts/{postId}/comments/recent")
+    public ResponseEntity<ResponseDTO> getRecentComment(@PathVariable String groupCode,
+                                                        @PathVariable Integer postId){
+        CommentDTO res = commentService.getRecentComment(groupCode, postId);
+
+        return ResponseEntity
+                .status(ResponseCode.SUCCESS_GET_RECENT_COMMENT.getStatus().value())
+                .body(new ResponseDTO(ResponseCode.SUCCESS_GET_RECENT_COMMENT, res));
+    }
+
+    /**
+     * 특정 포스트 댓글 갯수 가져오기 API
+     */
+    @GetMapping("/groups/{groupCode}/posts/{postId}/comments/count")
+    public ResponseEntity<ResponseDTO> getCommentCount(@PathVariable String groupCode,
+                                                       @PathVariable Integer postId){
+        Long res = commentService.countComment(groupCode, postId);
+
+        return ResponseEntity
+                .status(ResponseCode.SUCCESS_GET_COMMENT_COUNT.getStatus().value())
+                .body(new ResponseDTO(ResponseCode.SUCCESS_GET_COMMENT_COUNT, res));
     }
 
     @GetMapping("/create/chat")
@@ -48,22 +81,4 @@ public class CommentController {
                 .body(new ResponseDTO(ResponseCode.SUCCESS_CREATE_COMMENT, commentId));
     }
 
-    @GetMapping("/recent")
-    public ResponseEntity<ResponseDTO> getRecentComment(@RequestParam(value = "postId") Integer postId){
-        Optional<GetComment> recentComment = commentService.getRecentComment(postId);
-
-        return ResponseEntity
-                .status(ResponseCode.SUCCESS_GET_RECENT_COMMENT.getStatus().value())
-                .body(new ResponseDTO(ResponseCode.SUCCESS_GET_RECENT_COMMENT, recentComment));
-    }
-
-    @GetMapping("/count")
-    public ResponseEntity<ResponseDTO> getCommentCount(@RequestParam(value = "userId") String userId){
-
-        Long commentCount = commentService.countComment(userId);
-
-        return ResponseEntity
-                .status(ResponseCode.SUCCESS_GET_COMMENT_COUNT.getStatus().value())
-                .body(new ResponseDTO(ResponseCode.SUCCESS_GET_COMMENT_COUNT, commentCount));
-    }
 }

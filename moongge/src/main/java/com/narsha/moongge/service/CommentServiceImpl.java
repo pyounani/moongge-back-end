@@ -1,12 +1,11 @@
 package com.narsha.moongge.service;
 
 import com.narsha.moongge.base.code.ErrorCode;
+import com.narsha.moongge.base.dto.comment.CommentDTO;
 import com.narsha.moongge.base.dto.comment.CreateCommentDTO;
-import com.narsha.moongge.base.exception.EmptyCommentContentException;
-import com.narsha.moongge.base.exception.PostNotFoundException;
-import com.narsha.moongge.base.exception.UserNotFoundException;
-import com.narsha.moongge.base.projection.comment.GetComment;
+import com.narsha.moongge.base.exception.*;
 import com.narsha.moongge.entity.CommentEntity;
+import com.narsha.moongge.entity.GroupEntity;
 import com.narsha.moongge.entity.PostEntity;
 import com.narsha.moongge.entity.UserEntity;
 import com.narsha.moongge.repository.CommentRepository;
@@ -16,10 +15,10 @@ import com.narsha.moongge.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
 
@@ -27,97 +26,114 @@ import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class CommentServiceImpl implements CommentService {
 
     private final CommentRepository commentRepository;
-
     private final PostRepository postRepository;
-
+    private final UserRepository userRepository;
     private final GroupRepository groupRepository;
 
-
-    private final UserRepository userRepository;
-
-    private final ApplicationEventPublisher eventPublisher;
-
     WebClient webClient = WebClient.create("http://localhost:8000");
-//    WebClient webClient = WebClient.builder()
-//        .baseUrl("http://localhost:8000")
-//        .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-//        .build();
     Random rand = new Random();
 
+    /**
+     * 댓글 작성하기
+     */
     @Override
-    public Integer createComment(CreateCommentDTO createCommentDTO) {
+    @Transactional
+    public Integer createComment(String groupCode, Integer postId, CreateCommentDTO createCommentDTO) {
 
-        Optional<UserEntity> user = userRepository.findByUserId(createCommentDTO.getUserId());
-        if(!user.isPresent()) {
-            throw new UserNotFoundException(ErrorCode.USERID_NOT_FOUND);
-        }
+        GroupEntity group = groupRepository.findByGroupCode(groupCode)
+                .orElseThrow(() -> new GroupNotFoundException(ErrorCode.GROUP_NOT_FOUND));
 
-        Optional<PostEntity> post = postRepository.findByPostId(createCommentDTO.getPostId());
+        PostEntity post = postRepository.findByPostIdAndGroup(postId, group)
+                .orElseThrow(() -> new PostNotFoundException(ErrorCode.POST_NOT_FOUND));
 
-        // 게시물이 존재하지 않은 경우
-        if (!post.isPresent()) {
-            throw new PostNotFoundException(ErrorCode.POSTS_NOT_FOUND);
-        }
+        UserEntity user = userRepository.findByUserId(createCommentDTO.getWriter())
+                .orElseThrow(() -> new UserNotFoundException(ErrorCode.USER_NOT_FOUND));
 
-        // 댓글에 아무 내용이 없을 경우
-        String content = createCommentDTO.getContent();
-        if(content == null || content.trim().isEmpty()) {
-            throw new EmptyCommentContentException(ErrorCode.EMPTY_COMMENT_CONTENT);
-        }
+        // 댓글에 내용이 없을 경우
+        validateCommentContent(createCommentDTO);
 
         CommentEntity comment = CommentEntity.builder()
-                .postId(post.get())
-                .userId(user.get())
-                .groupCode(user.get().getGroup())
+                .post(post)
+                .user(user)
+                .group(group)
                 .content(createCommentDTO.getContent())
                 .build();
 
-        commentRepository.save(comment);
+        CommentEntity savedComment = commentRepository.save(comment);
 
-        return commentRepository.save(comment).getCommentId();
+        return savedComment.getCommentId();
+    }
+
+    /**
+     * 특정 포스트 댓글 목록 불러오기
+     */
+    @Override
+    public List<CommentDTO> getCommentList(String groupCode, Integer postId) {
+
+        GroupEntity group = groupRepository.findByGroupCode(groupCode)
+                .orElseThrow(() -> new GroupNotFoundException(ErrorCode.GROUP_NOT_FOUND));
+
+        PostEntity post = postRepository.findByPostIdAndGroup(postId, group)
+                .orElseThrow(() -> new PostNotFoundException(ErrorCode.POST_NOT_FOUND));
+
+        List<CommentEntity> commentList = commentRepository.findByPost(post);
+
+        return commentList.stream()
+                .map(CommentDTO::mapToCommentDTO)
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * 최신 댓글 1개 가져오기
+     */
+    @Override
+    public CommentDTO getRecentComment(String groupCode, Integer postId) {
+
+        GroupEntity group = groupRepository.findByGroupCode(groupCode)
+                .orElseThrow(() -> new GroupNotFoundException(ErrorCode.GROUP_NOT_FOUND));
+
+        PostEntity post = postRepository.findByPostIdAndGroup(postId, group)
+                .orElseThrow(() -> new PostNotFoundException(ErrorCode.POST_NOT_FOUND));
+
+        CommentEntity findComment = commentRepository.findTopByPostOrderByCreateAtDesc(post)
+                .orElseThrow(() -> new CommentNotFoundException(ErrorCode.COMMENT_NOT_FOUND));
+
+        return CommentDTO.mapToCommentDTO(findComment);
+    }
+
+    /**
+     * 특정 포스트 댓글 갯수 가져오기
+     */
+    @Override
+    public Long countComment(String groupCode, Integer postId){
+
+        GroupEntity group = groupRepository.findByGroupCode(groupCode)
+                .orElseThrow(() -> new GroupNotFoundException(ErrorCode.GROUP_NOT_FOUND));
+
+        PostEntity post = postRepository.findByPostIdAndGroup(postId, group)
+                .orElseThrow(() -> new PostNotFoundException(ErrorCode.POST_NOT_FOUND));
+
+        Long countComments = commentRepository.countByPost(post);
+
+        return countComments;
     }
 
     @Override
-    public List<GetComment> getCommentList(Integer postId) {
-
-        Optional<PostEntity> findPost = postRepository.findByPostId(postId);
-        // 게시물이 존재하지 않은 경우
-        if (!findPost.isPresent()) {
-            throw new PostNotFoundException(ErrorCode.POSTS_NOT_FOUND);
-        }
-
-        List<GetComment> commentList = commentRepository.findByPostId(findPost.get());
-
-        return commentList;
-    }
-
-    @Override
-    public Optional<GetComment> getRecentComment(Integer postId) {
-
-        Optional<PostEntity> findPost = postRepository.findByPostId(postId);
-        // 게시물이 존재하지 않은 경우
-        if (!findPost.isPresent()) {
-            throw new PostNotFoundException(ErrorCode.POSTS_NOT_FOUND);
-        }
-
-        Optional<GetComment> recentComment = commentRepository.findTopByPostIdOrderByCreateAtDesc(findPost.get());
-
-        return recentComment;
-    }
-
-    @Override
+    @Transactional
     public String createAIComment(Integer postId) {
 
         //포스트 검색
         Optional<PostEntity> post = postRepository.findByPostId(postId);
         if (!post.isPresent()) {
-            throw new PostNotFoundException(ErrorCode.POSTS_NOT_FOUND);
+            throw new PostNotFoundException(ErrorCode.POST_NOT_FOUND);
         }
 
         //포스트 내용 가져와서 json 형태로
@@ -144,9 +160,9 @@ public class CommentServiceImpl implements CommentService {
 
                 //comment 저장
                 CommentEntity comment = CommentEntity.builder()
-                        .postId(post.get())
-                        .userId(user.get())
-                        .groupCode(user.get().getGroup())
+                        .post(post.get())
+                        .user(user.get())
+                        .group(user.get().getGroup())
                         .content(res)
                         .build();
 
@@ -166,9 +182,9 @@ public class CommentServiceImpl implements CommentService {
                 String res = postImage(post_image, uri);
 
                 CommentEntity comment = CommentEntity.builder()
-                        .postId(post.get())
-                        .userId(user.get())
-                        .groupCode(user.get().getGroup())
+                        .post(post.get())
+                        .user(user.get())
+                        .group(user.get().getGroup())
                         .content(res)
                         .build();
 
@@ -188,9 +204,9 @@ public class CommentServiceImpl implements CommentService {
                 String res = postImageContent(post_image_content, uri);
 
                 CommentEntity comment = CommentEntity.builder()
-                        .postId(post.get())
-                        .userId(user.get())
-                        .groupCode(user.get().getGroup())
+                        .post(post.get())
+                        .user(user.get())
+                        .group(user.get().getGroup())
                         .content(res)
                         .build();
 
@@ -215,9 +231,9 @@ public class CommentServiceImpl implements CommentService {
 
                 //comment 저장
                 CommentEntity comment = CommentEntity.builder()
-                        .postId(post.get())
-                        .userId(user.get())
-                        .groupCode(user.get().getGroup())
+                        .post(post.get())
+                        .user(user.get())
+                        .group(user.get().getGroup())
                         .content(res)
                         .build();
 
@@ -236,9 +252,9 @@ public class CommentServiceImpl implements CommentService {
                 String res = postImage(post_image, uri);
 
                 CommentEntity comment = CommentEntity.builder()
-                        .postId(post.get())
-                        .userId(user.get())
-                        .groupCode(user.get().getGroup())
+                        .post(post.get())
+                        .user(user.get())
+                        .group(user.get().getGroup())
                         .content(res)
                         .build();
 
@@ -258,9 +274,9 @@ public class CommentServiceImpl implements CommentService {
                 String res = postImageContent(post_image_content, uri);
 
                 CommentEntity comment = CommentEntity.builder()
-                        .postId(post.get())
-                        .userId(user.get())
-                        .groupCode(user.get().getGroup())
+                        .post(post.get())
+                        .user(user.get())
+                        .group(user.get().getGroup())
                         .content(res)
                         .build();
 
@@ -284,9 +300,9 @@ public class CommentServiceImpl implements CommentService {
 
                 //comment 저장
                 CommentEntity comment = CommentEntity.builder()
-                        .postId(post.get())
-                        .userId(user.get())
-                        .groupCode(user.get().getGroup())
+                        .post(post.get())
+                        .user(user.get())
+                        .group(user.get().getGroup())
                         .content(res)
                         .build();
 
@@ -305,9 +321,9 @@ public class CommentServiceImpl implements CommentService {
                 String res = postImage(post_image, uri);
 
                 CommentEntity comment = CommentEntity.builder()
-                        .postId(post.get())
-                        .userId(user.get())
-                        .groupCode(user.get().getGroup())
+                        .post(post.get())
+                        .user(user.get())
+                        .group(user.get().getGroup())
                         .content(res)
                         .build();
 
@@ -327,9 +343,9 @@ public class CommentServiceImpl implements CommentService {
                 String res = postImageContent(post_image_content, uri);
 
                 CommentEntity comment = CommentEntity.builder()
-                        .postId(post.get())
-                        .userId(user.get())
-                        .groupCode(user.get().getGroup())
+                        .post(post.get())
+                        .user(user.get())
+                        .group(user.get().getGroup())
                         .content(res)
                         .build();
 
@@ -353,9 +369,9 @@ public class CommentServiceImpl implements CommentService {
 
                 //comment 저장
                 CommentEntity comment = CommentEntity.builder()
-                        .postId(post.get())
-                        .userId(user.get())
-                        .groupCode(user.get().getGroup())
+                        .post(post.get())
+                        .user(user.get())
+                        .group(user.get().getGroup())
                         .content(res)
                         .build();
 
@@ -374,9 +390,9 @@ public class CommentServiceImpl implements CommentService {
                 String res = postImage(post_image, uri);
 
                 CommentEntity comment = CommentEntity.builder()
-                        .postId(post.get())
-                        .userId(user.get())
-                        .groupCode(user.get().getGroup())
+                        .post(post.get())
+                        .user(user.get())
+                        .group(user.get().getGroup())
                         .content(res)
                         .build();
 
@@ -397,9 +413,9 @@ public class CommentServiceImpl implements CommentService {
                 String res = postImageContent(post_image_content, uri);
 
                 CommentEntity comment = CommentEntity.builder()
-                        .postId(post.get())
-                        .userId(user.get())
-                        .groupCode(user.get().getGroup())
+                        .post(post.get())
+                        .user(user.get())
+                        .group(user.get().getGroup())
                         .content(res)
                         .build();
 
@@ -515,18 +531,11 @@ public class CommentServiceImpl implements CommentService {
         return result.toString();
     }
 
-    @Override
-    public Long countComment(String userId){
-
-        Optional<UserEntity> user = userRepository.findByUserId(userId);
-        if(!user.isPresent()) {
-            throw new UserNotFoundException(ErrorCode.USER_NOT_FOUND);
+    private void validateCommentContent(CreateCommentDTO createCommentDTO) {
+        String content = createCommentDTO.getContent();
+        if(content == null || content.trim().isEmpty()) {
+            throw new EmptyCommentContentException(ErrorCode.EMPTY_COMMENT_CONTENT);
         }
-
-        Long count = commentRepository.countByUserId(user.get());
-
-        return count;
-
     }
 
 }

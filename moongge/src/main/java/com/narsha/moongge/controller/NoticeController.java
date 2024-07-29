@@ -25,7 +25,7 @@ public class NoticeController {
      * 공지 작성하기 API
      */
     @PostMapping("/{groupCode}")
-    public ResponseEntity<ResponseDTO> createNotice(@NotEmpty @PathVariable String groupCode,
+    public ResponseEntity<ResponseDTO> createNotice(@PathVariable String groupCode,
                                                     @Valid @RequestBody CreateNoticeDTO createNoticeDTO){
         NoticeDTO res = noticeService.createNotice(groupCode, createNoticeDTO);
 
@@ -38,7 +38,7 @@ public class NoticeController {
      * 공지 목록 불러오기 API
      */
     @GetMapping("/{groupCode}")
-    public ResponseEntity<ResponseDTO> getNoticeList(@NotEmpty @PathVariable String groupCode) {
+    public ResponseEntity<ResponseDTO> getNoticeList(@PathVariable String groupCode) {
         List<NoticeDTO> res = noticeService.getNoticeList(groupCode);
 
         return ResponseEntity
@@ -50,8 +50,8 @@ public class NoticeController {
      * 공지 상세사항 내용 불러오기 API
      */
     @GetMapping("/{groupCode}/{noticeId}")
-    public ResponseEntity<ResponseDTO> getNoticeDetail(@NotEmpty @PathVariable String groupCode,
-                                                       @NotNull @PathVariable Integer noticeId) {
+    public ResponseEntity<ResponseDTO> getNoticeDetail(@PathVariable String groupCode,
+                                                       @PathVariable Integer noticeId) {
         NoticeDTO res = noticeService.getNoticeDetail(groupCode, noticeId);
 
         return ResponseEntity
@@ -63,7 +63,7 @@ public class NoticeController {
      * 최근에 올린 공지 한 개 API
      */
     @GetMapping("/{groupCode}/recent")
-    public ResponseEntity<ResponseDTO> getRecentNoticeOne(@NotEmpty @PathVariable String groupCode) {
+    public ResponseEntity<ResponseDTO> getRecentNoticeOne(@PathVariable String groupCode) {
         NoticeDTO res = noticeService.getRecentNoticeOne(groupCode);
 
         return ResponseEntity
