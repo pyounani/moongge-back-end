@@ -50,6 +50,20 @@ public class CommentController {
                 .body(new ResponseDTO(ResponseCode.SUCCESS_GET_COMMENT_LIST, commentList));
     }
 
+    /**
+     * 최신 댓글 1개 겨져오기 API
+     */
+    @GetMapping("/groups/{groupCode}/posts/{postId}/comments/recent")
+    public ResponseEntity<ResponseDTO> getRecentComment(@PathVariable String groupCode,
+                                                        @PathVariable Integer postId){
+        CommentDTO recentComment = commentService.getRecentComment(groupCode, postId);
+
+        return ResponseEntity
+                .status(ResponseCode.SUCCESS_GET_RECENT_COMMENT.getStatus().value())
+                .body(new ResponseDTO(ResponseCode.SUCCESS_GET_RECENT_COMMENT, recentComment));
+    }
+
+
     @GetMapping("/create/chat")
     public ResponseEntity<ResponseDTO> createAIComment(@RequestParam(value = "postId") Integer postId){
         String commentId = commentService.createAIComment(postId);
@@ -57,15 +71,6 @@ public class CommentController {
         return ResponseEntity
                 .status(ResponseCode.SUCCESS_CREATE_COMMENT.getStatus().value())
                 .body(new ResponseDTO(ResponseCode.SUCCESS_CREATE_COMMENT, commentId));
-    }
-
-    @GetMapping("/recent")
-    public ResponseEntity<ResponseDTO> getRecentComment(@RequestParam(value = "postId") Integer postId){
-        Optional<GetComment> recentComment = commentService.getRecentComment(postId);
-
-        return ResponseEntity
-                .status(ResponseCode.SUCCESS_GET_RECENT_COMMENT.getStatus().value())
-                .body(new ResponseDTO(ResponseCode.SUCCESS_GET_RECENT_COMMENT, recentComment));
     }
 
     @GetMapping("/count")

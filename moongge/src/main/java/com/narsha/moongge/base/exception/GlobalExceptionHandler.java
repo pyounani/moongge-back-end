@@ -4,7 +4,6 @@ import com.narsha.moongge.base.code.ErrorCode;
 import com.narsha.moongge.base.dto.response.ErrorResponseDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
@@ -148,8 +147,8 @@ public class GlobalExceptionHandler {
     protected ResponseEntity<ErrorResponseDTO> handlePostNotFoundException(final PostNotFoundException e) {
         log.error("PostNotFoundException : {}", e.getMessage());
         return ResponseEntity
-                .status(ErrorCode.POSTS_NOT_FOUND.getStatus().value())
-                .body(new ErrorResponseDTO(ErrorCode.POSTS_NOT_FOUND));
+                .status(ErrorCode.POST_NOT_FOUND.getStatus().value())
+                .body(new ErrorResponseDTO(ErrorCode.POST_NOT_FOUND));
     }
 
     @ExceptionHandler(ProfileNotFoundException.class)

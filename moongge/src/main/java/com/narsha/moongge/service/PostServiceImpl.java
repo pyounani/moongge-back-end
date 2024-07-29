@@ -73,7 +73,7 @@ public class PostServiceImpl implements PostService {
                 .orElseThrow(() -> new GroupNotFoundException(ErrorCode.GROUP_NOT_FOUND));
 
         PostEntity post = postRepository.findByPostIdAndGroup(postId, group)
-                .orElseThrow(() -> new PostNotFoundException(ErrorCode.POSTS_NOT_FOUND));
+                .orElseThrow(() -> new PostNotFoundException(ErrorCode.POST_NOT_FOUND));
 
         return PostDTO.mapToPostDTO(post);
     }

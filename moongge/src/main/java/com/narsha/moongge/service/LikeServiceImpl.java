@@ -6,7 +6,6 @@ import com.narsha.moongge.base.exception.GroupNotFoundException;
 import com.narsha.moongge.base.exception.PostNotFoundException;
 import com.narsha.moongge.base.exception.UserNotFoundException;
 import com.narsha.moongge.base.projection.like.GetLikeList;
-import com.narsha.moongge.base.projection.post.GetOneUserPost;
 import com.narsha.moongge.entity.LikeEntity;
 import com.narsha.moongge.entity.PostEntity;
 import com.narsha.moongge.entity.UserEntity;
@@ -47,7 +46,7 @@ public class LikeServiceImpl implements LikeService{
         Optional<PostEntity> post = postRepository.findByPostId(createLikeDTO.getPostId());
         // 게시물이 존재하지 않은 경우
         if (!post.isPresent()) {
-            throw new PostNotFoundException(ErrorCode.POSTS_NOT_FOUND);
+            throw new PostNotFoundException(ErrorCode.POST_NOT_FOUND);
         }
 
         Optional<GroupEntity> group = groupRepository.findByGroupCode(createLikeDTO.getGroupCode());
@@ -73,7 +72,7 @@ public class LikeServiceImpl implements LikeService{
         Optional<PostEntity> findPost = postRepository.findByPostId(postId);
         // 게시물이 존재하지 않은 경우
         if (!findPost.isPresent()) {
-            throw new PostNotFoundException(ErrorCode.POSTS_NOT_FOUND);
+            throw new PostNotFoundException(ErrorCode.POST_NOT_FOUND);
         }
 
         List<GetLikeList> likeList = likeRepository.findByPostId(findPost.get());
@@ -92,7 +91,7 @@ public class LikeServiceImpl implements LikeService{
         Optional<PostEntity> post = postRepository.findByPostId(postId);
         // 게시물이 존재하지 않은 경우
         if (!post.isPresent()) {
-            throw new PostNotFoundException(ErrorCode.POSTS_NOT_FOUND);
+            throw new PostNotFoundException(ErrorCode.POST_NOT_FOUND);
         }
 
         Optional<GroupEntity> group = groupRepository.findByGroupCode(groupCode);
@@ -121,7 +120,7 @@ public class LikeServiceImpl implements LikeService{
         Optional<PostEntity> post = postRepository.findByPostId(postId);
         // 게시물이 존재하지 않은 경우
         if (!post.isPresent()) {
-            throw new PostNotFoundException(ErrorCode.POSTS_NOT_FOUND);
+            throw new PostNotFoundException(ErrorCode.POST_NOT_FOUND);
         }
 
         Optional<GroupEntity> group = groupRepository.findByGroupCode(groupCode);
@@ -150,7 +149,7 @@ public class LikeServiceImpl implements LikeService{
         Optional<PostEntity> post = postRepository.findByPostId(postId);
         // 게시물이 존재하지 않은 경우
         if (!post.isPresent()) {
-            throw new PostNotFoundException(ErrorCode.POSTS_NOT_FOUND);
+            throw new PostNotFoundException(ErrorCode.POST_NOT_FOUND);
         }
 
         Long like = likeRepository.countByGroupCodeAndPostId(group.get(), post.get());
