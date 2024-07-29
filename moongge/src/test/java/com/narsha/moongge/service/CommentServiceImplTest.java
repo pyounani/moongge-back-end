@@ -84,6 +84,26 @@ class CommentServiceImplTest {
         assertCommentListContains(commentList, commentId2, user, createCommentDTO2, "댓글 목록에 두 번째 댓글이 포함되어 있어야 합니다.");
     }
 
+    @Test
+    void 최신_댓글_1개_불러오기() {
+        // given
+        UserEntity user = createUser();
+        GroupEntity group = createGroup(user);
+        PostEntity post = createPost(user, group);
+
+        CreateCommentDTO createCommentDTO = buildCreateCommentDTO(user, group, post);
+        CreateCommentDTO recentCreateCommentDTO = buildCreateCommentDTO(user, group, post);
+        commentService.createComment(group.getGroupCode(), post.getPostId(), createCommentDTO);
+        Integer commentId = commentService.createComment(group.getGroupCode(), post.getPostId(), recentCreateCommentDTO);
+
+        // when
+        CommentDTO recentFindComment = commentService.getRecentComment(group.getGroupCode(), post.getPostId());
+
+        assertEquals(commentId, recentFindComment.getCommentId());
+        assertEquals(recentCreateCommentDTO.getContent(), recentFindComment.getContent());
+        assertEquals(recentCreateCommentDTO.getWriter(), recentFindComment.getWriter());
+    }
+
     private void assertCommentListContains(List<CommentDTO> commentList, Integer commentId1, UserEntity user, CreateCommentDTO createCommentDTO1, String message) {
         boolean containsComment1 = commentList.stream()
                 .anyMatch(comment -> comment.getCommentId().equals(commentId1) &&
