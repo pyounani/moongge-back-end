@@ -4,7 +4,6 @@ import com.narsha.moongge.base.code.ErrorCode;
 import com.narsha.moongge.base.dto.post.PostDTO;
 import com.narsha.moongge.base.dto.post.UploadPostDTO;
 import com.narsha.moongge.base.exception.*;
-import com.narsha.moongge.base.projection.post.GetMainPost;
 import com.narsha.moongge.entity.LikeEntity;
 import com.narsha.moongge.entity.PostEntity;
 import com.narsha.moongge.entity.UserEntity;
@@ -96,7 +95,7 @@ public class PostServiceImpl implements PostService {
     }
 
     /**
-     * 유저가 좋아요를 누르지 않은 최신 포스트 목록 가쟈오기
+     * 유저가 좋아요를 누르지 않은 최신 포스트 목록 가져오기
      */
     @Override
     public List<PostDTO> getMainPost(String userId) {
