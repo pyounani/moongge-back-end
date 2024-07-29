@@ -3,13 +3,16 @@ package com.narsha.moongge.service;
 import com.narsha.moongge.base.code.ErrorCode;
 import com.narsha.moongge.base.dto.comment.CreateCommentDTO;
 import com.narsha.moongge.base.exception.EmptyCommentContentException;
+import com.narsha.moongge.base.exception.GroupNotFoundException;
 import com.narsha.moongge.base.exception.PostNotFoundException;
 import com.narsha.moongge.base.exception.UserNotFoundException;
 import com.narsha.moongge.base.projection.comment.GetComment;
 import com.narsha.moongge.entity.CommentEntity;
+import com.narsha.moongge.entity.GroupEntity;
 import com.narsha.moongge.entity.PostEntity;
 import com.narsha.moongge.entity.UserEntity;
 import com.narsha.moongge.repository.CommentRepository;
+import com.narsha.moongge.repository.GroupRepository;
 import com.narsha.moongge.repository.PostRepository;
 import com.narsha.moongge.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -37,6 +40,7 @@ public class CommentServiceImpl implements CommentService {
     private final PostRepository postRepository;
 
     private final UserRepository userRepository;
+    private final GroupRepository groupRepository;
 
 
     WebClient webClient = WebClient.create("http://localhost:8000");
@@ -49,34 +53,31 @@ public class CommentServiceImpl implements CommentService {
     @Transactional
     public Integer createComment(String groupCode, Integer postId, CreateCommentDTO createCommentDTO) {
 
-        Optional<UserEntity> user = userRepository.findByUserId(createCommentDTO.getWriter());
-        if(!user.isPresent()) {
-            throw new UserNotFoundException(ErrorCode.USERID_NOT_FOUND);
-        }
+        GroupEntity group = groupRepository.findByGroupCode(groupCode)
+                .orElseThrow(() -> new GroupNotFoundException(ErrorCode.GROUP_NOT_FOUND));
 
-        Optional<PostEntity> post = postRepository.findByPostId(createCommentDTO.getPostId());
+        PostEntity post = postRepository.findByPostIdAndGroup(postId, group)
+                .orElseThrow(() -> new PostNotFoundException(ErrorCode.POSTS_NOT_FOUND));
 
-        // 게시물이 존재하지 않은 경우
-        if (!post.isPresent()) {
-            throw new PostNotFoundException(ErrorCode.POSTS_NOT_FOUND);
-        }
+        UserEntity user = userRepository.findByUserId(createCommentDTO.getWriter())
+                .orElseThrow(() -> new UserNotFoundException(ErrorCode.USER_NOT_FOUND));
 
-        // 댓글에 아무 내용이 없을 경우
+        // 댓글에 내용이 없을 경우
         String content = createCommentDTO.getContent();
         if(content == null || content.trim().isEmpty()) {
             throw new EmptyCommentContentException(ErrorCode.EMPTY_COMMENT_CONTENT);
         }
 
         CommentEntity comment = CommentEntity.builder()
-                .post(post.get())
-                .user(user.get())
-                .group(user.get().getGroup())
+                .post(post)
+                .user(user)
+                .group(group)
                 .content(createCommentDTO.getContent())
                 .build();
 
-        commentRepository.save(comment);
+        CommentEntity savedComment = commentRepository.save(comment);
 
-        return commentRepository.save(comment).getCommentId();
+        return savedComment.getCommentId();
     }
 
     @Override

@@ -26,8 +26,8 @@ public class CommentController {
      * 댓글 작성하기 API
      */
     @PostMapping("/groups/{groupCode}/posts/{postId}/comments")
-    public ResponseEntity<ResponseDTO> createComment(@NotEmpty @PathVariable String groupCode,
-                                                     @NotNull @PathVariable Integer postId,
+    public ResponseEntity<ResponseDTO> createComment(@PathVariable String groupCode,
+                                                     @PathVariable Integer postId,
                                                      @Valid @RequestBody CreateCommentDTO createCommentDTO){
         Integer commentId = commentService.createComment(groupCode, postId, createCommentDTO);
 
