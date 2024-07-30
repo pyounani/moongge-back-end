@@ -63,14 +63,18 @@ public class LikeController {
                 .body(new ResponseDTO(ResponseCode.SUCCESS_DELETE_LIKE, res));
     }
 
-    @GetMapping("/check")
-    public ResponseEntity<ResponseDTO> checkLike(@RequestParam(value="userId") String userId, @RequestParam(value="groupCode") String groupCode,
-                                                 @RequestParam(value="postId") Integer postId){
-        boolean checkLike = likeService.checkLikePost(userId, groupCode, postId);
+    /**
+     * 포스트에 좋아요 여부 받아오기 API
+     */
+    @GetMapping("/groups/{groupCode}/users/{userId}/posts/{postId}/likes/check")
+    public ResponseEntity<ResponseDTO> checkLike(@PathVariable String groupCode,
+                                                 @PathVariable String userId,
+                                                 @PathVariable Integer postId) {
+        boolean res = likeService.checkLikePost(userId, groupCode, postId);
 
         return ResponseEntity
                 .status(ResponseCode.SUCCESS_CHECK_LIKE_POST.getStatus().value())
-                .body(new ResponseDTO(ResponseCode.SUCCESS_CHECK_LIKE_POST, checkLike));
+                .body(new ResponseDTO(ResponseCode.SUCCESS_CHECK_LIKE_POST, res));
     }
 
     @GetMapping("/count")

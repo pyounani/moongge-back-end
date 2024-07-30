@@ -108,32 +108,24 @@ public class LikeServiceImpl implements LikeService{
         return LikeDTO.mapToLikeDTO(like);
     }
 
+    /**
+     * 유저가 특정 포스트에 좋아요 누른 여부
+     */
     @Override
     public Boolean checkLikePost(String userId, String groupCode, Integer postId) {
 
-        Optional<UserEntity> user = userRepository.findByUserId(userId);
-        if(!user.isPresent()) {
-            throw new UserNotFoundException(ErrorCode.USERID_NOT_FOUND);
-        }
+        GroupEntity group = groupRepository.findByGroupCode(groupCode)
+                .orElseThrow(() -> new GroupNotFoundException(ErrorCode.GROUP_NOT_FOUND));
 
-        Optional<PostEntity> post = postRepository.findByPostId(postId);
-        // 게시물이 존재하지 않은 경우
-        if (!post.isPresent()) {
-            throw new PostNotFoundException(ErrorCode.POST_NOT_FOUND);
-        }
+        PostEntity post = postRepository.findByPostIdAndGroup(postId, group)
+                .orElseThrow(() -> new PostNotFoundException(ErrorCode.POST_NOT_FOUND));
 
-        Optional<GroupEntity> group = groupRepository.findByGroupCode(groupCode);
-        if(!group.isPresent()){
-            throw new GroupNotFoundException(ErrorCode.GROUP_NOT_FOUND);
-        }
+        UserEntity user = userRepository.findByUserId(userId)
+                .orElseThrow(() -> new UserNotFoundException(ErrorCode.USER_NOT_FOUND));
 
-        Optional<LikeEntity> like = likeRepository.findByGroupAndUserAndPost(group.get(), user.get(), post.get());
+        Optional<LikeEntity> like = likeRepository.findByPostAndUser(post, user);
 
-        if(!like.isPresent()){
-            return false;
-        }else {
-            return true;
-        }
+        return like.isPresent();
     }
 
     @Override
