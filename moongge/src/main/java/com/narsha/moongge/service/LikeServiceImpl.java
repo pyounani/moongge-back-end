@@ -1,7 +1,9 @@
 package com.narsha.moongge.service;
 
 import com.narsha.moongge.base.code.ErrorCode;
+import com.narsha.moongge.base.dto.comment.CommentDTO;
 import com.narsha.moongge.base.dto.like.CreateLikeDTO;
+import com.narsha.moongge.base.dto.like.LikeDTO;
 import com.narsha.moongge.base.exception.GroupNotFoundException;
 import com.narsha.moongge.base.exception.PostNotFoundException;
 import com.narsha.moongge.base.exception.UserNotFoundException;
@@ -12,16 +14,18 @@ import com.narsha.moongge.entity.UserEntity;
 import com.narsha.moongge.entity.GroupEntity;
 import com.narsha.moongge.repository.GroupRepository;
 import com.narsha.moongge.repository.*;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class LikeServiceImpl implements LikeService{
 
     private final LikeRepository likeRepository;
@@ -34,6 +38,7 @@ public class LikeServiceImpl implements LikeService{
      * 좋아요 생성하기
      */
     @Override
+    @Transactional
     public Integer createLike(String groupCode, Integer postId, CreateLikeDTO createLikeDTO) {
 
         GroupEntity group = groupRepository.findByGroupCode(groupCode)
@@ -56,19 +61,23 @@ public class LikeServiceImpl implements LikeService{
         return savedLike.getLikeId();
     }
 
-
+    /**
+     * 특정 포스트에 좋아요 누른 유저 목록 가져오기
+     */
     @Override
-    public List<GetLikeList> getLikeList(Integer postId) {
+    public List<LikeDTO> getLikeList(String groupCode, Integer postId) {
 
-        Optional<PostEntity> findPost = postRepository.findByPostId(postId);
-        // 게시물이 존재하지 않은 경우
-        if (!findPost.isPresent()) {
-            throw new PostNotFoundException(ErrorCode.POST_NOT_FOUND);
-        }
+        GroupEntity group = groupRepository.findByGroupCode(groupCode)
+                .orElseThrow(() -> new GroupNotFoundException(ErrorCode.GROUP_NOT_FOUND));
 
-        List<GetLikeList> likeList = likeRepository.findByPost(findPost.get());
+        PostEntity post = postRepository.findByPostIdAndGroup(postId, group)
+                .orElseThrow(() -> new PostNotFoundException(ErrorCode.POST_NOT_FOUND));
 
-        return likeList;
+        List<LikeEntity> likeList = likeRepository.findByPost(post);
+
+        return likeList.stream()
+                .map(LikeDTO::mapToLikeDTO)
+                .collect(Collectors.toList());
     }
 
     @Override
