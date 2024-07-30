@@ -36,7 +36,7 @@ public class LikeServiceImpl implements LikeService{
     private final ApplicationEventPublisher eventPublisher;
 
     @Override
-    public Integer createLike(CreateLikeDTO createLikeDTO) {
+    public Integer createLike(String groupCode, Integer postId, CreateLikeDTO createLikeDTO) {
 
         Optional<UserEntity> user = userRepository.findByUserId(createLikeDTO.getUserId());
         if(!user.isPresent()) {

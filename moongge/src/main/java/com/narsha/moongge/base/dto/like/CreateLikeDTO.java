@@ -1,18 +1,19 @@
 package com.narsha.moongge.base.dto.like;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
+import lombok.*;
 
-@Data
+@Getter
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class CreateLikeDTO {
 
-
-    private String userId; // user id
-
-    private String groupCode; // group code
-
-    private Integer postId; // 포스트 id
+    @NotEmpty(message = "userId를 입력해주세요.")
+    private String userId;
+    @NotEmpty(message = "groupCode를 입력해주세요.")
+    private String groupCode;
+    @NotNull(message = "postId를 입력해주세요.")
+    private Integer postId;
 }

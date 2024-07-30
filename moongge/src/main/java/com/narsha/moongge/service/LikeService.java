@@ -7,7 +7,7 @@ import com.narsha.moongge.base.projection.like.GetLikeList;
 import java.util.List;
 
 public interface LikeService {
-    Integer createLike(CreateLikeDTO createLikeDTO);
+    Integer createLike(String groupCode, Integer postId, CreateLikeDTO createLikeDTO);
     List<GetLikeList> getLikeList(Integer postId);
     Boolean checkLikePost(String userId, String groupCode, Integer postId);
     String deleteLike(String userId, String groupCode, Integer postId);

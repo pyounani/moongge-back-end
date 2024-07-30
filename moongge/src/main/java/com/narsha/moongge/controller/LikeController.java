@@ -12,20 +12,24 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController // JSON 형태의 결과값 반환
-@Controller
 @RequiredArgsConstructor
-@RequestMapping("/api/like")
+@RequestMapping("/api")
 public class LikeController {
 
     private final LikeService likeService;
 
-    @PostMapping("/create")
-    public ResponseEntity<ResponseDTO> createLike(@RequestBody CreateLikeDTO createLikeDTO){
-        Integer likeId = likeService.createLike(createLikeDTO);
+    /**
+     * 좋아요 생성하기 API
+     */
+    @PostMapping("/groups/{groupCode}/posts/{postId}/likes")
+    public ResponseEntity<ResponseDTO> createLike(@PathVariable String groupCode,
+                                                  @PathVariable Integer postId,
+                                                  @RequestBody CreateLikeDTO createLikeDTO){
+        Integer res = likeService.createLike(groupCode,postId, createLikeDTO);
 
         return ResponseEntity
                 .status(ResponseCode.SUCCESS_CREATE_LIKE.getStatus().value())
-                .body(new ResponseDTO(ResponseCode.SUCCESS_CREATE_LIKE, likeId));
+                .body(new ResponseDTO(ResponseCode.SUCCESS_CREATE_LIKE, res));
     }
 
     @GetMapping("/list")
