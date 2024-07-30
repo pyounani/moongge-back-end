@@ -163,6 +163,29 @@ class LikeServiceImplTest {
         assertFalse(checkLikePost);
     }
 
+    @Test
+    void 좋아요_갯수_가져오기() {
+        // given
+        UserEntity user1 = createUser("userId1");
+        GroupEntity group = createGroup(user1);
+
+        UserEntity user2 = createUser("userId2");
+        joinGroup(user2, group);
+
+        PostEntity post = createPost(user1, group);
+
+        CreateLikeDTO createLikeDTOByUser1 = buildCreateLikeDTO(user1, group, post);
+        likeService.createLike(group.getGroupCode(), post.getPostId(), createLikeDTOByUser1);
+
+        CreateLikeDTO createLikeDTObyUser2 = buildCreateLikeDTO(user2, group, post);
+        likeService.createLike(group.getGroupCode(), post.getPostId(), createLikeDTObyUser2);
+
+        // when
+        Long countLike = likeService.countLike(group.getGroupCode(), post.getPostId());
+
+        assertEquals(2, countLike);
+    }
+
     private static void assertLikeListContains(List<LikeDTO> likeList, Integer likeId1, UserEntity user1, String message) {
         boolean containsLike1 = likeList.stream()
                 .anyMatch(like -> like.getLikeId().equals(likeId1) &&
