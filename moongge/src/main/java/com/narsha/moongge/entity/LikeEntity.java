@@ -15,11 +15,14 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
 public class LikeEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JoinColumn(name = "like_id")
     private Integer likeId; // 좋아요 id
 
     @CreatedDate
+    @JoinColumn(name = "create_at")
     private LocalDateTime createAt; // 생성일
 
     @ManyToOne(cascade = CascadeType.REMOVE)

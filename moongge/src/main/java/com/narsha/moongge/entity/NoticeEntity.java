@@ -18,6 +18,7 @@ public class NoticeEntity {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JoinColumn(name = "notice_id")
     private Integer noticeId; // 공지 id
 
     @ManyToOne(cascade = CascadeType.REMOVE)
@@ -29,11 +30,14 @@ public class NoticeEntity {
     private UserEntity user; // 작성자
 
     @Column(nullable = false, length=100)
+    @JoinColumn(name = "notice_title")
     private String noticeTitle; // 공지 제목
 
     @Column(nullable = false, columnDefinition = "TEXT")
+    @JoinColumn(name = "notice_content")
     private String noticeContent; // 공지 내용
 
     @CreatedDate
+    @JoinColumn(name = "create_at")
     private LocalDateTime createAt; // 생성일
 }
