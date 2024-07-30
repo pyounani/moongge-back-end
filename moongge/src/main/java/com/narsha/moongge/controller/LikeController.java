@@ -77,14 +77,17 @@ public class LikeController {
                 .body(new ResponseDTO(ResponseCode.SUCCESS_CHECK_LIKE_POST, res));
     }
 
-    @GetMapping("/count")
-    public ResponseEntity<ResponseDTO> countLike(@RequestParam(value="groupCode") String groupCode, @RequestParam(value="postId") Integer postId){
-
-        Long like = likeService.countLike(groupCode, postId);
+    /**
+     * 특정 포스트에 좋아요가 누른 갯수 API
+     */
+    @GetMapping("/groups/{groupCode}/posts/{postId}/likes/count")
+    public ResponseEntity<ResponseDTO> countLike(@PathVariable String groupCode,
+                                                 @PathVariable Integer postId){
+        Long res = likeService.countLike(groupCode, postId);
 
         return ResponseEntity
                 .status(ResponseCode.SUCCESS_COUNT_LIKE.getStatus().value())
-                .body(new ResponseDTO(ResponseCode.SUCCESS_COUNT_LIKE, like));
+                .body(new ResponseDTO(ResponseCode.SUCCESS_COUNT_LIKE, res));
     }
 
     @GetMapping("/receive-tenLikes")

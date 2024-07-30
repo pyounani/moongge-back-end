@@ -128,24 +128,19 @@ public class LikeServiceImpl implements LikeService{
         return like.isPresent();
     }
 
+    /**
+     * 특정 포스트에 좋아요 갯수 가져오기
+     */
     @Override
     public Long countLike(String groupCode, Integer postId){
 
-        Optional<GroupEntity> group = groupRepository.findByGroupCode(groupCode);
-        if(!group.isPresent()){
-            throw new GroupNotFoundException(ErrorCode.GROUP_NOT_FOUND);
-        }
+        GroupEntity group = groupRepository.findByGroupCode(groupCode)
+                .orElseThrow(() -> new GroupNotFoundException(ErrorCode.GROUP_NOT_FOUND));
 
-        Optional<PostEntity> post = postRepository.findByPostId(postId);
-        // 게시물이 존재하지 않은 경우
-        if (!post.isPresent()) {
-            throw new PostNotFoundException(ErrorCode.POST_NOT_FOUND);
-        }
+        PostEntity post = postRepository.findByPostIdAndGroup(postId, group)
+                .orElseThrow(() -> new PostNotFoundException(ErrorCode.POST_NOT_FOUND));
 
-        Long like = likeRepository.countByGroupAndPost(group.get(), post.get());
-
-        return like;
-
+        return likeRepository.countByPost(post);
     }
 
     @Override
