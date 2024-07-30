@@ -125,6 +125,44 @@ class LikeServiceImplTest {
         assertTrue(findLike.isEmpty());
     }
 
+    @Test
+    void 좋아요_여부_가져오기() {
+        // given
+        UserEntity user = createUser("userId");
+        GroupEntity group = createGroup(user);
+        PostEntity post = createPost(user, group);
+
+        CreateLikeDTO createLikeDTO = buildCreateLikeDTO(user, group, post);
+        likeService.createLike(group.getGroupCode(), post.getPostId(), createLikeDTO);
+
+        // when
+        Boolean checkLikePost = likeService.checkLikePost(user.getUserId(), group.getGroupCode(), post.getPostId());
+
+        // then
+        assertTrue(checkLikePost);
+    }
+
+    @Test
+    void 좋아요_누르지_않은_경우_가져오기() {
+
+        // given
+        UserEntity user = createUser("userId");
+        GroupEntity group = createGroup(user);
+        PostEntity post = createPost(user, group);
+
+        CreateLikeDTO createLikeDTO = buildCreateLikeDTO(user, group, post);
+        likeService.createLike(group.getGroupCode(), post.getPostId(), createLikeDTO);
+
+        DeleteLikeDTO deleteLikeDTO = buildDeleteLikeDTO(user, group, post);
+        likeService.deleteLike(group.getGroupCode(), post.getPostId(), deleteLikeDTO);
+
+        // when
+        Boolean checkLikePost = likeService.checkLikePost(user.getUserId(), group.getGroupCode(), post.getPostId());
+
+        // then
+        assertFalse(checkLikePost);
+    }
+
     private static void assertLikeListContains(List<LikeDTO> likeList, Integer likeId1, UserEntity user1, String message) {
         boolean containsLike1 = likeList.stream()
                 .anyMatch(like -> like.getLikeId().equals(likeId1) &&
