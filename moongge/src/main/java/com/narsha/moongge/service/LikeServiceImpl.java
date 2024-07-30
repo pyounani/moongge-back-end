@@ -5,6 +5,7 @@ import com.narsha.moongge.base.dto.comment.CommentDTO;
 import com.narsha.moongge.base.dto.like.CreateLikeDTO;
 import com.narsha.moongge.base.dto.like.LikeDTO;
 import com.narsha.moongge.base.exception.GroupNotFoundException;
+import com.narsha.moongge.base.exception.LikeAlreadyExistsException;
 import com.narsha.moongge.base.exception.PostNotFoundException;
 import com.narsha.moongge.base.exception.UserNotFoundException;
 import com.narsha.moongge.base.projection.like.GetLikeList;
@@ -49,6 +50,11 @@ public class LikeServiceImpl implements LikeService{
 
         UserEntity user = userRepository.findByUserId(createLikeDTO.getUserId())
                 .orElseThrow(() -> new UserNotFoundException(ErrorCode.USER_NOT_FOUND));
+
+        // 좋아요가 이미 생성된 경우 예외처리
+        likeRepository.findByPostAndUser(post, user).ifPresent(like -> {
+            throw new LikeAlreadyExistsException(ErrorCode.LIKE_ALREADY_EXISTS);
+        });
 
         LikeEntity like = LikeEntity.builder()
                 .group(group)

@@ -14,15 +14,11 @@ import java.util.Optional;
 public interface LikeRepository extends JpaRepository<LikeEntity, Integer> {
 
     List<LikeEntity> findByPost(PostEntity post);
-
+    Optional<LikeEntity> findByPostAndUser(PostEntity post, UserEntity user);
     List<LikeEntity> findByUser(UserEntity user);
-
     Optional<LikeEntity> findByGroupAndUserAndPost(GroupEntity group, UserEntity user, PostEntity post);
-
     Optional<LikeEntity> deleteByGroupAndUserAndPost(GroupEntity group, UserEntity user, PostEntity post);
-
     Long countByGroupAndPost(GroupEntity group, PostEntity post);
-
     Long countByUser(UserEntity user);
 
 
