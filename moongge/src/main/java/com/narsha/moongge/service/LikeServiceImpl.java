@@ -3,6 +3,7 @@ package com.narsha.moongge.service;
 import com.narsha.moongge.base.code.ErrorCode;
 import com.narsha.moongge.base.dto.comment.CommentDTO;
 import com.narsha.moongge.base.dto.like.CreateLikeDTO;
+import com.narsha.moongge.base.dto.like.DeleteLikeDTO;
 import com.narsha.moongge.base.dto.like.LikeDTO;
 import com.narsha.moongge.base.exception.GroupNotFoundException;
 import com.narsha.moongge.base.exception.LikeAlreadyExistsException;
@@ -86,6 +87,40 @@ public class LikeServiceImpl implements LikeService{
                 .collect(Collectors.toList());
     }
 
+    /**
+     * 좋아요 취소하기
+     */
+    @Transactional
+    @Override
+    public String deleteLike(String groupCode, Integer postId, DeleteLikeDTO deleteLikeDTO){
+
+        Optional<UserEntity> user = userRepository.findByUserId(deleteLikeDTO.getUserId());
+        if(!user.isPresent()) {
+            throw new UserNotFoundException(ErrorCode.USERID_NOT_FOUND);
+        }
+
+        Optional<PostEntity> post = postRepository.findByPostId(postId);
+        // 게시물이 존재하지 않은 경우
+        if (!post.isPresent()) {
+            throw new PostNotFoundException(ErrorCode.POST_NOT_FOUND);
+        }
+
+        Optional<GroupEntity> group = groupRepository.findByGroupCode(groupCode);
+        if(!group.isPresent()){
+            throw new GroupNotFoundException(ErrorCode.GROUP_NOT_FOUND);
+        }
+
+        Optional<LikeEntity> like = likeRepository.findByGroupAndUserAndPost(group.get(), user.get(), post.get());
+
+        if(like.isPresent()){
+            alarmRepository.deleteByLikeId(like.get());
+            likeRepository.deleteByGroupAndUserAndPost(group.get(), user.get(), post.get());
+        }
+
+        return "success";
+    }
+
+
     @Override
     public Boolean checkLikePost(String userId, String groupCode, Integer postId) {
 
@@ -112,36 +147,6 @@ public class LikeServiceImpl implements LikeService{
         }else {
             return true;
         }
-    }
-
-    @Transactional
-    @Override
-    public String deleteLike(String userId, String groupCode, Integer postId){
-
-        Optional<UserEntity> user = userRepository.findByUserId(userId);
-        if(!user.isPresent()) {
-            throw new UserNotFoundException(ErrorCode.USERID_NOT_FOUND);
-        }
-
-        Optional<PostEntity> post = postRepository.findByPostId(postId);
-        // 게시물이 존재하지 않은 경우
-        if (!post.isPresent()) {
-            throw new PostNotFoundException(ErrorCode.POST_NOT_FOUND);
-        }
-
-        Optional<GroupEntity> group = groupRepository.findByGroupCode(groupCode);
-        if(!group.isPresent()){
-            throw new GroupNotFoundException(ErrorCode.GROUP_NOT_FOUND);
-        }
-
-        Optional<LikeEntity> like = likeRepository.findByGroupAndUserAndPost(group.get(), user.get(), post.get());
-
-        if(like.isPresent()){
-            alarmRepository.deleteByLikeId(like.get());
-            likeRepository.deleteByGroupAndUserAndPost(group.get(), user.get(), post.get());
-        }
-
-        return "success";
     }
 
     @Override

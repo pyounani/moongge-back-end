@@ -2,6 +2,7 @@ package com.narsha.moongge.controller;
 
 import com.narsha.moongge.base.code.ResponseCode;
 import com.narsha.moongge.base.dto.like.CreateLikeDTO;
+import com.narsha.moongge.base.dto.like.DeleteLikeDTO;
 import com.narsha.moongge.base.dto.like.LikeDTO;
 import com.narsha.moongge.base.dto.response.ResponseDTO;
 import com.narsha.moongge.base.projection.like.GetLikeList;
@@ -35,7 +36,7 @@ public class LikeController {
     }
 
     /**
-     * 특정 포스트에 좋아요 누른 유저 목록
+     * 특정 포스트에 좋아요 누른 유저 목록 API
      */
     @GetMapping("/groups/{groupCode}/posts/{postId}/likes/users")
     public ResponseEntity<ResponseDTO> getLikeList(@PathVariable String groupCode,
@@ -48,6 +49,20 @@ public class LikeController {
 
     }
 
+    /**
+     * 좋아요 취소 API
+     */
+    @DeleteMapping("/groups/{groupCode}/posts/{postId}/likes")
+    public ResponseEntity<ResponseDTO> deleteLike(@PathVariable String groupCode,
+                                                  @PathVariable Integer postId,
+                                                  @Valid @RequestBody DeleteLikeDTO deleteLikeDTO){
+        String deleteLike = likeService.deleteLike(groupCode, postId, deleteLikeDTO);
+
+        return ResponseEntity
+                .status(ResponseCode.SUCCESS_DELETE_LIKE.getStatus().value())
+                .body(new ResponseDTO(ResponseCode.SUCCESS_DELETE_LIKE, deleteLike));
+    }
+
     @GetMapping("/check")
     public ResponseEntity<ResponseDTO> checkLike(@RequestParam(value="userId") String userId, @RequestParam(value="groupCode") String groupCode,
                                                  @RequestParam(value="postId") Integer postId){
@@ -56,16 +71,6 @@ public class LikeController {
         return ResponseEntity
                 .status(ResponseCode.SUCCESS_CHECK_LIKE_POST.getStatus().value())
                 .body(new ResponseDTO(ResponseCode.SUCCESS_CHECK_LIKE_POST, checkLike));
-    }
-
-    @DeleteMapping("/delete")
-    public ResponseEntity<ResponseDTO> deleteLike(@RequestParam(value="userId") String userId, @RequestParam(value="groupCode") String groupCode,
-                                                  @RequestParam(value="postId") Integer postId){
-        String deleteLike = likeService.deleteLike(userId, groupCode, postId);
-
-        return ResponseEntity
-                .status(ResponseCode.SUCCESS_DELETE_LIKE.getStatus().value())
-                .body(new ResponseDTO(ResponseCode.SUCCESS_DELETE_LIKE, deleteLike));
     }
 
     @GetMapping("/count")
