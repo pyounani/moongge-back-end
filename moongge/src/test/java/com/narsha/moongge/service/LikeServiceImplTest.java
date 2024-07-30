@@ -1,6 +1,7 @@
 package com.narsha.moongge.service;
 
 import com.narsha.moongge.base.dto.like.CreateLikeDTO;
+import com.narsha.moongge.base.dto.like.DeleteLikeDTO;
 import com.narsha.moongge.base.dto.like.LikeDTO;
 import com.narsha.moongge.base.exception.LikeAlreadyExistsException;
 import com.narsha.moongge.entity.GroupEntity;
@@ -107,6 +108,23 @@ class LikeServiceImplTest {
         assertLikeListContains(likeList, likeId2, user2, "좋아요 목록에 두 번째 좋아요가 포함되어 있어야 합니다.");
     }
 
+    @Test
+    void 좋아요_취소() {
+        // given
+        UserEntity user = createUser("userId");
+        GroupEntity group = createGroup(user);
+        PostEntity post = createPost(user, group);
+
+        CreateLikeDTO createLikeDTO = buildCreateLikeDTO(user, group, post);
+        Integer savedLikeId = likeService.createLike(group.getGroupCode(), post.getPostId(), createLikeDTO);
+
+        DeleteLikeDTO deleteLikeDTO = buildDeleteLikeDTO(user, group, post);
+        likeService.deleteLike(group.getGroupCode(), post.getPostId(), deleteLikeDTO);
+
+        Optional<LikeEntity> findLike = likeRepository.findById(savedLikeId);
+        assertTrue(findLike.isEmpty());
+    }
+
     private static void assertLikeListContains(List<LikeDTO> likeList, Integer likeId1, UserEntity user1, String message) {
         boolean containsLike1 = likeList.stream()
                 .anyMatch(like -> like.getLikeId().equals(likeId1) &&
@@ -117,6 +135,14 @@ class LikeServiceImplTest {
 
     private CreateLikeDTO buildCreateLikeDTO(UserEntity user, GroupEntity group, PostEntity post) {
         return CreateLikeDTO.builder()
+                .groupCode(group.getGroupCode())
+                .postId(post.getPostId())
+                .userId(user.getUserId())
+                .build();
+    }
+
+    private DeleteLikeDTO buildDeleteLikeDTO(UserEntity user, GroupEntity group, PostEntity post) {
+        return DeleteLikeDTO.builder()
                 .groupCode(group.getGroupCode())
                 .postId(post.getPostId())
                 .userId(user.getUserId())
