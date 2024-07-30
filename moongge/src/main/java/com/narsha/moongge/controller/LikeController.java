@@ -90,14 +90,17 @@ public class LikeController {
                 .body(new ResponseDTO(ResponseCode.SUCCESS_COUNT_LIKE, res));
     }
 
-    @GetMapping("/receive-tenLikes")
-    public ResponseEntity<ResponseDTO> checkTenLikes(@RequestParam(value = "userId") String userId, @RequestParam(value="groupCode") String groupCode){
-
-        Boolean isTen = likeService.receiveTenLikes(userId, groupCode);
+    /**
+     * 사용자가 쓴 게시글 중 좋아요 10개가 넘는 글의 여부 API
+     */
+    @GetMapping("/groups/{groupCode}/users/{userId}/likes/check-receive")
+    public ResponseEntity<ResponseDTO> checkTenLikes(@PathVariable String groupCode,
+                                                     @PathVariable String userId) {
+        Boolean res = likeService.receiveTenLikes(userId, groupCode);
 
         return ResponseEntity
                 .status(ResponseCode.SUCCESS_RECEIVE_TEN_LIKE.getStatus().value())
-                .body(new ResponseDTO(ResponseCode.SUCCESS_RECEIVE_TEN_LIKE, isTen));
+                .body(new ResponseDTO(ResponseCode.SUCCESS_RECEIVE_TEN_LIKE, res));
     }
 
     @GetMapping("/give-tenLikes")

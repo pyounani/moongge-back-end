@@ -12,6 +12,7 @@ import java.util.Optional;
 public interface PostRepository extends JpaRepository<PostEntity, Integer> {
 
     List<PostEntity> findByUserOrderByCreateAtDesc(UserEntity user);
+    List<PostEntity> findByUser(UserEntity user);
     Optional<PostEntity> findByPostIdAndGroup(Integer postId, GroupEntity group);
     Optional<PostEntity> findByPostId(Integer postId);
     List<PostEntity> findByGroupAndCreateAtBetweenOrderByCreateAtDesc(GroupEntity group, LocalDateTime startTime, LocalDateTime endTime);

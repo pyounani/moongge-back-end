@@ -1,12 +1,10 @@
 package com.narsha.moongge.service;
 
 import com.narsha.moongge.base.code.ErrorCode;
-import com.narsha.moongge.base.dto.comment.CommentDTO;
 import com.narsha.moongge.base.dto.like.CreateLikeDTO;
 import com.narsha.moongge.base.dto.like.DeleteLikeDTO;
 import com.narsha.moongge.base.dto.like.LikeDTO;
 import com.narsha.moongge.base.exception.*;
-import com.narsha.moongge.base.projection.like.GetLikeList;
 import com.narsha.moongge.entity.LikeEntity;
 import com.narsha.moongge.entity.PostEntity;
 import com.narsha.moongge.entity.UserEntity;
@@ -26,6 +24,8 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class LikeServiceImpl implements LikeService{
+
+    private static final int MIN_LIKES_REQUIRED = 10;
 
     private final LikeRepository likeRepository;
     private final PostRepository postRepository;
@@ -143,33 +143,28 @@ public class LikeServiceImpl implements LikeService{
         return likeRepository.countByPost(post);
     }
 
+    /**
+     * 사용자가 쓴 게시글 중 좋아요 10개가 넘는 글의 여부
+     */
     @Override
     public Boolean receiveTenLikes(String userId, String groupCode) {
 
-        Optional<UserEntity> user = userRepository.findByUserId(userId);
-        if(!user.isPresent()) {
-            throw new UserNotFoundException(ErrorCode.USERID_NOT_FOUND);
-        }
+        GroupEntity group = groupRepository.findByGroupCode(groupCode)
+                .orElseThrow(() -> new GroupNotFoundException(ErrorCode.GROUP_NOT_FOUND));
 
-        Optional<GroupEntity> group = groupRepository.findByGroupCode(groupCode);
-        if(!group.isPresent()){
-            throw new GroupNotFoundException(ErrorCode.GROUP_NOT_FOUND);
-        }
+        UserEntity user = userRepository.findByUserIdAndGroup(userId, group)
+                .orElseThrow(() -> new UserNotFoundException(ErrorCode.USER_NOT_FOUND));
 
-        List<PostEntity> userPostList = postRepository.findByUserOrderByCreateAtDesc(user.get());
+        List<PostEntity> userPostList = postRepository.findByUser(user);
 
-        for (int i=0;i<userPostList.size();i++){
-            PostEntity post = userPostList.get(i);
-            Integer postId = post.getPostId();
-
-            Integer count = Math.toIntExact(countLike(groupCode, postId));
-            if (count>=10){
+        for (PostEntity post : userPostList) {
+            Long likeCount = likeRepository.countByPost(post);
+            if (likeCount >= MIN_LIKES_REQUIRED) {
                 return true;
             }
         }
 
         return false;
-
     }
 
     @Override
