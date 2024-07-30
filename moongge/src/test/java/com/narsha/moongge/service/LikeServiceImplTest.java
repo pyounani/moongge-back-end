@@ -26,6 +26,8 @@ import static org.junit.jupiter.api.Assertions.*;
 @Transactional
 class LikeServiceImplTest {
 
+    private static final int MIN_LIKES_REQUIRED = 10;
+
     @Autowired
     private UserRepository userRepository;
     @Autowired
@@ -184,6 +186,50 @@ class LikeServiceImplTest {
         Long countLike = likeService.countLike(group.getGroupCode(), post.getPostId());
 
         assertEquals(2, countLike);
+    }
+
+    @Test
+    void 유저_쓴_포스트_좋아요_10개_넘는_여부() {
+
+        // given
+        UserEntity user = createUser("userId");
+        GroupEntity group = createGroup(user);
+        PostEntity post = createPost(user, group);
+
+        createTenLike(group, post);
+
+        Boolean receiveTenLikes = likeService.receiveTenLikes(user.getUserId(), group.getGroupCode());
+
+        assertTrue(receiveTenLikes);
+    }
+
+    @Test
+    void 유저_쓴_포스트_좋아요_10개_넘지_못하는_여부() {
+
+        // given
+        UserEntity user = createUser("userId");
+        GroupEntity group = createGroup(user);
+        PostEntity post = createPost(user, group);
+
+        CreateLikeDTO createLikeDTO = buildCreateLikeDTO(user, group, post);
+        likeService.createLike(group.getGroupCode(), post.getPostId(), createLikeDTO);
+
+        Boolean receiveTenLikes = likeService.receiveTenLikes(user.getUserId(), group.getGroupCode());
+
+        assertFalse(receiveTenLikes);
+    }
+
+    private void createTenLike(GroupEntity group, PostEntity post) {
+        for (int i = 1; i <= MIN_LIKES_REQUIRED; i++) {
+            createUserAndLike("giveLikeUser"+i, group, post);
+        }
+    }
+
+    private void createUserAndLike(String userId, GroupEntity group, PostEntity post) {
+        UserEntity user = createUser(userId);
+        joinGroup(user, group);
+        CreateLikeDTO createLikeDTObyUser2 = buildCreateLikeDTO(user, group, post);
+        likeService.createLike(group.getGroupCode(), post.getPostId(), createLikeDTObyUser2);
     }
 
     private static void assertLikeListContains(List<LikeDTO> likeList, Integer likeId1, UserEntity user1, String message) {
