@@ -21,7 +21,7 @@ public class NoticeEntity {
     @JoinColumn(name = "notice_id")
     private Integer noticeId; // 공지 id
 
-    @ManyToOne(cascade = CascadeType.REMOVE)
+    @ManyToOne
     @JoinColumn(name = "group_code")
     private GroupEntity group; // 그룹 code
 

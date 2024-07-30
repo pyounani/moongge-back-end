@@ -41,11 +41,11 @@ public class LikeController {
     @GetMapping("/groups/{groupCode}/posts/{postId}/likes/users")
     public ResponseEntity<ResponseDTO> getLikeList(@PathVariable String groupCode,
                                                    @PathVariable Integer postId){
-        List<LikeDTO> likeList = likeService.getLikeList(groupCode, postId);
+        List<LikeDTO> res = likeService.getLikeList(groupCode, postId);
 
         return ResponseEntity
                 .status(ResponseCode.SUCCESS_GET_LIKE_LIST.getStatus().value())
-                .body(new ResponseDTO(ResponseCode.SUCCESS_GET_LIKE_LIST, likeList));
+                .body(new ResponseDTO(ResponseCode.SUCCESS_GET_LIKE_LIST, res));
 
     }
 
@@ -56,11 +56,11 @@ public class LikeController {
     public ResponseEntity<ResponseDTO> deleteLike(@PathVariable String groupCode,
                                                   @PathVariable Integer postId,
                                                   @Valid @RequestBody DeleteLikeDTO deleteLikeDTO){
-        String deleteLike = likeService.deleteLike(groupCode, postId, deleteLikeDTO);
+        LikeDTO res = likeService.deleteLike(groupCode, postId, deleteLikeDTO);
 
         return ResponseEntity
                 .status(ResponseCode.SUCCESS_DELETE_LIKE.getStatus().value())
-                .body(new ResponseDTO(ResponseCode.SUCCESS_DELETE_LIKE, deleteLike));
+                .body(new ResponseDTO(ResponseCode.SUCCESS_DELETE_LIKE, res));
     }
 
     @GetMapping("/check")

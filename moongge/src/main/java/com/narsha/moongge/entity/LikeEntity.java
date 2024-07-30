@@ -25,7 +25,7 @@ public class LikeEntity {
     @JoinColumn(name = "create_at")
     private LocalDateTime createAt; // 생성일
 
-    @ManyToOne(cascade = CascadeType.REMOVE)
+    @ManyToOne
     @JoinColumn(name = "group_code")
     private GroupEntity group; // 좋아요를 누른 유저의 그룹
 

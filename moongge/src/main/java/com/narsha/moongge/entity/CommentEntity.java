@@ -20,7 +20,7 @@ public class CommentEntity {
     @JoinColumn(name = "comment_id")
     private Integer commentId; // 댓글 id
 
-    @ManyToOne(cascade = CascadeType.REMOVE)
+    @ManyToOne
     @JoinColumn(name = "group_code")
     private GroupEntity group;
 

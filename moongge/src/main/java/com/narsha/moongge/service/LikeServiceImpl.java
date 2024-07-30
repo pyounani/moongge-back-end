@@ -5,10 +5,7 @@ import com.narsha.moongge.base.dto.comment.CommentDTO;
 import com.narsha.moongge.base.dto.like.CreateLikeDTO;
 import com.narsha.moongge.base.dto.like.DeleteLikeDTO;
 import com.narsha.moongge.base.dto.like.LikeDTO;
-import com.narsha.moongge.base.exception.GroupNotFoundException;
-import com.narsha.moongge.base.exception.LikeAlreadyExistsException;
-import com.narsha.moongge.base.exception.PostNotFoundException;
-import com.narsha.moongge.base.exception.UserNotFoundException;
+import com.narsha.moongge.base.exception.*;
 import com.narsha.moongge.base.projection.like.GetLikeList;
 import com.narsha.moongge.entity.LikeEntity;
 import com.narsha.moongge.entity.PostEntity;
@@ -92,34 +89,24 @@ public class LikeServiceImpl implements LikeService{
      */
     @Transactional
     @Override
-    public String deleteLike(String groupCode, Integer postId, DeleteLikeDTO deleteLikeDTO){
+    public LikeDTO deleteLike(String groupCode, Integer postId, DeleteLikeDTO deleteLikeDTO){
 
-        Optional<UserEntity> user = userRepository.findByUserId(deleteLikeDTO.getUserId());
-        if(!user.isPresent()) {
-            throw new UserNotFoundException(ErrorCode.USERID_NOT_FOUND);
-        }
+        GroupEntity group = groupRepository.findByGroupCode(groupCode)
+                .orElseThrow(() -> new GroupNotFoundException(ErrorCode.GROUP_NOT_FOUND));
 
-        Optional<PostEntity> post = postRepository.findByPostId(postId);
-        // 게시물이 존재하지 않은 경우
-        if (!post.isPresent()) {
-            throw new PostNotFoundException(ErrorCode.POST_NOT_FOUND);
-        }
+        PostEntity post = postRepository.findByPostIdAndGroup(postId, group)
+                .orElseThrow(() -> new PostNotFoundException(ErrorCode.POST_NOT_FOUND));
 
-        Optional<GroupEntity> group = groupRepository.findByGroupCode(groupCode);
-        if(!group.isPresent()){
-            throw new GroupNotFoundException(ErrorCode.GROUP_NOT_FOUND);
-        }
+        UserEntity user = userRepository.findByUserId(deleteLikeDTO.getUserId())
+                .orElseThrow(() -> new UserNotFoundException(ErrorCode.USER_NOT_FOUND));
 
-        Optional<LikeEntity> like = likeRepository.findByGroupAndUserAndPost(group.get(), user.get(), post.get());
+        LikeEntity like = likeRepository.findByPostAndUser(post, user)
+                .orElseThrow(() -> new LikeNotFoundException(ErrorCode.LIKE_NOT_FOUND));
 
-        if(like.isPresent()){
-            alarmRepository.deleteByLikeId(like.get());
-            likeRepository.deleteByGroupAndUserAndPost(group.get(), user.get(), post.get());
-        }
+        likeRepository.delete(like);
 
-        return "success";
+        return LikeDTO.mapToLikeDTO(like);
     }
-
 
     @Override
     public Boolean checkLikePost(String userId, String groupCode, Integer postId) {

@@ -20,7 +20,7 @@ public class PostEntity {
     @JoinColumn(name = "post_id")
     private Integer postId; // 포스트 id
 
-    @ManyToOne(cascade = CascadeType.REMOVE)
+    @ManyToOne
     @JoinColumn(name = "group_code")
     private GroupEntity group; // group code
 
