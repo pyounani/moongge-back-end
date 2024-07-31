@@ -14,6 +14,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
+@Table(name = "likeentity", uniqueConstraints = {@UniqueConstraint(columnNames = {"writer", "post_id"})})
 public class LikeEntity {
 
     @Id
@@ -29,7 +30,7 @@ public class LikeEntity {
     @JoinColumn(name = "group_code")
     private GroupEntity group; // 좋아요를 누른 유저의 그룹
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "writer")
     private UserEntity user;
 
