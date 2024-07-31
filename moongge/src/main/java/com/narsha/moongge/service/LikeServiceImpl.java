@@ -147,7 +147,7 @@ public class LikeServiceImpl implements LikeService{
      * 사용자가 쓴 게시글 중 좋아요 10개가 넘는 글의 여부
      */
     @Override
-    public Boolean receiveTenLikes(String userId, String groupCode) {
+    public Boolean receiveTenLikes(String groupCode, String userId) {
 
         GroupEntity group = groupRepository.findByGroupCode(groupCode)
                 .orElseThrow(() -> new GroupNotFoundException(ErrorCode.GROUP_NOT_FOUND));
@@ -167,21 +167,23 @@ public class LikeServiceImpl implements LikeService{
         return false;
     }
 
+    /**
+     * 사용자가 좋아요를 10개 이상 달았는지 여부 가져오기
+     */
     @Override
-    public Long giveTenLikes(String userId) {
+    public Boolean giveTenLikes(String groupCode, String userId) {
 
-        Optional<UserEntity> user = userRepository.findByUserId(userId);
-        if(!user.isPresent()) {
-            throw new UserNotFoundException(ErrorCode.USERID_NOT_FOUND);
+        GroupEntity group = groupRepository.findByGroupCode(groupCode)
+                .orElseThrow(() -> new GroupNotFoundException(ErrorCode.GROUP_NOT_FOUND));
+
+        UserEntity user = userRepository.findByUserIdAndGroup(userId, group)
+                .orElseThrow(() -> new UserNotFoundException(ErrorCode.USER_NOT_FOUND));
+
+        Long count = likeRepository.countByUser(user);
+
+        if (count >= MIN_LIKES_REQUIRED) {
+            return true;
         }
-
-        Long count = likeRepository.countByUser(user.get());
-
-        return count;
-//        if (count>=10)
-//            return true;
-//        else
-//            return false;
-
+        return false;
     }
 }

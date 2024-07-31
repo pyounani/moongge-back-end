@@ -96,21 +96,23 @@ public class LikeController {
     @GetMapping("/groups/{groupCode}/users/{userId}/likes/check-receive")
     public ResponseEntity<ResponseDTO> checkTenLikes(@PathVariable String groupCode,
                                                      @PathVariable String userId) {
-        Boolean res = likeService.receiveTenLikes(userId, groupCode);
+        Boolean res = likeService.receiveTenLikes(groupCode, userId);
 
         return ResponseEntity
                 .status(ResponseCode.SUCCESS_RECEIVE_TEN_LIKE.getStatus().value())
                 .body(new ResponseDTO(ResponseCode.SUCCESS_RECEIVE_TEN_LIKE, res));
     }
 
-    @GetMapping("/give-tenLikes")
-    public ResponseEntity<ResponseDTO> giveTenLikes(@RequestParam(value = "userId") String userId){
-
-//        Boolean isTen = likeService.giveTenLikes(userId);
-        Long isTen = likeService.giveTenLikes(userId);
+    /**
+     * 사용자가 좋아요를 10개 이상 달았는지 여부 API
+     */
+    @GetMapping("/groups/{groupCode}/users/{userId}/likes/check-give")
+    public ResponseEntity<ResponseDTO> giveTenLikes(@PathVariable String groupCode,
+                                                    @PathVariable String userId){
+        Boolean res = likeService.giveTenLikes(groupCode, userId);
 
         return ResponseEntity
                 .status(ResponseCode.SUCCESS_GIVE_TEN_LIKE.getStatus().value())
-                .body(new ResponseDTO(ResponseCode.SUCCESS_GIVE_TEN_LIKE, isTen));
+                .body(new ResponseDTO(ResponseCode.SUCCESS_GIVE_TEN_LIKE, res));
     }
 }

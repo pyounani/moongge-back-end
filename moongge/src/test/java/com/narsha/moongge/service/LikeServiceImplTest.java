@@ -185,6 +185,7 @@ class LikeServiceImplTest {
         // when
         Long countLike = likeService.countLike(group.getGroupCode(), post.getPostId());
 
+        // then
         assertEquals(2, countLike);
     }
 
@@ -196,10 +197,13 @@ class LikeServiceImplTest {
         GroupEntity group = createGroup(user);
         PostEntity post = createPost(user, group);
 
-        createTenLike(group, post);
+        // 여러 유저 생성 및 post에 좋아요 누르기
+        createTenLikeByManyUser(group, post);
 
-        Boolean receiveTenLikes = likeService.receiveTenLikes(user.getUserId(), group.getGroupCode());
+        // when
+        Boolean receiveTenLikes = likeService.receiveTenLikes(group.getGroupCode(), user.getUserId());
 
+        // then
         assertTrue(receiveTenLikes);
     }
 
@@ -214,14 +218,63 @@ class LikeServiceImplTest {
         CreateLikeDTO createLikeDTO = buildCreateLikeDTO(user, group, post);
         likeService.createLike(group.getGroupCode(), post.getPostId(), createLikeDTO);
 
-        Boolean receiveTenLikes = likeService.receiveTenLikes(user.getUserId(), group.getGroupCode());
+        // when
+        Boolean receiveTenLikes = likeService.receiveTenLikes(group.getGroupCode(), user.getUserId());
 
+        // then
         assertFalse(receiveTenLikes);
     }
 
-    private void createTenLike(GroupEntity group, PostEntity post) {
+    @Test
+    void 유저가_좋아요_10개_눌렀는지_여부() {
+        // given
+        UserEntity giveLikeUser = createUser("giveLikeUser");
+        GroupEntity group = createGroup(giveLikeUser);
+
+        // 여러 유저 생성 및 포스트 생성 및 유저(giveLikeUser)가 좋아요 누르기
+        createTenLikeByOneUser(giveLikeUser, group);
+
+        // when
+        Boolean giveTenLikes = likeService.giveTenLikes(group.getGroupCode(), giveLikeUser.getUserId());
+
+        // then
+        assertTrue(giveTenLikes);
+    }
+
+    @Test
+    void 유저가_좋아요_10개_누르지_못한_여부() {
+        // given
+        UserEntity user = createUser("userId");
+        GroupEntity group = createGroup(user);
+        PostEntity post = createPost(user, group);
+
+        CreateLikeDTO createLikeDTO = buildCreateLikeDTO(user, group, post);
+        likeService.createLike(group.getGroupCode(), post.getPostId(), createLikeDTO);
+
+        Boolean giveTenLikes = likeService.giveTenLikes(group.getGroupCode(), user.getUserId());
+
+        assertFalse(giveTenLikes);
+    }
+
+    private void createTenLikeByOneUser(UserEntity giveLikeUser, GroupEntity group) {
         for (int i = 1; i <= MIN_LIKES_REQUIRED; i++) {
-            createUserAndLike("giveLikeUser"+i, group, post);
+            createPostAndLike(giveLikeUser, group, i);
+        }
+    }
+
+    private void createPostAndLike(UserEntity giveLikeUser, GroupEntity group, int i) {
+        UserEntity user = createUser("user" + i);
+        joinGroup(user, group);
+
+        PostEntity post1 = createPost(user, group);
+
+        CreateLikeDTO createLikeDTO1 = buildCreateLikeDTO(giveLikeUser, group, post1);
+        likeService.createLike(group.getGroupCode(), post1.getPostId(), createLikeDTO1);
+    }
+
+    private void createTenLikeByManyUser(GroupEntity group, PostEntity post) {
+        for (int i = 1; i <= MIN_LIKES_REQUIRED; i++) {
+            createUserAndLike("giveLikeUser" + i, group, post);
         }
     }
 
