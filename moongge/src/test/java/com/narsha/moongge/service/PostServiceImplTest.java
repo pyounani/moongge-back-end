@@ -203,8 +203,8 @@ class PostServiceImplTest {
         PostEntity post = findPost.get();
 
         LikeEntity likeEntity = LikeEntity.builder()
-                .postId(post)
-                .userId(user)
+                .post(post)
+                .user(user)
                 .build();
 
         likeRepository.save(likeEntity);

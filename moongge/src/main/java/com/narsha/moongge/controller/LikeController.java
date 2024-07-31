@@ -2,89 +2,115 @@ package com.narsha.moongge.controller;
 
 import com.narsha.moongge.base.code.ResponseCode;
 import com.narsha.moongge.base.dto.like.CreateLikeDTO;
+import com.narsha.moongge.base.dto.like.DeleteLikeDTO;
+import com.narsha.moongge.base.dto.like.LikeDTO;
 import com.narsha.moongge.base.dto.response.ResponseDTO;
-import com.narsha.moongge.base.projection.like.GetLikeList;
 import com.narsha.moongge.service.LikeService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController // JSON 형태의 결과값 반환
-@Controller
 @RequiredArgsConstructor
-@RequestMapping("/api/like")
+@RequestMapping("/api")
 public class LikeController {
 
     private final LikeService likeService;
 
-    @PostMapping("/create")
-    public ResponseEntity<ResponseDTO> createLike(@RequestBody CreateLikeDTO createLikeDTO){
-        Integer likeId = likeService.createLike(createLikeDTO);
+    /**
+     * 좋아요 생성하기 API
+     */
+    @PostMapping("/groups/{groupCode}/posts/{postId}/likes")
+    public ResponseEntity<ResponseDTO> createLike(@PathVariable String groupCode,
+                                                  @PathVariable Integer postId,
+                                                  @Valid @RequestBody CreateLikeDTO createLikeDTO){
+        Integer res = likeService.createLike(groupCode,postId, createLikeDTO);
 
         return ResponseEntity
                 .status(ResponseCode.SUCCESS_CREATE_LIKE.getStatus().value())
-                .body(new ResponseDTO(ResponseCode.SUCCESS_CREATE_LIKE, likeId));
+                .body(new ResponseDTO(ResponseCode.SUCCESS_CREATE_LIKE, res));
     }
 
-    @GetMapping("/list")
-    public ResponseEntity<ResponseDTO> getLikeList(@RequestParam(value="postId") Integer postId){
-        List<GetLikeList> likeList = likeService.getLikeList(postId);
+    /**
+     * 특정 포스트에 좋아요 누른 유저 목록 API
+     */
+    @GetMapping("/groups/{groupCode}/posts/{postId}/likes/users")
+    public ResponseEntity<ResponseDTO> getLikeList(@PathVariable String groupCode,
+                                                   @PathVariable Integer postId){
+        List<LikeDTO> res = likeService.getLikeList(groupCode, postId);
+
         return ResponseEntity
                 .status(ResponseCode.SUCCESS_GET_LIKE_LIST.getStatus().value())
-                .body(new ResponseDTO(ResponseCode.SUCCESS_GET_LIKE_LIST, likeList));
+                .body(new ResponseDTO(ResponseCode.SUCCESS_GET_LIKE_LIST, res));
 
     }
 
-    @GetMapping("/check")
-    public ResponseEntity<ResponseDTO> checkLike(@RequestParam(value="userId") String userId, @RequestParam(value="groupCode") String groupCode,
-                                                 @RequestParam(value="postId") Integer postId){
-        boolean checkLike = likeService.checkLikePost(userId, groupCode, postId);
-
-        return ResponseEntity
-                .status(ResponseCode.SUCCESS_CHECK_LIKE_POST.getStatus().value())
-                .body(new ResponseDTO(ResponseCode.SUCCESS_CHECK_LIKE_POST, checkLike));
-    }
-
-    @DeleteMapping("/delete")
-    public ResponseEntity<ResponseDTO> deleteLike(@RequestParam(value="userId") String userId, @RequestParam(value="groupCode") String groupCode,
-                                                  @RequestParam(value="postId") Integer postId){
-        String deleteLike = likeService.deleteLike(userId, groupCode, postId);
+    /**
+     * 좋아요 취소 API
+     */
+    @DeleteMapping("/groups/{groupCode}/posts/{postId}/likes")
+    public ResponseEntity<ResponseDTO> deleteLike(@PathVariable String groupCode,
+                                                  @PathVariable Integer postId,
+                                                  @Valid @RequestBody DeleteLikeDTO deleteLikeDTO){
+        LikeDTO res = likeService.deleteLike(groupCode, postId, deleteLikeDTO);
 
         return ResponseEntity
                 .status(ResponseCode.SUCCESS_DELETE_LIKE.getStatus().value())
-                .body(new ResponseDTO(ResponseCode.SUCCESS_DELETE_LIKE, deleteLike));
+                .body(new ResponseDTO(ResponseCode.SUCCESS_DELETE_LIKE, res));
     }
 
-    @GetMapping("/count")
-    public ResponseEntity<ResponseDTO> countLike(@RequestParam(value="groupCode") String groupCode, @RequestParam(value="postId") Integer postId){
+    /**
+     * 포스트에 좋아요 여부 받아오기 API
+     */
+    @GetMapping("/groups/{groupCode}/users/{userId}/posts/{postId}/likes/check")
+    public ResponseEntity<ResponseDTO> checkLike(@PathVariable String groupCode,
+                                                 @PathVariable String userId,
+                                                 @PathVariable Integer postId) {
+        boolean res = likeService.checkLikePost(userId, groupCode, postId);
 
-        Long like = likeService.countLike(groupCode, postId);
+        return ResponseEntity
+                .status(ResponseCode.SUCCESS_CHECK_LIKE_POST.getStatus().value())
+                .body(new ResponseDTO(ResponseCode.SUCCESS_CHECK_LIKE_POST, res));
+    }
+
+    /**
+     * 특정 포스트에 좋아요가 누른 갯수 API
+     */
+    @GetMapping("/groups/{groupCode}/posts/{postId}/likes/count")
+    public ResponseEntity<ResponseDTO> countLike(@PathVariable String groupCode,
+                                                 @PathVariable Integer postId){
+        Long res = likeService.countLike(groupCode, postId);
 
         return ResponseEntity
                 .status(ResponseCode.SUCCESS_COUNT_LIKE.getStatus().value())
-                .body(new ResponseDTO(ResponseCode.SUCCESS_COUNT_LIKE, like));
+                .body(new ResponseDTO(ResponseCode.SUCCESS_COUNT_LIKE, res));
     }
 
-    @GetMapping("/receive-tenLikes")
-    public ResponseEntity<ResponseDTO> checkTenLikes(@RequestParam(value = "userId") String userId, @RequestParam(value="groupCode") String groupCode){
-
-        Boolean isTen = likeService.receiveTenLikes(userId, groupCode);
+    /**
+     * 사용자가 쓴 게시글 중 좋아요 10개가 넘는 글의 여부 API
+     */
+    @GetMapping("/groups/{groupCode}/users/{userId}/likes/check-receive")
+    public ResponseEntity<ResponseDTO> checkTenLikes(@PathVariable String groupCode,
+                                                     @PathVariable String userId) {
+        Boolean res = likeService.receiveTenLikes(groupCode, userId);
 
         return ResponseEntity
                 .status(ResponseCode.SUCCESS_RECEIVE_TEN_LIKE.getStatus().value())
-                .body(new ResponseDTO(ResponseCode.SUCCESS_RECEIVE_TEN_LIKE, isTen));
+                .body(new ResponseDTO(ResponseCode.SUCCESS_RECEIVE_TEN_LIKE, res));
     }
 
-    @GetMapping("/give-tenLikes")
-    public ResponseEntity<ResponseDTO> giveTenLikes(@RequestParam(value = "userId") String userId){
-
-//        Boolean isTen = likeService.giveTenLikes(userId);
-        Long isTen = likeService.giveTenLikes(userId);
+    /**
+     * 사용자가 좋아요를 10개 이상 달았는지 여부 API
+     */
+    @GetMapping("/groups/{groupCode}/users/{userId}/likes/check-give")
+    public ResponseEntity<ResponseDTO> giveTenLikes(@PathVariable String groupCode,
+                                                    @PathVariable String userId){
+        Boolean res = likeService.giveTenLikes(groupCode, userId);
 
         return ResponseEntity
                 .status(ResponseCode.SUCCESS_GIVE_TEN_LIKE.getStatus().value())
-                .body(new ResponseDTO(ResponseCode.SUCCESS_GIVE_TEN_LIKE, isTen));
+                .body(new ResponseDTO(ResponseCode.SUCCESS_GIVE_TEN_LIKE, res));
     }
 }

@@ -109,9 +109,9 @@ public class PostServiceImpl implements PostService {
         List<PostEntity> allPosts = postRepository.findByGroupAndCreateAtBetweenOrderByCreateAtDesc(user.getGroup(), startTime, endTime);
 
         // 유저가 좋아요를 누른 포스트 목록 가져오기
-        List<LikeEntity> userLikes = likeRepository.findByUserId(user);
+        List<LikeEntity> userLikes = likeRepository.findByUser(user);
         List<Integer> likedPostIds = userLikes.stream()
-                .map(likeEntity -> likeEntity.getPostId().getPostId())
+                .map(likeEntity -> likeEntity.getPost().getPostId())
                 .collect(Collectors.toList());
 
         // 유저가 작성한 포스트를 제외하고 좋아요를 누르지 않은 포스트 필터링

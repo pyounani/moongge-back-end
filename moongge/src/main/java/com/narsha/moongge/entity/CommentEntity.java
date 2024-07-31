@@ -17,9 +17,10 @@ import java.time.LocalDateTime;
 public class CommentEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JoinColumn(name = "comment_id")
     private Integer commentId; // 댓글 id
 
-    @ManyToOne(cascade = CascadeType.REMOVE)
+    @ManyToOne
     @JoinColumn(name = "group_code")
     private GroupEntity group;
 
@@ -28,9 +29,11 @@ public class CommentEntity {
     private UserEntity user; // 유저 id
 
     @Column(columnDefinition = "TEXT")
+    @JoinColumn(name = "content")
     private String content; // 댓글 내용
 
     @CreatedDate
+    @JoinColumn(name = "create_at")
     private LocalDateTime createAt; // 생성일
 
     @ManyToOne

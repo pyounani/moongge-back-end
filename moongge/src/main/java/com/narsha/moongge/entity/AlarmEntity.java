@@ -18,8 +18,10 @@ public class AlarmEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JoinColumn(name = "alarm_id")
     private Integer alarmId;
 
+    @JoinColumn(name = "action_type")
     private String actionType;
 
     @ManyToOne
@@ -46,6 +48,7 @@ public class AlarmEntity {
     private GroupEntity groupCode;
 
     @CreatedDate
+    @JoinColumn(name = "create_at")
     private LocalDateTime createdAt;
 
 
