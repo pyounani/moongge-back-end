@@ -5,12 +5,10 @@ import com.narsha.moongge.base.dto.like.CreateLikeDTO;
 import com.narsha.moongge.base.dto.like.DeleteLikeDTO;
 import com.narsha.moongge.base.dto.like.LikeDTO;
 import com.narsha.moongge.base.dto.response.ResponseDTO;
-import com.narsha.moongge.base.projection.like.GetLikeList;
 import com.narsha.moongge.service.LikeService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
