@@ -31,7 +31,6 @@ public class LikeServiceImpl implements LikeService{
     private final PostRepository postRepository;
     private final GroupRepository groupRepository;
     private final UserRepository userRepository;
-    private final AlarmRepository alarmRepository;
 
     /**
      * 좋아요 생성하기

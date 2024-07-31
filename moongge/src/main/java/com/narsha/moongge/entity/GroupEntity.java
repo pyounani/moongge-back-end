@@ -9,11 +9,8 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 @Getter
-@Setter
 @Entity
 @Builder
-@AllArgsConstructor
-@NoArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
 public class GroupEntity {
     @Id
