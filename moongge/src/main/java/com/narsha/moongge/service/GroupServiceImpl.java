@@ -87,7 +87,7 @@ public class GroupServiceImpl implements GroupService{
      * 그룹에 가입하기
      */
     @Override
-    public GroupDTO joinUser(JoinGroupDTO joinGroupDTO) {
+    public GroupDTO joinGroup(JoinGroupDTO joinGroupDTO) {
         GroupEntity group = groupRepository.findByGroupCode(joinGroupDTO.getGroupCode())
                 .orElseThrow(() -> new GroupNotFoundException(ErrorCode.GROUP_NOT_FOUND));
 

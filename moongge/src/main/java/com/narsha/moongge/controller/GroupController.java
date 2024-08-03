@@ -48,7 +48,7 @@ public class GroupController {
      */
     @PostMapping("/groups/join")
     public ResponseEntity<ResponseDTO> joinGroup(@Valid @RequestBody JoinGroupDTO joinGroupDTO){
-        GroupDTO res = groupService.joinUser(joinGroupDTO);
+        GroupDTO res = groupService.joinGroup(joinGroupDTO);
 
         return ResponseEntity
                 .status(ResponseCode.SUCCESS_JOIN_GROUP.getStatus().value())
