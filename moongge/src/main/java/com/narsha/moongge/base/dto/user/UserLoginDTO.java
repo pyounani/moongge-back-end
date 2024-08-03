@@ -1,17 +1,17 @@
 package com.narsha.moongge.base.dto.user;
 
+import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.antlr.v4.runtime.misc.NotNull;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserLoginDTO {
 
-    @NotNull
+    @NotEmpty(message = "userId를 입력하지 않았습니다.")
     public String userId;
-    @NotNull
+    @NotEmpty(message = "password를 입력하지 않았습니다.")
     public String password;
 }

@@ -14,6 +14,7 @@ import com.narsha.moongge.base.projection.user.GetUserProfile;
 import com.narsha.moongge.entity.UserEntity;
 import com.narsha.moongge.service.AmazonS3Service;
 import com.narsha.moongge.service.UserService;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.RequiredArgsConstructor;
 import org.json.simple.parser.JSONParser;
@@ -39,22 +40,12 @@ public class UserController {
      * 회원가입 API
      */
     @PostMapping("/register")
-    public ResponseEntity<ResponseDTO> register(@RequestBody UserRegisterDTO userRegisterDTO){
+    public ResponseEntity<ResponseDTO> register(@Valid @RequestBody UserRegisterDTO userRegisterDTO){
         UserDTO res = userService.register(userRegisterDTO);
 
         return ResponseEntity
                 .status(ResponseCode.SUCCESS_REGISTER.getStatus().value())
                 .body(new ResponseDTO(ResponseCode.SUCCESS_REGISTER, res));
-    }
-
-    @PostMapping("/login")
-    public ResponseEntity<ResponseDTO> login(@RequestBody UserLoginDTO userLoginDTO){
-        GetUserProfile res = userService.login(userLoginDTO);
-
-        return ResponseEntity
-                .status(ResponseCode.SUCCESS_LOGIN.getStatus().value())
-                .body(new ResponseDTO(ResponseCode.SUCCESS_LOGIN, res));
-
     }
 
     /**
@@ -67,6 +58,19 @@ public class UserController {
         return ResponseEntity
                 .status(ResponseCode.SUCCESS_CHECK_UNIQUE_ID.getStatus().value())
                 .body(new ResponseDTO(ResponseCode.SUCCESS_CHECK_UNIQUE_ID, res));
+    }
+
+    /**
+     * 로그인 API
+     */
+    @PostMapping("/login")
+    public ResponseEntity<ResponseDTO> login(@Valid @RequestBody UserLoginDTO userLoginDTO){
+        GetUserProfile res = userService.login(userLoginDTO);
+
+        return ResponseEntity
+                .status(ResponseCode.SUCCESS_LOGIN.getStatus().value())
+                .body(new ResponseDTO(ResponseCode.SUCCESS_LOGIN, res));
+
     }
 
     @PostMapping("/join")
