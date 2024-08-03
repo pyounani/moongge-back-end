@@ -134,7 +134,33 @@ public class UserServiceImplTest {
 
         uploadedFile = userProfileDTO.getProfileImage();
     }
-    
+
+    @Test
+    void 유저_정보_조회하기() {
+
+        // 회원가입 진행
+        UserRegisterDTO userRegisterDTO = buildUserRegisterDTO();
+        userService.register(userRegisterDTO);
+
+        MultipartFile multipartFile = createMultipartFile();
+        UpdateUserProfileDTO updateUserProfileDTO = buildUpdateUserProfileDTO(userRegisterDTO);
+
+        UserProfileDTO savedUserProfileDTO = userService.updateProfile(userRegisterDTO.getUserId(), multipartFile, updateUserProfileDTO);
+
+        // when
+        UserProfileDTO findUserProfileDTO = userService.getProfile(userRegisterDTO.getUserId());
+
+        assertEquals(savedUserProfileDTO.getUserId(), findUserProfileDTO.getUserId());
+        assertEquals(savedUserProfileDTO.getUserType(), findUserProfileDTO.getUserType());
+        assertEquals(savedUserProfileDTO.getUsername(), findUserProfileDTO.getUsername());
+        assertEquals(savedUserProfileDTO.getNickname(), findUserProfileDTO.getNickname());
+        assertEquals(savedUserProfileDTO.getProfileImage(), findUserProfileDTO.getProfileImage());
+        assertEquals(savedUserProfileDTO.getBirth(), findUserProfileDTO.getBirth());
+        assertEquals(savedUserProfileDTO.getIntro(), findUserProfileDTO.getIntro());
+
+        uploadedFile = savedUserProfileDTO.getProfileImage();
+    }
+
     private UpdateUserProfileDTO buildUpdateUserProfileDTO(UserRegisterDTO userRegisterDTO) {
         return UpdateUserProfileDTO.builder()
                 .userId(userRegisterDTO.getUserId())
