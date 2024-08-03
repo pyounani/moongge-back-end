@@ -3,14 +3,12 @@ package com.narsha.moongge.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.JsonObject;
 import com.narsha.moongge.base.code.ResponseCode;
-import com.narsha.moongge.base.dto.group.JoinGroupDTO;
 import com.narsha.moongge.base.dto.response.ResponseDTO;
 import com.narsha.moongge.base.dto.user.UpdateUserProfileDTO;
 import com.narsha.moongge.base.dto.user.UserDTO;
 import com.narsha.moongge.base.dto.user.UserLoginDTO;
 import com.narsha.moongge.base.dto.user.UserRegisterDTO;
 import com.narsha.moongge.base.projection.user.GetUser;
-import com.narsha.moongge.base.projection.user.GetUserProfile;
 import com.narsha.moongge.entity.UserEntity;
 import com.narsha.moongge.service.AmazonS3Service;
 import com.narsha.moongge.service.UserService;
@@ -72,16 +70,6 @@ public class UserController {
                 .body(new ResponseDTO(ResponseCode.SUCCESS_LOGIN, res));
 
     }
-
-    @PostMapping("/join")
-    public ResponseEntity<ResponseDTO> joinGroup(@RequestBody JoinGroupDTO joinGroupDTO){
-        UserEntity res = userService.joinUser(joinGroupDTO);
-
-        return ResponseEntity
-                .status(ResponseCode.SUCCESS_JOIN_GROUP.getStatus().value())
-                .body(new ResponseDTO(ResponseCode.SUCCESS_JOIN_GROUP, res));
-    }
-
 
     @PutMapping("/update")
     public ResponseEntity<ResponseDTO> updateProfile(@RequestParam(value="image", required = false) MultipartFile profileImage,

@@ -2,11 +2,12 @@ package com.narsha.moongge.controller;
 
 import com.narsha.moongge.base.code.ResponseCode;
 import com.narsha.moongge.base.dto.group.CreateGroupDTO;
+import com.narsha.moongge.base.dto.group.GroupDTO;
+import com.narsha.moongge.base.dto.group.JoinGroupDTO;
 import com.narsha.moongge.base.dto.group.UpdateTimeDTO;
 import com.narsha.moongge.base.dto.response.ResponseDTO;
 import com.narsha.moongge.service.GroupService;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotEmpty;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -28,6 +29,18 @@ public class GroupController {
         return ResponseEntity
                 .status(ResponseCode.SUCCESS_CREATE_GROUP.getStatus().value())
                 .body(new ResponseDTO(ResponseCode.SUCCESS_CREATE_GROUP, res));
+    }
+
+    /**
+     * 그룹 가입하기 API
+     */
+    @PostMapping("/join")
+    public ResponseEntity<ResponseDTO> joinGroup(@Valid @RequestBody JoinGroupDTO joinGroupDTO){
+        GroupDTO res = groupService.joinUser(joinGroupDTO);
+
+        return ResponseEntity
+                .status(ResponseCode.SUCCESS_JOIN_GROUP.getStatus().value())
+                .body(new ResponseDTO(ResponseCode.SUCCESS_JOIN_GROUP, res));
     }
 
     /**

@@ -2,6 +2,8 @@ package com.narsha.moongge.service;
 
 import com.narsha.moongge.base.code.ErrorCode;
 import com.narsha.moongge.base.dto.group.CreateGroupDTO;
+import com.narsha.moongge.base.dto.group.GroupDTO;
+import com.narsha.moongge.base.dto.group.JoinGroupDTO;
 import com.narsha.moongge.base.dto.group.UpdateTimeDTO;
 import com.narsha.moongge.base.exception.*;
 import com.narsha.moongge.entity.*;
@@ -13,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 
 @Service
@@ -56,6 +59,27 @@ public class GroupServiceImpl implements GroupService{
         initialBadgeList(user);
 
         return user.getUserId();
+    }
+
+    /**
+     * 그룹에 가입하기
+     */
+    @Override
+    public GroupDTO joinUser(JoinGroupDTO joinGroupDTO) {
+        GroupEntity group = groupRepository.findByGroupCode(joinGroupDTO.getGroupCode())
+                .orElseThrow(() -> new GroupNotFoundException(ErrorCode.GROUP_NOT_FOUND));
+
+        // set group code
+        UserEntity user = userRepository.findByUserId(joinGroupDTO.getUserId())
+                .orElseThrow(() -> new UserNotFoundException(ErrorCode.USER_NOT_FOUND));
+
+        // 그룹에 조인
+        user.setGroup(group);
+
+        // badgeList 생성
+        initialBadgeList(user);
+
+        return GroupDTO.mapToGroupDTO(user);
     }
 
     /**

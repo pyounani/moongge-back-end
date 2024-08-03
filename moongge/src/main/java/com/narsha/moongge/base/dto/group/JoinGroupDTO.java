@@ -1,7 +1,7 @@
 package com.narsha.moongge.base.dto.group;
 
+import jakarta.validation.constraints.NotEmpty;
 import lombok.*;
-import org.antlr.v4.runtime.misc.NotNull;
 
 @Builder
 @Getter
@@ -9,9 +9,9 @@ import org.antlr.v4.runtime.misc.NotNull;
 @NoArgsConstructor
 public class JoinGroupDTO {
 
-    @NotNull
+    @NotEmpty(message = "userId를 입력하세요.")
     private String userId; // 유저 id
 
-    @NotNull
+    @NotEmpty(message = "groupCode를 입력하세요.")
     private String groupCode; // 그룹 코드
 }

@@ -16,10 +16,6 @@ public interface UserService {
     UserDTO register(UserRegisterDTO userRegisterDTO);
     Boolean checkUserId(String userId);
     UserDTO login(UserLoginDTO userLoginDTO);
-
-    UserEntity joinUser(JoinGroupDTO joinGroupDTO);
-
-
     UserEntity updateProfile(UpdateUserProfileDTO updateUserProfileDTO);
 
     Optional<UserEntity> getProfile(String userId);

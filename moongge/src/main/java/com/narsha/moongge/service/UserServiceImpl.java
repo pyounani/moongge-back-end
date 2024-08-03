@@ -82,34 +82,7 @@ public class UserServiceImpl implements UserService {
         return UserDTO.mapToUserDTO(findUser);
     }
 
-    @Override
-    public UserEntity joinUser(JoinGroupDTO joinGroupDTO) {
-        if (!groupRepository.findByGroupCode(joinGroupDTO.getGroupCode()).isPresent())
-            throw new GroupNotFoundException(ErrorCode.GROUPCODE_NOT_FOUND);
 
-        // set group code
-        Optional<UserEntity> user = userRepository.findByUserId(joinGroupDTO.getUserId());
-        Optional<GroupEntity> group = groupRepository.findByGroupCode(joinGroupDTO.getGroupCode());
-
-        if(!user.isPresent()){
-            throw new UserIdNotFoundException(ErrorCode.USERID_NOT_FOUND);
-        }
-
-        else if(!group.isPresent())
-            throw new GroupNotFoundException(ErrorCode.GROUP_NOT_FOUND);
-
-        // badgeList 생성
-        List<Boolean> newBadgeList = new ArrayList<>(10);
-        for (int i = 0; i < 10; i++) {
-            newBadgeList.add(false);
-        }
-
-        // profile badge update
-        user.get().setBadgeList(newBadgeList.toString()); // add badgeList
-        user.get().setGroup(group.get()); // add group code
-
-        return userRepository.save(user.get());
-    }
 
 
     //
