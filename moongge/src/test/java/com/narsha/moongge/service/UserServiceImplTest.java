@@ -1,6 +1,8 @@
 package com.narsha.moongge.service;
 
 import com.narsha.moongge.base.dto.group.CreateGroupDTO;
+import com.narsha.moongge.base.dto.group.GroupDTO;
+import com.narsha.moongge.base.dto.group.JoinGroupDTO;
 import com.narsha.moongge.base.dto.user.*;
 import com.narsha.moongge.base.exception.LoginIdNotFoundException;
 import com.narsha.moongge.base.exception.LoginPasswordNotMatchException;
@@ -180,20 +182,24 @@ public class UserServiceImplTest {
         assertEquals(user.getBadgeList(), updateBadgeList);
     }
 
-    private GroupEntity createGroup(UserEntity user) {
-        GroupEntity group = GroupEntity.builder()
-                .groupCode("groupCode")
-                .groupName("groupName")
-                .school("school")
-                .grade(3)
-                .groupClass(5)
-                .build();
+    @Test
+    void 뱃지_리스트_조회하기() {
+        // 회원가입 진행
+        UserRegisterDTO userRegisterDTO = buildUserRegisterDTO();
+        userService.register(userRegisterDTO);
 
-        GroupEntity savedGroup = groupRepository.save(group);
+        Optional<UserEntity> findUser = userRepository.findByUserId(userRegisterDTO.getUserId());
+        assertTrue(findUser.isPresent());
+        UserEntity user = findUser.get();
 
-        user.updateGroup(savedGroup);
+        CreateGroupDTO createGroupDTO = buildCreateGroupDTO(user);
+        groupService.createGroup(createGroupDTO);
+        String updateBadgeList = userService.updateBadgeList(user.getUserId(), 1);
 
-        return savedGroup;
+        // when
+        String findBadgeList = userService.getBadgeList(user.getUserId());
+
+        assertEquals(updateBadgeList, findBadgeList);
     }
 
     private CreateGroupDTO buildCreateGroupDTO(UserEntity user) {
@@ -238,6 +244,16 @@ public class UserServiceImplTest {
                 .userId("userId")
                 .password("password")
                 .userType("teacher")
+                .name("name")
+                .build();
+        return userRegisterDTO;
+    }
+
+    private UserRegisterDTO buildUserRegisterDTO(String userId, String userType) {
+        UserRegisterDTO userRegisterDTO = UserRegisterDTO.builder()
+                .userId(userId)
+                .password("password")
+                .userType(userType)
                 .name("name")
                 .build();
         return userRegisterDTO;
