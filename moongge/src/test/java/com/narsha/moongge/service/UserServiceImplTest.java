@@ -14,8 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @Transactional
@@ -45,6 +44,26 @@ public class UserServiceImplTest {
         assertEquals(userRegisterDTO.getPassword(), user.getPassword());
         assertEquals(userRegisterDTO.getUserType(), user.getUserType());
         assertEquals(userRegisterDTO.getName(), user.getUserName());
+    }
+
+    @Test
+    void 중복된_유저_인지_확인하기() {
+
+        UserRegisterDTO userRegisterDTO = buildUserRegisterDTO();
+        userService.register(userRegisterDTO);
+
+        Boolean checkUserId = userService.checkUserId(userRegisterDTO.getUserId());
+        assertFalse(checkUserId);
+    }
+
+    @Test
+    void 중복된_유저_아닌_경우_확인하기() {
+
+        UserRegisterDTO userRegisterDTO = buildUserRegisterDTO();
+        userService.register(userRegisterDTO);
+
+        Boolean checkUserId = userService.checkUserId("newUserId");
+        assertTrue(checkUserId);
     }
 
     @Test
