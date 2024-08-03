@@ -1,16 +1,10 @@
 package com.narsha.moongge.service;
 
-import com.narsha.moongge.base.dto.user.UpdateUserProfileDTO;
-import com.narsha.moongge.base.dto.user.UserDTO;
-import com.narsha.moongge.base.dto.user.UserLoginDTO;
-import com.narsha.moongge.base.dto.user.UserRegisterDTO;
+import com.narsha.moongge.base.dto.user.*;
 import com.narsha.moongge.base.projection.user.GetUser;
-import com.narsha.moongge.base.projection.user.GetUserProfile;
 import com.narsha.moongge.entity.UserEntity;
-import com.narsha.moongge.base.dto.group.JoinGroupDTO;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface UserService {
     UserDTO register(UserRegisterDTO userRegisterDTO);
@@ -18,7 +12,7 @@ public interface UserService {
     UserDTO login(UserLoginDTO userLoginDTO);
     UserEntity updateProfile(UpdateUserProfileDTO updateUserProfileDTO);
 
-    Optional<UserEntity> getProfile(String userId);
+    UserProfileDTO getProfile(String userId);
 
     String getBadgeList(String userId);
 

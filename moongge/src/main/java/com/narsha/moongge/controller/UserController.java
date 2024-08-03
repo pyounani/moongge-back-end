@@ -4,16 +4,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.JsonObject;
 import com.narsha.moongge.base.code.ResponseCode;
 import com.narsha.moongge.base.dto.response.ResponseDTO;
-import com.narsha.moongge.base.dto.user.UpdateUserProfileDTO;
-import com.narsha.moongge.base.dto.user.UserDTO;
-import com.narsha.moongge.base.dto.user.UserLoginDTO;
-import com.narsha.moongge.base.dto.user.UserRegisterDTO;
+import com.narsha.moongge.base.dto.user.*;
 import com.narsha.moongge.base.projection.user.GetUser;
 import com.narsha.moongge.entity.UserEntity;
 import com.narsha.moongge.service.AmazonS3Service;
 import com.narsha.moongge.service.UserService;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotEmpty;
 import lombok.RequiredArgsConstructor;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.JSONObject;
@@ -24,7 +20,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Optional;
 
 @RestController // JSON 형태의 결과값 반환
 @RequiredArgsConstructor
@@ -74,7 +69,6 @@ public class UserController {
     @PutMapping("/update")
     public ResponseEntity<ResponseDTO> updateProfile(@RequestParam(value="image", required = false) MultipartFile profileImage,
                                 @RequestParam(value="content") String updateUserProfileDTO) throws IOException, ParseException, ParseException {
-        // System.out.println(profileImage);
 
         // mapper
         ObjectMapper mapper = new ObjectMapper();
@@ -105,10 +99,12 @@ public class UserController {
                 .body(new ResponseDTO(ResponseCode.SUCCESS_UPDATE_PROFILE, res));
     }
 
-
-    @GetMapping("/detail")
-    public ResponseEntity<ResponseDTO> getProfile(@RequestParam(value = "userId")String userId){
-        Optional<UserEntity> res = userService.getProfile(userId);
+    /**
+     * 유저 정보 조회하기 API
+     */
+    @GetMapping("/{userId}")
+    public ResponseEntity<ResponseDTO> getProfile(@PathVariable String userId) {
+        UserProfileDTO res = userService.getProfile(userId);
 
         return ResponseEntity
                 .status(ResponseCode.SUCCESS_GET_PROFILE.getStatus().value())

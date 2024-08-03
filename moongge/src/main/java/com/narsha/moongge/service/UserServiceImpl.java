@@ -2,14 +2,9 @@ package com.narsha.moongge.service;
 
 
 import com.narsha.moongge.base.code.ErrorCode;
-import com.narsha.moongge.base.dto.group.JoinGroupDTO;
-import com.narsha.moongge.base.dto.user.UpdateUserProfileDTO;
-import com.narsha.moongge.base.dto.user.UserDTO;
-import com.narsha.moongge.base.dto.user.UserLoginDTO;
-import com.narsha.moongge.base.dto.user.UserRegisterDTO;
+import com.narsha.moongge.base.dto.user.*;
 import com.narsha.moongge.base.exception.*;
 import com.narsha.moongge.base.projection.user.GetUser;
-import com.narsha.moongge.base.projection.user.GetUserProfile;
 import com.narsha.moongge.entity.UserEntity;
 import com.narsha.moongge.entity.GroupEntity;
 import com.narsha.moongge.repository.GroupRepository;
@@ -20,12 +15,12 @@ import org.apache.tomcat.util.json.ParseException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor // 생성자 작성 생략
+@Transactional
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
@@ -60,6 +55,7 @@ public class UserServiceImpl implements UserService {
      * 아이디 중복 확인하기
      */
     @Override
+    @Transactional(readOnly = true)
     public Boolean checkUserId(String userId) {
         Optional<UserEntity> user = userRepository.findByUserId(userId);
 
@@ -103,20 +99,22 @@ public class UserServiceImpl implements UserService {
         return userRepository.save(profile.get());
     }
 
-    // 프로필 가져오기
+    /**
+     * 유저 정보 가져오기
+     */
     @Override
-    public Optional<UserEntity> getProfile(String userId) {
-        Optional<UserEntity> profile = userRepository.findById(userId);
+    @Transactional(readOnly = true)
+    public UserProfileDTO getProfile(String userId) {
 
-        // 프로필이 존재하지 않는 경우(잘못된 userId 입력)
-        if(!profile.isPresent())
-            throw new ProfileNotFoundException(ErrorCode.PROFILE_NOT_FOUND);
+        UserEntity user = userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException(ErrorCode.USER_NOT_FOUND));
 
-        return profile;
+        return UserProfileDTO.mapToUserProfileDTO(user);
     }
 
     //뱃지 리스트 가져오기
     @Override
+    @Transactional(readOnly = true)
     public String getBadgeList(String userId) {
         Optional<UserEntity> profile = userRepository.findByUserId(userId);
 
@@ -159,6 +157,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<GetUser> getStudentList(String GroupId, String userId) {
         Optional<GroupEntity> group = groupRepository.findByGroupCode(GroupId);
         if(!group.isPresent())
@@ -172,56 +171,5 @@ public class UserServiceImpl implements UserService {
         List<GetUser> studentList = userRepository.findByGroupAndUserIdNotLike(group.get(), userId);
 
         return studentList;
-    }
-
-    private GetUserProfile EntityToProjectionUser(UserEntity findUser){
-        GetUserProfile userProfile = new GetUserProfile() {
-            @Override
-            public String getUserId() {
-                return findUser.getUserId();
-            }
-
-            @Override
-            public GroupEntity getGroupCode() {
-                return findUser.getGroup();
-            }
-
-            @Override
-            public String getUserName() {
-                return findUser.getUserName();
-            }
-
-            @Override
-            public String getUserType(){
-                return findUser.getUserType();
-            }
-
-            @Override
-            public String getNickName() {
-                return  findUser.getNickname();
-            }
-
-            @Override
-            public String getProfileImage() {
-                return  findUser.getProfileImage();
-            }
-
-            @Override
-            public String getBirth() {
-                return  findUser.getBirth();
-            }
-
-            @Override
-            public String getIntro() {
-                return  findUser.getIntro();
-            }
-
-            @Override
-            public String getBadgeList() {
-                return  findUser.getBadgeList();
-            }
-        };
-
-        return userProfile;
     }
 }
