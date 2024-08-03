@@ -178,7 +178,7 @@ class CommentServiceImplTest {
 
         GroupEntity savedGroup = groupRepository.save(group);
 
-        user.setGroup(savedGroup);
+        user.updateGroup(savedGroup);
 
         return savedGroup;
     }

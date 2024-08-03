@@ -1,13 +1,10 @@
 package com.narsha.moongge.service;
 
-import com.narsha.moongge.base.dto.group.CreateGroupDTO;
 import com.narsha.moongge.base.dto.user.UserDTO;
 import com.narsha.moongge.base.dto.user.UserLoginDTO;
-import com.narsha.moongge.base.dto.user.UserProfileDTO;
 import com.narsha.moongge.base.dto.user.UserRegisterDTO;
 import com.narsha.moongge.base.exception.LoginIdNotFoundException;
 import com.narsha.moongge.base.exception.LoginPasswordNotMatchException;
-import com.narsha.moongge.entity.GroupEntity;
 import com.narsha.moongge.entity.UserEntity;
 import com.narsha.moongge.repository.GroupRepository;
 import com.narsha.moongge.repository.UserRepository;
