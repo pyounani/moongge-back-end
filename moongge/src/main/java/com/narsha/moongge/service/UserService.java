@@ -14,11 +14,11 @@ import java.util.Optional;
 
 public interface UserService {
     UserDTO register(UserRegisterDTO userRegisterDTO);
+    Boolean checkUserId(String userId);
     GetUserProfile login(UserLoginDTO userLoginDTO);
 
     UserEntity joinUser(JoinGroupDTO joinGroupDTO);
 
-    Boolean checkUserId(String userId);
 
     UserEntity updateProfile(UpdateUserProfileDTO updateUserProfileDTO);
 

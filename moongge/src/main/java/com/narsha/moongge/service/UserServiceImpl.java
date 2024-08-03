@@ -56,6 +56,17 @@ public class UserServiceImpl implements UserService {
         return UserDTO.mapToUserDTO(savedUser);
     }
 
+    /**
+     * 아이디 중복 확인하기
+     */
+    @Override
+    public Boolean checkUserId(String userId) {
+        Optional<UserEntity> user = userRepository.findByUserId(userId);
+
+        if (user.isPresent()) return false;
+        return true; // 사용 가능하면 true
+    }
+
     // 로그인
     @Override
     public GetUserProfile login(UserLoginDTO userLoginDTO) {
@@ -101,13 +112,7 @@ public class UserServiceImpl implements UserService {
         return userRepository.save(user.get());
     }
 
-    @Override
-    public Boolean checkUserId(String userId) {
-        Optional<UserEntity> user = userRepository.findByUserId(userId);
 
-        if (user.isPresent()) throw new RegisterException(ErrorCode.DUPLICATE_ID_REQUEST);
-        return true;
-    }
     //
 
     //프로필 수정(프로필 최초 설정)

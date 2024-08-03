@@ -57,13 +57,16 @@ public class UserController {
 
     }
 
-    @GetMapping("/check-userId")
-    public ResponseEntity<ResponseDTO> checkUserId(@RequestParam(value="userId")String userId){
+    /**
+     * 아이디 중복여부 API
+     */
+    @GetMapping("/{userId}/check-userId")
+    public ResponseEntity<ResponseDTO> checkUserId(@PathVariable String userId) {
         Boolean res = userService.checkUserId(userId);
 
         return ResponseEntity
-                .status(ResponseCode.SUCCESS_LOGIN.getStatus().value())
-                .body(new ResponseDTO(ResponseCode.SUCCESS_UNIQUE_ID, res));
+                .status(ResponseCode.SUCCESS_CHECK_UNIQUE_ID.getStatus().value())
+                .body(new ResponseDTO(ResponseCode.SUCCESS_CHECK_UNIQUE_ID, res));
     }
 
     @PostMapping("/join")
