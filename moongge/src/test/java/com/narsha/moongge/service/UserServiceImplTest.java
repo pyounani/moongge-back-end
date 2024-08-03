@@ -1,17 +1,19 @@
 package com.narsha.moongge.service;
 
-import com.narsha.moongge.base.dto.user.UserDTO;
-import com.narsha.moongge.base.dto.user.UserLoginDTO;
-import com.narsha.moongge.base.dto.user.UserRegisterDTO;
+import com.narsha.moongge.base.dto.user.*;
 import com.narsha.moongge.base.exception.LoginIdNotFoundException;
 import com.narsha.moongge.base.exception.LoginPasswordNotMatchException;
 import com.narsha.moongge.entity.UserEntity;
 import com.narsha.moongge.repository.GroupRepository;
 import com.narsha.moongge.repository.UserRepository;
+import org.junit.After;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Optional;
 
@@ -29,6 +31,17 @@ public class UserServiceImplTest {
     private GroupRepository groupRepository;
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private AmazonS3Service amazonS3Service;
+
+    private String uploadedFile;
+
+    @AfterEach
+    void deleteFileInS3() {
+        if (uploadedFile != null) {
+            amazonS3Service.deleteS3(uploadedFile);
+        }
+    }
 
     @Test
     void 유저_회원가입() {
@@ -101,6 +114,38 @@ public class UserServiceImplTest {
         // 잘못된 비밀번호로 로그인 시도
         UserLoginDTO userLoginDTO = buildUserLoginDTO(userRegisterDTO, "wrongPassword");
         assertThrows(LoginPasswordNotMatchException.class, () -> userService.login(userLoginDTO));
+    }
+
+    @Test
+    void 유저_정보_업데이트() {
+
+        // 회원가입 진행
+        UserRegisterDTO userRegisterDTO = buildUserRegisterDTO();
+        userService.register(userRegisterDTO);
+
+        MultipartFile multipartFile = createMultipartFile();
+        UpdateUserProfileDTO updateUserProfileDTO = buildUpdateUserProfileDTO(userRegisterDTO);
+
+        UserProfileDTO userProfileDTO = userService.updateProfile(userRegisterDTO.getUserId(), multipartFile, updateUserProfileDTO);
+
+        assertEquals(updateUserProfileDTO.getBirth(), userProfileDTO.getBirth());
+        assertEquals(updateUserProfileDTO.getNikname(), userProfileDTO.getNickname());
+        assertEquals(updateUserProfileDTO.getIntro(), userProfileDTO.getIntro());
+
+        uploadedFile = userProfileDTO.getProfileImage();
+    }
+    
+    private UpdateUserProfileDTO buildUpdateUserProfileDTO(UserRegisterDTO userRegisterDTO) {
+        return UpdateUserProfileDTO.builder()
+                .userId(userRegisterDTO.getUserId())
+                .birth("birth")
+                .nikname("nickname")
+                .intro("intro")
+                .build();
+    }
+
+    private MultipartFile createMultipartFile() {
+        return new MockMultipartFile("file", "testImage.jpg", "image/jpeg", "test image content".getBytes());
     }
 
     private UserLoginDTO buildUserLoginDTO(UserRegisterDTO userRegisterDTO) {
