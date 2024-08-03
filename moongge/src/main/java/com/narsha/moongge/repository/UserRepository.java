@@ -1,6 +1,5 @@
 package com.narsha.moongge.repository;
 
-import com.narsha.moongge.base.projection.user.GetUser;
 import com.narsha.moongge.entity.UserEntity;
 import com.narsha.moongge.entity.GroupEntity;
 import org.springframework.data.jpa.repository.JpaRepository;

@@ -7,7 +7,6 @@ import com.narsha.moongge.base.dto.group.JoinGroupDTO;
 import com.narsha.moongge.base.dto.group.UpdateTimeDTO;
 import com.narsha.moongge.base.dto.user.UserProfileDTO;
 import com.narsha.moongge.base.exception.*;
-import com.narsha.moongge.base.projection.user.GetUser;
 import com.narsha.moongge.entity.*;
 import com.narsha.moongge.repository.*;
 

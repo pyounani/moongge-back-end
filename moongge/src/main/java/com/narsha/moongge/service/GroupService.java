@@ -5,7 +5,6 @@ import com.narsha.moongge.base.dto.group.GroupDTO;
 import com.narsha.moongge.base.dto.group.JoinGroupDTO;
 import com.narsha.moongge.base.dto.group.UpdateTimeDTO;
 import com.narsha.moongge.base.dto.user.UserProfileDTO;
-import com.narsha.moongge.base.projection.user.GetUser;
 
 import java.util.List;
 

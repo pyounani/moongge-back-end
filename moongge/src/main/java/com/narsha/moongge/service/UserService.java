@@ -1,10 +1,7 @@
 package com.narsha.moongge.service;
 
 import com.narsha.moongge.base.dto.user.*;
-import com.narsha.moongge.base.projection.user.GetUser;
 import com.narsha.moongge.entity.UserEntity;
-
-import java.util.List;
 
 public interface UserService {
     UserDTO register(UserRegisterDTO userRegisterDTO);

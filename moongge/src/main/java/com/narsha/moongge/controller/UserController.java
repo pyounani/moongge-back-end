@@ -1,11 +1,9 @@
 package com.narsha.moongge.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.gson.JsonObject;
 import com.narsha.moongge.base.code.ResponseCode;
 import com.narsha.moongge.base.dto.response.ResponseDTO;
 import com.narsha.moongge.base.dto.user.*;
-import com.narsha.moongge.base.projection.user.GetUser;
 import com.narsha.moongge.entity.UserEntity;
 import com.narsha.moongge.service.AmazonS3Service;
 import com.narsha.moongge.service.UserService;
@@ -19,7 +17,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.List;
 
 @RestController // JSON 형태의 결과값 반환
 @RequiredArgsConstructor
