@@ -6,14 +6,13 @@ import com.narsha.moongge.base.code.ResponseCode;
 import com.narsha.moongge.base.dto.group.JoinGroupDTO;
 import com.narsha.moongge.base.dto.response.ResponseDTO;
 import com.narsha.moongge.base.dto.user.UpdateUserProfileDTO;
+import com.narsha.moongge.base.dto.user.UserDTO;
 import com.narsha.moongge.base.dto.user.UserLoginDTO;
 import com.narsha.moongge.base.dto.user.UserRegisterDTO;
-import com.narsha.moongge.base.projection.post.GetOneUserPost;
 import com.narsha.moongge.base.projection.user.GetUser;
 import com.narsha.moongge.base.projection.user.GetUserProfile;
 import com.narsha.moongge.entity.UserEntity;
 import com.narsha.moongge.service.AmazonS3Service;
-import com.narsha.moongge.service.PostService;
 import com.narsha.moongge.service.UserService;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +20,6 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.ParseException;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -30,21 +28,19 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController // JSON 형태의 결과값 반환
-@Controller
 @RequiredArgsConstructor
 @RequestMapping("/api/users")
 public class UserController {
+
     private final UserService userService;
     private final AmazonS3Service amazonS3Service;
 
-    @GetMapping("/")
-    public String welcome(){
-        return "home";
-    }
-
+    /**
+     * 회원가입 API
+     */
     @PostMapping("/register")
     public ResponseEntity<ResponseDTO> register(@RequestBody UserRegisterDTO userRegisterDTO){
-        GetUserProfile res = userService.register(userRegisterDTO);
+        UserDTO res = userService.register(userRegisterDTO);
 
         return ResponseEntity
                 .status(ResponseCode.SUCCESS_REGISTER.getStatus().value())

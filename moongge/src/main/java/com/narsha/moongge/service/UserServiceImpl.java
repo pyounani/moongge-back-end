@@ -4,6 +4,7 @@ package com.narsha.moongge.service;
 import com.narsha.moongge.base.code.ErrorCode;
 import com.narsha.moongge.base.dto.group.JoinGroupDTO;
 import com.narsha.moongge.base.dto.user.UpdateUserProfileDTO;
+import com.narsha.moongge.base.dto.user.UserDTO;
 import com.narsha.moongge.base.dto.user.UserLoginDTO;
 import com.narsha.moongge.base.dto.user.UserRegisterDTO;
 import com.narsha.moongge.base.exception.*;
@@ -31,22 +32,28 @@ public class UserServiceImpl implements UserService {
 
     private final GroupRepository groupRepository;
 
-    // 회원가입
+    /**
+     * 회원가입
+     */
     @Override
-    public GetUserProfile register(UserRegisterDTO userRegisterDTO) {
-        Optional<UserEntity> findUser = userRepository.findByUserId(userRegisterDTO.getUserId());
-        if(findUser.isPresent()){ // 중복된 유저 있을 때
+    public UserDTO register(UserRegisterDTO userRegisterDTO) {
+
+        // 중복된 유저 있을 때
+        Optional<UserEntity> existingUser = userRepository.findByUserId(userRegisterDTO.getUserId());
+        if (existingUser.isPresent()) {
             throw new RegisterException(ErrorCode.DUPLICATE_ID_REQUEST);
-        } else {
-            UserEntity user = UserEntity.builder()
-                    .userId(userRegisterDTO.getUserId())
-                    .userType(userRegisterDTO.getUserType())
-                    .password(userRegisterDTO.getPassword())
-                    .userName(userRegisterDTO.getName())
-                    .build();
-            UserEntity createUser = userRepository.save(user);
-            return EntityToProjectionUser(createUser);
         }
+
+        UserEntity user = UserEntity.builder()
+                .userId(userRegisterDTO.getUserId())
+                .userType(userRegisterDTO.getUserType())
+                .password(userRegisterDTO.getPassword())
+                .userName(userRegisterDTO.getName())
+                .build();
+
+        UserEntity savedUser = userRepository.save(user);
+
+        return UserDTO.mapToUserDTO(savedUser);
     }
 
     // 로그인

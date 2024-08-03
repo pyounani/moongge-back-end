@@ -8,8 +8,8 @@ import lombok.*;
 @Setter
 @Entity
 @Builder // DTO -> Entity
-@AllArgsConstructor
-@NoArgsConstructor
+@AllArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class UserEntity {
     @Id
     @Column(nullable = false, length=100)
