@@ -13,7 +13,6 @@ public interface UserService {
     UserEntity updateProfile(UpdateUserProfileDTO updateUserProfileDTO);
 
     UserProfileDTO getProfile(String userId);
-
     String getBadgeList(String userId);
 
     String updateBadgeList(String userId, Integer achNum);

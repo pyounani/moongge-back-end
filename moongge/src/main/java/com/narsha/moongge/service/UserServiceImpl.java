@@ -112,19 +112,17 @@ public class UserServiceImpl implements UserService {
         return UserProfileDTO.mapToUserProfileDTO(user);
     }
 
-    //뱃지 리스트 가져오기
+    /**
+     * 뱃지 리스트 가져오기
+     */
     @Override
     @Transactional(readOnly = true)
     public String getBadgeList(String userId) {
-        Optional<UserEntity> profile = userRepository.findByUserId(userId);
 
-        // 뱃지리스트(프로필)가 존재하지 않는 경우(잘못된 userId 입력)
-        if(!profile.isPresent())
-            throw new ProfileNotFoundException(ErrorCode.PROFILE_NOT_FOUND);
+        UserEntity user = userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException(ErrorCode.USER_NOT_FOUND));
 
-        String badgeList = profile.get().getBadgeList();
-
-        return badgeList;
+        return user.getBadgeList();
     }
 
     //뱃지 추가

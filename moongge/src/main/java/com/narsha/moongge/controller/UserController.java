@@ -111,8 +111,11 @@ public class UserController {
                 .body(new ResponseDTO(ResponseCode.SUCCESS_GET_PROFILE, res));
     }
 
-    @GetMapping("/badge-list")
-    public ResponseEntity<ResponseDTO> getBadgeList(@RequestParam(value = "userId")String userId){
+    /**
+     * 뱃지 리스트 조회하기 API
+     */
+    @GetMapping("/{userId}/badge-list")
+    public ResponseEntity<ResponseDTO> getBadgeList(@PathVariable String userId) {
         String res = userService.getBadgeList(userId);
 
         return ResponseEntity
