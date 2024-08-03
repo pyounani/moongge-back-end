@@ -146,23 +146,6 @@ public class UserServiceImpl implements UserService {
         return user.getBadgeList();
     }
 
-    @Override
-    @Transactional(readOnly = true)
-    public List<GetUser> getStudentList(String GroupId, String userId) {
-        Optional<GroupEntity> group = groupRepository.findByGroupCode(GroupId);
-        if(!group.isPresent())
-            throw new GroupCodeNotFoundException(ErrorCode.GROUPCODE_NOT_FOUND);
-
-        Optional<UserEntity> profile = userRepository.findByUserId(userId);
-        if(!profile.isPresent())
-            throw new ProfileNotFoundException(ErrorCode.PROFILE_NOT_FOUND);
-
-//        List<GetUser> studentList = userRepository.findByGroupCode(group.get());
-        List<GetUser> studentList = userRepository.findByGroupAndUserIdNotLike(group.get(), userId);
-
-        return studentList;
-    }
-
     /**
      * JSON 문자열을 List<Boolean>로 변환합니다.
      */

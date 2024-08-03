@@ -5,7 +5,9 @@ import com.narsha.moongge.base.dto.group.CreateGroupDTO;
 import com.narsha.moongge.base.dto.group.GroupDTO;
 import com.narsha.moongge.base.dto.group.JoinGroupDTO;
 import com.narsha.moongge.base.dto.group.UpdateTimeDTO;
+import com.narsha.moongge.base.dto.user.UserProfileDTO;
 import com.narsha.moongge.base.exception.*;
+import com.narsha.moongge.base.projection.user.GetUser;
 import com.narsha.moongge.entity.*;
 import com.narsha.moongge.repository.*;
 
@@ -17,6 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -154,6 +157,25 @@ public class GroupServiceImpl implements GroupService{
                 .startTime(findGroup.getStartTime())
                 .endTime(findGroup.getEndTime())
                 .build();
+    }
+
+    /**
+     * 그룹의 유저 목록 가져오기(요청한 유저 제외)
+     */
+    @Override
+    @Transactional(readOnly = true)
+    public List<UserProfileDTO> getStudentList(String groupCode, String userId) {
+        GroupEntity group = groupRepository.findByGroupCode(groupCode)
+                .orElseThrow(() -> new GroupNotFoundException(ErrorCode.GROUP_NOT_FOUND));
+
+        userRepository.findByUserIdAndGroup(userId, group)
+                .orElseThrow(() -> new UserNotFoundException(ErrorCode.USER_NOT_FOUND));
+
+        List<UserEntity> studentList = userRepository.findByGroupAndUserIdNotLike(group, userId);
+
+        return studentList.stream()
+                .map(UserProfileDTO::mapToUserProfileDTO)
+                .collect(Collectors.toList());
     }
 
     // 랜덤 코드 생성

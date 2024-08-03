@@ -135,19 +135,4 @@ public class UserController {
                 .status(ResponseCode.SUCCESS_UPDATE_BADGE_LIST.getStatus().value())
                 .body(new ResponseDTO(ResponseCode.SUCCESS_UPDATE_BADGE_LIST, res));
     }
-
-    @GetMapping("/student-list")
-    public ResponseEntity<ResponseDTO> getStudentList(@RequestParam(value = "groupCode")String groupCode, @RequestParam(value = "userId")String userId){
-        List<GetUser> res = userService.getStudentList(groupCode, userId);
-        JsonObject obj = new JsonObject();
-
-        if(res == null) {
-            obj.addProperty("message", "유저가 없습니다.");
-            //return obj.toString();
-        }
-        return ResponseEntity
-                .status(ResponseCode.SUCCESS_GET_USER_LIST.getStatus().value())
-                .body(new ResponseDTO(ResponseCode.SUCCESS_GET_USER_LIST, res));
-
-    }
 }

@@ -6,15 +6,19 @@ import com.narsha.moongge.base.dto.group.GroupDTO;
 import com.narsha.moongge.base.dto.group.JoinGroupDTO;
 import com.narsha.moongge.base.dto.group.UpdateTimeDTO;
 import com.narsha.moongge.base.dto.response.ResponseDTO;
+import com.narsha.moongge.base.dto.user.UserProfileDTO;
+import com.narsha.moongge.base.projection.user.GetUser;
 import com.narsha.moongge.service.GroupService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api")
+@RequestMapping("/api/groups")
 public class GroupController {
 
     private final GroupService groupService;
@@ -22,7 +26,7 @@ public class GroupController {
     /**
      * 그룹 생성 API
      */
-    @PostMapping("/groups")
+    @PostMapping
     public ResponseEntity<ResponseDTO> createGroup(@Valid @RequestBody CreateGroupDTO createGroupDTO){
         String res = groupService.createGroup(createGroupDTO);
 
@@ -34,7 +38,7 @@ public class GroupController {
     /**
      * 유저가 속해있는 그룹 코드 가져오기 API
      */
-    @GetMapping("/users/{userId}/groups")
+    @GetMapping("/users/{userId}")
     public ResponseEntity<ResponseDTO> getUserGroupCode(@PathVariable String userId) {
         String groupCode = groupService.getUserGroupCode(userId);
 
@@ -46,7 +50,7 @@ public class GroupController {
     /**
      * 그룹 가입하기 API
      */
-    @PostMapping("/groups/join")
+    @PostMapping("/join")
     public ResponseEntity<ResponseDTO> joinGroup(@Valid @RequestBody JoinGroupDTO joinGroupDTO){
         GroupDTO res = groupService.joinGroup(joinGroupDTO);
 
@@ -58,7 +62,7 @@ public class GroupController {
     /**
      * 그룹 삭제하기 API
      */
-    @DeleteMapping("/groups/{groupCode}")
+    @DeleteMapping("/{groupCode}")
     public ResponseEntity<ResponseDTO> deleteGroup(@PathVariable String groupCode) {
         String res = groupService.deleteGroup(groupCode);
 
@@ -70,7 +74,7 @@ public class GroupController {
     /**
      * 그룹 시간 등록(수정)하기 API
      */
-    @PutMapping("/groups/{groupCode}/time")
+    @PutMapping("/{groupCode}/time")
     public ResponseEntity<ResponseDTO> updateTime(@PathVariable String groupCode,
                                                   @Valid @RequestBody UpdateTimeDTO updateTimeDTO){
         UpdateTimeDTO res = groupService.updateTime(groupCode, updateTimeDTO);
@@ -83,13 +87,27 @@ public class GroupController {
     /**
      * 설정한 그룹 시간 불러오기 API
      */
-    @GetMapping("/groups/{groupCode}/time")
+    @GetMapping("/{groupCode}/time")
     public ResponseEntity<ResponseDTO> getTime(@PathVariable String groupCode){
         UpdateTimeDTO res = groupService.getTime(groupCode);
 
         return ResponseEntity
                 .status(ResponseCode.SUCCESS_GET_TIME.getStatus().value())
                 .body(new ResponseDTO(ResponseCode.SUCCESS_GET_TIME, res));
+    }
+
+    /**
+     * 그룹의 유저 목록 가져오기(요청한 유저 제외) API
+     */
+    @GetMapping("/{groupCode}/users/{userId}/list")
+    public ResponseEntity<ResponseDTO> getStudentList(@PathVariable String groupCode,
+                                                      @PathVariable String userId) {
+        List<UserProfileDTO> res = groupService.getStudentList(groupCode, userId);
+
+        return ResponseEntity
+                .status(ResponseCode.SUCCESS_GET_USER_LIST.getStatus().value())
+                .body(new ResponseDTO(ResponseCode.SUCCESS_GET_USER_LIST, res));
+
     }
 
 }
