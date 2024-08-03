@@ -9,6 +9,7 @@ import com.narsha.moongge.entity.UserEntity;
 public interface GroupService {
 
     String createGroup(CreateGroupDTO createGroupDTO);
+    String getUserGroupCode(String userId);
     GroupDTO joinUser(JoinGroupDTO joinGroupDTO);
     String deleteGroup(String groupCode);
     UpdateTimeDTO updateTime(String groupCode, UpdateTimeDTO updateTimeDTO);

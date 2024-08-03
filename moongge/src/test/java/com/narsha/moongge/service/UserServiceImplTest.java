@@ -105,26 +105,6 @@ public class UserServiceImplTest {
         assertThrows(LoginPasswordNotMatchException.class, () -> userService.login(userLoginDTO));
     }
 
-    @Test
-    void 그룹_코드_불러오기() {
-
-        // given
-        UserEntity user = createUser();
-        CreateGroupDTO createGroupDTO = buildCreateGroupDTO(user);
-        String userId = groupService.createGroup(createGroupDTO);
-
-        assertEquals(user.getUserId(), userId);
-
-        Optional<GroupEntity> savedGroup = groupRepository.findByGroupCode(user.getGroup().getGroupCode());
-        assertTrue(savedGroup.isPresent());
-
-        // when
-        String groupCode = userService.getUserGroupCode(userId);
-
-        // then
-        assertEquals(savedGroup.get().getGroupCode(), groupCode);
-    }
-
     private UserLoginDTO buildUserLoginDTO(UserRegisterDTO userRegisterDTO) {
         return UserLoginDTO.builder()
                 .userId(userRegisterDTO.getUserId())
@@ -147,29 +127,5 @@ public class UserServiceImplTest {
                 .name("name")
                 .build();
         return userRegisterDTO;
-    }
-
-    private CreateGroupDTO buildCreateGroupDTO(UserEntity user) {
-        CreateGroupDTO createGroupDTO = new CreateGroupDTO();
-        createGroupDTO.setGroupName("groupName");
-        createGroupDTO.setSchool("school");
-        createGroupDTO.setGrade(3);
-        createGroupDTO.setGroupClass(5);
-        createGroupDTO.setUserId(user.getUserId());
-        return createGroupDTO;
-    }
-
-    private UserEntity createUser() {
-        UserRegisterDTO userRegisterDTO = new UserRegisterDTO();
-        userRegisterDTO.setUserId("userId");
-        userRegisterDTO.setUserType("teacher");
-        userRegisterDTO.setPassword("password");
-        userRegisterDTO.setName("name");
-        userService.register(userRegisterDTO);
-
-        Optional<UserEntity> savedUser = userRepository.findByUserId("userId");
-        assertTrue(savedUser.isPresent());
-        UserEntity user = savedUser.get();
-        return user;
     }
 }

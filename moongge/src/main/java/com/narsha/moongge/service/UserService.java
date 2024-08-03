@@ -25,9 +25,4 @@ public interface UserService {
     String updateBadgeList(String userId, Integer achNum);
 
     List<GetUser> getStudentList(String GroupId, String userId);
-
-    String getUserGroupCode(String userId);
-
-    void saveUserFcmToken(String userId, String fcmToken);
-
 }

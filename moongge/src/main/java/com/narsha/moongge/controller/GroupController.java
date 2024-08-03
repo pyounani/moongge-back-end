@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/groups")
+@RequestMapping("/api")
 public class GroupController {
 
     private final GroupService groupService;
@@ -22,7 +22,7 @@ public class GroupController {
     /**
      * 그룹 생성 API
      */
-    @PostMapping
+    @PostMapping("/groups")
     public ResponseEntity<ResponseDTO> createGroup(@Valid @RequestBody CreateGroupDTO createGroupDTO){
         String res = groupService.createGroup(createGroupDTO);
 
@@ -32,9 +32,21 @@ public class GroupController {
     }
 
     /**
+     * 유저가 속해있는 그룹 코드 가져오기 API
+     */
+    @GetMapping("/users/{userId}/groups")
+    public ResponseEntity<ResponseDTO> getUserGroupCode(@PathVariable String userId) {
+        String groupCode = groupService.getUserGroupCode(userId);
+
+        return ResponseEntity
+                .status(ResponseCode.SUCCESS_GET_GROUP_CODE.getStatus().value())
+                .body(new ResponseDTO(ResponseCode.SUCCESS_GET_GROUP_CODE, groupCode));
+    }
+
+    /**
      * 그룹 가입하기 API
      */
-    @PostMapping("/join")
+    @PostMapping("/groups/join")
     public ResponseEntity<ResponseDTO> joinGroup(@Valid @RequestBody JoinGroupDTO joinGroupDTO){
         GroupDTO res = groupService.joinUser(joinGroupDTO);
 
@@ -46,7 +58,7 @@ public class GroupController {
     /**
      * 그룹 삭제하기 API
      */
-    @DeleteMapping("/{groupCode}")
+    @DeleteMapping("/groups/{groupCode}")
     public ResponseEntity<ResponseDTO> deleteGroup(@PathVariable String groupCode) {
         String res = groupService.deleteGroup(groupCode);
 
@@ -58,7 +70,7 @@ public class GroupController {
     /**
      * 그룹 시간 등록(수정)하기 API
      */
-    @PutMapping("/{groupCode}/time")
+    @PutMapping("/groups/{groupCode}/time")
     public ResponseEntity<ResponseDTO> updateTime(@PathVariable String groupCode,
                                                   @Valid @RequestBody UpdateTimeDTO updateTimeDTO){
         UpdateTimeDTO res = groupService.updateTime(groupCode, updateTimeDTO);
@@ -71,7 +83,7 @@ public class GroupController {
     /**
      * 설정한 그룹 시간 불러오기 API
      */
-    @GetMapping("/{groupCode}/time")
+    @GetMapping("/groups/{groupCode}/time")
     public ResponseEntity<ResponseDTO> getTime(@PathVariable String groupCode){
         UpdateTimeDTO res = groupService.getTime(groupCode);
 

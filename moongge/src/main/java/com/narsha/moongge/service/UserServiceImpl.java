@@ -82,9 +82,6 @@ public class UserServiceImpl implements UserService {
         return UserDTO.mapToUserDTO(findUser);
     }
 
-
-
-
     //
 
     //프로필 수정(프로필 최초 설정)
@@ -175,38 +172,6 @@ public class UserServiceImpl implements UserService {
         List<GetUser> studentList = userRepository.findByGroupAndUserIdNotLike(group.get(), userId);
 
         return studentList;
-    }
-
-    @Override
-    public void saveUserFcmToken(String userId, String fcmToken) {
-        Optional<UserEntity> user = userRepository.findByUserId(userId);
-
-        if(user.isPresent()) {
-           UserEntity userEntity = user.get();
-           userRepository.save(userEntity);
-        }
-     }
-
-    /**
-     * 그룹 코드 가져오기
-     */
-    @Override
-    @Transactional(readOnly=true)
-    public String getUserGroupCode(String userId) {
-
-        UserEntity user = userRepository.findByUserId(userId)
-                .orElseThrow(() -> new LoginIdNotFoundException(ErrorCode.USER_NOT_FOUND));
-
-        GroupEntity group = Optional.ofNullable(user.getGroup())
-                .orElseThrow(() -> new GroupNotFoundException(ErrorCode.GROUP_NOT_FOUND));
-
-        String groupCode = Optional.ofNullable(group.getGroupCode())
-                .orElseThrow(() -> new GroupCodeNotFoundException(ErrorCode.GROUPCODE_NOT_FOUND));
-
-        groupRepository.findByGroupCode(groupCode)
-                .orElseThrow(() -> new GroupNotFoundException(ErrorCode.GROUP_NOT_FOUND));
-
-        return groupCode;
     }
 
     private GetUserProfile EntityToProjectionUser(UserEntity findUser){

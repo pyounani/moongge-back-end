@@ -50,6 +50,26 @@ class GroupServiceImplTest {
     }
 
     @Test
+    void 그룹_코드_불러오기() {
+
+        // given
+        UserEntity user = createUser();
+        CreateGroupDTO createGroupDTO = buildCreateGroupDTO(user);
+        String userId = groupService.createGroup(createGroupDTO);
+
+        assertEquals(user.getUserId(), userId);
+
+        Optional<GroupEntity> savedGroup = groupRepository.findByGroupCode(user.getGroup().getGroupCode());
+        assertTrue(savedGroup.isPresent());
+
+        // when
+        String groupCode = groupService.getUserGroupCode(userId);
+
+        // then
+        assertEquals(savedGroup.get().getGroupCode(), groupCode);
+    }
+
+    @Test
     void 그룹_삭제하기() {
         // given
         UserEntity user = createUser();

@@ -62,6 +62,28 @@ public class GroupServiceImpl implements GroupService{
     }
 
     /**
+     * 그룹 코드 가져오기
+     */
+    @Override
+    @Transactional(readOnly=true)
+    public String getUserGroupCode(String userId) {
+
+        UserEntity user = userRepository.findByUserId(userId)
+                .orElseThrow(() -> new LoginIdNotFoundException(ErrorCode.USER_NOT_FOUND));
+
+        GroupEntity group = Optional.ofNullable(user.getGroup())
+                .orElseThrow(() -> new GroupNotFoundException(ErrorCode.GROUP_NOT_FOUND));
+
+        String groupCode = Optional.ofNullable(group.getGroupCode())
+                .orElseThrow(() -> new GroupCodeNotFoundException(ErrorCode.GROUPCODE_NOT_FOUND));
+
+        groupRepository.findByGroupCode(groupCode)
+                .orElseThrow(() -> new GroupNotFoundException(ErrorCode.GROUP_NOT_FOUND));
+
+        return groupCode;
+    }
+
+    /**
      * 그룹에 가입하기
      */
     @Override

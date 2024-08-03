@@ -147,17 +147,4 @@ public class UserController {
                 .body(new ResponseDTO(ResponseCode.SUCCESS_GET_USER_LIST, res));
 
     }
-
-    /**
-     * 유저가 속해있는 그룹 코드 가져오기 API
-     */
-    @GetMapping("/{userId}/group-code")
-    public ResponseEntity<ResponseDTO> getUserGroupCode(@PathVariable @NotEmpty String userId) {
-        String groupCode = userService.getUserGroupCode(userId);
-
-        return ResponseEntity
-                .status(ResponseCode.SUCCESS_GET_GROUP_CODE.getStatus().value())
-                .body(new ResponseDTO(ResponseCode.SUCCESS_GET_GROUP_CODE, groupCode));
-    }
-
 }
