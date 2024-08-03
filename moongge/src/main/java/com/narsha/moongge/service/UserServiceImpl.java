@@ -12,9 +12,12 @@ import com.narsha.moongge.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.apache.tomcat.util.json.JSONParser;
 import org.apache.tomcat.util.json.ParseException;
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -125,33 +128,22 @@ public class UserServiceImpl implements UserService {
         return user.getBadgeList();
     }
 
-    //뱃지 추가
+    /**
+     * 뱃지 리스트 업데이트
+     */
     @Override
-    public String updateBadgeList(String userId, Integer achNum) {
-        Optional<UserEntity> profile = userRepository.findByUserId(userId);
+    public String updateBadgeList(String userId, Integer achieveNum) {
 
-        if(!profile.isPresent())
-            throw new ProfileNotFoundException(ErrorCode.PROFILE_NOT_FOUND);
+        UserEntity user = userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException(ErrorCode.USER_NOT_FOUND));
 
-        UserEntity userProfile = profile.get();
+        List<Boolean> badgeList = parseBadgeList(user.getBadgeList());
+        updateBadgeListInUser(badgeList, achieveNum);
 
-        // parse object
-        String badgeListStr = userProfile.getBadgeList();
-        JSONParser parser = new JSONParser(badgeListStr);
+        // 뱃지 리스트 업데이트
+        user.updateBadgeList(new JSONArray(badgeList).toString());
 
-        try {
-            // string parse & convert array
-            List<Boolean> badgeList = (List<Boolean>) parser.parse();
-            badgeList.set(achNum - 1, true);
-
-            // update
-            userProfile.setBadgeList(badgeList.toString());
-            userRepository.save(userProfile);
-        } catch (ParseException e) {
-            throw new RuntimeException(e);
-        }
-
-        return userProfile.getBadgeList();
+        return user.getBadgeList();
     }
 
     @Override
@@ -169,5 +161,34 @@ public class UserServiceImpl implements UserService {
         List<GetUser> studentList = userRepository.findByGroupAndUserIdNotLike(group.get(), userId);
 
         return studentList;
+    }
+
+    /**
+     * JSON 문자열을 List<Boolean>로 변환합니다.
+     */
+    private List<Boolean> parseBadgeList(String badgeListStr) {
+        try {
+            JSONArray jsonArray = new JSONArray(badgeListStr);
+            List<Boolean> badgeList = new ArrayList<>();
+
+            for (int i = 0; i < jsonArray.length(); i++) {
+                badgeList.add(jsonArray.getBoolean(i));
+            }
+
+            return badgeList;
+        } catch (JSONException e) {
+            throw new RuntimeException("배지 리스트 JSON 파싱 실패", e);
+        }
+    }
+
+    /**
+     * 지정된 인덱스의 배지 상태를 true로 업데이트합니다.
+     */
+    private void updateBadgeListInUser(List<Boolean> badgeList, Integer achieveNum) {
+        if (achieveNum <= 0 || achieveNum > badgeList.size()) {
+            throw new IllegalArgumentException("유효하지 않은 achieveNum: " + achieveNum);
+        }
+
+        badgeList.set(achieveNum - 1, true);
     }
 }

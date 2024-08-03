@@ -123,9 +123,13 @@ public class UserController {
                 .body(new ResponseDTO(ResponseCode.SUCCESS_GET_BADGE_LIST, res));
     }
 
-    @PutMapping("/check-achieve")
-    public ResponseEntity<ResponseDTO> updateCheckAchieve(@RequestParam(value="userId")String userId, @RequestParam(value="achieveNum")Integer achNum){
-        String res = userService.updateBadgeList(userId, achNum);
+    /**
+     * 특정 업적 달성 API(뱃지 리스트 업데이트 API)
+     */
+    @PutMapping("/{userId}/badge-list/{achieveNum}")
+    public ResponseEntity<ResponseDTO> updateCheckAchieve(@PathVariable String userId,
+                                                          @PathVariable Integer achieveNum) {
+        String res = userService.updateBadgeList(userId, achieveNum);
 
         return ResponseEntity
                 .status(ResponseCode.SUCCESS_UPDATE_BADGE_LIST.getStatus().value())

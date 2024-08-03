@@ -14,8 +14,7 @@ public interface UserService {
 
     UserProfileDTO getProfile(String userId);
     String getBadgeList(String userId);
-
-    String updateBadgeList(String userId, Integer achNum);
+    String updateBadgeList(String userId, Integer achieveNum);
 
     List<GetUser> getStudentList(String GroupId, String userId);
 }
