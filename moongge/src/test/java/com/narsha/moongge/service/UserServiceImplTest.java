@@ -1,6 +1,7 @@
 package com.narsha.moongge.service;
 
 import com.narsha.moongge.base.dto.group.CreateGroupDTO;
+import com.narsha.moongge.base.dto.user.UserDTO;
 import com.narsha.moongge.base.dto.user.UserRegisterDTO;
 import com.narsha.moongge.entity.GroupEntity;
 import com.narsha.moongge.entity.UserEntity;
@@ -30,6 +31,23 @@ public class UserServiceImplTest {
     private UserRepository userRepository;
 
     @Test
+    void 유저_회원가입() {
+
+        UserRegisterDTO userRegisterDTO = buildUserRegisterDTO();
+
+        UserDTO savedUserDTO = userService.register(userRegisterDTO);
+
+        Optional<UserEntity> findUser = userRepository.findByUserId(savedUserDTO.getUserId());
+        assertTrue(findUser.isPresent());
+
+        UserEntity user = findUser.get();
+        assertEquals(userRegisterDTO.getUserId(), user.getUserId());
+        assertEquals(userRegisterDTO.getPassword(), user.getPassword());
+        assertEquals(userRegisterDTO.getUserType(), user.getUserType());
+        assertEquals(userRegisterDTO.getName(), user.getUserName());
+    }
+
+    @Test
     void 그룹_코드_불러오기() {
 
         // given
@@ -47,6 +65,16 @@ public class UserServiceImplTest {
 
         // then
         assertEquals(savedGroup.get().getGroupCode(), groupCode);
+    }
+
+    private UserRegisterDTO buildUserRegisterDTO() {
+        UserRegisterDTO userRegisterDTO = UserRegisterDTO.builder()
+                .userId("userId")
+                .password("password")
+                .userType("teacher")
+                .name("name")
+                .build();
+        return userRegisterDTO;
     }
 
     private CreateGroupDTO buildCreateGroupDTO(UserEntity user) {
