@@ -103,12 +103,12 @@ class CommentRepositoryTest {
 
         GroupEntity savedGroup = groupRepository.save(group);
 
-        user.setGroup(savedGroup);
+        user.updateGroup(savedGroup);
 
         return savedGroup;
     }
 
     private void joinGroup(UserEntity user, GroupEntity group) {
-        user.setGroup(group);
+        user.updateGroup(group);
     }
 }

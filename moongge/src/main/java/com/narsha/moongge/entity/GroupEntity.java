@@ -11,6 +11,8 @@ import java.time.LocalTime;
 @Getter
 @Entity
 @Builder
+@AllArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EntityListeners(AuditingEntityListener.class)
 public class GroupEntity {
     @Id

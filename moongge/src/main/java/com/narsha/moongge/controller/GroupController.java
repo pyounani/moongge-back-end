@@ -2,14 +2,18 @@ package com.narsha.moongge.controller;
 
 import com.narsha.moongge.base.code.ResponseCode;
 import com.narsha.moongge.base.dto.group.CreateGroupDTO;
+import com.narsha.moongge.base.dto.group.GroupDTO;
+import com.narsha.moongge.base.dto.group.JoinGroupDTO;
 import com.narsha.moongge.base.dto.group.UpdateTimeDTO;
 import com.narsha.moongge.base.dto.response.ResponseDTO;
+import com.narsha.moongge.base.dto.user.UserProfileDTO;
 import com.narsha.moongge.service.GroupService;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotEmpty;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -28,6 +32,30 @@ public class GroupController {
         return ResponseEntity
                 .status(ResponseCode.SUCCESS_CREATE_GROUP.getStatus().value())
                 .body(new ResponseDTO(ResponseCode.SUCCESS_CREATE_GROUP, res));
+    }
+
+    /**
+     * 유저가 속해있는 그룹 코드 가져오기 API
+     */
+    @GetMapping("/users/{userId}")
+    public ResponseEntity<ResponseDTO> getUserGroupCode(@PathVariable String userId) {
+        String groupCode = groupService.getUserGroupCode(userId);
+
+        return ResponseEntity
+                .status(ResponseCode.SUCCESS_GET_GROUP_CODE.getStatus().value())
+                .body(new ResponseDTO(ResponseCode.SUCCESS_GET_GROUP_CODE, groupCode));
+    }
+
+    /**
+     * 그룹 가입하기 API
+     */
+    @PostMapping("/join")
+    public ResponseEntity<ResponseDTO> joinGroup(@Valid @RequestBody JoinGroupDTO joinGroupDTO){
+        GroupDTO res = groupService.joinGroup(joinGroupDTO);
+
+        return ResponseEntity
+                .status(ResponseCode.SUCCESS_JOIN_GROUP.getStatus().value())
+                .body(new ResponseDTO(ResponseCode.SUCCESS_JOIN_GROUP, res));
     }
 
     /**
@@ -65,6 +93,20 @@ public class GroupController {
         return ResponseEntity
                 .status(ResponseCode.SUCCESS_GET_TIME.getStatus().value())
                 .body(new ResponseDTO(ResponseCode.SUCCESS_GET_TIME, res));
+    }
+
+    /**
+     * 그룹의 유저 목록 가져오기(요청한 유저 제외) API
+     */
+    @GetMapping("/{groupCode}/users/{userId}/list")
+    public ResponseEntity<ResponseDTO> getStudentList(@PathVariable String groupCode,
+                                                      @PathVariable String userId) {
+        List<UserProfileDTO> res = groupService.getStudentList(groupCode, userId);
+
+        return ResponseEntity
+                .status(ResponseCode.SUCCESS_GET_USER_LIST.getStatus().value())
+                .body(new ResponseDTO(ResponseCode.SUCCESS_GET_USER_LIST, res));
+
     }
 
 }

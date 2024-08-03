@@ -1,6 +1,10 @@
 package com.narsha.moongge.service;
 
+import com.narsha.moongge.base.dto.group.GroupDTO;
+import com.narsha.moongge.base.dto.group.JoinGroupDTO;
 import com.narsha.moongge.base.dto.group.UpdateTimeDTO;
+import com.narsha.moongge.base.dto.user.UserProfileDTO;
+import com.narsha.moongge.base.dto.user.UserRegisterDTO;
 import com.narsha.moongge.entity.GroupEntity;
 import com.narsha.moongge.base.dto.group.CreateGroupDTO;
 import com.narsha.moongge.entity.UserEntity;
@@ -12,6 +16,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -20,6 +25,8 @@ import static org.junit.jupiter.api.Assertions.*;
 @Transactional
 class GroupServiceImplTest {
 
+    @Autowired
+    private UserService userService;
     @Autowired
     private GroupService groupService;
     @Autowired
@@ -30,7 +37,7 @@ class GroupServiceImplTest {
     @Test
     void 그룹_생성하기() {
         // given
-        UserEntity user = createUser();
+        UserEntity user = createUserTeacher();
         CreateGroupDTO createGroupDTO = buildCreateGroupDTO(user);
 
         // when
@@ -50,9 +57,110 @@ class GroupServiceImplTest {
     }
 
     @Test
+    void 그룹_코드_불러오기() {
+
+        // given
+        UserEntity user = createUserTeacher();
+        CreateGroupDTO createGroupDTO = buildCreateGroupDTO(user);
+        String userId = groupService.createGroup(createGroupDTO);
+
+        assertEquals(user.getUserId(), userId);
+
+        Optional<GroupEntity> savedGroup = groupRepository.findByGroupCode(user.getGroup().getGroupCode());
+        assertTrue(savedGroup.isPresent());
+
+        // when
+        String groupCode = groupService.getUserGroupCode(userId);
+
+        // then
+        assertEquals(savedGroup.get().getGroupCode(), groupCode);
+    }
+
+    @Test
+    void 그룹_조인하기() {
+        // 선생님 생성 및 그룹 생성
+        UserEntity teacher = createUserTeacher();
+        CreateGroupDTO createGroupDTO = buildCreateGroupDTO(teacher);
+        String userId = groupService.createGroup(createGroupDTO);
+
+        String groupCode = groupService.getUserGroupCode(userId);
+
+        // 학생 생성
+        UserEntity student = createUserStudent();
+        JoinGroupDTO joinGroupDTO = buildJoinGroupDTO(student, groupCode);
+
+        // 그룹 조인
+        GroupDTO groupDTO = groupService.joinGroup(joinGroupDTO);
+
+        assertEquals(student.getUserId(), groupDTO.getUserId());
+        assertEquals(student.getUserType(), groupDTO.getUserType());
+        assertEquals(student.getUserName(), groupDTO.getUsername());
+
+        assertEquals(student.getGroup().getGroupCode(), groupDTO.getGroupCode());
+        assertEquals(student.getGroup().getGroupName(), groupDTO.getGroupName());
+        assertEquals(student.getGroup().getSchool(), groupDTO.getSchool());
+        assertEquals(student.getGroup().getGrade(), groupDTO.getGrade());
+        assertEquals(student.getGroup().getGroupClass(), groupDTO.getGroupClass());
+    }
+
+    private JoinGroupDTO buildJoinGroupDTO(UserEntity student, String groupCode) {
+        return JoinGroupDTO.builder()
+                .userId(student.getUserId())
+                .groupCode(groupCode)
+                .build();
+    }
+
+    @Test
+    void 그룹내_유저_목록_가져오기() {
+        String teacherId = "teacher";
+        String groupCode = createTeacherAndGroup(teacherId);
+
+        createStudentAndJoinGroup("student1", groupCode);
+        createStudentAndJoinGroup("student2", groupCode);
+        createStudentAndJoinGroup("student3", groupCode);
+
+        List<UserProfileDTO> studentList = groupService.getStudentList(groupCode, teacherId);
+
+        assertEquals(3, studentList.size(), "학생 목록의 크기가 예상과 다릅니다.");
+        // 각 학생이 목록에 포함되어 있는지 확인
+        List<String> studentIds = List.of("student1", "student2", "student3");
+        for (String studentId : studentIds) {
+            boolean studentFound = studentList.stream()
+                    .anyMatch(dto -> dto.getUserId().equals(studentId));
+            assertTrue(studentFound, "학생 ID " + studentId + "가 목록에 없습니다.");
+        }
+    }
+
+    private void createStudentAndJoinGroup(String userId, String groupCode) {
+        UserRegisterDTO userRegisterDTO = buildUserRegisterDTO(userId, "student");
+        userService.register(userRegisterDTO);
+
+        Optional<UserEntity> findUser = userRepository.findByUserId(userRegisterDTO.getUserId());
+        assertTrue(findUser.isPresent());
+        UserEntity user = findUser.get();
+
+        JoinGroupDTO joinGroupDTO = buildJoinGroupDTO(user, groupCode);
+        groupService.joinGroup(joinGroupDTO);
+    }
+
+    private String createTeacherAndGroup(String userId) {
+        UserRegisterDTO userRegisterDTO = buildUserRegisterDTO(userId, "teacher");
+        userService.register(userRegisterDTO);
+
+        Optional<UserEntity> findUser = userRepository.findByUserId(userRegisterDTO.getUserId());
+        assertTrue(findUser.isPresent());
+        UserEntity user = findUser.get();
+
+        CreateGroupDTO createGroupDTO = buildCreateGroupDTO(user);
+        groupService.createGroup(createGroupDTO);
+
+        return user.getGroup().getGroupCode();
+    }
+
+    @Test
     void 그룹_삭제하기() {
         // given
-        UserEntity user = createUser();
+        UserEntity user = createUserTeacher();
         CreateGroupDTO createGroupDTO = buildCreateGroupDTO(user);
         groupService.createGroup(createGroupDTO);
 
@@ -74,7 +182,7 @@ class GroupServiceImplTest {
     @Test
     void 그룹_시간_등록하기() {
         // given
-        UserEntity user = createUser();
+        UserEntity user = createUserTeacher();
         CreateGroupDTO createGroupDTO = buildCreateGroupDTO(user);
         groupService.createGroup(createGroupDTO);
 
@@ -100,7 +208,7 @@ class GroupServiceImplTest {
     @Test
     void 그룹_시간_조회하기() {
         // given
-        UserEntity user = createUser();
+        UserEntity user = createUserTeacher();
         CreateGroupDTO createGroupDTO = buildCreateGroupDTO(user);
         groupService.createGroup(createGroupDTO);
 
@@ -125,6 +233,16 @@ class GroupServiceImplTest {
         assertEquals(groupCode, retrievedTimeDTO.getGroupCode(), "그룹 코드가 일치해야 합니다.");
     }
 
+    private UserRegisterDTO buildUserRegisterDTO(String userId, String userType) {
+        UserRegisterDTO userRegisterDTO = UserRegisterDTO.builder()
+                .userId(userId)
+                .password("password")
+                .userType(userType)
+                .name("name")
+                .build();
+        return userRegisterDTO;
+    }
+
     private CreateGroupDTO buildCreateGroupDTO(UserEntity user) {
         return CreateGroupDTO.builder()
                 .groupName("groupName")
@@ -135,10 +253,21 @@ class GroupServiceImplTest {
                 .build();
     }
 
-    private UserEntity createUser() {
+    private UserEntity createUserTeacher() {
         UserEntity user = UserEntity.builder()
                 .userId("userId")
                 .userType("teacher")
+                .password("password")
+                .userName("name")
+                .build();
+
+        return userRepository.save(user);
+    }
+
+    private UserEntity createUserStudent() {
+        UserEntity user = UserEntity.builder()
+                .userId("studentId")
+                .userType("student")
                 .password("password")
                 .userName("name")
                 .build();

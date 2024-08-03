@@ -310,7 +310,7 @@ class LikeServiceImplTest {
     }
 
     private void joinGroup(UserEntity user, GroupEntity group) {
-        user.setGroup(group);
+        user.updateGroup(group);
     }
 
     private PostEntity createPost(UserEntity user, GroupEntity group) {
@@ -345,7 +345,7 @@ class LikeServiceImplTest {
 
         GroupEntity savedGroup = groupRepository.save(group);
 
-        user.setGroup(savedGroup);
+        user.updateGroup(savedGroup);
 
         return savedGroup;
     }

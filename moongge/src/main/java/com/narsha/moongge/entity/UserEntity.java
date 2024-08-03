@@ -5,11 +5,10 @@ import lombok.*;
 
 
 @Getter
-@Setter
 @Entity
 @Builder // DTO -> Entity
-@AllArgsConstructor
-@NoArgsConstructor
+@AllArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class UserEntity {
     @Id
     @Column(nullable = false, length=100)
@@ -66,5 +65,12 @@ public class UserEntity {
 
     public void clearGroup() {
         this.group = null;
+    }
+
+    public void updateProfile(String birth, String nickname, String intro, String profileImage) {
+        this.birth = birth;
+        this.nickname = nickname;
+        this.intro = intro;
+        this.profileImage = profileImage;
     }
 }

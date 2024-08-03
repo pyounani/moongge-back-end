@@ -10,6 +10,8 @@ import java.time.LocalDateTime;
 @Getter
 @Entity
 @Builder
+@AllArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EntityListeners(AuditingEntityListener.class)
 @Table(name = "likeentity", uniqueConstraints = {@UniqueConstraint(columnNames = {"writer", "post_id"})})
 public class LikeEntity {
