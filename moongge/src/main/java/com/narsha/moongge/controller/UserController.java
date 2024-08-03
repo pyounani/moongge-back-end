@@ -65,7 +65,7 @@ public class UserController {
      */
     @PostMapping("/login")
     public ResponseEntity<ResponseDTO> login(@Valid @RequestBody UserLoginDTO userLoginDTO){
-        GetUserProfile res = userService.login(userLoginDTO);
+        UserDTO res = userService.login(userLoginDTO);
 
         return ResponseEntity
                 .status(ResponseCode.SUCCESS_LOGIN.getStatus().value())

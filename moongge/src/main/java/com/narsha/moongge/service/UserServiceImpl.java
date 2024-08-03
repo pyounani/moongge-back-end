@@ -67,20 +67,19 @@ public class UserServiceImpl implements UserService {
         return true; // 사용 가능하면 true
     }
 
-    // 로그인
+    /**
+     * 로그인
+     */
     @Override
-    public GetUserProfile login(UserLoginDTO userLoginDTO) {
-        Optional<UserEntity> findUser = userRepository.findByUserId(userLoginDTO.userId);
+    public UserDTO login(UserLoginDTO userLoginDTO) {
+        UserEntity findUser = userRepository.findByUserId(userLoginDTO.userId)
+                .orElseThrow(() -> new LoginIdNotFoundException(ErrorCode.USERID_NOT_FOUND));
 
-        // 아이디가 존재하는지 확인
-        if(!findUser.isPresent()) throw new LoginIdNotFoundException(ErrorCode.USERID_NOT_FOUND);
         // 비밀번호가 같은지 확인
-        else if(!findUser.get().getPassword().equals(userLoginDTO.password)) throw new LoginPasswordNotMatchException(ErrorCode.PASSWORD_NOT_MATCH);
+        if(!findUser.getPassword().equals(userLoginDTO.password))
+            throw new LoginPasswordNotMatchException(ErrorCode.PASSWORD_NOT_MATCH);
 
-        // 아이디, 비밀번호가 일치
-        GetUserProfile userProfile = EntityToProjectionUser(findUser.get());
-
-        return userProfile;
+        return UserDTO.mapToUserDTO(findUser);
     }
 
     @Override

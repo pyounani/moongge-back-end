@@ -15,7 +15,7 @@ import java.util.Optional;
 public interface UserService {
     UserDTO register(UserRegisterDTO userRegisterDTO);
     Boolean checkUserId(String userId);
-    GetUserProfile login(UserLoginDTO userLoginDTO);
+    UserDTO login(UserLoginDTO userLoginDTO);
 
     UserEntity joinUser(JoinGroupDTO joinGroupDTO);
 
