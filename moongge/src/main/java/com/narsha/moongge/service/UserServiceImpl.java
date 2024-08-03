@@ -5,13 +5,13 @@ import com.narsha.moongge.base.code.ErrorCode;
 import com.narsha.moongge.base.dto.user.*;
 import com.narsha.moongge.base.exception.*;
 import com.narsha.moongge.entity.UserEntity;
-import com.narsha.moongge.repository.GroupRepository;
 import com.narsha.moongge.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,7 +24,7 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
 
-    private final GroupRepository groupRepository;
+    private final AmazonS3Service amazonS3Service;
 
     /**
      * 회원가입
@@ -77,25 +77,25 @@ public class UserServiceImpl implements UserService {
         return UserDTO.mapToUserDTO(findUser);
     }
 
-    //
-
-    //프로필 수정(프로필 최초 설정)
+    /**
+     * 유저 정보 업데이트
+     */
     @Override
-    public UserEntity updateProfile(UpdateUserProfileDTO updateUserProfileDTO) {
+    public UserProfileDTO updateProfile(String userId, MultipartFile multipartFile, UpdateUserProfileDTO updateUserProfileDTO) {
 
-        // 특정 프로필 객체 업데이트
-        Optional<UserEntity> profile = userRepository.findByUserId(updateUserProfileDTO.getUserId());
+        UserEntity user = userRepository.findByUserId(userId)
+                .orElseThrow(() -> new UserNotFoundException(ErrorCode.USER_NOT_FOUND));
 
-        if(!profile.isPresent())
-            throw new ProfileNotFoundException(ErrorCode.PROFILE_NOT_FOUND);
+        // S3에 업로드
+        String imageUrl = amazonS3Service.uploadFileToS3(multipartFile, "users/profileImages");
 
-        if(updateUserProfileDTO.getProfileImage() != null)
-            profile.get().setProfileImage(updateUserProfileDTO.getProfileImage());
-        profile.get().setBirth(updateUserProfileDTO.getBirth());
-        profile.get().setIntro(updateUserProfileDTO.getIntro());
-        profile.get().setNickname(updateUserProfileDTO.getNikname());
+        // 유저 정보 업데이트
+        user.updateProfile(updateUserProfileDTO.getBirth(),
+                updateUserProfileDTO.getNikname(),
+                updateUserProfileDTO.getIntro(),
+                imageUrl);
 
-        return userRepository.save(profile.get());
+        return UserProfileDTO.mapToUserProfileDTO(user);
     }
 
     /**

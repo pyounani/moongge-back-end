@@ -1,22 +1,15 @@
 package com.narsha.moongge.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.narsha.moongge.base.code.ResponseCode;
 import com.narsha.moongge.base.dto.response.ResponseDTO;
 import com.narsha.moongge.base.dto.user.*;
-import com.narsha.moongge.entity.UserEntity;
 import com.narsha.moongge.service.AmazonS3Service;
 import com.narsha.moongge.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.ParseException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.io.IOException;
 
 @RestController // JSON 형태의 결과값 반환
 @RequiredArgsConstructor
@@ -63,33 +56,14 @@ public class UserController {
 
     }
 
-    @PutMapping("/update")
-    public ResponseEntity<ResponseDTO> updateProfile(@RequestParam(value="image", required = false) MultipartFile profileImage,
-                                @RequestParam(value="content") String updateUserProfileDTO) throws IOException, ParseException, ParseException {
-
-        // mapper
-        ObjectMapper mapper = new ObjectMapper();
-        UpdateUserProfileDTO mapperUpdateUserProfileDTO = mapper.readValue(updateUserProfileDTO, UpdateUserProfileDTO.class);
-
-        // 이미지 등록
-        if (profileImage != null && profileImage.getResource().contentLength() != 0){
-            // parse
-            JSONParser parser = new JSONParser();
-            JSONObject object = (JSONObject) parser.parse(updateUserProfileDTO);
-            String userId = object.get("userId").toString();
-
-            // 예전 유저의 프로필 이미지 삭제
-            amazonS3Service.deleteS3(userId);
-
-            // 이미지 업로드
-            String uploadFileUrl = amazonS3Service.uploadFileToS3(profileImage, "");
-
-            // updateUserProfileDTO 객체에 프로필 정보 설정
-            mapperUpdateUserProfileDTO.setProfileImage(uploadFileUrl);
-        }
-
-        // 정보 업데이트
-        UserEntity res = userService.updateProfile(mapperUpdateUserProfileDTO);
+    /**
+     * 유저 정보 업데이트 API
+     */
+    @PutMapping("/{userId}/update")
+    public ResponseEntity<ResponseDTO> updateProfile(@PathVariable String userId,
+                                                     @RequestParam("image") MultipartFile multipartFile,
+                                                     @RequestPart(value="content") UpdateUserProfileDTO updateUserProfileDTO) {
+        UserProfileDTO res = userService.updateProfile(userId, multipartFile, updateUserProfileDTO);
 
         return ResponseEntity
                 .status(ResponseCode.SUCCESS_UPDATE_PROFILE.getStatus().value())

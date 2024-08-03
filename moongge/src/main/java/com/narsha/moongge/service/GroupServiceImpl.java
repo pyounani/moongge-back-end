@@ -98,7 +98,7 @@ public class GroupServiceImpl implements GroupService{
                 .orElseThrow(() -> new UserNotFoundException(ErrorCode.USER_NOT_FOUND));
 
         // 그룹에 조인
-        user.setGroup(group);
+        user.updateGroup(group);
 
         // badgeList 생성
         initialBadgeList(user);

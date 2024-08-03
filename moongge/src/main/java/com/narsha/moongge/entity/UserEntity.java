@@ -5,7 +5,6 @@ import lombok.*;
 
 
 @Getter
-@Setter
 @Entity
 @Builder // DTO -> Entity
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
@@ -66,5 +65,12 @@ public class UserEntity {
 
     public void clearGroup() {
         this.group = null;
+    }
+
+    public void updateProfile(String birth, String nickname, String intro, String profileImage) {
+        this.birth = birth;
+        this.nickname = nickname;
+        this.intro = intro;
+        this.profileImage = profileImage;
     }
 }
