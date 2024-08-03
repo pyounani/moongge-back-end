@@ -1,12 +1,13 @@
 package com.narsha.moongge.service;
 
+import com.narsha.moongge.base.dto.group.CreateGroupDTO;
 import com.narsha.moongge.base.dto.user.*;
 import com.narsha.moongge.base.exception.LoginIdNotFoundException;
 import com.narsha.moongge.base.exception.LoginPasswordNotMatchException;
+import com.narsha.moongge.entity.GroupEntity;
 import com.narsha.moongge.entity.UserEntity;
 import com.narsha.moongge.repository.GroupRepository;
 import com.narsha.moongge.repository.UserRepository;
-import org.junit.After;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -159,6 +160,50 @@ public class UserServiceImplTest {
         assertEquals(savedUserProfileDTO.getIntro(), findUserProfileDTO.getIntro());
 
         uploadedFile = savedUserProfileDTO.getProfileImage();
+    }
+
+    @Test
+    void 뱃지_리스트_업데이트() {
+        // 회원가입 진행
+        UserRegisterDTO userRegisterDTO = buildUserRegisterDTO();
+        userService.register(userRegisterDTO);
+
+        Optional<UserEntity> findUser = userRepository.findByUserId(userRegisterDTO.getUserId());
+        assertTrue(findUser.isPresent());
+        UserEntity user = findUser.get();
+
+        CreateGroupDTO createGroupDTO = buildCreateGroupDTO(user);
+        groupService.createGroup(createGroupDTO);
+
+        // when
+        String updateBadgeList = userService.updateBadgeList(user.getUserId(), 1);
+        assertEquals(user.getBadgeList(), updateBadgeList);
+    }
+
+    private GroupEntity createGroup(UserEntity user) {
+        GroupEntity group = GroupEntity.builder()
+                .groupCode("groupCode")
+                .groupName("groupName")
+                .school("school")
+                .grade(3)
+                .groupClass(5)
+                .build();
+
+        GroupEntity savedGroup = groupRepository.save(group);
+
+        user.updateGroup(savedGroup);
+
+        return savedGroup;
+    }
+
+    private CreateGroupDTO buildCreateGroupDTO(UserEntity user) {
+        return CreateGroupDTO.builder()
+                .groupName("groupName")
+                .school("school")
+                .grade(3)
+                .groupClass(5)
+                .userId(user.getUserId())
+                .build();
     }
 
     private UpdateUserProfileDTO buildUpdateUserProfileDTO(UserRegisterDTO userRegisterDTO) {
