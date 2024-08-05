@@ -15,7 +15,7 @@ public class UserEntity {
     @JoinColumn(name = "user_id")
     private String userId; // 유저 id
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "group_code")
     private GroupEntity group;
 

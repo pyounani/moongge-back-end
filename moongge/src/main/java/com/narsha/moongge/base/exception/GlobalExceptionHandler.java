@@ -89,15 +89,6 @@ public class GlobalExceptionHandler {
                 .body(new ErrorResponseDTO(ErrorCode.GROUP_NOT_FOUND));
     }
 
-    // 그룹: 모든 그룹을 삭제하지 못했을 때
-    @ExceptionHandler(DeleteFailedEntityRelatedGroupCodeException.class)
-    protected ResponseEntity<ErrorResponseDTO> handleDeleteFailedEntityRelatedGroupCodeException(final DeleteFailedEntityRelatedGroupCodeException e) {
-        log.error("DeleteFailedEntityRelatedGroupCodeException : {}", e.getMessage());
-        return ResponseEntity
-                .status(ErrorCode.DELETE_FAILED_ENTITY_RELATED_GROUPCODE.getStatus().value())
-                .body(new ErrorResponseDTO(ErrorCode.DELETE_FAILED_ENTITY_RELATED_GROUPCODE));
-    }
-
     @ExceptionHandler(StudentGroupCreationException.class)
     protected ResponseEntity<ErrorResponseDTO> handleStudentGroupCreationException(final StudentGroupCreationException e) {
         log.error("StudentGroupCreationException : {}", e.getMessage());
@@ -149,22 +140,6 @@ public class GlobalExceptionHandler {
         return ResponseEntity
                 .status(ErrorCode.POST_NOT_FOUND.getStatus().value())
                 .body(new ErrorResponseDTO(ErrorCode.POST_NOT_FOUND));
-    }
-
-    @ExceptionHandler(ProfileNotFoundException.class)
-    protected ResponseEntity<ErrorResponseDTO> handleProfileNotFoundException(final ProfileNotFoundException e) {
-        log.error("ProfileNotFoundException : { }", e.getMessage());
-        return ResponseEntity
-                .status(ErrorCode.PROFILE_NOT_FOUND.getStatus().value())
-                .body(new ErrorResponseDTO(ErrorCode.PROFILE_NOT_FOUND));
-    }
-
-    @ExceptionHandler(UserIdNotFoundException.class)
-    protected ResponseEntity<ErrorResponseDTO> handleUserIdNotFoundException(final UserIdNotFoundException e) {
-        log.error("UserIdNotFoundException : {}", e.getMessage());
-        return ResponseEntity
-                .status(ErrorCode.USER_NOT_FOUND.getStatus().value())
-                .body(new ErrorResponseDTO(ErrorCode.USER_NOT_FOUND));
     }
 
     @ExceptionHandler(NoticeNotFoundException.class)

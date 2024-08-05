@@ -19,11 +19,11 @@ public class CommentEntity {
     @JoinColumn(name = "comment_id")
     private Integer commentId; // 댓글 id
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "group_code")
     private GroupEntity group;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "writer")
     private UserEntity user; // 유저 id
 
@@ -35,7 +35,7 @@ public class CommentEntity {
     @JoinColumn(name = "create_at")
     private LocalDateTime createAt; // 생성일
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "post_id")
     private PostEntity post; // 포스트
  }

@@ -25,15 +25,15 @@ public class LikeEntity {
     @JoinColumn(name = "create_at")
     private LocalDateTime createAt; // 생성일
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "group_code")
     private GroupEntity group; // 좋아요를 누른 유저의 그룹
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "writer")
     private UserEntity user;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "post_id")
     private PostEntity post; // 포스트 id
 }

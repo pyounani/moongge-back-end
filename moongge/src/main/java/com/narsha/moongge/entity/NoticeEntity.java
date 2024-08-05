@@ -20,11 +20,11 @@ public class NoticeEntity {
     @JoinColumn(name = "notice_id")
     private Integer noticeId; // 공지 id
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "group_code")
     private GroupEntity group; // 그룹 code
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "writer")
     private UserEntity user; // 작성자
 

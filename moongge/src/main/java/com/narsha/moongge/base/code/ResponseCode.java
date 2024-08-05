@@ -12,7 +12,6 @@ public enum ResponseCode {
     SUCCESS_LOGIN(HttpStatus.OK, "로그인을 성공했습니다."),
 
     SUCCESS_CHECK_UNIQUE_ID(HttpStatus.OK, "중복된 아이디가 있는지 확인 완료했습니다."),
-//    SUCCESS_FRIENDS_LIST(HttpStatus.OK, "그룹 사용자 목록 가져오기 성공"),
 
     SUCCESS_JOIN_GROUP(HttpStatus.OK, "그룹에 가입되었습니다."),
 
@@ -61,9 +60,6 @@ public enum ResponseCode {
     SUCCESS_GET_TIME(HttpStatus.OK, "앱 사용시간 불러오기 성공"),
     SUCCESS_GET_ALARM_LIST(HttpStatus.OK, "알람 목록을 성공적으로 가져왔습니다."),
     SUCCESS_DELETE_ALARM(HttpStatus.OK, "알람을 성공적으로 삭제했습니다."),
-
-    SUCCESS_SAVE_FCM_TOKEN(HttpStatus.OK, "Fcm 토큰을 성공적으로 가져왔습니다."),
-
     ;
 
     private final HttpStatus status;
