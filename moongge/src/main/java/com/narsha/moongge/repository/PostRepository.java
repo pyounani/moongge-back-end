@@ -18,6 +18,6 @@ public interface PostRepository extends JpaRepository<PostEntity, Integer> {
     Optional<PostEntity> findByPostIdAndGroup(Integer postId, GroupEntity group);
     Optional<PostEntity> findByPostId(Integer postId);
     List<PostEntity> findByGroupAndCreateAtBetweenOrderByCreateAtDesc(GroupEntity group, LocalDateTime startTime, LocalDateTime endTime);
-    @Query("SELECT p FROM PostEntity p JOIN FETCH p.user JOIN FETCH p.group WHERE p.group = :group AND p.createAt BETWEEN :startTime AND :endTime")
+    @Query("SELECT p FROM PostEntity p JOIN FETCH p.user JOIN FETCH p.group WHERE p.group = :group AND p.createAt BETWEEN :startTime AND :endTime ORDER BY p.createAt DESC")
     List<PostEntity> findPostsWithUserAndGroup(@Param("group") GroupEntity group, @Param("startTime") LocalDateTime startTime, @Param("endTime") LocalDateTime endTime);
 }
