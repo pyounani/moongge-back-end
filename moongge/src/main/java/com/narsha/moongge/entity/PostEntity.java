@@ -19,11 +19,11 @@ public class PostEntity {
     @JoinColumn(name = "post_id")
     private Integer postId; // 포스트 id
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "group_code")
     private GroupEntity group; // group code
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "writer")
     private UserEntity user;  // 작성자
 
