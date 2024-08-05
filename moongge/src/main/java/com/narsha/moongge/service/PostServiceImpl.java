@@ -106,7 +106,7 @@ public class PostServiceImpl implements PostService {
         LocalDateTime endTime = LocalDateTime.now();
         LocalDateTime startTime = LocalDateTime.now().minus(24, ChronoUnit.HOURS);
 
-        List<PostEntity> allPosts = postRepository.findByGroupAndCreateAtBetweenOrderByCreateAtDesc(user.getGroup(), startTime, endTime);
+        List<PostEntity> allPosts = postRepository.findPostsWithUserAndGroup(user.getGroup(), startTime, endTime);
 
         // 유저가 좋아요를 누른 포스트 목록 가져오기
         List<LikeEntity> userLikes = likeRepository.findByUser(user);
