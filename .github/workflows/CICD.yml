@@ -25,17 +25,6 @@ jobs:
         run : |
           echo ${{ secrets.APPLICATION_SECRET }} | base64 --decode > ./src/main/resources/application-secret.yml
 
-      - name: Verify application-secret.yml
-        run: |
-          echo "Checking application-secret.yml..."
-          if [ -f ./src/main/resources/application-secret.yml ]; then
-            echo "File exists."
-            cat ./src/main/resources/application-secret.yml
-          else
-            echo "File does not exist."
-            exit 1
-          fi
-
       - name: Build with Gradle
         run: |
           chmod +x ./gradlew
