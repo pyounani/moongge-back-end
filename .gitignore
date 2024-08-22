@@ -39,5 +39,9 @@ out/
 ### application ###
 /src/main/resources/application-secret.yml
 
+### tomcat test ###
+/src/main/java/com/narsha/moongge/tomcat
+/src/test/java/com/narsha/moongge/tomcat
+
 ### firebase ###
 /src/main/resources/firebase/serviceAccountKey.json
