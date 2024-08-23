@@ -2,14 +2,16 @@ package com.narsha.moongge.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.data.domain.Persistable;
 
 
 @Getter
 @Entity
-@Builder // DTO -> Entity
+@Builder
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class UserEntity {
+public class UserEntity implements Persistable<String> {
+
     @Id
     @Column(nullable = false, length=100)
     @JoinColumn(name = "user_id")
@@ -55,6 +57,10 @@ public class UserEntity {
     @JoinColumn(name = "fcm_token")
     private String fcmToken; // FCM 토큰 필드
 
+    @Transient
+    @Builder.Default
+    private boolean isNew = true;
+
     public void updateBadgeList(String badgeList) {
         this.badgeList = badgeList;
     }
@@ -72,5 +78,21 @@ public class UserEntity {
         this.nickname = nickname;
         this.intro = intro;
         this.profileImage = profileImage;
+    }
+
+    @Override
+    public String getId() {
+        return this.userId;
+    }
+
+    @Override
+    public boolean isNew() {
+        return this.isNew;
+    }
+
+    @PostLoad
+    @PrePersist
+    private void markNotNew() {
+        this.isNew = false;
     }
 }
