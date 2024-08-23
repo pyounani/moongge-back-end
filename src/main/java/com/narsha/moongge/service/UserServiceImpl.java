@@ -56,10 +56,7 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional(readOnly = true)
     public Boolean checkUserId(String userId) {
-        Optional<UserEntity> user = userRepository.findByUserId(userId);
-
-        if (user.isPresent()) return false;
-        return true; // 사용 가능하면 true
+        return userRepository.existsByUserId(userId);
     }
 
     /**
