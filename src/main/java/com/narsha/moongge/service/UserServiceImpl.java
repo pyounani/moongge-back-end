@@ -78,7 +78,7 @@ public class UserServiceImpl implements UserService {
      * 유저 정보 업데이트
      */
     @Override
-    public UserProfileDTO updateProfile(String userId, MultipartFile multipartFile, UpdateUserProfileRequestDTO updateUserProfileRequestDTO) {
+    public UserProfileDTO updateProfile(String userId, MultipartFile multipartFile, UpdateUserRequestDTO updateUserRequestDTO) {
 
         UserEntity user = userRepository.findByUserId(userId)
                 .orElseThrow(() -> new UserNotFoundException(ErrorCode.USER_NOT_FOUND));
@@ -87,9 +87,9 @@ public class UserServiceImpl implements UserService {
         String imageUrl = amazonS3Service.uploadFileToS3(multipartFile, "users/profileImages");
 
         // 유저 정보 업데이트
-        user.updateProfile(updateUserProfileRequestDTO.getBirth(),
-                updateUserProfileRequestDTO.getNickname(),
-                updateUserProfileRequestDTO.getIntro(),
+        user.updateProfile(updateUserRequestDTO.getBirth(),
+                updateUserRequestDTO.getNickname(),
+                updateUserRequestDTO.getIntro(),
                 imageUrl);
 
         return UserProfileDTO.mapToUserProfileDTO(user);

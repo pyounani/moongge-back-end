@@ -7,7 +7,7 @@ import lombok.*;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class UpdateUserProfileRequestDTO {
+public class UpdateUserRequestDTO {
 
     @NotEmpty(message = "userId를 입력하지 않았습니다.")
     private String userId; // 유저 id

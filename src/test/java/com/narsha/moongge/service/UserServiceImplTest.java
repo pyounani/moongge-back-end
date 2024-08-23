@@ -124,13 +124,13 @@ public class UserServiceImplTest {
         userService.register(userRegisterDTO);
 
         MultipartFile multipartFile = createMultipartFile();
-        UpdateUserProfileRequestDTO updateUserProfileRequestDTO = buildUpdateUserProfileDTO(userRegisterDTO);
+        UpdateUserRequestDTO updateUserRequestDTO = buildUpdateUserProfileDTO(userRegisterDTO);
 
-        UserProfileDTO userProfileDTO = userService.updateProfile(userRegisterDTO.getUserId(), multipartFile, updateUserProfileRequestDTO);
+        UserProfileDTO userProfileDTO = userService.updateProfile(userRegisterDTO.getUserId(), multipartFile, updateUserRequestDTO);
 
-        assertEquals(updateUserProfileRequestDTO.getBirth(), userProfileDTO.getBirth());
-        assertEquals(updateUserProfileRequestDTO.getNickname(), userProfileDTO.getNickname());
-        assertEquals(updateUserProfileRequestDTO.getIntro(), userProfileDTO.getIntro());
+        assertEquals(updateUserRequestDTO.getBirth(), userProfileDTO.getBirth());
+        assertEquals(updateUserRequestDTO.getNickname(), userProfileDTO.getNickname());
+        assertEquals(updateUserRequestDTO.getIntro(), userProfileDTO.getIntro());
 
         uploadedFile = userProfileDTO.getProfileImage();
     }
@@ -143,9 +143,9 @@ public class UserServiceImplTest {
         userService.register(userRegisterDTO);
 
         MultipartFile multipartFile = createMultipartFile();
-        UpdateUserProfileRequestDTO updateUserProfileRequestDTO = buildUpdateUserProfileDTO(userRegisterDTO);
+        UpdateUserRequestDTO updateUserRequestDTO = buildUpdateUserProfileDTO(userRegisterDTO);
 
-        UserProfileDTO savedUserProfileDTO = userService.updateProfile(userRegisterDTO.getUserId(), multipartFile, updateUserProfileRequestDTO);
+        UserProfileDTO savedUserProfileDTO = userService.updateProfile(userRegisterDTO.getUserId(), multipartFile, updateUserRequestDTO);
 
         // when
         UserProfileDTO findUserProfileDTO = userService.getProfile(userRegisterDTO.getUserId());
@@ -209,8 +209,8 @@ public class UserServiceImplTest {
                 .build();
     }
 
-    private UpdateUserProfileRequestDTO buildUpdateUserProfileDTO(UserRegisterDTO userRegisterDTO) {
-        return UpdateUserProfileRequestDTO.builder()
+    private UpdateUserRequestDTO buildUpdateUserProfileDTO(UserRegisterDTO userRegisterDTO) {
+        return UpdateUserRequestDTO.builder()
                 .userId(userRegisterDTO.getUserId())
                 .birth("birth")
                 .nickname("nickname")

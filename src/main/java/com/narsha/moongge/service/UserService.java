@@ -7,7 +7,7 @@ public interface UserService {
     UserDTO register(UserRegisterDTO userRegisterDTO);
     Boolean checkUserId(String userId);
     UserDTO login(UserLoginDTO userLoginDTO);
-    UserProfileDTO updateProfile(String userId, MultipartFile multipartFile, UpdateUserProfileRequestDTO updateUserProfileRequestDTO);
+    UserProfileDTO updateProfile(String userId, MultipartFile multipartFile, UpdateUserRequestDTO updateUserRequestDTO);
     UserProfileDTO getProfile(String userId);
     String getBadgeList(String userId);
     String updateBadgeList(String userId, Integer achieveNum);

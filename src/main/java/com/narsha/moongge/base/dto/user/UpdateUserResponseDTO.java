@@ -6,7 +6,7 @@ import lombok.*;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class UpdateUserProfileResponseDTO {
+public class UpdateUserResponseDTO {
 
 
     private String userId; // 유저 id

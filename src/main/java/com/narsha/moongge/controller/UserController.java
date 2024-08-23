@@ -105,8 +105,8 @@ public class UserController {
     )
     public ResponseEntity<ResponseDTO> updateProfile(@PathVariable String userId,
                                                      @RequestParam("image") MultipartFile multipartFile,
-                                                     @Valid @RequestPart(value="content") UpdateUserProfileRequestDTO updateUserProfileRequestDTO) {
-        UserProfileDTO res = userService.updateProfile(userId, multipartFile, updateUserProfileRequestDTO);
+                                                     @Valid @RequestPart(value="content") UpdateUserRequestDTO updateUserRequestDTO) {
+        UserProfileDTO res = userService.updateProfile(userId, multipartFile, updateUserRequestDTO);
 
         return ResponseEntity
                 .status(ResponseCode.SUCCESS_UPDATE_PROFILE.getStatus().value())
