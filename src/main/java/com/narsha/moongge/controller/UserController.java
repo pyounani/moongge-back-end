@@ -18,11 +18,10 @@ import org.springframework.web.multipart.MultipartFile;
 @RestController // JSON 형태의 결과값 반환
 @RequiredArgsConstructor
 @RequestMapping("/api/users")
-@Tag(name = "User Management", description = "유저 관련 API")
+@Tag(name = "User Controller", description = "유저 관련 API")
 public class UserController {
 
     private final UserService userService;
-    private final AmazonS3Service amazonS3Service;
 
     /**
      * 회원가입 API
@@ -33,7 +32,8 @@ public class UserController {
             description = "새로운 유저 회원가입 할 때 사용하는 API",
             responses = {
                     @ApiResponse(responseCode = "200", description = "회원가입을 성공했습니다.", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json")),
-                    @ApiResponse(responseCode = "400", description = "잘못된 요청", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json"))
+                    @ApiResponse(responseCode = "400", description = "잘못된 요청", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json")),
+                    @ApiResponse(responseCode = "409", description = "중복된 아이디가 있습니다.", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json"))
             }
     )
     public ResponseEntity<ResponseDTO> register(@Valid @RequestBody UserRegisterDTO userRegisterDTO) {
@@ -74,7 +74,9 @@ public class UserController {
             description = "유저 로그인 API",
             responses = {
                     @ApiResponse(responseCode = "200", description = "로그인 성공", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json")),
-                    @ApiResponse(responseCode = "400", description = "잘못된 요청", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json"))
+                    @ApiResponse(responseCode = "400", description = "잘못된 요청", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json")),
+                    @ApiResponse(responseCode = "404", description = "아이디가 존재하지 않습니다.", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json")),
+                    @ApiResponse(responseCode = "401", description = "비밀번호가 올바르지 않습니다.", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json"))
             }
     )
     public ResponseEntity<ResponseDTO> login(@Valid @RequestBody UserLoginDTO userLoginDTO) {
