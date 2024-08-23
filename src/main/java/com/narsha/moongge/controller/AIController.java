@@ -3,6 +3,10 @@ package com.narsha.moongge.controller;
 import com.narsha.moongge.base.code.ResponseCode;
 import com.narsha.moongge.base.dto.response.ResponseDTO;
 import com.narsha.moongge.service.TextService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.apache.tomcat.util.json.JSONParser;
 import org.springframework.http.HttpEntity;
@@ -24,6 +28,7 @@ import java.util.List;
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/api/ai-flask")
+@Tag(name = "AIController", description = "AIController API")
 public class AIController {
     private final TextService textService;
 
@@ -68,7 +73,25 @@ public class AIController {
 //    }
 
 
+    /**
+     * 객체 감지 API
+     */
     @PostMapping("/object-detect")
+    @Operation(
+            summary = "객체 감지",
+            description = "여러 이미지를 업로드하여 객체를 감지하는 API입니다.",
+            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
+                    description = "객체 감지할 이미지 파일들",
+                    required = true,
+                    content = @io.swagger.v3.oas.annotations.media.Content(
+                            mediaType = MediaType.MULTIPART_FORM_DATA_VALUE
+                    )
+            ),
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "객체 감지 성공", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = MediaType.APPLICATION_JSON_VALUE)),
+                    @ApiResponse(responseCode = "400", description = "잘못된 요청", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = MediaType.APPLICATION_JSON_VALUE))
+            }
+    )
     public ResponseEntity<ResponseDTO> objectDetect(@RequestParam("images") List<MultipartFile> imageFiles) throws Exception {
         // request setting //
         RestTemplate restTemplate = new RestTemplate(); // req set
@@ -122,14 +145,24 @@ public class AIController {
                 .body(new ResponseDTO(ResponseCode.SUCCESS_IMAGE_MASKING, res));
     }
 
-
-
     private String getBase64String(MultipartFile multipartFile) throws Exception {
         byte[] bytes = multipartFile.getBytes();
         return Base64.getEncoder().encodeToString(bytes);
     }
 
+    /**
+     * 텍스트 필터링 API
+     */
     @GetMapping("/text-filter")
+    @Operation(
+            summary = "텍스트 필터링",
+            description = "주어진 텍스트에서 필터링된 내용을 반환하는 API입니다.",
+            parameters = @Parameter(name = "text", description = "필터링할 텍스트", required = true),
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "텍스트 필터링 성공", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = MediaType.APPLICATION_JSON_VALUE)),
+                    @ApiResponse(responseCode = "400", description = "잘못된 요청", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = MediaType.APPLICATION_JSON_VALUE))
+            }
+    )
     public ResponseEntity<ResponseDTO> textFilter(@RequestParam("text") String text){
 
         String res = textService.getTextFiltering(text);
