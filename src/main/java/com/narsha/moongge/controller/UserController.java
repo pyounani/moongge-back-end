@@ -3,7 +3,6 @@ package com.narsha.moongge.controller;
 import com.narsha.moongge.base.code.ResponseCode;
 import com.narsha.moongge.base.dto.response.ResponseDTO;
 import com.narsha.moongge.base.dto.user.*;
-import com.narsha.moongge.service.AmazonS3Service;
 import com.narsha.moongge.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -105,8 +104,8 @@ public class UserController {
     )
     public ResponseEntity<ResponseDTO> updateProfile(@PathVariable String userId,
                                                      @RequestParam("image") MultipartFile multipartFile,
-                                                     @RequestPart(value="content") UpdateUserProfileDTO updateUserProfileDTO) {
-        UserProfileDTO res = userService.updateProfile(userId, multipartFile, updateUserProfileDTO);
+                                                     @RequestPart(value="content") UpdateUserProfileRequestDTO updateUserProfileRequestDTO) {
+        UserProfileDTO res = userService.updateProfile(userId, multipartFile, updateUserProfileRequestDTO);
 
         return ResponseEntity
                 .status(ResponseCode.SUCCESS_UPDATE_PROFILE.getStatus().value())

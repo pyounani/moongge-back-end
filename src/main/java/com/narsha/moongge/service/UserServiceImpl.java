@@ -56,7 +56,7 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional(readOnly = true)
     public Boolean checkUserId(String userId) {
-        return userRepository.existsByUserId(userId);
+        return !userRepository.existsByUserId(userId);
     }
 
     /**
@@ -78,7 +78,7 @@ public class UserServiceImpl implements UserService {
      * 유저 정보 업데이트
      */
     @Override
-    public UserProfileDTO updateProfile(String userId, MultipartFile multipartFile, UpdateUserProfileDTO updateUserProfileDTO) {
+    public UserProfileDTO updateProfile(String userId, MultipartFile multipartFile, UpdateUserProfileRequestDTO updateUserProfileRequestDTO) {
 
         UserEntity user = userRepository.findByUserId(userId)
                 .orElseThrow(() -> new UserNotFoundException(ErrorCode.USER_NOT_FOUND));
@@ -87,9 +87,9 @@ public class UserServiceImpl implements UserService {
         String imageUrl = amazonS3Service.uploadFileToS3(multipartFile, "users/profileImages");
 
         // 유저 정보 업데이트
-        user.updateProfile(updateUserProfileDTO.getBirth(),
-                updateUserProfileDTO.getNikname(),
-                updateUserProfileDTO.getIntro(),
+        user.updateProfile(updateUserProfileRequestDTO.getBirth(),
+                updateUserProfileRequestDTO.getNickname(),
+                updateUserProfileRequestDTO.getIntro(),
                 imageUrl);
 
         return UserProfileDTO.mapToUserProfileDTO(user);
