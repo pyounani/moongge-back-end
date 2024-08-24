@@ -119,12 +119,8 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional(readOnly = true)
     public String getBadgeList(String userId) {
-        String badgeList = userRepository.findBadgeListByUserId(userId);
-
-        if (badgeList == null) {
-            throw new UserNotFoundException(ErrorCode.USER_NOT_FOUND);
-        }
-        return badgeList;
+        return userRepository.findBadgeListByUserId(userId)
+                .orElseThrow(() -> new UserNotFoundException(ErrorCode.USER_NOT_FOUND));
     }
 
     /**
