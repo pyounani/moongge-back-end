@@ -71,7 +71,7 @@ public class GroupServiceImpl implements GroupService{
     public String getUserGroupCode(String userId) {
 
         UserEntity user = userRepository.findByUserId(userId)
-                .orElseThrow(() -> new LoginIdNotFoundException(ErrorCode.USER_NOT_FOUND));
+                .orElseThrow(() -> new UserNotFoundException(ErrorCode.USER_NOT_FOUND));
 
         GroupEntity group = Optional.ofNullable(user.getGroup())
                 .orElseThrow(() -> new GroupNotFoundException(ErrorCode.GROUP_NOT_FOUND));

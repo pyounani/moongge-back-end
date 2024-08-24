@@ -64,7 +64,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDTO login(UserLoginDTO userLoginDTO) {
         UserEntity findUser = userRepository.findByUserId(userLoginDTO.userId)
-                .orElseThrow(() -> new LoginIdNotFoundException(ErrorCode.USERID_NOT_FOUND));
+                .orElseThrow(() -> new UserNotFoundException(ErrorCode.USER_NOT_FOUND));
 
         // 비밀번호가 같은지 확인
         if(!findUser.getPassword().equals(userLoginDTO.password))

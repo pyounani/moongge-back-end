@@ -14,9 +14,6 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice // 컨트롤러 전역에서 발생하는 예외 throw
 @Slf4j // 자동 로그 객체 생성
 public class GlobalExceptionHandler {
-    /*
-     * Developer Custom Exception
-     */
 
     /**
      * 입력값 검증
@@ -39,7 +36,7 @@ public class GlobalExceptionHandler {
      * User
      */
 
-    // 회원가입: 아이디 중복 확인
+    // 아이디 중복 확인
     @ExceptionHandler(RegisterException.class)
     protected ResponseEntity<ErrorResponseDTO> handleRegisterException(final RegisterException e) {
         log.error("handleRegisterException : {}", e.getMessage());
@@ -48,16 +45,16 @@ public class GlobalExceptionHandler {
                 .body(new ErrorResponseDTO(ErrorCode.DUPLICATE_ID_REQUEST));
     }
 
-    // 로그인: 존재하는 아이디가 없을 때
-    @ExceptionHandler(LoginIdNotFoundException.class)
-    protected ResponseEntity<ErrorResponseDTO> handleLoginIdNotFoundException(final LoginIdNotFoundException e) {
-        log.error("LoginIdNotFoundException : {}", e.getMessage());
+    // 유저가 존재하지 않을 때
+    @ExceptionHandler(UserNotFoundException.class)
+    protected ResponseEntity<ErrorResponseDTO> handleUserNotFoundException(final UserNotFoundException e) {
+        log.error("handleUserNotFoundException : {}", e.getMessage());
         return ResponseEntity
-                .status(ErrorCode.USERID_NOT_FOUND.getStatus().value())
-                .body(new ErrorResponseDTO(ErrorCode.USERID_NOT_FOUND));
+                .status(ErrorCode.USER_NOT_FOUND.getStatus().value())
+                .body(new ErrorResponseDTO(ErrorCode.USER_NOT_FOUND));
     }
 
-    // 로그인: 비밀번호가 일치하지 않을 때
+    // 비밀번호가 일치하지 않을 때
     @ExceptionHandler(LoginPasswordNotMatchException.class)
     protected ResponseEntity<ErrorResponseDTO> handleLoginPasswordNotMatchException(final LoginPasswordNotMatchException e) {
         log.error("LoginPasswordNotMatchException : {}", e.getMessage());
@@ -101,14 +98,6 @@ public class GlobalExceptionHandler {
      * Comment
      */
 
-    // 사용자: 댓글 불러올 때 사용자가 존재하지 않을 때
-    @ExceptionHandler(UserNotFoundException.class)
-    protected ResponseEntity<ErrorResponseDTO> handleUserNotFoundException(final UserNotFoundException e) {
-        log.error("UserNotFoundException : {}", e.getMessage());
-        return ResponseEntity
-                .status(ErrorCode.USERID_NOT_FOUND.getStatus().value())
-                .body(new ErrorResponseDTO(ErrorCode.USERID_NOT_FOUND));
-    }
 
     // 댓글: 댓글이 비어있을 때
 

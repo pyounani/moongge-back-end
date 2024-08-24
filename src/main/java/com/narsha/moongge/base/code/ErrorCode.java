@@ -11,6 +11,7 @@ public enum ErrorCode {
     /**
      * 400 BAD_REQUEST: 잘못된 요청
      */
+
     BAD_REQUEST(HttpStatus.BAD_REQUEST, "잘못된 요청입니다."),
     EMPTY_COMMENT_CONTENT(HttpStatus.BAD_REQUEST, "댓글 내용이 비어있습니다."),
 
