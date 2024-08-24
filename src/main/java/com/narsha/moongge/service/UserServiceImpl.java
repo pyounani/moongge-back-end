@@ -33,8 +33,7 @@ public class UserServiceImpl implements UserService {
     public UserDTO register(UserRegisterDTO userRegisterDTO) {
 
         // 중복된 유저 있을 때
-        Optional<UserEntity> existingUser = userRepository.findByUserId(userRegisterDTO.getUserId());
-        if (existingUser.isPresent()) {
+        if (userRepository.existsByUserId(userRegisterDTO.getUserId())) {
             throw new RegisterException(ErrorCode.DUPLICATE_ID_REQUEST);
         }
 
@@ -120,11 +119,12 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional(readOnly = true)
     public String getBadgeList(String userId) {
+        String badgeList = userRepository.findBadgeListByUserId(userId);
 
-        UserEntity user = userRepository.findById(userId)
-                .orElseThrow(() -> new UserNotFoundException(ErrorCode.USER_NOT_FOUND));
-
-        return user.getBadgeList();
+        if (badgeList == null) {
+            throw new UserNotFoundException(ErrorCode.USER_NOT_FOUND);
+        }
+        return badgeList;
     }
 
     /**
