@@ -8,10 +8,17 @@ import org.springframework.http.HttpStatus;
 @AllArgsConstructor
 public enum ResponseCode {
 
+    /**
+     * USER
+     */
     SUCCESS_REGISTER(HttpStatus.OK, "회원가입을 성공했습니다."),
     SUCCESS_LOGIN(HttpStatus.OK, "로그인을 성공했습니다."),
-
     SUCCESS_CHECK_UNIQUE_ID(HttpStatus.OK, "중복된 아이디가 있는지 확인 완료했습니다."),
+    SUCCESS_UPDATE_PROFILE(HttpStatus.OK, "프로필 수정에 성공했습니다."),
+    SUCCESS_GET_PROFILE(HttpStatus.OK, "프로필을 성공적으로 가져왔습니다."),
+    SUCCESS_GET_BADGE_LIST(HttpStatus.OK, "뱃지 목록을 성공적으로 가져왔습니다."),
+    SUCCESS_UPDATE_BADGE_LIST(HttpStatus.OK, "뱃지 목록을 성공적으로 업데이트했습니다."),
+
 
     SUCCESS_JOIN_GROUP(HttpStatus.OK, "그룹에 가입되었습니다."),
 
@@ -22,12 +29,6 @@ public enum ResponseCode {
     SUCCESS_GET_NOTICE_DETAIL(HttpStatus.OK, "공지 상세를 성공적으로 가져왔습니다."),
     SUCCESS_GET_NOTICE_RECENT_ONE(HttpStatus.OK, "가장 최근 공지를 성공적으로 가져왔습니다."),
     SUCCESS_GET_UNLIKED_POSTS(HttpStatus.OK, "사용자 좋아요를 누르지 않은 게시물 목록을 성공적으로 가져왔습니다."),
-
-    SUCCESS_UPDATE_PROFILE(HttpStatus.OK, "프로필 수정에 성공했습니다."),
-    SUCCESS_GET_PROFILE(HttpStatus.OK, "프로필을 성공적으로 가져왔습니다."),
-    SUCCESS_GET_BADGE_LIST(HttpStatus.OK, "뱃지 목록을 성공적으로 가져왔습니다."),
-    SUCCESS_UPDATE_BADGE_LIST(HttpStatus.OK, "뱃지 목록을 성공적으로 업데이트했습니다."),
-
 
     SUCCESS_CREATE_COMMENT(HttpStatus.OK, "댓글 작성을 성공했습니다."),
     SUCCESS_GET_COMMENT_LIST(HttpStatus.OK, "댓글 목록을 성공적으로 가져왔습니다."),

@@ -27,6 +27,7 @@ public class GroupServiceImpl implements GroupService{
 
     private final GroupRepository groupRepository;
     private final UserRepository userRepository;
+    public static final int BADGE_LIST_SIZE = 10;
 
     /**
      * 그룹 생성하기
@@ -71,7 +72,7 @@ public class GroupServiceImpl implements GroupService{
     public String getUserGroupCode(String userId) {
 
         UserEntity user = userRepository.findByUserId(userId)
-                .orElseThrow(() -> new LoginIdNotFoundException(ErrorCode.USER_NOT_FOUND));
+                .orElseThrow(() -> new UserNotFoundException(ErrorCode.USER_NOT_FOUND));
 
         GroupEntity group = Optional.ofNullable(user.getGroup())
                 .orElseThrow(() -> new GroupNotFoundException(ErrorCode.GROUP_NOT_FOUND));
@@ -212,8 +213,8 @@ public class GroupServiceImpl implements GroupService{
     }
 
     private void initialBadgeList(UserEntity user) {
-        List<Boolean> newBadgeList = new ArrayList<>(10);
-        for (int i = 0; i < 10; i++) {
+        List<Boolean> newBadgeList = new ArrayList<>(BADGE_LIST_SIZE);
+        for (int i = 0; i < BADGE_LIST_SIZE; i++) {
             newBadgeList.add(false);
         }
         user.updateBadgeList(newBadgeList.toString());

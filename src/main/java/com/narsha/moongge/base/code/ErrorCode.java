@@ -11,6 +11,7 @@ public enum ErrorCode {
     /**
      * 400 BAD_REQUEST: 잘못된 요청
      */
+
     BAD_REQUEST(HttpStatus.BAD_REQUEST, "잘못된 요청입니다."),
     EMPTY_COMMENT_CONTENT(HttpStatus.BAD_REQUEST, "댓글 내용이 비어있습니다."),
 
@@ -50,6 +51,7 @@ public enum ErrorCode {
      * 409 CONFLICT
      */
     DUPLICATE_ID_REQUEST(HttpStatus.CONFLICT, "중복된 아이디가 있습니다."),
+    ACHIEVEMENT_ALREADY_COMPLETED(HttpStatus.CONFLICT, "이미 달성된 업적입니다."),
 
     LIKE_ALREADY_EXISTS(HttpStatus.CONFLICT, "좋아요가 이미 생성되어있습니다."),
 

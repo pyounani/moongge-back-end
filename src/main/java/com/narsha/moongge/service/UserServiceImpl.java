@@ -15,7 +15,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor // 생성자 작성 생략
@@ -33,8 +32,7 @@ public class UserServiceImpl implements UserService {
     public UserDTO register(UserRegisterDTO userRegisterDTO) {
 
         // 중복된 유저 있을 때
-        Optional<UserEntity> existingUser = userRepository.findByUserId(userRegisterDTO.getUserId());
-        if (existingUser.isPresent()) {
+        if (userRepository.existsByUserId(userRegisterDTO.getUserId())) {
             throw new RegisterException(ErrorCode.DUPLICATE_ID_REQUEST);
         }
 
@@ -65,7 +63,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDTO login(UserLoginDTO userLoginDTO) {
         UserEntity findUser = userRepository.findByUserId(userLoginDTO.userId)
-                .orElseThrow(() -> new LoginIdNotFoundException(ErrorCode.USERID_NOT_FOUND));
+                .orElseThrow(() -> new UserNotFoundException(ErrorCode.USER_NOT_FOUND));
 
         // 비밀번호가 같은지 확인
         if(!findUser.getPassword().equals(userLoginDTO.password))
@@ -120,11 +118,8 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional(readOnly = true)
     public String getBadgeList(String userId) {
-
-        UserEntity user = userRepository.findById(userId)
+        return userRepository.findBadgeListByUserId(userId)
                 .orElseThrow(() -> new UserNotFoundException(ErrorCode.USER_NOT_FOUND));
-
-        return user.getBadgeList();
     }
 
     /**
@@ -137,9 +132,14 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(() -> new UserNotFoundException(ErrorCode.USER_NOT_FOUND));
 
         List<Boolean> badgeList = parseBadgeList(user.getBadgeList());
-        updateBadgeListInUser(badgeList, achieveNum);
+
+        // 업적이 이미 달성되었는지 확인
+        if (badgeList.get(achieveNum - 1)) {
+            throw new AchievementAlreadyCompletedException(ErrorCode.ACHIEVEMENT_ALREADY_COMPLETED);
+        }
 
         // 뱃지 리스트 업데이트
+        badgeList.set(achieveNum - 1, true);
         user.updateBadgeList(new JSONArray(badgeList).toString());
 
         return user.getBadgeList();
@@ -163,14 +163,4 @@ public class UserServiceImpl implements UserService {
         }
     }
 
-    /**
-     * 지정된 인덱스의 배지 상태를 true로 업데이트합니다.
-     */
-    private void updateBadgeListInUser(List<Boolean> badgeList, Integer achieveNum) {
-        if (achieveNum <= 0 || achieveNum > badgeList.size()) {
-            throw new IllegalArgumentException("유효하지 않은 achieveNum: " + achieveNum);
-        }
-
-        badgeList.set(achieveNum - 1, true);
-    }
 }

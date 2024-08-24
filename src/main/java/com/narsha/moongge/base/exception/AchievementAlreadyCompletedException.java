@@ -6,6 +6,6 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public class LoginIdNotFoundException extends RuntimeException{
+public class AchievementAlreadyCompletedException extends RuntimeException{
     private final ErrorCode errorCode;
 }

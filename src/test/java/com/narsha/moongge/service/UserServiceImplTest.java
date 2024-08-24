@@ -2,8 +2,8 @@ package com.narsha.moongge.service;
 
 import com.narsha.moongge.base.dto.group.CreateGroupDTO;
 import com.narsha.moongge.base.dto.user.*;
-import com.narsha.moongge.base.exception.LoginIdNotFoundException;
 import com.narsha.moongge.base.exception.LoginPasswordNotMatchException;
+import com.narsha.moongge.base.exception.UserNotFoundException;
 import com.narsha.moongge.entity.UserEntity;
 import com.narsha.moongge.repository.GroupRepository;
 import com.narsha.moongge.repository.UserRepository;
@@ -101,7 +101,7 @@ public class UserServiceImplTest {
 
         // 회원가입없이 로그인을 진행한 상태
         UserLoginDTO userLoginDTO = buildUserLoginDTO(userRegisterDTO);
-        assertThrows(LoginIdNotFoundException.class, () -> userService.login(userLoginDTO));
+        assertThrows(UserNotFoundException.class, () -> userService.login(userLoginDTO));
     }
 
     @Test
