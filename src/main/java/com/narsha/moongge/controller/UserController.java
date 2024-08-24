@@ -89,7 +89,7 @@ public class UserController {
     /**
      * 유저 정보 업데이트 API
      */
-    @PutMapping("/{userId}/update")
+    @PatchMapping("/{userId}/update")
     @Operation(
             summary = "유저 정보 업데이트",
             description = "유저의 프로필 정보를 업데이트하는 API",

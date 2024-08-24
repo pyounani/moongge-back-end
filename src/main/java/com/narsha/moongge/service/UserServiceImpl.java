@@ -83,7 +83,13 @@ public class UserServiceImpl implements UserService {
         UserEntity user = userRepository.findByUserId(userId)
                 .orElseThrow(() -> new UserNotFoundException(ErrorCode.USER_NOT_FOUND));
 
-        // S3에 업로드
+        // 기존 프로필 이미지가 있을 경우 삭제
+        String existingProfileImage = user.getProfileImage();
+        if (existingProfileImage != null && !existingProfileImage.isEmpty()) {
+            amazonS3Service.deleteS3(existingProfileImage);
+        }
+
+        // 새로운 프로필 이미지 S3에 업로드
         String imageUrl = amazonS3Service.uploadFileToS3(multipartFile, "users/profileImages");
 
         // 유저 정보 업데이트
