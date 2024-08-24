@@ -63,6 +63,15 @@ public class GlobalExceptionHandler {
                 .body(new ErrorResponseDTO(ErrorCode.PASSWORD_NOT_MATCH));
     }
 
+    // 이미 달성된 업적일 떄
+    @ExceptionHandler(AchievementAlreadyCompletedException.class)
+    protected ResponseEntity<ErrorResponseDTO> handleAchievementAlreadyCompletedException(final AchievementAlreadyCompletedException e) {
+        log.error("handleAchievementAlreadyCompletedException : {}", e.getMessage());
+        return ResponseEntity
+                .status(ErrorCode.ACHIEVEMENT_ALREADY_COMPLETED.getStatus().value())
+                .body(new ErrorResponseDTO(ErrorCode.ACHIEVEMENT_ALREADY_COMPLETED));
+    }
+
 
     /**
      * Group

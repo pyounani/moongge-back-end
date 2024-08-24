@@ -9,10 +9,14 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import static com.narsha.moongge.service.GroupServiceImpl.BADGE_LIST_SIZE;
 
 @RestController // JSON 형태의 결과값 반환
 @RequiredArgsConstructor
@@ -170,11 +174,13 @@ public class UserController {
             },
             responses = {
                     @ApiResponse(responseCode = "200", description = "업적 달성 성공", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json")),
-                    @ApiResponse(responseCode = "400", description = "잘못된 요청", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json"))
+                    @ApiResponse(responseCode = "400", description = "잘못된 요청", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json")),
+                    @ApiResponse(responseCode = "404", description = "아이디에 해당하는 유저를 찾을 수 없습니다.", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json")),
+                    @ApiResponse(responseCode = "409", description = "이미 달성된 업적입니다.", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json"))
             }
     )
     public ResponseEntity<ResponseDTO> updateCheckAchieve(@PathVariable String userId,
-                                                          @PathVariable Integer achieveNum) {
+                                                          @PathVariable @Min(1) @Max(BADGE_LIST_SIZE) Integer achieveNum) {
         String res = userService.updateBadgeList(userId, achieveNum);
 
         return ResponseEntity

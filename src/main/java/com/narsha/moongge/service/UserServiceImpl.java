@@ -15,7 +15,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor // 생성자 작성 생략
@@ -133,9 +132,14 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(() -> new UserNotFoundException(ErrorCode.USER_NOT_FOUND));
 
         List<Boolean> badgeList = parseBadgeList(user.getBadgeList());
-        updateBadgeListInUser(badgeList, achieveNum);
+
+        // 업적이 이미 달성되었는지 확인
+        if (badgeList.get(achieveNum - 1)) {
+            throw new AchievementAlreadyCompletedException(ErrorCode.ACHIEVEMENT_ALREADY_COMPLETED);
+        }
 
         // 뱃지 리스트 업데이트
+        badgeList.set(achieveNum - 1, true);
         user.updateBadgeList(new JSONArray(badgeList).toString());
 
         return user.getBadgeList();
@@ -159,14 +163,4 @@ public class UserServiceImpl implements UserService {
         }
     }
 
-    /**
-     * 지정된 인덱스의 배지 상태를 true로 업데이트합니다.
-     */
-    private void updateBadgeListInUser(List<Boolean> badgeList, Integer achieveNum) {
-        if (achieveNum <= 0 || achieveNum > badgeList.size()) {
-            throw new IllegalArgumentException("유효하지 않은 achieveNum: " + achieveNum);
-        }
-
-        badgeList.set(achieveNum - 1, true);
-    }
 }
