@@ -56,10 +56,7 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional(readOnly = true)
     public Boolean checkUserId(String userId) {
-        Optional<UserEntity> user = userRepository.findByUserId(userId);
-
-        if (user.isPresent()) return false;
-        return true; // 사용 가능하면 true
+        return !userRepository.existsByUserId(userId);
     }
 
     /**
@@ -81,18 +78,24 @@ public class UserServiceImpl implements UserService {
      * 유저 정보 업데이트
      */
     @Override
-    public UserProfileDTO updateProfile(String userId, MultipartFile multipartFile, UpdateUserProfileDTO updateUserProfileDTO) {
+    public UserProfileDTO updateProfile(String userId, MultipartFile multipartFile, UpdateUserRequestDTO updateUserRequestDTO) {
 
         UserEntity user = userRepository.findByUserId(userId)
                 .orElseThrow(() -> new UserNotFoundException(ErrorCode.USER_NOT_FOUND));
 
-        // S3에 업로드
+        // 기존 프로필 이미지가 있을 경우 삭제
+        String existingProfileImage = user.getProfileImage();
+        if (existingProfileImage != null && !existingProfileImage.isEmpty()) {
+            amazonS3Service.deleteS3(existingProfileImage);
+        }
+
+        // 새로운 프로필 이미지 S3에 업로드
         String imageUrl = amazonS3Service.uploadFileToS3(multipartFile, "users/profileImages");
 
         // 유저 정보 업데이트
-        user.updateProfile(updateUserProfileDTO.getBirth(),
-                updateUserProfileDTO.getNikname(),
-                updateUserProfileDTO.getIntro(),
+        user.updateProfile(updateUserRequestDTO.getBirth(),
+                updateUserRequestDTO.getNickname(),
+                updateUserRequestDTO.getIntro(),
                 imageUrl);
 
         return UserProfileDTO.mapToUserProfileDTO(user);

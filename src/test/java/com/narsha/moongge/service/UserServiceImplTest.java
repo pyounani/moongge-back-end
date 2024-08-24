@@ -1,12 +1,9 @@
 package com.narsha.moongge.service;
 
 import com.narsha.moongge.base.dto.group.CreateGroupDTO;
-import com.narsha.moongge.base.dto.group.GroupDTO;
-import com.narsha.moongge.base.dto.group.JoinGroupDTO;
 import com.narsha.moongge.base.dto.user.*;
 import com.narsha.moongge.base.exception.LoginIdNotFoundException;
 import com.narsha.moongge.base.exception.LoginPasswordNotMatchException;
-import com.narsha.moongge.entity.GroupEntity;
 import com.narsha.moongge.entity.UserEntity;
 import com.narsha.moongge.repository.GroupRepository;
 import com.narsha.moongge.repository.UserRepository;
@@ -127,13 +124,13 @@ public class UserServiceImplTest {
         userService.register(userRegisterDTO);
 
         MultipartFile multipartFile = createMultipartFile();
-        UpdateUserProfileDTO updateUserProfileDTO = buildUpdateUserProfileDTO(userRegisterDTO);
+        UpdateUserRequestDTO updateUserRequestDTO = buildUpdateUserProfileDTO(userRegisterDTO);
 
-        UserProfileDTO userProfileDTO = userService.updateProfile(userRegisterDTO.getUserId(), multipartFile, updateUserProfileDTO);
+        UserProfileDTO userProfileDTO = userService.updateProfile(userRegisterDTO.getUserId(), multipartFile, updateUserRequestDTO);
 
-        assertEquals(updateUserProfileDTO.getBirth(), userProfileDTO.getBirth());
-        assertEquals(updateUserProfileDTO.getNikname(), userProfileDTO.getNickname());
-        assertEquals(updateUserProfileDTO.getIntro(), userProfileDTO.getIntro());
+        assertEquals(updateUserRequestDTO.getBirth(), userProfileDTO.getBirth());
+        assertEquals(updateUserRequestDTO.getNickname(), userProfileDTO.getNickname());
+        assertEquals(updateUserRequestDTO.getIntro(), userProfileDTO.getIntro());
 
         uploadedFile = userProfileDTO.getProfileImage();
     }
@@ -146,9 +143,9 @@ public class UserServiceImplTest {
         userService.register(userRegisterDTO);
 
         MultipartFile multipartFile = createMultipartFile();
-        UpdateUserProfileDTO updateUserProfileDTO = buildUpdateUserProfileDTO(userRegisterDTO);
+        UpdateUserRequestDTO updateUserRequestDTO = buildUpdateUserProfileDTO(userRegisterDTO);
 
-        UserProfileDTO savedUserProfileDTO = userService.updateProfile(userRegisterDTO.getUserId(), multipartFile, updateUserProfileDTO);
+        UserProfileDTO savedUserProfileDTO = userService.updateProfile(userRegisterDTO.getUserId(), multipartFile, updateUserRequestDTO);
 
         // when
         UserProfileDTO findUserProfileDTO = userService.getProfile(userRegisterDTO.getUserId());
@@ -212,11 +209,11 @@ public class UserServiceImplTest {
                 .build();
     }
 
-    private UpdateUserProfileDTO buildUpdateUserProfileDTO(UserRegisterDTO userRegisterDTO) {
-        return UpdateUserProfileDTO.builder()
+    private UpdateUserRequestDTO buildUpdateUserProfileDTO(UserRegisterDTO userRegisterDTO) {
+        return UpdateUserRequestDTO.builder()
                 .userId(userRegisterDTO.getUserId())
                 .birth("birth")
-                .nikname("nickname")
+                .nickname("nickname")
                 .intro("intro")
                 .build();
     }

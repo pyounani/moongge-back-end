@@ -13,4 +13,5 @@ public interface UserRepository extends JpaRepository<UserEntity, String> {
     Optional<UserEntity> findByUserIdAndGroup(String userId, GroupEntity group);
     List<UserEntity> findByGroupAndUserIdNotLike(GroupEntity group, String userId);
     List<UserEntity> findByGroup(GroupEntity group);
+    boolean existsByUserId(String userId);
 }

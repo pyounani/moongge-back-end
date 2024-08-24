@@ -1,15 +1,12 @@
 package com.narsha.moongge.base.dto.user;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-@Data
+@Getter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class UpdateUserProfileDTO {
+public class UpdateUserResponseDTO {
 
 
     private String userId; // 유저 id
@@ -18,7 +15,7 @@ public class UpdateUserProfileDTO {
 
     private String birth; // 생일
 
-    private String nikname; // 닉네임
+    private String nickname; // 닉네임
 
     private String intro; // 소개
 }

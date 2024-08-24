@@ -3,7 +3,6 @@ package com.narsha.moongge.controller;
 import com.narsha.moongge.base.code.ResponseCode;
 import com.narsha.moongge.base.dto.response.ResponseDTO;
 import com.narsha.moongge.base.dto.user.*;
-import com.narsha.moongge.service.AmazonS3Service;
 import com.narsha.moongge.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -18,11 +17,10 @@ import org.springframework.web.multipart.MultipartFile;
 @RestController // JSON 형태의 결과값 반환
 @RequiredArgsConstructor
 @RequestMapping("/api/users")
-@Tag(name = "User Management", description = "유저 관련 API")
+@Tag(name = "User Controller", description = "유저 관련 API")
 public class UserController {
 
     private final UserService userService;
-    private final AmazonS3Service amazonS3Service;
 
     /**
      * 회원가입 API
@@ -33,7 +31,8 @@ public class UserController {
             description = "새로운 유저 회원가입 할 때 사용하는 API",
             responses = {
                     @ApiResponse(responseCode = "200", description = "회원가입을 성공했습니다.", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json")),
-                    @ApiResponse(responseCode = "400", description = "잘못된 요청", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json"))
+                    @ApiResponse(responseCode = "400", description = "잘못된 요청", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json")),
+                    @ApiResponse(responseCode = "409", description = "중복된 아이디가 있습니다.", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json"))
             }
     )
     public ResponseEntity<ResponseDTO> register(@Valid @RequestBody UserRegisterDTO userRegisterDTO) {
@@ -74,7 +73,9 @@ public class UserController {
             description = "유저 로그인 API",
             responses = {
                     @ApiResponse(responseCode = "200", description = "로그인 성공", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json")),
-                    @ApiResponse(responseCode = "400", description = "잘못된 요청", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json"))
+                    @ApiResponse(responseCode = "400", description = "잘못된 요청", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json")),
+                    @ApiResponse(responseCode = "404", description = "아이디가 존재하지 않습니다.", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json")),
+                    @ApiResponse(responseCode = "401", description = "비밀번호가 올바르지 않습니다.", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json"))
             }
     )
     public ResponseEntity<ResponseDTO> login(@Valid @RequestBody UserLoginDTO userLoginDTO) {
@@ -88,7 +89,7 @@ public class UserController {
     /**
      * 유저 정보 업데이트 API
      */
-    @PutMapping("/{userId}/update")
+    @PatchMapping("/{userId}/update")
     @Operation(
             summary = "유저 정보 업데이트",
             description = "유저의 프로필 정보를 업데이트하는 API",
@@ -98,13 +99,14 @@ public class UserController {
             requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "업데이트할 유저 정보", required = true, content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "multipart/form-data")),
             responses = {
                     @ApiResponse(responseCode = "200", description = "유저 정보 업데이트 성공", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json")),
-                    @ApiResponse(responseCode = "400", description = "잘못된 요청", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json"))
+                    @ApiResponse(responseCode = "400", description = "잘못된 요청", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json")),
+                    @ApiResponse(responseCode = "404", description = "아이디에 해당하는 유저를 찾을 수 없습니다.", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json"))
             }
     )
     public ResponseEntity<ResponseDTO> updateProfile(@PathVariable String userId,
                                                      @RequestParam("image") MultipartFile multipartFile,
-                                                     @RequestPart(value="content") UpdateUserProfileDTO updateUserProfileDTO) {
-        UserProfileDTO res = userService.updateProfile(userId, multipartFile, updateUserProfileDTO);
+                                                     @Valid @RequestPart(value="content") UpdateUserRequestDTO updateUserRequestDTO) {
+        UserProfileDTO res = userService.updateProfile(userId, multipartFile, updateUserRequestDTO);
 
         return ResponseEntity
                 .status(ResponseCode.SUCCESS_UPDATE_PROFILE.getStatus().value())

@@ -17,6 +17,8 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.regex.Pattern;
@@ -45,7 +47,7 @@ public class AmazonS3ServiceImpl implements AmazonS3Service{
         }
 
         // S3에 저장된 파일 이름
-        String fileName = filePath + "/" + UUID.randomUUID() + "_" + multipartFile.getOriginalFilename();
+        String fileName = filePath + "/" + UUID.randomUUID();
 
         // s3로 업로드 후 로컬 파일 삭제
         String uploadImageUrl = putS3(uploadFile, fileName);
@@ -71,7 +73,7 @@ public class AmazonS3ServiceImpl implements AmazonS3Service{
      */
     public void deleteS3(String filePath) {
         try{
-            String key = filePath.substring(61); // 폴더/파일.확장자
+            String key = filePath.substring(filePath.indexOf(bucket) + bucket.length() + 1);
 
             try {
                 amazonS3Client.deleteObject(bucket, key);
