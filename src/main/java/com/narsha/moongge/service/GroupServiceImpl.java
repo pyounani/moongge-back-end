@@ -117,9 +117,8 @@ public class GroupServiceImpl implements GroupService{
         GroupEntity group = groupRepository.findByGroupCode(groupCode)
                 .orElseThrow(() -> new GroupNotFoundException(ErrorCode.GROUP_NOT_FOUND));
 
-        // 유저의 그룹 제거(null 값으로)
-        clearGroupForUsers(group);
-
+        // 유저의 그룹 제거 및 그룹 제거
+        groupRepository.clearGroupForUsers(group);
         groupRepository.delete(group);
 
         return groupCode;
