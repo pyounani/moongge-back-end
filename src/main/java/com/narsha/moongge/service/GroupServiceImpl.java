@@ -28,10 +28,11 @@ public class GroupServiceImpl implements GroupService{
 
     private final GroupRepository groupRepository;
     private final UserRepository userRepository;
+
     public static final int BADGE_LIST_SIZE = 10;
     private static final int GROUP_CODE_SIZE = 10;
 
-    @Value("${group.code}")
+    @Value("${group.code.charset}")
     private String alphaNum;
 
     /**
