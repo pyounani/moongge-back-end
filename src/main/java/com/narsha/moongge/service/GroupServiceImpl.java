@@ -40,12 +40,6 @@ public class GroupServiceImpl implements GroupService{
     @Override
     public String createGroup(CreateGroupDTO createGroupDTO) {
 
-        // 그룹 코드 생성
-        String groupCode = generateUniqueGroupCode();
-
-        // 그룹 생성
-        GroupEntity group = buildGroupEntity(createGroupDTO, groupCode);
-
         UserEntity user = userRepository.findByUserId(createGroupDTO.getUserId())
                 .orElseThrow(() -> new UserNotFoundException(ErrorCode.USER_NOT_FOUND));
 
@@ -54,6 +48,10 @@ public class GroupServiceImpl implements GroupService{
             throw new StudentGroupCreationException(ErrorCode.STUDENT_NOT_ALLOWED_GROUP);
         }
 
+        // 그룹 코드 생성
+        String groupCode = generateUniqueGroupCode();
+        // 그룹 생성
+        GroupEntity group = buildGroupEntity(createGroupDTO, groupCode);
         // DB에 그룹 생성
         GroupEntity createdGroup  = groupRepository.save(group);
         if (createdGroup  == null || createdGroup .getGroupCode() == null) {
@@ -62,8 +60,6 @@ public class GroupServiceImpl implements GroupService{
 
         // 사용자에 생성된 그룹 업데이트
         user.updateGroup(createdGroup);
-
-        // profile badge update
         initialBadgeList(user);
 
         return user.getUserId();
