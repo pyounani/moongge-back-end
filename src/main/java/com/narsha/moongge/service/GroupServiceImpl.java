@@ -11,6 +11,7 @@ import com.narsha.moongge.entity.*;
 import com.narsha.moongge.repository.*;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,6 +29,10 @@ public class GroupServiceImpl implements GroupService{
     private final GroupRepository groupRepository;
     private final UserRepository userRepository;
     public static final int BADGE_LIST_SIZE = 10;
+    private static final int GROUP_CODE_SIZE = 10;
+
+    @Value("${group.code}")
+    private String alphaNum;
 
     /**
      * 그룹 생성하기
@@ -180,7 +185,6 @@ public class GroupServiceImpl implements GroupService{
 
     // 랜덤 코드 생성
     private String getRandomCode(int length) {
-        String alphaNum = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
         int alphaNumLength = alphaNum.length();
 
         Random random = new Random();
@@ -196,7 +200,7 @@ public class GroupServiceImpl implements GroupService{
     private String generateUniqueGroupCode() {
         String groupCode;
         do {
-            groupCode = getRandomCode(10);
+            groupCode = getRandomCode(GROUP_CODE_SIZE);
         } while (groupRepository.existsByGroupCode(groupCode)); // 동일한 그룹 코드가 나오지 않도록
         return groupCode;
     }
