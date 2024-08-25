@@ -3,6 +3,7 @@ package com.narsha.moongge.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.domain.Persistable;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
@@ -14,7 +15,7 @@ import java.time.LocalTime;
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EntityListeners(AuditingEntityListener.class)
-public class GroupEntity {
+public class GroupEntity implements Persistable<String> {
     @Id
     @Column(nullable = false, length=20)
     @JoinColumn(name = "group_code")
@@ -48,9 +49,28 @@ public class GroupEntity {
     @JoinColumn(name = "create_at")
     private LocalDateTime createAt; // 생성일
 
+    @Transient
+    @Builder.Default
+    private boolean isNew = true;
+
     public void setTime(LocalTime startTime, LocalTime endTime) {
         this.startTime = startTime;
         this.endTime = endTime;
     }
 
+    @Override
+    public String getId() {
+        return this.groupCode;
+    }
+
+    @Override
+    public boolean isNew() {
+        return this.isNew;
+    }
+
+    @PostLoad
+    @PrePersist
+    private void markNotNew() {
+        this.isNew = false;
+    }
 }
