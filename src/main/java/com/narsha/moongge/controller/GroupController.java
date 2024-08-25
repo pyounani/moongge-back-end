@@ -92,7 +92,7 @@ public class GroupController {
             responses = {
                     @ApiResponse(responseCode = "200", description = "그룹에 가입되었습니다.", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json")),
                     @ApiResponse(responseCode = "400", description = "잘못된 요청", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json")),
-                    @ApiResponse(responseCode = "404", description = "그룹을 찾을 수 없음", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json"))
+                    @ApiResponse(responseCode = "404", description = "그룹이 생성되지 않았습니다.", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json"))
             }
     )
     public ResponseEntity<ResponseDTO> joinGroup(@Valid @RequestBody JoinGroupDTO joinGroupDTO) {
@@ -113,7 +113,7 @@ public class GroupController {
             parameters = @Parameter(name = "groupCode", description = "그룹 코드", required = true),
             responses = {
                     @ApiResponse(responseCode = "200", description = "그룹 삭제 성공했습니다.", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json")),
-                    @ApiResponse(responseCode = "404", description = "그룹을 찾을 수 없음", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json"))
+                    @ApiResponse(responseCode = "404", description = "그룹이 생성되지 않았습니다.", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json"))
             }
     )
     public ResponseEntity<ResponseDTO> deleteGroup(@PathVariable String groupCode) {
