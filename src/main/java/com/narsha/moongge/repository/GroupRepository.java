@@ -8,4 +8,5 @@ import java.util.Optional;
 public interface GroupRepository extends JpaRepository<GroupEntity,String> {
 
     Optional<GroupEntity> findByGroupCode(String groupCode);
+    boolean existsByGroupCode(String groupCode);
 }

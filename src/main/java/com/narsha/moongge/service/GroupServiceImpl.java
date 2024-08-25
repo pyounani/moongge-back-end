@@ -197,7 +197,7 @@ public class GroupServiceImpl implements GroupService{
         String groupCode;
         do {
             groupCode = getRandomCode(10);
-        } while (groupRepository.findByGroupCode(groupCode).isPresent()); // 동일한 그룹 코드가 나오지 않도록
+        } while (groupRepository.existsByGroupCode(groupCode)); // 동일한 그룹 코드가 나오지 않도록
         return groupCode;
     }
 
