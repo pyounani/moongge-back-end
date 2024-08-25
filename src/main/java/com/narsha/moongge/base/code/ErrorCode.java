@@ -11,10 +11,10 @@ public enum ErrorCode {
     /**
      * 400 BAD_REQUEST: 잘못된 요청
      */
+    INVALID_GROUP_CODE(HttpStatus.BAD_REQUEST, "잘못된 그룹 코드의 형태입니다."),
 
     BAD_REQUEST(HttpStatus.BAD_REQUEST, "잘못된 요청입니다."),
     EMPTY_COMMENT_CONTENT(HttpStatus.BAD_REQUEST, "댓글 내용이 비어있습니다."),
-
     DELETE_FAILED_ENTITY_RELATED_GROUPCODE(HttpStatus.BAD_REQUEST, "해당 그룹코드로 모든 엔티티 삭제를 실패했습니다."),
 
     /**

@@ -78,15 +78,6 @@ public class GlobalExceptionHandler {
      */
 
     // 그룹: 그룹 코드에 해당하는 그룹이 존재하지 않을 때
-    @ExceptionHandler(GroupCodeNotFoundException.class)
-    protected ResponseEntity<ErrorResponseDTO> handleGroupCodeNotFoundException(final GroupCodeNotFoundException e) {
-        log.error("GroupCodeNotFoundException : {}", e.getMessage());
-        return ResponseEntity
-                .status(ErrorCode.GROUPCODE_NOT_FOUND.getStatus().value())
-                .body(new ErrorResponseDTO(ErrorCode.GROUPCODE_NOT_FOUND));
-    }
-
-    // 그룹: 그룹 코드에 해당하는 그룹이 존재하지 않을 때
     @ExceptionHandler(GroupNotFoundException.class)
     protected ResponseEntity<ErrorResponseDTO> handleGroupNotFoundException(final GroupNotFoundException e) {
         log.error("GroupNotFoundException : {}", e.getMessage());
@@ -101,6 +92,14 @@ public class GlobalExceptionHandler {
         return ResponseEntity
                 .status(ErrorCode.STUDENT_NOT_ALLOWED_GROUP.getStatus().value())
                 .body(new ErrorResponseDTO(ErrorCode.STUDENT_NOT_ALLOWED_GROUP));
+    }
+
+    @ExceptionHandler(InvalidGroupCodeException.class)
+    protected ResponseEntity<ErrorResponseDTO> handleInvalidGroupCodeException(final InvalidGroupCodeException e) {
+        log.error("handleInvalidGroupCodeException : {}", e.getMessage());
+        return ResponseEntity
+                .status(ErrorCode.INVALID_GROUP_CODE.getStatus().value())
+                .body(new ErrorResponseDTO(ErrorCode.INVALID_GROUP_CODE));
     }
 
     /**

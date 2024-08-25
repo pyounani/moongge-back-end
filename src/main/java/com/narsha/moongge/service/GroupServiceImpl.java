@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 @Service
@@ -30,10 +31,11 @@ public class GroupServiceImpl implements GroupService{
     private final UserRepository userRepository;
 
     public static final int BADGE_LIST_SIZE = 10;
-    private static final int GROUP_CODE_SIZE = 10;
 
     @Value("${group.code.charset}")
-    private String alphaNum;
+    private String charset;
+    @Value("${group.code.size}")
+    private int groupCodeSize;
 
     /**
      * 그룹 생성하기
@@ -72,18 +74,17 @@ public class GroupServiceImpl implements GroupService{
     @Override
     @Transactional(readOnly=true)
     public String getUserGroupCode(String userId) {
-
         UserEntity user = userRepository.findByUserId(userId)
                 .orElseThrow(() -> new UserNotFoundException(ErrorCode.USER_NOT_FOUND));
 
         GroupEntity group = Optional.ofNullable(user.getGroup())
                 .orElseThrow(() -> new GroupNotFoundException(ErrorCode.GROUP_NOT_FOUND));
 
-        String groupCode = Optional.ofNullable(group.getGroupCode())
-                .orElseThrow(() -> new GroupCodeNotFoundException(ErrorCode.GROUPCODE_NOT_FOUND));
+        String groupCode = group.getGroupCode();
 
-        groupRepository.findByGroupCode(groupCode)
-                .orElseThrow(() -> new GroupNotFoundException(ErrorCode.GROUP_NOT_FOUND));
+        if (!isValidGroupCode(groupCode)) {
+            throw new InvalidGroupCodeException(ErrorCode.INVALID_GROUP_CODE);
+        }
 
         return groupCode;
     }
@@ -180,15 +181,22 @@ public class GroupServiceImpl implements GroupService{
                 .collect(Collectors.toList());
     }
 
+    // 그룹 코드 검증 로직
+    private boolean isValidGroupCode(String groupCode) {
+        return groupCode != null
+                && !groupCode.isEmpty()
+                && groupCode.matches("[" + Pattern.quote(charset) + "]{" + groupCodeSize + "}");
+    }
+
     // 랜덤 코드 생성
     private String getRandomCode(int length) {
-        int alphaNumLength = alphaNum.length();
+        int alphaNumLength = charset.length();
 
         Random random = new Random();
 
         StringBuffer code = new StringBuffer();
         for (int i = 0; i < length; i++) {
-            code.append(alphaNum.charAt(random.nextInt(alphaNumLength)));
+            code.append(charset.charAt(random.nextInt(alphaNumLength)));
         }
 
         return code.toString();
@@ -197,7 +205,7 @@ public class GroupServiceImpl implements GroupService{
     private String generateUniqueGroupCode() {
         String groupCode;
         do {
-            groupCode = getRandomCode(GROUP_CODE_SIZE);
+            groupCode = getRandomCode(groupCodeSize);
         } while (groupRepository.existsByGroupCode(groupCode)); // 동일한 그룹 코드가 나오지 않도록
         return groupCode;
     }

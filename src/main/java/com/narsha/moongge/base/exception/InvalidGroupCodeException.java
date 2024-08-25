@@ -6,6 +6,6 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public class GroupCodeNotFoundException extends RuntimeException {
+public class InvalidGroupCodeException extends RuntimeException{
     private final ErrorCode errorCode;
 }

@@ -32,7 +32,7 @@ public class GroupController {
      */
     @PostMapping
     @Operation(
-            summary = "그룹 생성 성공했습니다.",
+            summary = "그룹 생성",
             description = "새로운 그룹을 생성하는 API",
             requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
                     description = "그룹 생성에 필요한 정보",
@@ -40,7 +40,7 @@ public class GroupController {
                     content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json")
             ),
             responses = {
-                    @ApiResponse(responseCode = "200", description = "그룹 생성 성공", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json")),
+                    @ApiResponse(responseCode = "200", description = "그룹 생성 성공했습니다.", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json")),
                     @ApiResponse(responseCode = "400", description = "잘못된 요청", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json")),
                     @ApiResponse(responseCode = "404", description = "아이디가 존재하지 않습니다.", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json")),
                     @ApiResponse(responseCode = "403", description = "학생은 그룹을 생성할 수 없습니다.", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json"))
