@@ -97,13 +97,11 @@ public class GroupServiceImpl implements GroupService{
         GroupEntity group = groupRepository.findByGroupCode(joinGroupDTO.getGroupCode())
                 .orElseThrow(() -> new GroupNotFoundException(ErrorCode.GROUP_NOT_FOUND));
 
-        // set group code
         UserEntity user = userRepository.findByUserId(joinGroupDTO.getUserId())
                 .orElseThrow(() -> new UserNotFoundException(ErrorCode.USER_NOT_FOUND));
 
         // 그룹에 조인
         user.updateGroup(group);
-
         // badgeList 생성
         initialBadgeList(user);
 
