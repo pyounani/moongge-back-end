@@ -35,9 +35,8 @@ public enum ErrorCode {
      */
     USERID_NOT_FOUND(HttpStatus.NOT_FOUND, "아이디가 존재하지 않습니다."),
     USER_NOT_FOUND(HttpStatus.NOT_FOUND, "아이디에 해당하는 유저를 찾을 수 없습니다."),
-
-    GROUPCODE_NOT_FOUND(HttpStatus.NOT_FOUND, "그룹 코드에 해당하는 그룹을 찾을 수 없습니다."),
     GROUP_NOT_FOUND(HttpStatus.NOT_FOUND, "그룹이 생성되지 않았습니다."),
+
     POST_NOT_FOUND(HttpStatus.NOT_FOUND, "게시글 정보를 찾을 수 없습니다."),
     COMMENT_NOT_FOUND(HttpStatus.NOT_FOUND, "댓글 정보를 찾을 수 없습니다."),
     LIKE_NOT_FOUND(HttpStatus.NOT_FOUND, "좋아요를 찾을 수 없습니다."),

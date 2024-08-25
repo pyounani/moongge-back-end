@@ -64,7 +64,9 @@ public class GroupController {
             parameters = @Parameter(name = "userId", description = "유저 ID", required = true),
             responses = {
                     @ApiResponse(responseCode = "200", description = "그룹 코드 가져오기 성공했습니다.", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json")),
-                    @ApiResponse(responseCode = "404", description = "유저를 찾을 수 없음", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json"))
+                    @ApiResponse(responseCode = "404", description = "아이디에 해당하는 유저를 찾을 수 없습니다.", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json")),
+                    @ApiResponse(responseCode = "404", description = "그룹이 생성되지 않았습니다.", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json")),
+                    @ApiResponse(responseCode = "400", description = "잘못된 그룹 코드의 형태입니다.", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json"))
             }
     )
     public ResponseEntity<ResponseDTO> getUserGroupCode(@PathVariable String userId) {
