@@ -3,6 +3,7 @@ package com.narsha.moongge.base.dto.group;
 import com.narsha.moongge.base.dto.user.UserDTO;
 import com.narsha.moongge.entity.GroupEntity;
 import com.narsha.moongge.entity.UserEntity;
+import com.narsha.moongge.entity.UserType;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -10,7 +11,7 @@ import lombok.Getter;
 @Builder
 public class GroupDTO {
     private String userId;
-    private String userType;
+    private UserType userType;
     private String username;
     private String groupCode;
     private String groupName;

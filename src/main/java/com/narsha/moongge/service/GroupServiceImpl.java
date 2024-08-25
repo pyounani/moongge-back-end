@@ -47,7 +47,7 @@ public class GroupServiceImpl implements GroupService{
                 .orElseThrow(() -> new UserNotFoundException(ErrorCode.USER_NOT_FOUND));
 
         // 학생 유형 사용자 검증
-        if ("student".equals(user.getUserType())) {
+        if (UserType.STUDENT == user.getUserType()) {
             throw new StudentGroupCreationException(ErrorCode.STUDENT_NOT_ALLOWED_GROUP);
         }
 

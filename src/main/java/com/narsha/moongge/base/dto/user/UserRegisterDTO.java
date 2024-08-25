@@ -1,5 +1,8 @@
 package com.narsha.moongge.base.dto.user;
 
+import com.narsha.moongge.base.code.ErrorCode;
+import com.narsha.moongge.base.exception.InvalidUserTypeException;
+import com.narsha.moongge.entity.UserType;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

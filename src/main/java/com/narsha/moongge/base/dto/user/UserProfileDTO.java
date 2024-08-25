@@ -1,6 +1,7 @@
 package com.narsha.moongge.base.dto.user;
 
 import com.narsha.moongge.entity.UserEntity;
+import com.narsha.moongge.entity.UserType;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -9,7 +10,7 @@ import lombok.Getter;
 public class UserProfileDTO {
 
     private String userId;
-    private String userType;
+    private UserType userType;
     private String username;
     private String nickname;
     private String profileImage;

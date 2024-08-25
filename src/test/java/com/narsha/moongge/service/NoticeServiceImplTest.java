@@ -5,6 +5,7 @@ import com.narsha.moongge.base.dto.notice.NoticeDTO;
 import com.narsha.moongge.entity.GroupEntity;
 import com.narsha.moongge.entity.NoticeEntity;
 import com.narsha.moongge.entity.UserEntity;
+import com.narsha.moongge.entity.UserType;
 import com.narsha.moongge.repository.GroupRepository;
 import com.narsha.moongge.repository.NoticeRepository;
 import com.narsha.moongge.repository.UserRepository;
@@ -153,7 +154,7 @@ class NoticeServiceImplTest {
     private UserEntity createUser() {
         UserEntity user = UserEntity.builder()
                 .userId("userId")
-                .userType("teacher")
+                .userType(UserType.TEACHER)
                 .password("password")
                 .userName("name")
                 .build();

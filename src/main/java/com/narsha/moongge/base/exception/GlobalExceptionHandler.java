@@ -72,6 +72,14 @@ public class GlobalExceptionHandler {
                 .body(new ErrorResponseDTO(ErrorCode.ACHIEVEMENT_ALREADY_COMPLETED));
     }
 
+    @ExceptionHandler(InvalidUserTypeException.class)
+    protected ResponseEntity<ErrorResponseDTO> handleInvalidUserTypeException(final InvalidUserTypeException e) {
+        log.error("handleInvalidUserTypeException : {}", e.getMessage());
+        return ResponseEntity
+                .status(ErrorCode.INVALID_USER_TYPE.getStatus().value())
+                .body(new ErrorResponseDTO(ErrorCode.INVALID_USER_TYPE));
+    }
+
 
     /**
      * Group

@@ -4,10 +4,7 @@ import com.narsha.moongge.base.dto.like.CreateLikeDTO;
 import com.narsha.moongge.base.dto.like.DeleteLikeDTO;
 import com.narsha.moongge.base.dto.like.LikeDTO;
 import com.narsha.moongge.base.exception.LikeAlreadyExistsException;
-import com.narsha.moongge.entity.GroupEntity;
-import com.narsha.moongge.entity.LikeEntity;
-import com.narsha.moongge.entity.PostEntity;
-import com.narsha.moongge.entity.UserEntity;
+import com.narsha.moongge.entity.*;
 import com.narsha.moongge.repository.GroupRepository;
 import com.narsha.moongge.repository.LikeRepository;
 import com.narsha.moongge.repository.PostRepository;
@@ -326,7 +323,7 @@ class LikeServiceImplTest {
     private UserEntity createUser(String userId) {
         UserEntity user = UserEntity.builder()
                 .userId(userId)
-                .userType("teacher")
+                .userType(UserType.TEACHER)
                 .password("password")
                 .userName("name")
                 .build();

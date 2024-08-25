@@ -5,6 +5,7 @@ import com.narsha.moongge.base.code.ErrorCode;
 import com.narsha.moongge.base.dto.user.*;
 import com.narsha.moongge.base.exception.*;
 import com.narsha.moongge.entity.UserEntity;
+import com.narsha.moongge.entity.UserType;
 import com.narsha.moongge.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.json.JSONArray;
@@ -29,7 +30,7 @@ public class UserServiceImpl implements UserService {
      * 회원가입
      */
     @Override
-    public UserDTO register(UserRegisterDTO userRegisterDTO) {
+    public UserDTO register(UserRegisterDTO userRegisterDTO, UserType userType) {
 
         // 중복된 유저 있을 때
         if (userRepository.existsByUserId(userRegisterDTO.getUserId())) {
@@ -38,7 +39,7 @@ public class UserServiceImpl implements UserService {
 
         UserEntity user = UserEntity.builder()
                 .userId(userRegisterDTO.getUserId())
-                .userType(userRegisterDTO.getUserType())
+                .userType(userType)
                 .password(userRegisterDTO.getPassword())
                 .userName(userRegisterDTO.getName())
                 .build();

@@ -26,9 +26,10 @@ public class UserEntity implements Persistable<String> {
     @JoinColumn(name = "password")
     private String password; // 패스워드
 
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false, length=20)
     @JoinColumn(name = "user_type")
-    private String userType; // 유저 타입: teacher | student
+    private UserType userType; // 유저 타입: teacher | student
 
     @Column(nullable = false, length=20)
     @JoinColumn(name = "user_name")

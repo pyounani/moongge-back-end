@@ -3,6 +3,7 @@ package com.narsha.moongge.controller;
 import com.narsha.moongge.base.code.ResponseCode;
 import com.narsha.moongge.base.dto.response.ResponseDTO;
 import com.narsha.moongge.base.dto.user.*;
+import com.narsha.moongge.entity.UserType;
 import com.narsha.moongge.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -40,7 +41,9 @@ public class UserController {
             }
     )
     public ResponseEntity<ResponseDTO> register(@Valid @RequestBody UserRegisterDTO userRegisterDTO) {
-        UserDTO res = userService.register(userRegisterDTO);
+        // 유저 타입 검증
+        UserType userType = UserType.fromString(userRegisterDTO.getUserType());
+        UserDTO res = userService.register(userRegisterDTO, userType);
 
         return ResponseEntity
                 .status(ResponseCode.SUCCESS_REGISTER.getStatus().value())
