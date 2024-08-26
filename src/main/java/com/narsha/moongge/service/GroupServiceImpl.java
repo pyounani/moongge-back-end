@@ -166,7 +166,7 @@ public class GroupServiceImpl implements GroupService{
         if (!isValidGroupCode(groupCode)) {
             throw new InvalidGroupCodeException(ErrorCode.INVALID_GROUP_CODE);
         }
-        
+
         return UpdateTimeDTO.mapToUpdateTimeDTO(findGroup);
     }
 
@@ -239,13 +239,6 @@ public class GroupServiceImpl implements GroupService{
             newBadgeList.add(false);
         }
         user.updateBadgeList(newBadgeList.toString());
-    }
-
-    private void clearGroupForUsers(GroupEntity group) {
-        List<UserEntity> users = userRepository.findByGroup(group);
-        for (UserEntity user : users) {
-            user.clearGroup();
-        }
     }
 
 }
