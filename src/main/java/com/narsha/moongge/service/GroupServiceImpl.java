@@ -94,8 +94,14 @@ public class GroupServiceImpl implements GroupService{
      */
     @Override
     public GroupDTO joinGroup(JoinGroupDTO joinGroupDTO) {
+
         GroupEntity group = groupRepository.findByGroupCode(joinGroupDTO.getGroupCode())
                 .orElseThrow(() -> new GroupNotFoundException(ErrorCode.GROUP_NOT_FOUND));
+
+        // 그룹 코드 검증
+        if (!isValidGroupCode(joinGroupDTO.getGroupCode())) {
+            throw new InvalidGroupCodeException(ErrorCode.INVALID_GROUP_CODE);
+        }
 
         UserEntity user = userRepository.findByUserId(joinGroupDTO.getUserId())
                 .orElseThrow(() -> new UserNotFoundException(ErrorCode.USER_NOT_FOUND));
@@ -113,6 +119,11 @@ public class GroupServiceImpl implements GroupService{
      */
     @Override
     public String deleteGroup(String groupCode) {
+
+        // 그룹 코드 검증
+        if (!isValidGroupCode(groupCode)) {
+            throw new InvalidGroupCodeException(ErrorCode.INVALID_GROUP_CODE);
+        }
 
         GroupEntity group = groupRepository.findByGroupCode(groupCode)
                 .orElseThrow(() -> new GroupNotFoundException(ErrorCode.GROUP_NOT_FOUND));
@@ -165,13 +176,17 @@ public class GroupServiceImpl implements GroupService{
     @Override
     @Transactional(readOnly = true)
     public List<UserProfileDTO> getStudentList(String groupCode, String userId) {
-        GroupEntity group = groupRepository.findByGroupCode(groupCode)
-                .orElseThrow(() -> new GroupNotFoundException(ErrorCode.GROUP_NOT_FOUND));
 
-        userRepository.findByUserIdAndGroup(userId, group)
-                .orElseThrow(() -> new UserNotFoundException(ErrorCode.USER_NOT_FOUND));
+        if (!userRepository.existsByGroupCodeAndUserId(groupCode, userId)) {
+            throw new UserNotFoundException(ErrorCode.USER_NOT_FOUND);
+        }
 
-        List<UserEntity> studentList = userRepository.findByGroupAndUserIdNotLike(group, userId);
+        // 그룹 코드 검증
+        if (!isValidGroupCode(groupCode)) {
+            throw new InvalidGroupCodeException(ErrorCode.INVALID_GROUP_CODE);
+        }
+
+        List<UserEntity> studentList = userRepository.getUsersInGroupExcept(groupCode, userId);
 
         return studentList.stream()
                 .map(UserProfileDTO::mapToUserProfileDTO)

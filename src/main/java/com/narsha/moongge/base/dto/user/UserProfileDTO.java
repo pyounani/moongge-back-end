@@ -2,6 +2,7 @@ package com.narsha.moongge.base.dto.user;
 
 import com.narsha.moongge.entity.UserEntity;
 import com.narsha.moongge.entity.UserType;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 
