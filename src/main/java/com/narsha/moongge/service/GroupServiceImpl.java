@@ -159,11 +159,7 @@ public class GroupServiceImpl implements GroupService{
         GroupEntity findGroup = groupRepository.findByGroupCode(groupCode)
                 .orElseThrow(() -> new GroupNotFoundException(ErrorCode.GROUP_NOT_FOUND));
 
-        return UpdateTimeDTO.builder()
-                .groupCode(groupCode)
-                .startTime(findGroup.getStartTime())
-                .endTime(findGroup.getEndTime())
-                .build();
+        return UpdateTimeDTO.mapToUpdateTimeDTO(findGroup);
     }
 
     /**
