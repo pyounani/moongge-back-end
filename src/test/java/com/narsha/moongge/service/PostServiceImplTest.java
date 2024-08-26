@@ -2,10 +2,7 @@ package com.narsha.moongge.service;
 
 import com.narsha.moongge.base.dto.post.PostDTO;
 import com.narsha.moongge.base.dto.post.UploadPostDTO;
-import com.narsha.moongge.entity.GroupEntity;
-import com.narsha.moongge.entity.LikeEntity;
-import com.narsha.moongge.entity.PostEntity;
-import com.narsha.moongge.entity.UserEntity;
+import com.narsha.moongge.entity.*;
 import com.narsha.moongge.repository.GroupRepository;
 import com.narsha.moongge.repository.LikeRepository;
 import com.narsha.moongge.repository.PostRepository;
@@ -255,7 +252,7 @@ class PostServiceImplTest {
     private UserEntity createUser(String userId) {
         UserEntity user = UserEntity.builder()
                 .userId(userId)
-                .userType("teacher")
+                .userType(UserType.TEACHER)
                 .password("password")
                 .userName("name")
                 .build();

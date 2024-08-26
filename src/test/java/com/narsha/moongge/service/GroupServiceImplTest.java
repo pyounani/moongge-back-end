@@ -8,6 +8,7 @@ import com.narsha.moongge.base.dto.user.UserRegisterDTO;
 import com.narsha.moongge.entity.GroupEntity;
 import com.narsha.moongge.base.dto.group.CreateGroupDTO;
 import com.narsha.moongge.entity.UserEntity;
+import com.narsha.moongge.entity.UserType;
 import com.narsha.moongge.repository.GroupRepository;
 import com.narsha.moongge.repository.UserRepository;
 import jakarta.transaction.Transactional;
@@ -133,7 +134,7 @@ class GroupServiceImplTest {
 
     private void createStudentAndJoinGroup(String userId, String groupCode) {
         UserRegisterDTO userRegisterDTO = buildUserRegisterDTO(userId, "student");
-        userService.register(userRegisterDTO);
+        userService.register(userRegisterDTO, UserType.STUDENT);
 
         Optional<UserEntity> findUser = userRepository.findByUserId(userRegisterDTO.getUserId());
         assertTrue(findUser.isPresent());
@@ -145,7 +146,7 @@ class GroupServiceImplTest {
 
     private String createTeacherAndGroup(String userId) {
         UserRegisterDTO userRegisterDTO = buildUserRegisterDTO(userId, "teacher");
-        userService.register(userRegisterDTO);
+        userService.register(userRegisterDTO, UserType.TEACHER);
 
         Optional<UserEntity> findUser = userRepository.findByUserId(userRegisterDTO.getUserId());
         assertTrue(findUser.isPresent());
@@ -256,7 +257,7 @@ class GroupServiceImplTest {
     private UserEntity createUserTeacher() {
         UserEntity user = UserEntity.builder()
                 .userId("userId")
-                .userType("teacher")
+                .userType(UserType.TEACHER)
                 .password("password")
                 .userName("name")
                 .build();
@@ -267,7 +268,7 @@ class GroupServiceImplTest {
     private UserEntity createUserStudent() {
         UserEntity user = UserEntity.builder()
                 .userId("studentId")
-                .userType("student")
+                .userType(UserType.STUDENT)
                 .password("password")
                 .userName("name")
                 .build();

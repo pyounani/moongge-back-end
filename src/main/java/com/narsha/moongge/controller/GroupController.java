@@ -40,8 +40,10 @@ public class GroupController {
                     content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json")
             ),
             responses = {
-                    @ApiResponse(responseCode = "200", description = "그룹 생성 성공", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json")),
-                    @ApiResponse(responseCode = "400", description = "잘못된 요청", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json"))
+                    @ApiResponse(responseCode = "200", description = "그룹 생성 성공했습니다.", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json")),
+                    @ApiResponse(responseCode = "400", description = "잘못된 요청", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json")),
+                    @ApiResponse(responseCode = "404", description = "아이디가 존재하지 않습니다.", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json")),
+                    @ApiResponse(responseCode = "403", description = "학생은 그룹을 생성할 수 없습니다.", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json"))
             }
     )
     public ResponseEntity<ResponseDTO> createGroup(@Valid @RequestBody CreateGroupDTO createGroupDTO) {
@@ -61,8 +63,10 @@ public class GroupController {
             description = "특정 유저가 속해있는 그룹의 코드를 조회하는 API",
             parameters = @Parameter(name = "userId", description = "유저 ID", required = true),
             responses = {
-                    @ApiResponse(responseCode = "200", description = "유저의 그룹 코드 조회 성공", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json")),
-                    @ApiResponse(responseCode = "404", description = "유저를 찾을 수 없음", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json"))
+                    @ApiResponse(responseCode = "200", description = "그룹 코드 가져오기 성공했습니다.", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json")),
+                    @ApiResponse(responseCode = "404", description = "아이디에 해당하는 유저를 찾을 수 없습니다.", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json")),
+                    @ApiResponse(responseCode = "404", description = "그룹이 생성되지 않았습니다.", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json")),
+                    @ApiResponse(responseCode = "400", description = "잘못된 그룹 코드의 형태입니다.", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json"))
             }
     )
     public ResponseEntity<ResponseDTO> getUserGroupCode(@PathVariable String userId) {
@@ -86,9 +90,9 @@ public class GroupController {
                     content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json")
             ),
             responses = {
-                    @ApiResponse(responseCode = "200", description = "그룹 가입 성공", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json")),
+                    @ApiResponse(responseCode = "200", description = "그룹에 가입되었습니다.", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json")),
                     @ApiResponse(responseCode = "400", description = "잘못된 요청", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json")),
-                    @ApiResponse(responseCode = "404", description = "그룹을 찾을 수 없음", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json"))
+                    @ApiResponse(responseCode = "404", description = "그룹이 생성되지 않았습니다.", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json"))
             }
     )
     public ResponseEntity<ResponseDTO> joinGroup(@Valid @RequestBody JoinGroupDTO joinGroupDTO) {
@@ -108,8 +112,8 @@ public class GroupController {
             description = "특정 그룹을 삭제하는 API",
             parameters = @Parameter(name = "groupCode", description = "그룹 코드", required = true),
             responses = {
-                    @ApiResponse(responseCode = "200", description = "그룹 삭제 성공", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json")),
-                    @ApiResponse(responseCode = "404", description = "그룹을 찾을 수 없음", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json"))
+                    @ApiResponse(responseCode = "200", description = "그룹 삭제 성공했습니다.", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json")),
+                    @ApiResponse(responseCode = "404", description = "그룹이 생성되지 않았습니다.", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json"))
             }
     )
     public ResponseEntity<ResponseDTO> deleteGroup(@PathVariable String groupCode) {
@@ -134,7 +138,7 @@ public class GroupController {
             ),
             parameters = @Parameter(name = "groupCode", description = "그룹 코드", required = true),
             responses = {
-                    @ApiResponse(responseCode = "200", description = "그룹 시간 등록/수정 성공", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json")),
+                    @ApiResponse(responseCode = "200", description = "앱 사용시간 설정 성공했습니다.", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json")),
                     @ApiResponse(responseCode = "400", description = "잘못된 요청", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json")),
                     @ApiResponse(responseCode = "404", description = "그룹을 찾을 수 없음", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json"))
             }
@@ -157,7 +161,7 @@ public class GroupController {
             description = "설정한 그룹의 시간을 조회하는 API",
             parameters = @Parameter(name = "groupCode", description = "그룹 코드", required = true),
             responses = {
-                    @ApiResponse(responseCode = "200", description = "그룹 시간 조회 성공", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json")),
+                    @ApiResponse(responseCode = "200", description = "앱 사용시간 불러오기 성공했습니다.", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json")),
                     @ApiResponse(responseCode = "404", description = "그룹을 찾을 수 없음", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json"))
             }
     )
@@ -181,7 +185,7 @@ public class GroupController {
                     @Parameter(name = "userId", description = "요청한 유저의 ID", required = true)
             },
             responses = {
-                    @ApiResponse(responseCode = "200", description = "유저 목록 조회 성공", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json")),
+                    @ApiResponse(responseCode = "200", description = "그룹의 유저 목록을 성공적으로 가져왔습니다.", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json")),
                     @ApiResponse(responseCode = "404", description = "그룹을 찾을 수 없음", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json"))
             }
     )

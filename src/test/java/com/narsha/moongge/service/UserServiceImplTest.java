@@ -5,6 +5,7 @@ import com.narsha.moongge.base.dto.user.*;
 import com.narsha.moongge.base.exception.LoginPasswordNotMatchException;
 import com.narsha.moongge.base.exception.UserNotFoundException;
 import com.narsha.moongge.entity.UserEntity;
+import com.narsha.moongge.entity.UserType;
 import com.narsha.moongge.repository.GroupRepository;
 import com.narsha.moongge.repository.UserRepository;
 import org.junit.jupiter.api.AfterEach;
@@ -48,7 +49,7 @@ public class UserServiceImplTest {
 
         UserRegisterDTO userRegisterDTO = buildUserRegisterDTO();
 
-        UserDTO savedUserDTO = userService.register(userRegisterDTO);
+        UserDTO savedUserDTO = userService.register(userRegisterDTO, UserType.TEACHER);
 
         Optional<UserEntity> findUser = userRepository.findByUserId(savedUserDTO.getUserId());
         assertTrue(findUser.isPresent());
@@ -64,7 +65,7 @@ public class UserServiceImplTest {
     void 중복된_유저_인지_확인하기() {
 
         UserRegisterDTO userRegisterDTO = buildUserRegisterDTO();
-        userService.register(userRegisterDTO);
+        userService.register(userRegisterDTO, UserType.TEACHER);
 
         Boolean checkUserId = userService.checkUserId(userRegisterDTO.getUserId());
         assertFalse(checkUserId);
@@ -74,7 +75,7 @@ public class UserServiceImplTest {
     void 중복된_유저_아닌_경우_확인하기() {
 
         UserRegisterDTO userRegisterDTO = buildUserRegisterDTO();
-        userService.register(userRegisterDTO);
+        userService.register(userRegisterDTO, UserType.TEACHER);
 
         Boolean checkUserId = userService.checkUserId("newUserId");
         assertTrue(checkUserId);
@@ -83,7 +84,7 @@ public class UserServiceImplTest {
     @Test
     void 로그인() {
         UserRegisterDTO userRegisterDTO = buildUserRegisterDTO();
-        userService.register(userRegisterDTO);
+        userService.register(userRegisterDTO, UserType.TEACHER);
 
         UserLoginDTO userLoginDTO = buildUserLoginDTO(userRegisterDTO);
         UserDTO userDTO = userService.login(userLoginDTO);
@@ -109,7 +110,7 @@ public class UserServiceImplTest {
 
         // 회원가입 진행
         UserRegisterDTO userRegisterDTO = buildUserRegisterDTO();
-        userService.register(userRegisterDTO);
+        userService.register(userRegisterDTO, UserType.TEACHER);
 
         // 잘못된 비밀번호로 로그인 시도
         UserLoginDTO userLoginDTO = buildUserLoginDTO(userRegisterDTO, "wrongPassword");
@@ -121,7 +122,7 @@ public class UserServiceImplTest {
 
         // 회원가입 진행
         UserRegisterDTO userRegisterDTO = buildUserRegisterDTO();
-        userService.register(userRegisterDTO);
+        userService.register(userRegisterDTO, UserType.TEACHER);
 
         MultipartFile multipartFile = createMultipartFile();
         UpdateUserRequestDTO updateUserRequestDTO = buildUpdateUserProfileDTO(userRegisterDTO);
@@ -140,7 +141,7 @@ public class UserServiceImplTest {
 
         // 회원가입 진행
         UserRegisterDTO userRegisterDTO = buildUserRegisterDTO();
-        userService.register(userRegisterDTO);
+        userService.register(userRegisterDTO, UserType.TEACHER);
 
         MultipartFile multipartFile = createMultipartFile();
         UpdateUserRequestDTO updateUserRequestDTO = buildUpdateUserProfileDTO(userRegisterDTO);
@@ -165,7 +166,7 @@ public class UserServiceImplTest {
     void 뱃지_리스트_업데이트() {
         // 회원가입 진행
         UserRegisterDTO userRegisterDTO = buildUserRegisterDTO();
-        userService.register(userRegisterDTO);
+        userService.register(userRegisterDTO, UserType.TEACHER);
 
         Optional<UserEntity> findUser = userRepository.findByUserId(userRegisterDTO.getUserId());
         assertTrue(findUser.isPresent());
@@ -183,7 +184,7 @@ public class UserServiceImplTest {
     void 뱃지_리스트_조회하기() {
         // 회원가입 진행
         UserRegisterDTO userRegisterDTO = buildUserRegisterDTO();
-        userService.register(userRegisterDTO);
+        userService.register(userRegisterDTO, UserType.TEACHER);
 
         Optional<UserEntity> findUser = userRepository.findByUserId(userRegisterDTO.getUserId());
         assertTrue(findUser.isPresent());

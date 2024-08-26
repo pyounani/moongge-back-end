@@ -11,6 +11,7 @@ import com.narsha.moongge.entity.*;
 import com.narsha.moongge.repository.*;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,6 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 @Service
@@ -27,7 +29,13 @@ public class GroupServiceImpl implements GroupService{
 
     private final GroupRepository groupRepository;
     private final UserRepository userRepository;
+
     public static final int BADGE_LIST_SIZE = 10;
+
+    @Value("${group.code.charset}")
+    private String charset;
+    @Value("${group.code.size}")
+    private int groupCodeSize;
 
     /**
      * 그룹 생성하기
@@ -35,20 +43,18 @@ public class GroupServiceImpl implements GroupService{
     @Override
     public String createGroup(CreateGroupDTO createGroupDTO) {
 
-        // 그룹 코드 생성
-        String groupCode = generateUniqueGroupCode();
-
-        // 그룹 생성
-        GroupEntity group = buildGroupEntity(createGroupDTO, groupCode);
-
         UserEntity user = userRepository.findByUserId(createGroupDTO.getUserId())
                 .orElseThrow(() -> new UserNotFoundException(ErrorCode.USER_NOT_FOUND));
 
         // 학생 유형 사용자 검증
-        if ("student".equals(user.getUserType())) {
+        if (UserType.STUDENT == user.getUserType()) {
             throw new StudentGroupCreationException(ErrorCode.STUDENT_NOT_ALLOWED_GROUP);
         }
 
+        // 그룹 코드 생성
+        String groupCode = generateUniqueGroupCode();
+        // 그룹 생성
+        GroupEntity group = buildGroupEntity(createGroupDTO, groupCode);
         // DB에 그룹 생성
         GroupEntity createdGroup  = groupRepository.save(group);
         if (createdGroup  == null || createdGroup .getGroupCode() == null) {
@@ -57,8 +63,6 @@ public class GroupServiceImpl implements GroupService{
 
         // 사용자에 생성된 그룹 업데이트
         user.updateGroup(createdGroup);
-
-        // profile badge update
         initialBadgeList(user);
 
         return user.getUserId();
@@ -70,18 +74,17 @@ public class GroupServiceImpl implements GroupService{
     @Override
     @Transactional(readOnly=true)
     public String getUserGroupCode(String userId) {
-
         UserEntity user = userRepository.findByUserId(userId)
                 .orElseThrow(() -> new UserNotFoundException(ErrorCode.USER_NOT_FOUND));
 
         GroupEntity group = Optional.ofNullable(user.getGroup())
                 .orElseThrow(() -> new GroupNotFoundException(ErrorCode.GROUP_NOT_FOUND));
 
-        String groupCode = Optional.ofNullable(group.getGroupCode())
-                .orElseThrow(() -> new GroupCodeNotFoundException(ErrorCode.GROUPCODE_NOT_FOUND));
+        String groupCode = group.getGroupCode();
 
-        groupRepository.findByGroupCode(groupCode)
-                .orElseThrow(() -> new GroupNotFoundException(ErrorCode.GROUP_NOT_FOUND));
+        if (!isValidGroupCode(groupCode)) {
+            throw new InvalidGroupCodeException(ErrorCode.INVALID_GROUP_CODE);
+        }
 
         return groupCode;
     }
@@ -91,16 +94,20 @@ public class GroupServiceImpl implements GroupService{
      */
     @Override
     public GroupDTO joinGroup(JoinGroupDTO joinGroupDTO) {
+
         GroupEntity group = groupRepository.findByGroupCode(joinGroupDTO.getGroupCode())
                 .orElseThrow(() -> new GroupNotFoundException(ErrorCode.GROUP_NOT_FOUND));
 
-        // set group code
+        // 그룹 코드 검증
+        if (!isValidGroupCode(joinGroupDTO.getGroupCode())) {
+            throw new InvalidGroupCodeException(ErrorCode.INVALID_GROUP_CODE);
+        }
+
         UserEntity user = userRepository.findByUserId(joinGroupDTO.getUserId())
                 .orElseThrow(() -> new UserNotFoundException(ErrorCode.USER_NOT_FOUND));
 
         // 그룹에 조인
         user.updateGroup(group);
-
         // badgeList 생성
         initialBadgeList(user);
 
@@ -113,12 +120,16 @@ public class GroupServiceImpl implements GroupService{
     @Override
     public String deleteGroup(String groupCode) {
 
+        // 그룹 코드 검증
+        if (!isValidGroupCode(groupCode)) {
+            throw new InvalidGroupCodeException(ErrorCode.INVALID_GROUP_CODE);
+        }
+
         GroupEntity group = groupRepository.findByGroupCode(groupCode)
                 .orElseThrow(() -> new GroupNotFoundException(ErrorCode.GROUP_NOT_FOUND));
 
-        // 유저의 그룹 제거(null 값으로)
-        clearGroupForUsers(group);
-
+        // 유저의 그룹 제거 및 그룹 제거
+        groupRepository.clearGroupForUsers(group);
         groupRepository.delete(group);
 
         return groupCode;
@@ -133,13 +144,13 @@ public class GroupServiceImpl implements GroupService{
         GroupEntity findGroup = groupRepository.findByGroupCode(groupCode)
                 .orElseThrow(() -> new GroupNotFoundException(ErrorCode.GROUP_NOT_FOUND));
 
+        if (!isValidGroupCode(groupCode)) {
+            throw new InvalidGroupCodeException(ErrorCode.INVALID_GROUP_CODE);
+        }
+
         findGroup.setTime(updateTimeDTO.getStartTime(), updateTimeDTO.getEndTime());
 
-        return UpdateTimeDTO.builder()
-                .groupCode(groupCode)
-                .startTime(findGroup.getStartTime())
-                .endTime(findGroup.getEndTime())
-                .build();
+        return UpdateTimeDTO.mapToUpdateTimeDTO(findGroup);
     }
 
     /**
@@ -152,11 +163,11 @@ public class GroupServiceImpl implements GroupService{
         GroupEntity findGroup = groupRepository.findByGroupCode(groupCode)
                 .orElseThrow(() -> new GroupNotFoundException(ErrorCode.GROUP_NOT_FOUND));
 
-        return UpdateTimeDTO.builder()
-                .groupCode(groupCode)
-                .startTime(findGroup.getStartTime())
-                .endTime(findGroup.getEndTime())
-                .build();
+        if (!isValidGroupCode(groupCode)) {
+            throw new InvalidGroupCodeException(ErrorCode.INVALID_GROUP_CODE);
+        }
+
+        return UpdateTimeDTO.mapToUpdateTimeDTO(findGroup);
     }
 
     /**
@@ -165,29 +176,39 @@ public class GroupServiceImpl implements GroupService{
     @Override
     @Transactional(readOnly = true)
     public List<UserProfileDTO> getStudentList(String groupCode, String userId) {
-        GroupEntity group = groupRepository.findByGroupCode(groupCode)
-                .orElseThrow(() -> new GroupNotFoundException(ErrorCode.GROUP_NOT_FOUND));
 
-        userRepository.findByUserIdAndGroup(userId, group)
-                .orElseThrow(() -> new UserNotFoundException(ErrorCode.USER_NOT_FOUND));
+        if (!userRepository.existsByGroupCodeAndUserId(groupCode, userId)) {
+            throw new UserNotFoundException(ErrorCode.USER_NOT_FOUND);
+        }
 
-        List<UserEntity> studentList = userRepository.findByGroupAndUserIdNotLike(group, userId);
+        // 그룹 코드 검증
+        if (!isValidGroupCode(groupCode)) {
+            throw new InvalidGroupCodeException(ErrorCode.INVALID_GROUP_CODE);
+        }
+
+        List<UserEntity> studentList = userRepository.getUsersInGroupExcept(groupCode, userId);
 
         return studentList.stream()
                 .map(UserProfileDTO::mapToUserProfileDTO)
                 .collect(Collectors.toList());
     }
 
+    // 그룹 코드 검증 로직
+    private boolean isValidGroupCode(String groupCode) {
+        return groupCode != null
+                && !groupCode.isEmpty()
+                && groupCode.matches("[" + Pattern.quote(charset) + "]{" + groupCodeSize + "}");
+    }
+
     // 랜덤 코드 생성
     private String getRandomCode(int length) {
-        String alphaNum = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-        int alphaNumLength = alphaNum.length();
+        int alphaNumLength = charset.length();
 
         Random random = new Random();
 
         StringBuffer code = new StringBuffer();
         for (int i = 0; i < length; i++) {
-            code.append(alphaNum.charAt(random.nextInt(alphaNumLength)));
+            code.append(charset.charAt(random.nextInt(alphaNumLength)));
         }
 
         return code.toString();
@@ -196,8 +217,8 @@ public class GroupServiceImpl implements GroupService{
     private String generateUniqueGroupCode() {
         String groupCode;
         do {
-            groupCode = getRandomCode(10);
-        } while (groupRepository.findByGroupCode(groupCode).isPresent()); // 동일한 그룹 코드가 나오지 않도록
+            groupCode = getRandomCode(groupCodeSize);
+        } while (groupRepository.existsByGroupCode(groupCode)); // 동일한 그룹 코드가 나오지 않도록
         return groupCode;
     }
 
@@ -218,13 +239,6 @@ public class GroupServiceImpl implements GroupService{
             newBadgeList.add(false);
         }
         user.updateBadgeList(newBadgeList.toString());
-    }
-
-    private void clearGroupForUsers(GroupEntity group) {
-        List<UserEntity> users = userRepository.findByGroup(group);
-        for (UserEntity user : users) {
-            user.clearGroup();
-        }
     }
 
 }

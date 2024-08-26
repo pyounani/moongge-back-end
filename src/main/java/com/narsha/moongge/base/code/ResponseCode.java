@@ -19,10 +19,17 @@ public enum ResponseCode {
     SUCCESS_GET_BADGE_LIST(HttpStatus.OK, "뱃지 목록을 성공적으로 가져왔습니다."),
     SUCCESS_UPDATE_BADGE_LIST(HttpStatus.OK, "뱃지 목록을 성공적으로 업데이트했습니다."),
 
-
+    /**
+     * GROUP
+     */
+    SUCCESS_CREATE_GROUP(HttpStatus.OK, "그룹 생성 성공했습니다."),
+    SUCCESS_GET_GROUP_CODE(HttpStatus.OK,"그룹 코드 가져오기 성공했습니다."),
     SUCCESS_JOIN_GROUP(HttpStatus.OK, "그룹에 가입되었습니다."),
-
+    SUCCESS_DELETE_GROUP(HttpStatus.OK, "그룹 삭제 성공했습니다."),
+    SUCCESS_UPDATE_TIME(HttpStatus.OK, "앱 사용시간 설정 성공했습니다."),
+    SUCCESS_GET_TIME(HttpStatus.OK, "앱 사용시간 불러오기 성공했습니다."),
     SUCCESS_GET_USER_LIST(HttpStatus.OK, "그룹의 유저 목록을 성공적으로 가져왔습니다."),
+
 
     SUCCESS_CREATE_NOTICE(HttpStatus.OK, "공지 작성에 성공했습니다."),
     SUCCESS_GET_NOTICE_LIST(HttpStatus.OK, "공지 목록을 성공적으로 가져왔습니다."),
@@ -42,11 +49,8 @@ public enum ResponseCode {
     SUCCESS_RECEIVE_TEN_LIKE(HttpStatus.OK, "좋아요 10개 받기 달성 여부를 성공적으로 가져왔습니다."),
     SUCCESS_GIVE_TEN_LIKE(HttpStatus.OK, "좋아요 10개 주기 달성 여부를 성공적으로 가져왔습니다."),
 
-    SUCCESS_CREATE_GROUP(HttpStatus.OK, "그룹 생성 성공"),
 
-    SUCCESS_GET_GROUP_CODE(HttpStatus.OK,"그룹 코드 가져오기 성공"),
 
-    SUCCESS_DELETE_GROUP(HttpStatus.OK, "그룹 삭제 성공"),
 
     SUCCESS_UPLOAD_POST(HttpStatus.OK, "포스트 업로드 완료!"),
 
@@ -56,9 +60,6 @@ public enum ResponseCode {
 
     SUCCESS_DETAIL_POST(HttpStatus.OK, "포스트 상세 불러오기 성공"),
 
-    SUCCESS_UPDATE_TIME(HttpStatus.OK, "앱 사용시간 설정 성공"),
-
-    SUCCESS_GET_TIME(HttpStatus.OK, "앱 사용시간 불러오기 성공"),
     SUCCESS_GET_ALARM_LIST(HttpStatus.OK, "알람 목록을 성공적으로 가져왔습니다."),
     SUCCESS_DELETE_ALARM(HttpStatus.OK, "알람을 성공적으로 삭제했습니다."),
     ;

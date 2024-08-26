@@ -11,10 +11,11 @@ public enum ErrorCode {
     /**
      * 400 BAD_REQUEST: 잘못된 요청
      */
+    INVALID_GROUP_CODE(HttpStatus.BAD_REQUEST, "잘못된 그룹 코드입니다."),
+    INVALID_USER_TYPE(HttpStatus.BAD_REQUEST, "잘못된 유저 타입입니다."),
 
     BAD_REQUEST(HttpStatus.BAD_REQUEST, "잘못된 요청입니다."),
     EMPTY_COMMENT_CONTENT(HttpStatus.BAD_REQUEST, "댓글 내용이 비어있습니다."),
-
     DELETE_FAILED_ENTITY_RELATED_GROUPCODE(HttpStatus.BAD_REQUEST, "해당 그룹코드로 모든 엔티티 삭제를 실패했습니다."),
 
     /**
@@ -25,8 +26,9 @@ public enum ErrorCode {
     /**
      * 403 FORBIDDEN
      */
-    STUDENT_NOT_ALLOWED_NOTICE(HttpStatus.FORBIDDEN, "학생은 공지사항은 작성할 수 없습니다."),
     STUDENT_NOT_ALLOWED_GROUP(HttpStatus.FORBIDDEN, "학생은 그룹을 생성할 수 없습니다."),
+
+    STUDENT_NOT_ALLOWED_NOTICE(HttpStatus.FORBIDDEN, "학생은 공지사항은 작성할 수 없습니다."),
     GROUP_MISMATCH(HttpStatus.FORBIDDEN, "그룹 코드가 일치하지 않습니다."),
 
     /**
@@ -34,9 +36,8 @@ public enum ErrorCode {
      */
     USERID_NOT_FOUND(HttpStatus.NOT_FOUND, "아이디가 존재하지 않습니다."),
     USER_NOT_FOUND(HttpStatus.NOT_FOUND, "아이디에 해당하는 유저를 찾을 수 없습니다."),
-
-    GROUPCODE_NOT_FOUND(HttpStatus.NOT_FOUND, "그룹 코드에 해당하는 그룹을 찾을 수 없습니다."),
     GROUP_NOT_FOUND(HttpStatus.NOT_FOUND, "그룹이 생성되지 않았습니다."),
+
     POST_NOT_FOUND(HttpStatus.NOT_FOUND, "게시글 정보를 찾을 수 없습니다."),
     COMMENT_NOT_FOUND(HttpStatus.NOT_FOUND, "댓글 정보를 찾을 수 없습니다."),
     LIKE_NOT_FOUND(HttpStatus.NOT_FOUND, "좋아요를 찾을 수 없습니다."),
