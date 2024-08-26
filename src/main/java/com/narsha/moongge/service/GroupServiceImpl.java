@@ -146,11 +146,7 @@ public class GroupServiceImpl implements GroupService{
 
         findGroup.setTime(updateTimeDTO.getStartTime(), updateTimeDTO.getEndTime());
 
-        return UpdateTimeDTO.builder()
-                .groupCode(groupCode)
-                .startTime(findGroup.getStartTime())
-                .endTime(findGroup.getEndTime())
-                .build();
+        return UpdateTimeDTO.mapToUpdateTimeDTO(findGroup);
     }
 
     /**

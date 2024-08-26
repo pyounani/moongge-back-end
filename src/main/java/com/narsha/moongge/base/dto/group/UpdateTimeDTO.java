@@ -1,5 +1,7 @@
 package com.narsha.moongge.base.dto.group;
 
+import com.narsha.moongge.entity.GroupEntity;
+import com.narsha.moongge.entity.UserEntity;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
@@ -18,5 +20,13 @@ public class UpdateTimeDTO {
     private LocalTime endTime; // 끝 시간
 
     private String groupCode; // 그룹 코드
+
+    public static UpdateTimeDTO mapToUpdateTimeDTO(GroupEntity group) {
+        return UpdateTimeDTO.builder()
+                .startTime(group.getStartTime())
+                .endTime(group.getEndTime())
+                .groupCode(group.getGroupCode())
+                .build();
+    }
 
 }
