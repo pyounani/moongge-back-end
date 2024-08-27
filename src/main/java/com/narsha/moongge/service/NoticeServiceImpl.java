@@ -6,9 +6,7 @@ import com.narsha.moongge.base.dto.notice.NoticeDTO;
 import com.narsha.moongge.base.exception.*;
 import com.narsha.moongge.entity.NoticeEntity;
 import com.narsha.moongge.entity.UserEntity;
-import com.narsha.moongge.entity.GroupEntity;
 import com.narsha.moongge.entity.UserType;
-import com.narsha.moongge.repository.GroupRepository;
 import com.narsha.moongge.repository.NoticeRepository;
 import com.narsha.moongge.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +22,6 @@ import java.util.stream.Collectors;
 public class NoticeServiceImpl implements NoticeService{
 
     private final NoticeRepository noticeRepository;
-    private final GroupRepository groupRepository;
     private final UserRepository userRepository;
 
 
