@@ -17,7 +17,6 @@ import java.time.LocalDateTime;
 public class NoticeDTO {
 
     private Integer noticeId;
-    private String groupCode;
     private String writer;
     private String noticeTitle;
     private String noticeContent;

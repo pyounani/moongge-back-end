@@ -3,6 +3,7 @@ package com.narsha.moongge.repository;
 import com.narsha.moongge.entity.GroupEntity;
 import com.narsha.moongge.entity.NoticeEntity;
 import com.narsha.moongge.entity.UserEntity;
+import com.narsha.moongge.entity.UserType;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -76,7 +77,7 @@ class NoticeRepositoryTest {
     private UserEntity createUser() {
         UserEntity user = UserEntity.builder()
                 .userId("userId")
-                .userType("teacher")
+                .userType(UserType.TEACHER)
                 .password("password")
                 .userName("name")
                 .build();

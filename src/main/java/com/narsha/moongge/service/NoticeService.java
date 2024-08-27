@@ -11,6 +11,6 @@ public interface NoticeService {
 
     NoticeDTO createNotice(CreateNoticeDTO createNoticeDTO);
     List<NoticeDTO> getNoticeList(String groupCode);
-    NoticeDTO getNoticeDetail(String groupCode, Integer noticeId);
+    NoticeDTO getNoticeDetail(String userId, Integer noticeId);
     NoticeDTO getRecentNoticeOne(String groupCode);
 }

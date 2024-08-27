@@ -59,8 +59,8 @@ public class NoticeServiceImpl implements NoticeService{
      * 공지 목록 불러오기
      */
     @Override
-    public List<NoticeDTO> getNoticeList(String groupId) {
-        GroupEntity group = groupRepository.findByGroupCode(groupId)
+    public List<NoticeDTO> getNoticeList(String groupCode) {
+        GroupEntity group = groupRepository.findByGroupCode(groupCode)
                 .orElseThrow(() -> new GroupNotFoundException(ErrorCode.GROUP_NOT_FOUND));
 
         List<NoticeEntity> noticeList = noticeRepository.findByGroup(group);
@@ -74,13 +74,13 @@ public class NoticeServiceImpl implements NoticeService{
      * 공지 상세 불러오기
      */
     @Override
-    public NoticeDTO getNoticeDetail(String groupCode, Integer noticeId) {
-        NoticeEntity notice = noticeRepository.findByNoticeId(noticeId)
-                .orElseThrow(() -> new NoticeNotFoundException(ErrorCode.NOTICE_NOT_FOUND));
+    public NoticeDTO getNoticeDetail(String userId, Integer noticeId) {
 
-        if (!groupCode.equals(notice.getGroup().getGroupCode())) {
-            throw new GroupMismatchException(ErrorCode.GROUP_MISMATCH);
-        }
+        UserEntity findUser = userRepository.findUserWithGroup(userId)
+                .orElseThrow(() -> new UserNotFoundException(ErrorCode.USER_NOT_FOUND));
+
+        NoticeEntity notice = noticeRepository.findByGroupAndNoticeId(findUser.getGroup(), noticeId)
+                .orElseThrow(() -> new NoticeNotFoundException(ErrorCode.NOTICE_NOT_FOUND));
 
         return NoticeDTO.mapToNoticeDTO(notice);
     }

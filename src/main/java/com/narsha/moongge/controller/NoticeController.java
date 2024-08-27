@@ -75,12 +75,12 @@ public class NoticeController {
     /**
      * 공지 상세사항 내용 불러오기 API
      */
-    @GetMapping("/{groupCode}/{noticeId}")
+    @GetMapping("/{userId}/{noticeId}")
     @Operation(
             summary = "공지 상세 조회",
             description = "주어진 그룹 코드와 공지 ID에 대해 공지의 상세 내용을 조회하는 API",
             parameters = {
-                    @Parameter(name = "groupCode", description = "공지가 포함된 그룹의 코드", required = true),
+                    @Parameter(name = "userId", description = "사용자의 유저 ID", required = true),
                     @Parameter(name = "noticeId", description = "상세 조회할 공지의 ID", required = true)
             },
             responses = {
@@ -89,9 +89,9 @@ public class NoticeController {
                     @ApiResponse(responseCode = "404", description = "공지 또는 그룹을 찾을 수 없음", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json"))
             }
     )
-    public ResponseEntity<ResponseDTO> getNoticeDetail(@PathVariable String groupCode,
+    public ResponseEntity<ResponseDTO> getNoticeDetail(@PathVariable String userId,
                                                        @PathVariable Integer noticeId) {
-        NoticeDTO res = noticeService.getNoticeDetail(groupCode, noticeId);
+        NoticeDTO res = noticeService.getNoticeDetail(userId, noticeId);
 
         return ResponseEntity
                 .status(ResponseCode.SUCCESS_GET_NOTICE_DETAIL.getStatus().value())

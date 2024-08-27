@@ -77,7 +77,6 @@ class NoticeServiceImplTest {
         assertEquals(createNoticeDTO.getNoticeTitle(), retrievedNotice.getNoticeTitle(), "공지 제목이 일치해야 합니다.");
         assertEquals(createNoticeDTO.getNoticeContent(), retrievedNotice.getNoticeContent(), "공지 내용이 일치해야 합니다.");
         assertEquals(user.getUserId(), retrievedNotice.getWriter(), "작성자가 일치해야 합니다.");
-        assertEquals(group.getGroupCode(), retrievedNotice.getGroupCode(), "그룹 코드가 일치해야 합니다.");
     }
 
     @Test
@@ -116,13 +115,12 @@ class NoticeServiceImplTest {
         NoticeDTO noticeDTO = noticeService.createNotice(createNoticeDTO);
 
         // when
-        NoticeDTO findNoticeDTO = noticeService.getNoticeDetail(group.getGroupCode(), noticeDTO.getNoticeId());
+        NoticeDTO findNoticeDTO = noticeService.getNoticeDetail(user.getUserId(), noticeDTO.getNoticeId());
 
         // then
         assertEquals(createNoticeDTO.getNoticeTitle(), findNoticeDTO.getNoticeTitle(), "공지 제목이 일치해야 합니다.");
         assertEquals(createNoticeDTO.getNoticeContent(), findNoticeDTO.getNoticeContent(), "공지 내용이 일치해야 합니다.");
         assertEquals(user.getUserId(), findNoticeDTO.getWriter(), "공지 작성자가 일치해야 합니다.");
-        assertEquals(group.getGroupCode(), findNoticeDTO.getGroupCode(), "공지 그룹 코드가 일치해야 합니다.");
 
     }
 

@@ -11,6 +11,7 @@ public interface NoticeRepository extends JpaRepository<NoticeEntity,Integer> {
 
     List<NoticeEntity> findByGroup(GroupEntity group);
     Optional<NoticeEntity> findByNoticeId(Integer noticeId);
+    Optional<NoticeEntity> findByGroupAndNoticeId(GroupEntity group, Integer noticeId);
     Optional<NoticeEntity> findTopByGroupOrderByCreateAtDesc(GroupEntity group);
 
 }

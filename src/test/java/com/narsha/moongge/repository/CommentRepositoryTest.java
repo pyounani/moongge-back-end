@@ -1,9 +1,6 @@
 package com.narsha.moongge.repository;
 
-import com.narsha.moongge.entity.CommentEntity;
-import com.narsha.moongge.entity.GroupEntity;
-import com.narsha.moongge.entity.PostEntity;
-import com.narsha.moongge.entity.UserEntity;
+import com.narsha.moongge.entity.*;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -84,7 +81,7 @@ class CommentRepositoryTest {
     private UserEntity createUser() {
         UserEntity user = UserEntity.builder()
                 .userId("userId")
-                .userType("teacher")
+                .userType(UserType.TEACHER)
                 .password("password")
                 .userName("name")
                 .build();
