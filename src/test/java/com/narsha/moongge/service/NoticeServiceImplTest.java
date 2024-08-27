@@ -92,7 +92,7 @@ class NoticeServiceImplTest {
         NoticeDTO recentNoticeDTO = noticeService.createNotice(createNoticeDTO2);
 
         // when
-        NoticeDTO noticeDTO = noticeService.getRecentNoticeOne(group.getGroupCode());
+        NoticeDTO noticeDTO = noticeService.getRecentNoticeOne(user.getUserId());
 
         Optional<NoticeEntity> savedNotice = noticeRepository.findByNoticeId(noticeDTO.getNoticeId());
         assertTrue(savedNotice.isPresent());

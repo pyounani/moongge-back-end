@@ -89,11 +89,12 @@ public class NoticeServiceImpl implements NoticeService{
      * 최근에 올린 공지 한 개 불러오기
      */
     @Override
-    public NoticeDTO getRecentNoticeOne(String groupCode) {
-        GroupEntity group = groupRepository.findByGroupCode(groupCode)
-                .orElseThrow(() -> new GroupNotFoundException(ErrorCode.GROUP_NOT_FOUND));
+    public NoticeDTO getRecentNoticeOne(String userId) {
 
-        NoticeEntity notice = noticeRepository.findTopByGroupOrderByCreateAtDesc(group)
+        UserEntity findUser = userRepository.findUserWithGroup(userId)
+                .orElseThrow(() -> new UserNotFoundException(ErrorCode.USER_NOT_FOUND));
+
+        NoticeEntity notice = noticeRepository.findTopByGroupOrderByCreateAtDesc(findUser.getGroup())
                 .orElseThrow(() -> new NoticeNotFoundException(ErrorCode.NOTICE_NOT_FOUND));
 
         return NoticeDTO.mapToNoticeDTO(notice);

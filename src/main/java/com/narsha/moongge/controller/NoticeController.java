@@ -105,18 +105,18 @@ public class NoticeController {
     /**
      * 최근에 올린 공지 한 개 API
      */
-    @GetMapping("/{groupCode}/recent")
+    @GetMapping("/{userId}/recent")
     @Operation(
             summary = "최근 공지 조회",
             description = "주어진 그룹 코드에 대해 최근에 올라온 공지 하나를 조회하는 API",
-            parameters = @Parameter(name = "groupCode", description = "최근 공지를 조회할 그룹 코드", required = true),
+            parameters = @Parameter(name = "userId", description = "최근 공지를 조회할 유저 아이디", required = true),
             responses = {
                     @ApiResponse(responseCode = "200", description = "가장 최근 공지를 성공적으로 가져왔습니다.", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json")),
                     @ApiResponse(responseCode = "400", description = "잘못된 요청", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json"))
             }
     )
-    public ResponseEntity<ResponseDTO> getRecentNoticeOne(@PathVariable String groupCode) {
-        NoticeDTO res = noticeService.getRecentNoticeOne(groupCode);
+    public ResponseEntity<ResponseDTO> getRecentNoticeOne(@PathVariable String userId) {
+        NoticeDTO res = noticeService.getRecentNoticeOne(userId);
 
         return ResponseEntity
                 .status(ResponseCode.SUCCESS_GET_NOTICE_RECENT_ONE.getStatus().value())
