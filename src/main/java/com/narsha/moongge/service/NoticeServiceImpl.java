@@ -59,11 +59,11 @@ public class NoticeServiceImpl implements NoticeService{
      * 공지 목록 불러오기
      */
     @Override
-    public List<NoticeDTO> getNoticeList(String groupCode) {
-        GroupEntity group = groupRepository.findByGroupCode(groupCode)
-                .orElseThrow(() -> new GroupNotFoundException(ErrorCode.GROUP_NOT_FOUND));
+    public List<NoticeDTO> getNoticeList(String userId) {
+        UserEntity findUser = userRepository.findUserWithGroup(userId)
+                .orElseThrow(() -> new UserNotFoundException(ErrorCode.USER_NOT_FOUND));
 
-        List<NoticeEntity> noticeList = noticeRepository.findByGroup(group);
+        List<NoticeEntity> noticeList = noticeRepository.findByGroup(findUser.getGroup());
 
         return noticeList.stream()
                 .map(NoticeDTO::mapToNoticeDTO)

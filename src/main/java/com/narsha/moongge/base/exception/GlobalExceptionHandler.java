@@ -111,6 +111,28 @@ public class GlobalExceptionHandler {
     }
 
     /**
+     * Notice
+     */
+    @ExceptionHandler(StudentNoticeCreationException.class)
+    protected ResponseEntity<ErrorResponseDTO>  handleStudentNoticeCreationException(final StudentNoticeCreationException e) {
+        log.error("StudentNoticeCreationException : {}", e.getMessage());
+        return ResponseEntity
+                .status(ErrorCode.STUDENT_NOT_ALLOWED_NOTICE.getStatus().value())
+                .body(new ErrorResponseDTO(ErrorCode.STUDENT_NOT_ALLOWED_NOTICE));
+
+    }
+
+    @ExceptionHandler(NoticeNotFoundException.class)
+    protected ResponseEntity<ErrorResponseDTO>  handleNoticeNotFoundException(final NoticeNotFoundException e) {
+        log.error("NoticeNotFoundException : {}", e.getMessage());
+        return ResponseEntity
+                .status(ErrorCode.NOTICE_NOT_FOUND.getStatus().value())
+                .body(new ErrorResponseDTO(ErrorCode.NOTICE_NOT_FOUND));
+
+    }
+
+
+    /**
      * Comment
      */
 
@@ -147,26 +169,7 @@ public class GlobalExceptionHandler {
                 .body(new ErrorResponseDTO(ErrorCode.POST_NOT_FOUND));
     }
 
-    @ExceptionHandler(NoticeNotFoundException.class)
-    protected ResponseEntity<ErrorResponseDTO>  handleNoticeNotFoundException(final NoticeNotFoundException e) {
-        log.error("NoticeNotFoundException : {}", e.getMessage());
-        return ResponseEntity
-                .status(ErrorCode.NOTICE_NOT_FOUND.getStatus().value())
-                .body(new ErrorResponseDTO(ErrorCode.NOTICE_NOT_FOUND));
 
-    }
-
-    /**
-     * NOTICE
-     */
-    @ExceptionHandler(StudentNoticeCreationException.class)
-    protected ResponseEntity<ErrorResponseDTO>  handleStudentNoticeCreationException(final StudentNoticeCreationException e) {
-        log.error("StudentNoticeCreationException : {}", e.getMessage());
-        return ResponseEntity
-                .status(ErrorCode.STUDENT_NOT_ALLOWED_NOTICE.getStatus().value())
-                .body(new ErrorResponseDTO(ErrorCode.STUDENT_NOT_ALLOWED_NOTICE));
-
-    }
 
     @ExceptionHandler(GroupMismatchException.class)
     protected ResponseEntity<ErrorResponseDTO>  handleGroupMismatchException(final GroupMismatchException e) {

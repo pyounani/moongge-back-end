@@ -66,7 +66,7 @@ class NoticeServiceImplTest {
         NoticeDTO noticeDTO = noticeService.createNotice(createNoticeDTO);
 
         // when
-        List<NoticeDTO> noticeList = noticeService.getNoticeList(group.getGroupCode());
+        List<NoticeDTO> noticeList = noticeService.getNoticeList(user.getUserId());
 
         // then
         assertFalse(noticeList.isEmpty(), "공지 목록이 비어 있으면 안 됩니다.");
