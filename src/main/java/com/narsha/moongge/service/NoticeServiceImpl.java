@@ -7,6 +7,7 @@ import com.narsha.moongge.base.exception.*;
 import com.narsha.moongge.entity.NoticeEntity;
 import com.narsha.moongge.entity.UserEntity;
 import com.narsha.moongge.entity.GroupEntity;
+import com.narsha.moongge.entity.UserType;
 import com.narsha.moongge.repository.GroupRepository;
 import com.narsha.moongge.repository.NoticeRepository;
 import com.narsha.moongge.repository.UserRepository;
@@ -32,29 +33,26 @@ public class NoticeServiceImpl implements NoticeService{
      */
     @Override
     @Transactional
-    public NoticeDTO createNotice(String groupCode, CreateNoticeDTO createNoticeDTO) {
+    public NoticeDTO createNotice(CreateNoticeDTO createNoticeDTO) {
 
-        GroupEntity group = groupRepository.findByGroupCode(groupCode)
-                .orElseThrow(() -> new GroupNotFoundException(ErrorCode.GROUP_NOT_FOUND));
-
-        UserEntity user = userRepository.findByUserId(createNoticeDTO.getWriter())
+        UserEntity findUser = userRepository.findUserWithGroup(createNoticeDTO.getWriter())
                 .orElseThrow(() -> new UserNotFoundException(ErrorCode.USER_NOT_FOUND));
 
-        // 학생 유형 사용자 검증
-        if ("student".equals(user.getUserType())) {
+        // 선생님 유형 사용자 검증
+        if (UserType.STUDENT == findUser.getUserType()) {
             throw new StudentNoticeCreationException(ErrorCode.STUDENT_NOT_ALLOWED_NOTICE);
         }
 
         NoticeEntity notice = NoticeEntity.builder()
-                .group(group)
+                .group(findUser.getGroup())
                 .noticeTitle(createNoticeDTO.getNoticeTitle())
                 .noticeContent(createNoticeDTO.getNoticeContent())
-                .user(user)
+                .user(findUser)
                 .build();
 
-        NoticeEntity savedNotice = noticeRepository.save(notice);
+        noticeRepository.save(notice);
 
-        return NoticeDTO.mapToNoticeDTO(savedNotice);
+        return NoticeDTO.mapToNoticeDTO(notice);
     }
 
     /**

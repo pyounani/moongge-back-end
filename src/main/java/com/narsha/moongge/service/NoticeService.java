@@ -9,7 +9,7 @@ import java.util.Optional;
 
 public interface NoticeService {
 
-    NoticeDTO createNotice(String groupCode, CreateNoticeDTO createNoticeDTO);
+    NoticeDTO createNotice(CreateNoticeDTO createNoticeDTO);
     List<NoticeDTO> getNoticeList(String groupCode);
     NoticeDTO getNoticeDetail(String groupCode, Integer noticeId);
     NoticeDTO getRecentNoticeOne(String groupCode);

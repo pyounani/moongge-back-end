@@ -9,4 +9,5 @@ public interface UserRepositoryCustom {
     Optional<String> findBadgeListByUserId(String userId);
     boolean existsByGroupCodeAndUserId(String groupCode, String userId);
     List<UserEntity> getUsersInGroupExcept(String groupCode, String userId);
+    Optional<UserEntity> findUserWithGroup(String userId);
 }

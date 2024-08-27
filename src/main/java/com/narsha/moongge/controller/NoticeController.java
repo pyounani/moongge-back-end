@@ -33,7 +33,6 @@ public class NoticeController {
     @Operation(
             summary = "공지 작성",
             description = "주어진 그룹 코드에 대해 새로운 공지를 작성하는 API",
-            parameters = @Parameter(name = "groupCode", description = "공지 작성할 그룹 코드", required = true),
             requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
                     description = "공지 작성 정보",
                     required = true,
@@ -44,9 +43,8 @@ public class NoticeController {
                     @ApiResponse(responseCode = "400", description = "잘못된 요청", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json"))
             }
     )
-    public ResponseEntity<ResponseDTO> createNotice(@PathVariable String groupCode,
-                                                    @Valid @RequestBody CreateNoticeDTO createNoticeDTO) {
-        NoticeDTO res = noticeService.createNotice(groupCode, createNoticeDTO);
+    public ResponseEntity<ResponseDTO> createNotice(@Valid @RequestBody CreateNoticeDTO createNoticeDTO) {
+        NoticeDTO res = noticeService.createNotice(createNoticeDTO);
 
         return ResponseEntity
                 .status(ResponseCode.SUCCESS_CREATE_NOTICE.getStatus().value())
