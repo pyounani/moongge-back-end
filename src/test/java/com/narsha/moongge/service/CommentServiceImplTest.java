@@ -2,10 +2,7 @@ package com.narsha.moongge.service;
 
 import com.narsha.moongge.base.dto.comment.CommentDTO;
 import com.narsha.moongge.base.dto.comment.CreateCommentDTO;
-import com.narsha.moongge.entity.CommentEntity;
-import com.narsha.moongge.entity.GroupEntity;
-import com.narsha.moongge.entity.PostEntity;
-import com.narsha.moongge.entity.UserEntity;
+import com.narsha.moongge.entity.*;
 import com.narsha.moongge.repository.CommentRepository;
 import com.narsha.moongge.repository.GroupRepository;
 import com.narsha.moongge.repository.PostRepository;
@@ -159,7 +156,7 @@ class CommentServiceImplTest {
     private UserEntity createUser() {
         UserEntity user = UserEntity.builder()
                 .userId("userId")
-                .userType("teacher")
+                .userType(UserType.TEACHER)
                 .password("password")
                 .userName("name")
                 .build();

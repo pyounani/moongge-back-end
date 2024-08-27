@@ -26,7 +26,6 @@ public class NoticeDTO {
     public static NoticeDTO mapToNoticeDTO(NoticeEntity notice) {
         return NoticeDTO.builder()
                 .noticeId(notice.getNoticeId())
-                .groupCode(notice.getGroup().getGroupCode())
                 .writer(notice.getUser().getUserId())
                 .noticeTitle(notice.getNoticeTitle())
                 .noticeContent(notice.getNoticeContent())

@@ -38,10 +38,10 @@ class NoticeServiceImplTest {
         // given
         UserEntity user = createUser();
         GroupEntity group = createGroup(user);
-        CreateNoticeDTO createNoticeDTO = buildCreateNoticeDTO(user, group);
+        CreateNoticeDTO createNoticeDTO = buildCreateNoticeDTO(user);
 
         // when
-        NoticeDTO noticeDTO = noticeService.createNotice(group.getGroupCode(), createNoticeDTO);
+        NoticeDTO noticeDTO = noticeService.createNotice(createNoticeDTO);
 
         // then
         Optional<NoticeEntity> savedNotice = noticeRepository.findByNoticeId(noticeDTO.getNoticeId());
@@ -61,9 +61,9 @@ class NoticeServiceImplTest {
         // given
         UserEntity user = createUser();
         GroupEntity group = createGroup(user);
-        CreateNoticeDTO createNoticeDTO = buildCreateNoticeDTO(user, group);
+        CreateNoticeDTO createNoticeDTO = buildCreateNoticeDTO(user);
 
-        NoticeDTO noticeDTO = noticeService.createNotice(group.getGroupCode(), createNoticeDTO);
+        NoticeDTO noticeDTO = noticeService.createNotice(createNoticeDTO);
 
         // when
         List<NoticeDTO> noticeList = noticeService.getNoticeList(group.getGroupCode());
@@ -86,11 +86,11 @@ class NoticeServiceImplTest {
         // given
         UserEntity user = createUser();
         GroupEntity group = createGroup(user);
-        CreateNoticeDTO createNoticeDTO1 = buildCreateNoticeDTO(user, group);
-        noticeService.createNotice(group.getGroupCode(), createNoticeDTO1);
+        CreateNoticeDTO createNoticeDTO1 = buildCreateNoticeDTO(user);
+        noticeService.createNotice(createNoticeDTO1);
 
-        CreateNoticeDTO createNoticeDTO2 = buildCreateNoticeDTO(user, group);
-        NoticeDTO recentNoticeDTO = noticeService.createNotice(group.getGroupCode(), createNoticeDTO2);
+        CreateNoticeDTO createNoticeDTO2 = buildCreateNoticeDTO(user);
+        NoticeDTO recentNoticeDTO = noticeService.createNotice(createNoticeDTO2);
 
         // when
         NoticeDTO noticeDTO = noticeService.getRecentNoticeOne(group.getGroupCode());
@@ -112,8 +112,8 @@ class NoticeServiceImplTest {
         // given
         UserEntity user = createUser();
         GroupEntity group = createGroup(user);
-        CreateNoticeDTO createNoticeDTO = buildCreateNoticeDTO(user, group);
-        NoticeDTO noticeDTO = noticeService.createNotice(group.getGroupCode(), createNoticeDTO);
+        CreateNoticeDTO createNoticeDTO = buildCreateNoticeDTO(user);
+        NoticeDTO noticeDTO = noticeService.createNotice(createNoticeDTO);
 
         // when
         NoticeDTO findNoticeDTO = noticeService.getNoticeDetail(group.getGroupCode(), noticeDTO.getNoticeId());
@@ -126,9 +126,8 @@ class NoticeServiceImplTest {
 
     }
 
-    private CreateNoticeDTO buildCreateNoticeDTO(UserEntity user, GroupEntity group) {
+    private CreateNoticeDTO buildCreateNoticeDTO(UserEntity user) {
         return CreateNoticeDTO.builder()
-                .groupCode(group.getGroupCode())
                 .noticeTitle("title")
                 .noticeContent("content")
                 .writer(user.getUserId())
