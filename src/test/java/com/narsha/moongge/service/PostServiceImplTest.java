@@ -67,7 +67,7 @@ class PostServiceImplTest {
         UploadPostDTO uploadPostDTO = buildUploadPostDTO(user, group);
 
         // when
-        PostDTO postDTO = postService.uploadPost(uploadPostDTO.getGroupCode(), multipartFiles, uploadPostDTO);
+        PostDTO postDTO = postService.uploadPost(user.getUserId(), multipartFiles, uploadPostDTO);
 
         // then
         Optional<PostEntity> savedPost = postRepository.findByPostId(postDTO.getPostId());
@@ -92,7 +92,7 @@ class PostServiceImplTest {
         MultipartFile[] multipartFiles = createMultipartFile();
         UploadPostDTO uploadPostDTO = buildUploadPostDTO(user, group);
 
-        PostDTO savedPostDTO = postService.uploadPost(uploadPostDTO.getGroupCode(), multipartFiles, uploadPostDTO);
+        PostDTO savedPostDTO = postService.uploadPost(user.getUserId(), multipartFiles, uploadPostDTO);
 
         // when
         PostDTO findPostDTO = postService.getPostDetail(savedPostDTO.getGroupCode(), savedPostDTO.getPostId());
@@ -115,8 +115,8 @@ class PostServiceImplTest {
         MultipartFile[] multipartFiles = createMultipartFile();
         UploadPostDTO uploadPostDTO = buildUploadPostDTO(user, group);
 
-        PostDTO savedPostDTO1 = postService.uploadPost(uploadPostDTO.getGroupCode(), multipartFiles, uploadPostDTO);
-        PostDTO savedPostDTO2 = postService.uploadPost(uploadPostDTO.getGroupCode(), multipartFiles, uploadPostDTO);
+        PostDTO savedPostDTO1 = postService.uploadPost(user.getUserId(), multipartFiles, uploadPostDTO);
+        PostDTO savedPostDTO2 = postService.uploadPost(user.getUserId(), multipartFiles, uploadPostDTO);
 
         // when
         List<PostDTO> findPostDTOList = postService.getUserPost(savedPostDTO1.getWriter());
@@ -143,8 +143,8 @@ class PostServiceImplTest {
 
         UploadPostDTO uploadPostDTO2 = buildUploadPostDTO(user2, group1);
 
-        PostDTO savedPostDTO1 = postService.uploadPost(uploadPostDTO1.getGroupCode(), multipartFiles, uploadPostDTO1);
-        PostDTO savedPostDTO2 = postService.uploadPost(uploadPostDTO2.getGroupCode(), multipartFiles, uploadPostDTO2);
+        PostDTO savedPostDTO1 = postService.uploadPost(user1.getUserId(), multipartFiles, uploadPostDTO1);
+        PostDTO savedPostDTO2 = postService.uploadPost(user2.getUserId(), multipartFiles, uploadPostDTO2);
 
         // when
         List<PostDTO> findPostDTOList = postService.getUserPost(savedPostDTO1.getWriter());
@@ -223,7 +223,6 @@ class PostServiceImplTest {
 
     private UploadPostDTO buildUploadPostDTO(UserEntity user, GroupEntity group) {
         return UploadPostDTO.builder()
-                .groupCode(group.getGroupCode())
                 .writer(user.getUserId())
                 .content("content")
                 .build();

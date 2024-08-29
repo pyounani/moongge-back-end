@@ -31,10 +31,11 @@ public class PostController {
     /**
      * 포스트 업로드 API
      */
-    @PostMapping("/posts")
+    @PostMapping("/users/{userId}/posts")
     @Operation(
             summary = "포스트 업로드",
             description = "포스트 정보를 포함한 포스트를 업로드하는 API",
+            parameters = @Parameter(name = "userId", description = "업로드할 유저의 ID", required = true),
             requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
                     description = "포스트 업로드 정보 및 이미지",
                     required = true,
@@ -45,10 +46,10 @@ public class PostController {
                     @ApiResponse(responseCode = "400", description = "잘못된 요청", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json"))
             }
     )
-    public ResponseEntity<ResponseDTO> uploadPost(@PathVariable String groupCode,
+    public ResponseEntity<ResponseDTO> uploadPost(@PathVariable String userId,
                                                   @RequestParam("images") MultipartFile[] multipartFiles,
                                                   @RequestPart(value = "info") UploadPostDTO uploadPostDTO) {
-        PostDTO res = postService.uploadPost(groupCode, multipartFiles, uploadPostDTO);
+        PostDTO res = postService.uploadPost(userId, multipartFiles, uploadPostDTO);
 
         return ResponseEntity
                 .status(ResponseCode.SUCCESS_UPLOAD_POST.getStatus().value())

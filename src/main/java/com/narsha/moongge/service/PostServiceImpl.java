@@ -41,15 +41,12 @@ public class PostServiceImpl implements PostService {
      */
     @Override
     @Transactional
-    public PostDTO uploadPost(String groupCode, MultipartFile[] multipartFiles, UploadPostDTO uploadPostDTO) {
+    public PostDTO uploadPost(String userId, MultipartFile[] multipartFiles, UploadPostDTO uploadPostDTO) {
 
-        // 해당 유저-그룹 찾기
-        GroupEntity group = groupRepository.findByGroupCode(groupCode)
-                .orElseThrow(() -> new GroupNotFoundException(ErrorCode.GROUP_NOT_FOUND));
-
-        UserEntity user = userRepository.findByUserId(uploadPostDTO.getWriter())
+        UserEntity user = userRepository.findUserWithGroup(userId)
                 .orElseThrow(() -> new UserNotFoundException(ErrorCode.USER_NOT_FOUND));
 
+        // S3 업로드
         List<String> imageUrls = uploadImagesToS3(multipartFiles);
 
         // 포스트 엔티티 생성 및 저장
@@ -57,7 +54,7 @@ public class PostServiceImpl implements PostService {
                 .content(uploadPostDTO.getContent())
                 .imageArray(String.join(",", imageUrls))
                 .user(user)
-                .group(group)
+                .group(user.getGroup())
                 .build();
 
         PostEntity savedPost = postRepository.save(post);
