@@ -31,20 +31,17 @@ public class PostController {
     /**
      * 포스트 업로드 API
      */
-    @PostMapping("/groups/{groupCode}/posts")
+    @PostMapping("/posts")
     @Operation(
             summary = "포스트 업로드",
-            description = "그룹 코드와 포스트 정보를 포함한 포스트를 업로드하는 API",
-            parameters = {
-                    @Parameter(name = "groupCode", description = "포스트를 업로드할 그룹의 코드", required = true)
-            },
+            description = "포스트 정보를 포함한 포스트를 업로드하는 API",
             requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
                     description = "포스트 업로드 정보 및 이미지",
                     required = true,
                     content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "multipart/form-data")
             ),
             responses = {
-                    @ApiResponse(responseCode = "200", description = "포스트 업로드 성공", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json")),
+                    @ApiResponse(responseCode = "200", description = "포스트 업로드를 성공했습니다.", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json")),
                     @ApiResponse(responseCode = "400", description = "잘못된 요청", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json"))
             }
     )
@@ -70,7 +67,7 @@ public class PostController {
                     @Parameter(name = "postId", description = "조회할 포스트의 ID", required = true)
             },
             responses = {
-                    @ApiResponse(responseCode = "200", description = "포스트 상세 조회 성공", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json")),
+                    @ApiResponse(responseCode = "200", description = "포스트 상세 불러오기 성공했습니다.", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json")),
                     @ApiResponse(responseCode = "400", description = "잘못된 요청", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json")),
                     @ApiResponse(responseCode = "404", description = "포스트 또는 그룹을 찾을 수 없음", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json"))
             }
@@ -93,7 +90,7 @@ public class PostController {
             description = "주어진 유저 ID에 의해 올린 포스트 목록을 조회하는 API",
             parameters = @Parameter(name = "userId", description = "조회할 유저의 ID", required = true),
             responses = {
-                    @ApiResponse(responseCode = "200", description = "유저 포스트 목록 조회 성공", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json")),
+                    @ApiResponse(responseCode = "200", description = "사용자 게시글 목록 불러오기 성공했습니다.", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json")),
                     @ApiResponse(responseCode = "400", description = "잘못된 요청", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json"))
             }
     )
@@ -114,7 +111,7 @@ public class PostController {
             description = "유저가 좋아요를 누르지 않은 최신 포스트 목록을 조회하는 API",
             parameters = @Parameter(name = "userId", description = "조회할 유저의 ID", required = true),
             responses = {
-                    @ApiResponse(responseCode = "200", description = "최신 포스트 목록 조회 성공", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json")),
+                    @ApiResponse(responseCode = "200", description = "사용자 좋아요를 누르지 않은 게시물 목록을 성공적으로 가져왔습니다.", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json")),
                     @ApiResponse(responseCode = "400", description = "잘못된 요청", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json"))
             }
     )
