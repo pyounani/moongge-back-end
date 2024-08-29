@@ -9,15 +9,12 @@ import lombok.*;
 @AllArgsConstructor
 public class CreateNoticeDTO {
 
-    @NotEmpty
-    private String groupCode;
-
-    @NotEmpty
+    @NotEmpty(message = "noticeTitle를 입력해주세요.")
     private String noticeTitle;
 
-    @NotEmpty
+    @NotEmpty(message = "noticeContent를 입력해주세요.")
     private String noticeContent;
 
-    @NotEmpty
+    @NotEmpty(message = "writer를 입력해주세요.")
     private String writer;
 }

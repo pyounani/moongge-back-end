@@ -17,7 +17,6 @@ import java.time.LocalDateTime;
 public class NoticeDTO {
 
     private Integer noticeId;
-    private String groupCode;
     private String writer;
     private String noticeTitle;
     private String noticeContent;
@@ -26,7 +25,6 @@ public class NoticeDTO {
     public static NoticeDTO mapToNoticeDTO(NoticeEntity notice) {
         return NoticeDTO.builder()
                 .noticeId(notice.getNoticeId())
-                .groupCode(notice.getGroup().getGroupCode())
                 .writer(notice.getUser().getUserId())
                 .noticeTitle(notice.getNoticeTitle())
                 .noticeContent(notice.getNoticeContent())

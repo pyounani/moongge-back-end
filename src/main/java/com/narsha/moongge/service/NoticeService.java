@@ -9,8 +9,8 @@ import java.util.Optional;
 
 public interface NoticeService {
 
-    NoticeDTO createNotice(String groupCode, CreateNoticeDTO createNoticeDTO);
-    List<NoticeDTO> getNoticeList(String groupCode);
-    NoticeDTO getNoticeDetail(String groupCode, Integer noticeId);
-    NoticeDTO getRecentNoticeOne(String groupCode);
+    NoticeDTO createNotice(CreateNoticeDTO createNoticeDTO);
+    List<NoticeDTO> getNoticeList(String userId);
+    NoticeDTO getNoticeDetail(String userId, Integer noticeId);
+    NoticeDTO getRecentNoticeOne(String userId);
 }

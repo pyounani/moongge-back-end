@@ -31,12 +31,15 @@ public enum ResponseCode {
     SUCCESS_GET_USER_LIST(HttpStatus.OK, "그룹의 유저 목록을 성공적으로 가져왔습니다."),
 
 
+    /**
+     *  NOTICE
+     */
     SUCCESS_CREATE_NOTICE(HttpStatus.OK, "공지 작성에 성공했습니다."),
     SUCCESS_GET_NOTICE_LIST(HttpStatus.OK, "공지 목록을 성공적으로 가져왔습니다."),
     SUCCESS_GET_NOTICE_DETAIL(HttpStatus.OK, "공지 상세를 성공적으로 가져왔습니다."),
     SUCCESS_GET_NOTICE_RECENT_ONE(HttpStatus.OK, "가장 최근 공지를 성공적으로 가져왔습니다."),
-    SUCCESS_GET_UNLIKED_POSTS(HttpStatus.OK, "사용자 좋아요를 누르지 않은 게시물 목록을 성공적으로 가져왔습니다."),
 
+    SUCCESS_GET_UNLIKED_POSTS(HttpStatus.OK, "사용자 좋아요를 누르지 않은 게시물 목록을 성공적으로 가져왔습니다."),
     SUCCESS_CREATE_COMMENT(HttpStatus.OK, "댓글 작성을 성공했습니다."),
     SUCCESS_GET_COMMENT_LIST(HttpStatus.OK, "댓글 목록을 성공적으로 가져왔습니다."),
     SUCCESS_GET_RECENT_COMMENT(HttpStatus.OK, "최신 댓글을 성공적으로 가져왔습니다."),

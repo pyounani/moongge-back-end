@@ -6,8 +6,7 @@ import com.narsha.moongge.base.dto.notice.NoticeDTO;
 import com.narsha.moongge.base.exception.*;
 import com.narsha.moongge.entity.NoticeEntity;
 import com.narsha.moongge.entity.UserEntity;
-import com.narsha.moongge.entity.GroupEntity;
-import com.narsha.moongge.repository.GroupRepository;
+import com.narsha.moongge.entity.UserType;
 import com.narsha.moongge.repository.NoticeRepository;
 import com.narsha.moongge.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -23,7 +22,6 @@ import java.util.stream.Collectors;
 public class NoticeServiceImpl implements NoticeService{
 
     private final NoticeRepository noticeRepository;
-    private final GroupRepository groupRepository;
     private final UserRepository userRepository;
 
 
@@ -32,40 +30,37 @@ public class NoticeServiceImpl implements NoticeService{
      */
     @Override
     @Transactional
-    public NoticeDTO createNotice(String groupCode, CreateNoticeDTO createNoticeDTO) {
+    public NoticeDTO createNotice(CreateNoticeDTO createNoticeDTO) {
 
-        GroupEntity group = groupRepository.findByGroupCode(groupCode)
-                .orElseThrow(() -> new GroupNotFoundException(ErrorCode.GROUP_NOT_FOUND));
-
-        UserEntity user = userRepository.findByUserId(createNoticeDTO.getWriter())
+        UserEntity findUser = userRepository.findUserWithGroup(createNoticeDTO.getWriter())
                 .orElseThrow(() -> new UserNotFoundException(ErrorCode.USER_NOT_FOUND));
 
-        // 학생 유형 사용자 검증
-        if ("student".equals(user.getUserType())) {
+        // 선생님 유형 사용자 검증
+        if (UserType.STUDENT == findUser.getUserType()) {
             throw new StudentNoticeCreationException(ErrorCode.STUDENT_NOT_ALLOWED_NOTICE);
         }
 
         NoticeEntity notice = NoticeEntity.builder()
-                .group(group)
+                .group(findUser.getGroup())
                 .noticeTitle(createNoticeDTO.getNoticeTitle())
                 .noticeContent(createNoticeDTO.getNoticeContent())
-                .user(user)
+                .user(findUser)
                 .build();
 
-        NoticeEntity savedNotice = noticeRepository.save(notice);
+        noticeRepository.save(notice);
 
-        return NoticeDTO.mapToNoticeDTO(savedNotice);
+        return NoticeDTO.mapToNoticeDTO(notice);
     }
 
     /**
      * 공지 목록 불러오기
      */
     @Override
-    public List<NoticeDTO> getNoticeList(String groupId) {
-        GroupEntity group = groupRepository.findByGroupCode(groupId)
-                .orElseThrow(() -> new GroupNotFoundException(ErrorCode.GROUP_NOT_FOUND));
+    public List<NoticeDTO> getNoticeList(String userId) {
+        UserEntity findUser = userRepository.findUserWithGroup(userId)
+                .orElseThrow(() -> new UserNotFoundException(ErrorCode.USER_NOT_FOUND));
 
-        List<NoticeEntity> noticeList = noticeRepository.findByGroup(group);
+        List<NoticeEntity> noticeList = noticeRepository.findByGroup(findUser.getGroup());
 
         return noticeList.stream()
                 .map(NoticeDTO::mapToNoticeDTO)
@@ -76,13 +71,13 @@ public class NoticeServiceImpl implements NoticeService{
      * 공지 상세 불러오기
      */
     @Override
-    public NoticeDTO getNoticeDetail(String groupCode, Integer noticeId) {
-        NoticeEntity notice = noticeRepository.findByNoticeId(noticeId)
-                .orElseThrow(() -> new NoticeNotFoundException(ErrorCode.NOTICE_NOT_FOUND));
+    public NoticeDTO getNoticeDetail(String userId, Integer noticeId) {
 
-        if (!groupCode.equals(notice.getGroup().getGroupCode())) {
-            throw new GroupMismatchException(ErrorCode.GROUP_MISMATCH);
-        }
+        UserEntity findUser = userRepository.findUserWithGroup(userId)
+                .orElseThrow(() -> new UserNotFoundException(ErrorCode.USER_NOT_FOUND));
+
+        NoticeEntity notice = noticeRepository.findByGroupAndNoticeId(findUser.getGroup(), noticeId)
+                .orElseThrow(() -> new NoticeNotFoundException(ErrorCode.NOTICE_NOT_FOUND));
 
         return NoticeDTO.mapToNoticeDTO(notice);
     }
@@ -91,11 +86,12 @@ public class NoticeServiceImpl implements NoticeService{
      * 최근에 올린 공지 한 개 불러오기
      */
     @Override
-    public NoticeDTO getRecentNoticeOne(String groupCode) {
-        GroupEntity group = groupRepository.findByGroupCode(groupCode)
-                .orElseThrow(() -> new GroupNotFoundException(ErrorCode.GROUP_NOT_FOUND));
+    public NoticeDTO getRecentNoticeOne(String userId) {
 
-        NoticeEntity notice = noticeRepository.findTopByGroupOrderByCreateAtDesc(group)
+        UserEntity findUser = userRepository.findUserWithGroup(userId)
+                .orElseThrow(() -> new UserNotFoundException(ErrorCode.USER_NOT_FOUND));
+
+        NoticeEntity notice = noticeRepository.findTopByGroupOrderByCreateAtDesc(findUser.getGroup())
                 .orElseThrow(() -> new NoticeNotFoundException(ErrorCode.NOTICE_NOT_FOUND));
 
         return NoticeDTO.mapToNoticeDTO(notice);

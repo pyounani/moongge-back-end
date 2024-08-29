@@ -38,10 +38,10 @@ class NoticeServiceImplTest {
         // given
         UserEntity user = createUser();
         GroupEntity group = createGroup(user);
-        CreateNoticeDTO createNoticeDTO = buildCreateNoticeDTO(user, group);
+        CreateNoticeDTO createNoticeDTO = buildCreateNoticeDTO(user);
 
         // when
-        NoticeDTO noticeDTO = noticeService.createNotice(group.getGroupCode(), createNoticeDTO);
+        NoticeDTO noticeDTO = noticeService.createNotice(createNoticeDTO);
 
         // then
         Optional<NoticeEntity> savedNotice = noticeRepository.findByNoticeId(noticeDTO.getNoticeId());
@@ -61,12 +61,12 @@ class NoticeServiceImplTest {
         // given
         UserEntity user = createUser();
         GroupEntity group = createGroup(user);
-        CreateNoticeDTO createNoticeDTO = buildCreateNoticeDTO(user, group);
+        CreateNoticeDTO createNoticeDTO = buildCreateNoticeDTO(user);
 
-        NoticeDTO noticeDTO = noticeService.createNotice(group.getGroupCode(), createNoticeDTO);
+        NoticeDTO noticeDTO = noticeService.createNotice(createNoticeDTO);
 
         // when
-        List<NoticeDTO> noticeList = noticeService.getNoticeList(group.getGroupCode());
+        List<NoticeDTO> noticeList = noticeService.getNoticeList(user.getUserId());
 
         // then
         assertFalse(noticeList.isEmpty(), "공지 목록이 비어 있으면 안 됩니다.");
@@ -77,7 +77,6 @@ class NoticeServiceImplTest {
         assertEquals(createNoticeDTO.getNoticeTitle(), retrievedNotice.getNoticeTitle(), "공지 제목이 일치해야 합니다.");
         assertEquals(createNoticeDTO.getNoticeContent(), retrievedNotice.getNoticeContent(), "공지 내용이 일치해야 합니다.");
         assertEquals(user.getUserId(), retrievedNotice.getWriter(), "작성자가 일치해야 합니다.");
-        assertEquals(group.getGroupCode(), retrievedNotice.getGroupCode(), "그룹 코드가 일치해야 합니다.");
     }
 
     @Test
@@ -86,14 +85,14 @@ class NoticeServiceImplTest {
         // given
         UserEntity user = createUser();
         GroupEntity group = createGroup(user);
-        CreateNoticeDTO createNoticeDTO1 = buildCreateNoticeDTO(user, group);
-        noticeService.createNotice(group.getGroupCode(), createNoticeDTO1);
+        CreateNoticeDTO createNoticeDTO1 = buildCreateNoticeDTO(user);
+        noticeService.createNotice(createNoticeDTO1);
 
-        CreateNoticeDTO createNoticeDTO2 = buildCreateNoticeDTO(user, group);
-        NoticeDTO recentNoticeDTO = noticeService.createNotice(group.getGroupCode(), createNoticeDTO2);
+        CreateNoticeDTO createNoticeDTO2 = buildCreateNoticeDTO(user);
+        NoticeDTO recentNoticeDTO = noticeService.createNotice(createNoticeDTO2);
 
         // when
-        NoticeDTO noticeDTO = noticeService.getRecentNoticeOne(group.getGroupCode());
+        NoticeDTO noticeDTO = noticeService.getRecentNoticeOne(user.getUserId());
 
         Optional<NoticeEntity> savedNotice = noticeRepository.findByNoticeId(noticeDTO.getNoticeId());
         assertTrue(savedNotice.isPresent());
@@ -112,23 +111,21 @@ class NoticeServiceImplTest {
         // given
         UserEntity user = createUser();
         GroupEntity group = createGroup(user);
-        CreateNoticeDTO createNoticeDTO = buildCreateNoticeDTO(user, group);
-        NoticeDTO noticeDTO = noticeService.createNotice(group.getGroupCode(), createNoticeDTO);
+        CreateNoticeDTO createNoticeDTO = buildCreateNoticeDTO(user);
+        NoticeDTO noticeDTO = noticeService.createNotice(createNoticeDTO);
 
         // when
-        NoticeDTO findNoticeDTO = noticeService.getNoticeDetail(group.getGroupCode(), noticeDTO.getNoticeId());
+        NoticeDTO findNoticeDTO = noticeService.getNoticeDetail(user.getUserId(), noticeDTO.getNoticeId());
 
         // then
         assertEquals(createNoticeDTO.getNoticeTitle(), findNoticeDTO.getNoticeTitle(), "공지 제목이 일치해야 합니다.");
         assertEquals(createNoticeDTO.getNoticeContent(), findNoticeDTO.getNoticeContent(), "공지 내용이 일치해야 합니다.");
         assertEquals(user.getUserId(), findNoticeDTO.getWriter(), "공지 작성자가 일치해야 합니다.");
-        assertEquals(group.getGroupCode(), findNoticeDTO.getGroupCode(), "공지 그룹 코드가 일치해야 합니다.");
 
     }
 
-    private CreateNoticeDTO buildCreateNoticeDTO(UserEntity user, GroupEntity group) {
+    private CreateNoticeDTO buildCreateNoticeDTO(UserEntity user) {
         return CreateNoticeDTO.builder()
-                .groupCode(group.getGroupCode())
                 .noticeTitle("title")
                 .noticeContent("content")
                 .writer(user.getUserId())

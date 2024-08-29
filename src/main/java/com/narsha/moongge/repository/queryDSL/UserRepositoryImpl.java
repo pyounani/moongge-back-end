@@ -59,4 +59,18 @@ public class UserRepositoryImpl implements UserRepositoryCustom {
                 .fetch();
 
     }
+
+    @Override
+    public Optional<UserEntity> findUserWithGroup(String userId) {
+        QUserEntity user = QUserEntity.userEntity;
+        QGroupEntity group = QGroupEntity.groupEntity;
+
+        return Optional.ofNullable(
+                query.selectFrom(user)
+                        .join(user.group, group)
+                        .fetchJoin() // 그룹 정보도 함께 가져오기 위해 fetchJoin 사용
+                        .where(user.userId.eq(userId))
+                        .fetchOne()
+        );
+    }
 }
