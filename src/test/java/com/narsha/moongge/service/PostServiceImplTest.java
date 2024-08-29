@@ -95,7 +95,7 @@ class PostServiceImplTest {
         PostDTO savedPostDTO = postService.uploadPost(user.getUserId(), multipartFiles, uploadPostDTO);
 
         // when
-        PostDTO findPostDTO = postService.getPostDetail(savedPostDTO.getGroupCode(), savedPostDTO.getPostId());
+        PostDTO findPostDTO = postService.getPostDetail(user.getUserId(), savedPostDTO.getPostId());
 
         //then
         assertEquals(uploadPostDTO.getContent(), findPostDTO.getContent(), "포스트 내용이 일치해야 합니다.");

@@ -60,12 +60,12 @@ public class PostController {
     /**
      * 포스트 상세 가져오기 API
      */
-    @GetMapping("/groups/{groupCode}/posts/{postId}")
+    @GetMapping("/users/{userId}/posts/{postId}")
     @Operation(
             summary = "포스트 상세 조회",
             description = "그룹 코드와 포스트 ID를 사용하여 포스트의 상세 정보를 조회하는 API",
             parameters = {
-                    @Parameter(name = "groupCode", description = "포스트가 포함된 그룹의 코드", required = true),
+                    @Parameter(name = "userId", description = "포스트가 포함된 유저의 ID", required = true),
                     @Parameter(name = "postId", description = "조회할 포스트의 ID", required = true)
             },
             responses = {
@@ -74,9 +74,9 @@ public class PostController {
                     @ApiResponse(responseCode = "404", description = "포스트 또는 그룹을 찾을 수 없음", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json"))
             }
     )
-    public ResponseEntity<ResponseDTO> getPost(@PathVariable(value = "groupCode") String groupCode,
+    public ResponseEntity<ResponseDTO> getPost(@PathVariable(value = "userId") String userId,
                                                @PathVariable(value = "postId") Integer postId) {
-        PostDTO res = postService.getPostDetail(groupCode, postId);
+        PostDTO res = postService.getPostDetail(userId, postId);
 
         return ResponseEntity
                 .status(ResponseCode.SUCCESS_DETAIL_POST.getStatus().value())

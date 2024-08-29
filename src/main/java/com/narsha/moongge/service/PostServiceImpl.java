@@ -66,12 +66,12 @@ public class PostServiceImpl implements PostService {
      * 포스트 상세 조회하기
      */
     @Override
-    public PostDTO getPostDetail(String groupCode, Integer postId) {
+    public PostDTO getPostDetail(String userId, Integer postId) {
 
-        GroupEntity group = groupRepository.findByGroupCode(groupCode)
-                .orElseThrow(() -> new GroupNotFoundException(ErrorCode.GROUP_NOT_FOUND));
+        UserEntity user = userRepository.findUserWithGroup(userId)
+                .orElseThrow(() -> new UserNotFoundException(ErrorCode.USER_NOT_FOUND));
 
-        PostEntity post = postRepository.findByPostIdAndGroup(postId, group)
+        PostEntity post = postRepository.findByPostIdAndGroupWithWriter(postId, user.getGroup().getGroupCode())
                 .orElseThrow(() -> new PostNotFoundException(ErrorCode.POST_NOT_FOUND));
 
         return PostDTO.mapToPostDTO(post);
