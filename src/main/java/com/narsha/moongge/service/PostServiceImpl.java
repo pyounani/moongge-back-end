@@ -83,7 +83,7 @@ public class PostServiceImpl implements PostService {
     @Override
     public List<PostDTO> getUserPost(String userId) {
 
-        UserEntity user = userRepository.findByUserId(userId)
+        UserEntity user = userRepository.findUserWithGroup(userId)
                 .orElseThrow(() -> new UserNotFoundException(ErrorCode.USER_NOT_FOUND));
 
         List<PostEntity> userPostList = postRepository.findByUserOrderByCreateAtDesc(user);
