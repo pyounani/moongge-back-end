@@ -71,7 +71,7 @@ public class PostServiceImpl implements PostService {
         UserEntity user = userRepository.findUserWithGroup(userId)
                 .orElseThrow(() -> new UserNotFoundException(ErrorCode.USER_NOT_FOUND));
 
-        PostEntity post = postRepository.findByPostIdAndGroupWithWriter(postId, user.getGroup().getGroupCode())
+        PostEntity post = postRepository.findByPostIdAndGroupWithWriter(postId, user.getGroup())
                 .orElseThrow(() -> new PostNotFoundException(ErrorCode.POST_NOT_FOUND));
 
         return PostDTO.mapToPostDTO(post);
