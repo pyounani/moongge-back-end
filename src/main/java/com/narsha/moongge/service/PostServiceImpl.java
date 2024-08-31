@@ -98,27 +98,16 @@ public class PostServiceImpl implements PostService {
      */
     @Override
     public List<PostDTO> getMainPost(String userId) {
-        UserEntity user = userRepository.findByUserId(userId)
+
+        UserEntity user = userRepository.findUserWithGroup(userId)
                 .orElseThrow(() -> new UserNotFoundException(ErrorCode.USER_NOT_FOUND));
 
-        // 24시간 내 게시물 불러오고
         LocalDateTime endTime = LocalDateTime.now();
         LocalDateTime startTime = LocalDateTime.now().minus(24, ChronoUnit.HOURS);
 
-        List<PostEntity> allPosts = postRepository.findPostsWithUserAndGroup(user.getGroup(), startTime, endTime);
+        List<PostEntity> mainPost = postRepository.getMainPost(userId, user.getGroup(), startTime, endTime);
 
-        // 유저가 좋아요를 누른 포스트 목록 가져오기
-        List<LikeEntity> userLikes = likeRepository.findByUser(user);
-        List<Integer> likedPostIds = userLikes.stream()
-                .map(likeEntity -> likeEntity.getPost().getPostId())
-                .collect(Collectors.toList());
-
-        // 유저가 작성한 포스트를 제외하고 좋아요를 누르지 않은 포스트 필터링
-        List<PostEntity> nonLikedPosts = allPosts.stream()
-                .filter(post -> !likedPostIds.contains(post.getPostId()) && !post.getUser().getUserId().equals(userId))
-                .collect(Collectors.toList());
-
-        return nonLikedPosts.stream()
+        return mainPost.stream()
                 .map(PostDTO::mapToPostDTO)
                 .collect(Collectors.toList());
     }
