@@ -110,12 +110,12 @@ public class CommentServiceImpl implements CommentService {
      * 특정 포스트 댓글 갯수 가져오기
      */
     @Override
-    public Long countComment(String groupCode, Integer postId){
+    public Long countComment(String userId, Integer postId){
 
-        GroupEntity group = groupRepository.findByGroupCode(groupCode)
-                .orElseThrow(() -> new GroupNotFoundException(ErrorCode.GROUP_NOT_FOUND));
+        UserEntity user = userRepository.findUserWithGroup(userId)
+                .orElseThrow(() -> new UserNotFoundException(ErrorCode.USER_NOT_FOUND));
 
-        PostEntity post = postRepository.findByPostIdAndGroup(postId, group)
+        PostEntity post = postRepository.findByPostIdAndGroup(postId, user.getGroup())
                 .orElseThrow(() -> new PostNotFoundException(ErrorCode.POST_NOT_FOUND));
 
         Long countComments = commentRepository.countByPost(post);

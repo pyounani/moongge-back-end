@@ -110,12 +110,12 @@ public class CommentController {
     /**
      * 특정 포스트 댓글 갯수 가져오기 API
      */
-    @GetMapping("/groups/{groupCode}/posts/{postId}/comments/count")
+    @GetMapping("/users/{userId}/posts/{postId}/comments/count")
     @Operation(
             summary = "댓글 개수 조회",
             description = "특정 게시글의 댓글 개수를 조회하는 API",
             parameters = {
-                    @Parameter(name = "groupCode", description = "그룹 코드", required = true),
+                    @Parameter(name = "userId", description = "유저 ID", required = true),
                     @Parameter(name = "postId", description = "게시글 ID", required = true)
             },
             responses = {
@@ -123,9 +123,9 @@ public class CommentController {
                     @ApiResponse(responseCode = "404", description = "게시글을 찾을 수 없음", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json"))
             }
     )
-    public ResponseEntity<ResponseDTO> getCommentCount(@PathVariable String groupCode,
+    public ResponseEntity<ResponseDTO> getCommentCount(@PathVariable String userId,
                                                        @PathVariable Integer postId){
-        Long res = commentService.countComment(groupCode, postId);
+        Long res = commentService.countComment(userId, postId);
 
         return ResponseEntity
                 .status(ResponseCode.SUCCESS_GET_COMMENT_COUNT.getStatus().value())

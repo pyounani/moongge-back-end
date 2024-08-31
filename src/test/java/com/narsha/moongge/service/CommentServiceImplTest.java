@@ -117,7 +117,7 @@ class CommentServiceImplTest {
         commentService.createComment(user.getUserId(), post.getPostId(), createCommentDTO2);
 
         // when
-        Long countComments = commentService.countComment(group.getGroupCode(), post.getPostId());
+        Long countComments = commentService.countComment(user.getUserId(), post.getPostId());
 
         // then
         assertEquals(2, countComments);

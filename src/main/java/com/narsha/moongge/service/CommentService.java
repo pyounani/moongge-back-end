@@ -10,6 +10,6 @@ public interface CommentService {
     Integer createComment(String userId, Integer postId, CreateCommentDTO createCommentDTO);
     List<CommentDTO> getCommentList(String groupCode, Integer postId);
     CommentDTO getRecentComment(String groupCode, Integer postId);
-    Long countComment(String groupCode, Integer postId);
+    Long countComment(String userId, Integer postId);
     String createAIComment(Integer postId);
 }
