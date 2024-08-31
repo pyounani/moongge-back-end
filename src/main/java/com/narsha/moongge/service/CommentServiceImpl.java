@@ -92,15 +92,15 @@ public class CommentServiceImpl implements CommentService {
      * 최신 댓글 1개 가져오기
      */
     @Override
-    public CommentDTO getRecentComment(String groupCode, Integer postId) {
+    public CommentDTO getRecentComment(String userId, Integer postId) {
 
-        GroupEntity group = groupRepository.findByGroupCode(groupCode)
-                .orElseThrow(() -> new GroupNotFoundException(ErrorCode.GROUP_NOT_FOUND));
+        UserEntity user = userRepository.findUserWithGroup(userId)
+                .orElseThrow(() -> new UserNotFoundException(ErrorCode.USER_NOT_FOUND));
 
-        PostEntity post = postRepository.findByPostIdAndGroup(postId, group)
+        PostEntity post = postRepository.findByPostIdAndGroup(postId, user.getGroup())
                 .orElseThrow(() -> new PostNotFoundException(ErrorCode.POST_NOT_FOUND));
 
-        CommentEntity findComment = commentRepository.findTopByPostOrderByCreateAtDesc(post)
+        CommentEntity findComment = commentRepository.findTopCommentWithUserByPost(post)
                 .orElseThrow(() -> new CommentNotFoundException(ErrorCode.COMMENT_NOT_FOUND));
 
         return CommentDTO.mapToCommentDTO(findComment);

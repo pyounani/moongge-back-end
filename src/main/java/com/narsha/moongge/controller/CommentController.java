@@ -86,12 +86,12 @@ public class CommentController {
     /**
      * 최신 댓글 1개 가져오기 API
      */
-    @GetMapping("/groups/{groupCode}/posts/{postId}/comments/recent")
+    @GetMapping("/users/{userId}/posts/{postId}/comments/recent")
     @Operation(
             summary = "최신 댓글 조회",
             description = "특정 게시글의 최신 댓글 1개를 조회하는 API",
             parameters = {
-                    @Parameter(name = "groupCode", description = "그룹 코드", required = true),
+                    @Parameter(name = "userId", description = "유저 ID", required = true),
                     @Parameter(name = "postId", description = "게시글 ID", required = true)
             },
             responses = {
@@ -99,9 +99,9 @@ public class CommentController {
                     @ApiResponse(responseCode = "404", description = "게시글을 찾을 수 없음", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json"))
             }
     )
-    public ResponseEntity<ResponseDTO> getRecentComment(@PathVariable String groupCode,
+    public ResponseEntity<ResponseDTO> getRecentComment(@PathVariable String userId,
                                                         @PathVariable Integer postId){
-        CommentDTO res = commentService.getRecentComment(groupCode, postId);
+        CommentDTO res = commentService.getRecentComment(userId, postId);
 
         return ResponseEntity
                 .status(ResponseCode.SUCCESS_GET_RECENT_COMMENT.getStatus().value())

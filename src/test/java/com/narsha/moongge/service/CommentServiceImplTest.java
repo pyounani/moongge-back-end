@@ -95,7 +95,7 @@ class CommentServiceImplTest {
         Integer commentId = commentService.createComment(user.getUserId(), post.getPostId(), recentCreateCommentDTO);
 
         // when
-        CommentDTO recentFindComment = commentService.getRecentComment(group.getGroupCode(), post.getPostId());
+        CommentDTO recentFindComment = commentService.getRecentComment(user.getUserId(), post.getPostId());
 
         // then
         assertEquals(commentId, recentFindComment.getCommentId());

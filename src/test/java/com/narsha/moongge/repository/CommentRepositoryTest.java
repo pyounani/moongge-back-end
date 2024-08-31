@@ -39,7 +39,7 @@ class CommentRepositoryTest {
         CommentEntity createCommentEntity = createComment(user2, group, post);
 
         // when
-        Optional<CommentEntity> findComment = commentRepository.findTopByPostOrderByCreateAtDesc(post);
+        Optional<CommentEntity> findComment = commentRepository.findTopCommentWithUserByPost(post);
 
         // then
         assertTrue(findComment.isPresent(), "최신 댓글을 가져오는 데 실패했습니다.");
