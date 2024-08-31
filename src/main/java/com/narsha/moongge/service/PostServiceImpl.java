@@ -4,12 +4,8 @@ import com.narsha.moongge.base.code.ErrorCode;
 import com.narsha.moongge.base.dto.post.PostDTO;
 import com.narsha.moongge.base.dto.post.UploadPostDTO;
 import com.narsha.moongge.base.exception.*;
-import com.narsha.moongge.entity.LikeEntity;
 import com.narsha.moongge.entity.PostEntity;
 import com.narsha.moongge.entity.UserEntity;
-import com.narsha.moongge.entity.GroupEntity;
-import com.narsha.moongge.repository.GroupRepository;
-import com.narsha.moongge.repository.LikeRepository;
 import com.narsha.moongge.repository.PostRepository;
 import com.narsha.moongge.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -32,8 +28,6 @@ public class PostServiceImpl implements PostService {
     private static final String POST_PHOTOS_FOLDER = "post/photos";
     private final UserRepository userRepository;
     private final PostRepository postRepository;
-    private final GroupRepository groupRepository;
-    private final LikeRepository likeRepository;
     private final AmazonS3Service amazonS3Service;
 
     /**

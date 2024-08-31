@@ -9,8 +9,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -49,7 +48,7 @@ public class PostController {
     )
     public ResponseEntity<ResponseDTO> uploadPost(@PathVariable String userId,
                                                   @RequestParam("images") MultipartFile[] multipartFiles,
-                                                  @RequestPart(value = "info") UploadPostDTO uploadPostDTO) {
+                                                  @Valid @RequestPart(value = "info") UploadPostDTO uploadPostDTO) {
         PostDTO res = postService.uploadPost(userId, multipartFiles, uploadPostDTO);
 
         return ResponseEntity
@@ -71,7 +70,8 @@ public class PostController {
             responses = {
                     @ApiResponse(responseCode = "200", description = "포스트 상세 불러오기 성공했습니다.", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json")),
                     @ApiResponse(responseCode = "400", description = "잘못된 요청", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json")),
-                    @ApiResponse(responseCode = "404", description = "포스트 또는 그룹을 찾을 수 없음", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json"))
+                    @ApiResponse(responseCode = "404", description = "아이디에 해당하는 유저를 찾을 수 없습니다.", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json")),
+                    @ApiResponse(responseCode = "404", description = "게시글 정보를 찾을 수 없습니다.", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json"))
             }
     )
     public ResponseEntity<ResponseDTO> getPost(@PathVariable(value = "userId") String userId,
@@ -93,7 +93,8 @@ public class PostController {
             parameters = @Parameter(name = "userId", description = "조회할 유저의 ID", required = true),
             responses = {
                     @ApiResponse(responseCode = "200", description = "사용자 게시글 목록 불러오기 성공했습니다.", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json")),
-                    @ApiResponse(responseCode = "400", description = "잘못된 요청", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json"))
+                    @ApiResponse(responseCode = "400", description = "잘못된 요청", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json")),
+                    @ApiResponse(responseCode = "404", description = "아이디에 해당하는 유저를 찾을 수 없습니다.", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json"))
             }
     )
     public ResponseEntity<ResponseDTO> getUserPostList(@PathVariable(value = "userId") String userId) {
@@ -114,7 +115,8 @@ public class PostController {
             parameters = @Parameter(name = "userId", description = "조회할 유저의 ID", required = true),
             responses = {
                     @ApiResponse(responseCode = "200", description = "사용자 좋아요를 누르지 않은 게시물 목록을 성공적으로 가져왔습니다.", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json")),
-                    @ApiResponse(responseCode = "400", description = "잘못된 요청", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json"))
+                    @ApiResponse(responseCode = "400", description = "잘못된 요청", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json")),
+                    @ApiResponse(responseCode = "404", description = "아이디에 해당하는 유저를 찾을 수 없습니다.", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json"))
             }
     )
     public ResponseEntity<ResponseDTO> getMainPosts(@PathVariable(value = "userId") String userId) {
