@@ -27,7 +27,7 @@ public class CommentController {
     /**
      * 댓글 작성하기 API
      */
-    @PostMapping("/groups/{groupCode}/posts/{postId}/comments")
+    @PostMapping("/users/{userId}/posts/{postId}/comments")
     @Operation(
             summary = "댓글 작성",
             description = "특정 게시글에 댓글을 작성하는 API",
@@ -37,7 +37,7 @@ public class CommentController {
                     content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json")
             ),
             parameters = {
-                    @Parameter(name = "groupCode", description = "그룹 코드", required = true),
+                    @Parameter(name = "userId", description = "유저 ID", required = true),
                     @Parameter(name = "postId", description = "게시글 ID", required = true)
             },
             responses = {
@@ -45,10 +45,10 @@ public class CommentController {
                     @ApiResponse(responseCode = "400", description = "잘못된 요청", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json"))
             }
     )
-    public ResponseEntity<ResponseDTO> createComment(@PathVariable String groupCode,
+    public ResponseEntity<ResponseDTO> createComment(@PathVariable String userId,
                                                      @PathVariable Integer postId,
                                                      @Valid @RequestBody CreateCommentDTO createCommentDTO){
-        Integer res = commentService.createComment(groupCode, postId, createCommentDTO);
+        Integer res = commentService.createComment(userId, postId, createCommentDTO);
 
         return ResponseEntity
                 .status(ResponseCode.SUCCESS_CREATE_COMMENT.getStatus().value())

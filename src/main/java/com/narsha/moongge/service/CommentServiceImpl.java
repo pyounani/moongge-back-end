@@ -46,16 +46,13 @@ public class CommentServiceImpl implements CommentService {
      */
     @Override
     @Transactional
-    public Integer createComment(String groupCode, Integer postId, CreateCommentDTO createCommentDTO) {
+    public Integer createComment(String userId, Integer postId, CreateCommentDTO createCommentDTO) {
 
-        GroupEntity group = groupRepository.findByGroupCode(groupCode)
-                .orElseThrow(() -> new GroupNotFoundException(ErrorCode.GROUP_NOT_FOUND));
-
-        PostEntity post = postRepository.findByPostIdAndGroup(postId, group)
-                .orElseThrow(() -> new PostNotFoundException(ErrorCode.POST_NOT_FOUND));
-
-        UserEntity user = userRepository.findByUserId(createCommentDTO.getWriter())
+        UserEntity user = userRepository.findUserWithGroup(userId)
                 .orElseThrow(() -> new UserNotFoundException(ErrorCode.USER_NOT_FOUND));
+
+        PostEntity post = postRepository.findByPostIdAndGroup(postId, user.getGroup())
+                .orElseThrow(() -> new PostNotFoundException(ErrorCode.POST_NOT_FOUND));
 
         // 댓글에 내용이 없을 경우
         validateCommentContent(createCommentDTO);
@@ -63,7 +60,7 @@ public class CommentServiceImpl implements CommentService {
         CommentEntity comment = CommentEntity.builder()
                 .post(post)
                 .user(user)
-                .group(group)
+                .group(user.getGroup())
                 .content(createCommentDTO.getContent())
                 .build();
 

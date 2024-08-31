@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface CommentService {
 
-    Integer createComment(String groupCode, Integer postId, CreateCommentDTO createCommentDTO);
+    Integer createComment(String userId, Integer postId, CreateCommentDTO createCommentDTO);
     List<CommentDTO> getCommentList(String groupCode, Integer postId);
     CommentDTO getRecentComment(String groupCode, Integer postId);
     Long countComment(String groupCode, Integer postId);
