@@ -44,7 +44,7 @@ class CommentServiceImplTest {
         CreateCommentDTO createCommentDTO = buildCreateCommentDTO(user, group, post);
 
         // when
-        Integer commentId = commentService.createComment(group.getGroupCode(), post.getPostId(), createCommentDTO);
+        Integer commentId = commentService.createComment(user.getUserId(), post.getPostId(), createCommentDTO);
 
         // then
         assertNotNull(commentId, "댓글 ID는 null이 아니어야 합니다.");
@@ -53,7 +53,6 @@ class CommentServiceImplTest {
         assertTrue(findComment.isPresent());
         CommentEntity comment = findComment.get();
 
-        assertEquals(createCommentDTO.getGroupCode(), comment.getGroup().getGroupCode());
         assertEquals(createCommentDTO.getPostId(), comment.getPost().getPostId());
         assertEquals(createCommentDTO.getWriter(), comment.getUser().getUserId());
         assertEquals(createCommentDTO.getContent(), comment.getContent());
@@ -68,11 +67,11 @@ class CommentServiceImplTest {
 
         CreateCommentDTO createCommentDTO1 = buildCreateCommentDTO(user, group, post);
         CreateCommentDTO createCommentDTO2 = buildCreateCommentDTO(user, group, post);
-        Integer commentId1 = commentService.createComment(group.getGroupCode(), post.getPostId(), createCommentDTO1);
-        Integer commentId2 = commentService.createComment(group.getGroupCode(), post.getPostId(), createCommentDTO2);
+        Integer commentId1 = commentService.createComment(user.getUserId(), post.getPostId(), createCommentDTO1);
+        Integer commentId2 = commentService.createComment(user.getUserId(), post.getPostId(), createCommentDTO2);
 
         // when
-        List<CommentDTO> commentList = commentService.getCommentList(group.getGroupCode(), post.getPostId());
+        List<CommentDTO> commentList = commentService.getCommentList(user.getUserId(), post.getPostId());
 
         // then
         assertNotNull(commentList, "댓글 목록은 null이 아니어야 합니다.");
@@ -92,11 +91,11 @@ class CommentServiceImplTest {
 
         CreateCommentDTO createCommentDTO = buildCreateCommentDTO(user, group, post);
         CreateCommentDTO recentCreateCommentDTO = buildCreateCommentDTO(user, group, post);
-        commentService.createComment(group.getGroupCode(), post.getPostId(), createCommentDTO);
-        Integer commentId = commentService.createComment(group.getGroupCode(), post.getPostId(), recentCreateCommentDTO);
+        commentService.createComment(user.getUserId(), post.getPostId(), createCommentDTO);
+        Integer commentId = commentService.createComment(user.getUserId(), post.getPostId(), recentCreateCommentDTO);
 
         // when
-        CommentDTO recentFindComment = commentService.getRecentComment(group.getGroupCode(), post.getPostId());
+        CommentDTO recentFindComment = commentService.getRecentComment(user.getUserId(), post.getPostId());
 
         // then
         assertEquals(commentId, recentFindComment.getCommentId());
@@ -114,11 +113,11 @@ class CommentServiceImplTest {
 
         CreateCommentDTO createCommentDTO1 = buildCreateCommentDTO(user, group, post);
         CreateCommentDTO createCommentDTO2 = buildCreateCommentDTO(user, group, post);
-        commentService.createComment(group.getGroupCode(), post.getPostId(), createCommentDTO1);
-        commentService.createComment(group.getGroupCode(), post.getPostId(), createCommentDTO2);
+        commentService.createComment(user.getUserId(), post.getPostId(), createCommentDTO1);
+        commentService.createComment(user.getUserId(), post.getPostId(), createCommentDTO2);
 
         // when
-        Long countComments = commentService.countComment(group.getGroupCode(), post.getPostId());
+        Long countComments = commentService.countComment(user.getUserId(), post.getPostId());
 
         // then
         assertEquals(2, countComments);
@@ -135,7 +134,6 @@ class CommentServiceImplTest {
 
     private CreateCommentDTO buildCreateCommentDTO(UserEntity user, GroupEntity group, PostEntity post) {
         CreateCommentDTO createCommentDTO = CreateCommentDTO.builder()
-                .groupCode(group.getGroupCode())
                 .postId(post.getPostId())
                 .writer(user.getUserId())
                 .content("content")

@@ -5,7 +5,6 @@ import com.narsha.moongge.base.dto.comment.CommentDTO;
 import com.narsha.moongge.base.dto.comment.CreateCommentDTO;
 import com.narsha.moongge.base.exception.*;
 import com.narsha.moongge.entity.CommentEntity;
-import com.narsha.moongge.entity.GroupEntity;
 import com.narsha.moongge.entity.PostEntity;
 import com.narsha.moongge.entity.UserEntity;
 import com.narsha.moongge.repository.CommentRepository;
@@ -46,16 +45,13 @@ public class CommentServiceImpl implements CommentService {
      */
     @Override
     @Transactional
-    public Integer createComment(String groupCode, Integer postId, CreateCommentDTO createCommentDTO) {
+    public Integer createComment(String userId, Integer postId, CreateCommentDTO createCommentDTO) {
 
-        GroupEntity group = groupRepository.findByGroupCode(groupCode)
-                .orElseThrow(() -> new GroupNotFoundException(ErrorCode.GROUP_NOT_FOUND));
-
-        PostEntity post = postRepository.findByPostIdAndGroup(postId, group)
-                .orElseThrow(() -> new PostNotFoundException(ErrorCode.POST_NOT_FOUND));
-
-        UserEntity user = userRepository.findByUserId(createCommentDTO.getWriter())
+        UserEntity user = userRepository.findUserWithGroup(userId)
                 .orElseThrow(() -> new UserNotFoundException(ErrorCode.USER_NOT_FOUND));
+
+        PostEntity post = postRepository.findByPostIdAndGroup(postId, user.getGroup())
+                .orElseThrow(() -> new PostNotFoundException(ErrorCode.POST_NOT_FOUND));
 
         // 댓글에 내용이 없을 경우
         validateCommentContent(createCommentDTO);
@@ -63,7 +59,7 @@ public class CommentServiceImpl implements CommentService {
         CommentEntity comment = CommentEntity.builder()
                 .post(post)
                 .user(user)
-                .group(group)
+                .group(user.getGroup())
                 .content(createCommentDTO.getContent())
                 .build();
 
@@ -76,15 +72,15 @@ public class CommentServiceImpl implements CommentService {
      * 특정 포스트 댓글 목록 불러오기
      */
     @Override
-    public List<CommentDTO> getCommentList(String groupCode, Integer postId) {
+    public List<CommentDTO> getCommentList(String userId, Integer postId) {
 
-        GroupEntity group = groupRepository.findByGroupCode(groupCode)
-                .orElseThrow(() -> new GroupNotFoundException(ErrorCode.GROUP_NOT_FOUND));
+        UserEntity user = userRepository.findUserWithGroup(userId)
+                .orElseThrow(() -> new UserNotFoundException(ErrorCode.USER_NOT_FOUND));
 
-        PostEntity post = postRepository.findByPostIdAndGroup(postId, group)
+        PostEntity post = postRepository.findByPostIdAndGroup(postId, user.getGroup())
                 .orElseThrow(() -> new PostNotFoundException(ErrorCode.POST_NOT_FOUND));
 
-        List<CommentEntity> commentList = commentRepository.findByPost(post);
+        List<CommentEntity> commentList = commentRepository.findCommentsWithUserByPost(post);
 
         return commentList.stream()
                 .map(CommentDTO::mapToCommentDTO)
@@ -95,15 +91,15 @@ public class CommentServiceImpl implements CommentService {
      * 최신 댓글 1개 가져오기
      */
     @Override
-    public CommentDTO getRecentComment(String groupCode, Integer postId) {
+    public CommentDTO getRecentComment(String userId, Integer postId) {
 
-        GroupEntity group = groupRepository.findByGroupCode(groupCode)
-                .orElseThrow(() -> new GroupNotFoundException(ErrorCode.GROUP_NOT_FOUND));
+        UserEntity user = userRepository.findUserWithGroup(userId)
+                .orElseThrow(() -> new UserNotFoundException(ErrorCode.USER_NOT_FOUND));
 
-        PostEntity post = postRepository.findByPostIdAndGroup(postId, group)
+        PostEntity post = postRepository.findByPostIdAndGroup(postId, user.getGroup())
                 .orElseThrow(() -> new PostNotFoundException(ErrorCode.POST_NOT_FOUND));
 
-        CommentEntity findComment = commentRepository.findTopByPostOrderByCreateAtDesc(post)
+        CommentEntity findComment = commentRepository.findTopCommentWithUserByPost(post)
                 .orElseThrow(() -> new CommentNotFoundException(ErrorCode.COMMENT_NOT_FOUND));
 
         return CommentDTO.mapToCommentDTO(findComment);
@@ -113,12 +109,12 @@ public class CommentServiceImpl implements CommentService {
      * 특정 포스트 댓글 갯수 가져오기
      */
     @Override
-    public Long countComment(String groupCode, Integer postId){
+    public Long countComment(String userId, Integer postId){
 
-        GroupEntity group = groupRepository.findByGroupCode(groupCode)
-                .orElseThrow(() -> new GroupNotFoundException(ErrorCode.GROUP_NOT_FOUND));
+        UserEntity user = userRepository.findUserWithGroup(userId)
+                .orElseThrow(() -> new UserNotFoundException(ErrorCode.USER_NOT_FOUND));
 
-        PostEntity post = postRepository.findByPostIdAndGroup(postId, group)
+        PostEntity post = postRepository.findByPostIdAndGroup(postId, user.getGroup())
                 .orElseThrow(() -> new PostNotFoundException(ErrorCode.POST_NOT_FOUND));
 
         Long countComments = commentRepository.countByPost(post);

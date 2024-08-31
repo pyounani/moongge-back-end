@@ -13,8 +13,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class CreateCommentDTO {
 
-    @NotEmpty(message = "groupCode를 입력해주세요.")
-    private String groupCode;
     @NotNull(message = "postId를 입력해주세요.")
     private Integer postId;
     @NotEmpty(message = "writer를 입력해주세요.")
