@@ -60,22 +60,23 @@ public class CommentController {
     /**
      * 댓글 목록 불러오기 API
      */
-    @GetMapping("/groups/{groupCode}/posts/{postId}/comments")
+    @GetMapping("/users/{userId}/posts/{postId}/comments")
     @Operation(
             summary = "댓글 목록 조회",
             description = "특정 게시글의 댓글 목록을 조회하는 API",
             parameters = {
-                    @Parameter(name = "groupCode", description = "그룹 코드", required = true),
+                    @Parameter(name = "userId", description = "유저 ID", required = true),
                     @Parameter(name = "postId", description = "게시글 ID", required = true)
             },
             responses = {
                     @ApiResponse(responseCode = "200", description = "댓글 목록을 성공적으로 가져왔습니다.", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json")),
-                    @ApiResponse(responseCode = "404", description = "게시글을 찾을 수 없음", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json"))
+                    @ApiResponse(responseCode = "404", description = "아이디에 해당하는 유저를 찾을 수 없습니다.", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json")),
+                    @ApiResponse(responseCode = "404", description = "게시글 정보를 찾을 수 없습니다.", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json"))
             }
     )
-    public ResponseEntity<ResponseDTO> getCommentList(@PathVariable String groupCode,
+    public ResponseEntity<ResponseDTO> getCommentList(@PathVariable String userId,
                                                       @PathVariable Integer postId){
-        List<CommentDTO> res = commentService.getCommentList(groupCode, postId);
+        List<CommentDTO> res = commentService.getCommentList(userId, postId);
 
         return ResponseEntity
                 .status(ResponseCode.SUCCESS_GET_COMMENT_LIST.getStatus().value())

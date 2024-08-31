@@ -73,15 +73,15 @@ public class CommentServiceImpl implements CommentService {
      * 특정 포스트 댓글 목록 불러오기
      */
     @Override
-    public List<CommentDTO> getCommentList(String groupCode, Integer postId) {
+    public List<CommentDTO> getCommentList(String userId, Integer postId) {
 
-        GroupEntity group = groupRepository.findByGroupCode(groupCode)
-                .orElseThrow(() -> new GroupNotFoundException(ErrorCode.GROUP_NOT_FOUND));
+        UserEntity user = userRepository.findUserWithGroup(userId)
+                .orElseThrow(() -> new UserNotFoundException(ErrorCode.USER_NOT_FOUND));
 
-        PostEntity post = postRepository.findByPostIdAndGroup(postId, group)
+        PostEntity post = postRepository.findByPostIdAndGroup(postId, user.getGroup())
                 .orElseThrow(() -> new PostNotFoundException(ErrorCode.POST_NOT_FOUND));
 
-        List<CommentEntity> commentList = commentRepository.findByPost(post);
+        List<CommentEntity> commentList = commentRepository.findCommentsWithUserByPost(post);
 
         return commentList.stream()
                 .map(CommentDTO::mapToCommentDTO)
