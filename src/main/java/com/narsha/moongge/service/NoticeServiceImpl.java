@@ -30,9 +30,9 @@ public class NoticeServiceImpl implements NoticeService{
      */
     @Override
     @Transactional
-    public NoticeDTO createNotice(CreateNoticeDTO createNoticeDTO) {
+    public NoticeDTO createNotice(String userId, CreateNoticeDTO createNoticeDTO) {
 
-        UserEntity findUser = userRepository.findUserWithGroup(createNoticeDTO.getWriter())
+        UserEntity findUser = userRepository.findUserWithGroup(userId)
                 .orElseThrow(() -> new UserNotFoundException(ErrorCode.USER_NOT_FOUND));
 
         // 선생님 유형 사용자 검증

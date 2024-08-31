@@ -18,7 +18,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/notices")
+@RequestMapping("/api")
 @Tag(name = "NoticeController", description = "공지 관련 API")
 public class NoticeController {
 
@@ -27,7 +27,7 @@ public class NoticeController {
     /**
      * 공지 작성하기 API
      */
-    @PostMapping
+    @PostMapping("/users/{userId}/notices")
     @Operation(
             summary = "공지 작성",
             description = "주어진 그룹 코드에 대해 새로운 공지를 작성하는 API",
@@ -43,8 +43,9 @@ public class NoticeController {
                     @ApiResponse(responseCode = "403", description = "학생은 그룹을 생성할 수 없습니다.", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json"))
             }
     )
-    public ResponseEntity<ResponseDTO> createNotice(@Valid @RequestBody CreateNoticeDTO createNoticeDTO) {
-        NoticeDTO res = noticeService.createNotice(createNoticeDTO);
+    public ResponseEntity<ResponseDTO> createNotice(@PathVariable String userId,
+                                                    @Valid @RequestBody CreateNoticeDTO createNoticeDTO) {
+        NoticeDTO res = noticeService.createNotice(userId, createNoticeDTO);
 
         return ResponseEntity
                 .status(ResponseCode.SUCCESS_CREATE_NOTICE.getStatus().value())
@@ -54,7 +55,7 @@ public class NoticeController {
     /**
      * 공지 목록 불러오기 API
      */
-    @GetMapping("/{userId}")
+    @GetMapping("/users/{userId}/notices")
     @Operation(
             summary = "공지 목록 조회",
             description = "주어진 그룹 코드에 대해 공지 목록을 조회하는 API",
@@ -76,7 +77,7 @@ public class NoticeController {
     /**
      * 공지 상세사항 내용 불러오기 API
      */
-    @GetMapping("/{userId}/{noticeId}")
+    @GetMapping("/users/{userId}/notices/{noticeId}")
     @Operation(
             summary = "공지 상세 조회",
             description = "주어진 그룹 코드와 공지 ID에 대해 공지의 상세 내용을 조회하는 API",
@@ -103,7 +104,7 @@ public class NoticeController {
     /**
      * 최근에 올린 공지 한 개 API
      */
-    @GetMapping("/{userId}/recent")
+    @GetMapping("/users/{userId}/notices/recent")
     @Operation(
             summary = "최근 공지 조회",
             description = "주어진 그룹 코드에 대해 최근에 올라온 공지 하나를 조회하는 API",
