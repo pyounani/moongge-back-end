@@ -41,7 +41,7 @@ class NoticeServiceImplTest {
         CreateNoticeDTO createNoticeDTO = buildCreateNoticeDTO(user);
 
         // when
-        NoticeDTO noticeDTO = noticeService.createNotice(createNoticeDTO);
+        NoticeDTO noticeDTO = noticeService.createNotice(user.getUserId(), createNoticeDTO);
 
         // then
         Optional<NoticeEntity> savedNotice = noticeRepository.findByNoticeId(noticeDTO.getNoticeId());
@@ -63,7 +63,7 @@ class NoticeServiceImplTest {
         GroupEntity group = createGroup(user);
         CreateNoticeDTO createNoticeDTO = buildCreateNoticeDTO(user);
 
-        NoticeDTO noticeDTO = noticeService.createNotice(createNoticeDTO);
+        NoticeDTO noticeDTO = noticeService.createNotice(user.getUserId(), createNoticeDTO);
 
         // when
         List<NoticeDTO> noticeList = noticeService.getNoticeList(user.getUserId());
@@ -86,10 +86,10 @@ class NoticeServiceImplTest {
         UserEntity user = createUser();
         GroupEntity group = createGroup(user);
         CreateNoticeDTO createNoticeDTO1 = buildCreateNoticeDTO(user);
-        noticeService.createNotice(createNoticeDTO1);
+        noticeService.createNotice(user.getUserId(), createNoticeDTO1);
 
         CreateNoticeDTO createNoticeDTO2 = buildCreateNoticeDTO(user);
-        NoticeDTO recentNoticeDTO = noticeService.createNotice(createNoticeDTO2);
+        NoticeDTO recentNoticeDTO = noticeService.createNotice(user.getUserId(), createNoticeDTO2);
 
         // when
         NoticeDTO noticeDTO = noticeService.getRecentNoticeOne(user.getUserId());
@@ -112,7 +112,7 @@ class NoticeServiceImplTest {
         UserEntity user = createUser();
         GroupEntity group = createGroup(user);
         CreateNoticeDTO createNoticeDTO = buildCreateNoticeDTO(user);
-        NoticeDTO noticeDTO = noticeService.createNotice(createNoticeDTO);
+        NoticeDTO noticeDTO = noticeService.createNotice(user.getUserId(), createNoticeDTO);
 
         // when
         NoticeDTO findNoticeDTO = noticeService.getNoticeDetail(user.getUserId(), noticeDTO.getNoticeId());
