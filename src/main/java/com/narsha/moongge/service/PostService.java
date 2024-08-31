@@ -7,8 +7,8 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 
 public interface PostService {
-    PostDTO uploadPost(String groupCode, MultipartFile[] multipartFiles, UploadPostDTO uploadPostDTO);
-    PostDTO getPostDetail(String groupCode, Integer postId);
+    PostDTO uploadPost(String userId, MultipartFile[] multipartFiles, UploadPostDTO uploadPostDTO);
+    PostDTO getPostDetail(String userId, Integer postId);
     List<PostDTO> getUserPost(String userId);
     List<PostDTO> getMainPost(String userId);
 

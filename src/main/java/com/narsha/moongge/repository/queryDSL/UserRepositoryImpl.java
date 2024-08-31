@@ -67,10 +67,15 @@ public class UserRepositoryImpl implements UserRepositoryCustom {
 
         return Optional.ofNullable(
                 query.selectFrom(user)
-                        .join(user.group, group)
-                        .fetchJoin() // 그룹 정보도 함께 가져오기 위해 fetchJoin 사용
-                        .where(user.userId.eq(userId))
+                        .where(user.userId.eq(userId)
+                                .and(query.selectOne()
+                                        .from(group)
+                                        .where(group.groupCode.eq(user.group.groupCode))
+                                        .exists()
+                                )
+                        )
                         .fetchOne()
         );
     }
+
 }

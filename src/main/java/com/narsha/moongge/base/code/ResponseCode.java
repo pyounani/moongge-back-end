@@ -39,7 +39,15 @@ public enum ResponseCode {
     SUCCESS_GET_NOTICE_DETAIL(HttpStatus.OK, "공지 상세를 성공적으로 가져왔습니다."),
     SUCCESS_GET_NOTICE_RECENT_ONE(HttpStatus.OK, "가장 최근 공지를 성공적으로 가져왔습니다."),
 
+    /**
+     * POST
+     */
+    SUCCESS_UPLOAD_POST(HttpStatus.OK, "포스트 업로드를 성공했습니다."),
+    SUCCESS_DETAIL_POST(HttpStatus.OK, "포스트 상세 불러오기 성공했습니다."),
+    SUCCESS_GET_POST_LIST(HttpStatus.OK,"사용자 게시글 목록 불러오기 성공했습니다."),
     SUCCESS_GET_UNLIKED_POSTS(HttpStatus.OK, "사용자 좋아요를 누르지 않은 게시물 목록을 성공적으로 가져왔습니다."),
+
+
     SUCCESS_CREATE_COMMENT(HttpStatus.OK, "댓글 작성을 성공했습니다."),
     SUCCESS_GET_COMMENT_LIST(HttpStatus.OK, "댓글 목록을 성공적으로 가져왔습니다."),
     SUCCESS_GET_RECENT_COMMENT(HttpStatus.OK, "최신 댓글을 성공적으로 가져왔습니다."),
@@ -51,18 +59,8 @@ public enum ResponseCode {
     SUCCESS_COUNT_LIKE(HttpStatus.OK, "좋아요 개수를 성공적으로 가져왔습니다."),
     SUCCESS_RECEIVE_TEN_LIKE(HttpStatus.OK, "좋아요 10개 받기 달성 여부를 성공적으로 가져왔습니다."),
     SUCCESS_GIVE_TEN_LIKE(HttpStatus.OK, "좋아요 10개 주기 달성 여부를 성공적으로 가져왔습니다."),
-
-
-
-
-    SUCCESS_UPLOAD_POST(HttpStatus.OK, "포스트 업로드 완료!"),
-
     SUCCESS_IMAGE_MASKING(HttpStatus.OK, "이미지 마스킹 성공"),
-    SUCCESS_GET_POST_LIST(HttpStatus.OK,"사용자 게시글 목록 불러오기 성공"),
     SUCCESS_TEXT_FILTERING(HttpStatus.OK,"텍스트 필터링 성공"),
-
-    SUCCESS_DETAIL_POST(HttpStatus.OK, "포스트 상세 불러오기 성공"),
-
     SUCCESS_GET_ALARM_LIST(HttpStatus.OK, "알람 목록을 성공적으로 가져왔습니다."),
     SUCCESS_DELETE_ALARM(HttpStatus.OK, "알람을 성공적으로 삭제했습니다."),
     ;

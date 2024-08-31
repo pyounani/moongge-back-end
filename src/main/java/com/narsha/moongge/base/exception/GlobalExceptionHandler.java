@@ -131,14 +131,23 @@ public class GlobalExceptionHandler {
 
     }
 
+    /**
+     * POST
+     */
+    @ExceptionHandler(PostNotFoundException.class)
+    protected ResponseEntity<ErrorResponseDTO>  handlePostNotFoundException(final PostNotFoundException e) {
+        log.error("handlePostNotFoundException : {}", e.getMessage());
+        return ResponseEntity
+                .status(ErrorCode.POST_NOT_FOUND.getStatus().value())
+                .body(new ErrorResponseDTO(ErrorCode.POST_NOT_FOUND));
+
+    }
+
+
 
     /**
      * Comment
      */
-
-
-    // 댓글: 댓글이 비어있을 때
-
     @ExceptionHandler(EmptyCommentContentException.class)
     protected ResponseEntity<ErrorResponseDTO> handleEmptyCommentContentException(final EmptyCommentContentException e) {
         log.error("EmptyCommentContentException : {}", e.getMessage());
@@ -158,26 +167,5 @@ public class GlobalExceptionHandler {
                 .body(new ErrorResponseDTO(ErrorCode.METHOD_NOT_ALLOWED));
     }
 
-    /**
-     * Post
-     */
-    @ExceptionHandler(PostNotFoundException.class)
-    protected ResponseEntity<ErrorResponseDTO> handlePostNotFoundException(final PostNotFoundException e) {
-        log.error("PostNotFoundException : {}", e.getMessage());
-        return ResponseEntity
-                .status(ErrorCode.POST_NOT_FOUND.getStatus().value())
-                .body(new ErrorResponseDTO(ErrorCode.POST_NOT_FOUND));
-    }
-
-
-
-    @ExceptionHandler(GroupMismatchException.class)
-    protected ResponseEntity<ErrorResponseDTO>  handleGroupMismatchException(final GroupMismatchException e) {
-        log.error("GroupMismatchException : {}", e.getMessage());
-        return ResponseEntity
-                .status(ErrorCode.GROUP_MISMATCH.getStatus().value())
-                .body(new ErrorResponseDTO(ErrorCode.GROUP_MISMATCH));
-
-    }
 
 }

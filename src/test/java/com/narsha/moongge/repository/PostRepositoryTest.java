@@ -51,7 +51,7 @@ class PostRepositoryTest {
         LocalDateTime endTime = now.plusDays(1);
 
         // when
-        List<PostEntity> posts = postRepository.findPostsWithUserAndGroup(group, startTime, endTime);
+        List<PostEntity> posts = postRepository.getMainPost(user.getUserId(), group, startTime, endTime);
 
         // then
         assertEquals(3, posts.size(), "조회된 포스트 수가 일치해야 합니다.");
