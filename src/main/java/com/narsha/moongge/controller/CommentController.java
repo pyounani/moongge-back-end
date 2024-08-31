@@ -41,7 +41,7 @@ public class CommentController {
                     @Parameter(name = "postId", description = "게시글 ID", required = true)
             },
             responses = {
-                    @ApiResponse(responseCode = "200", description = "댓글 작성 성공", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json")),
+                    @ApiResponse(responseCode = "200", description = "댓글 작성을 성공했습니다.", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json")),
                     @ApiResponse(responseCode = "400", description = "잘못된 요청", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json"))
             }
     )
@@ -67,7 +67,7 @@ public class CommentController {
                     @Parameter(name = "postId", description = "게시글 ID", required = true)
             },
             responses = {
-                    @ApiResponse(responseCode = "200", description = "댓글 목록 조회 성공", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json")),
+                    @ApiResponse(responseCode = "200", description = "댓글 목록을 성공적으로 가져왔습니다.", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json")),
                     @ApiResponse(responseCode = "404", description = "게시글을 찾을 수 없음", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json"))
             }
     )
@@ -92,7 +92,7 @@ public class CommentController {
                     @Parameter(name = "postId", description = "게시글 ID", required = true)
             },
             responses = {
-                    @ApiResponse(responseCode = "200", description = "최신 댓글 조회 성공", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json")),
+                    @ApiResponse(responseCode = "200", description = "최신 댓글을 성공적으로 가져왔습니다.", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json")),
                     @ApiResponse(responseCode = "404", description = "게시글을 찾을 수 없음", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json"))
             }
     )
@@ -117,7 +117,7 @@ public class CommentController {
                     @Parameter(name = "postId", description = "게시글 ID", required = true)
             },
             responses = {
-                    @ApiResponse(responseCode = "200", description = "댓글 개수 조회 성공", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json")),
+                    @ApiResponse(responseCode = "200", description = "댓글 갯수를 성공적으로 가져왔습니다.", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json")),
                     @ApiResponse(responseCode = "404", description = "게시글을 찾을 수 없음", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json"))
             }
     )

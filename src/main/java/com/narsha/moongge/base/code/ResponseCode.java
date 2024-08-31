@@ -47,11 +47,15 @@ public enum ResponseCode {
     SUCCESS_GET_POST_LIST(HttpStatus.OK,"사용자 게시글 목록 불러오기 성공했습니다."),
     SUCCESS_GET_UNLIKED_POSTS(HttpStatus.OK, "사용자 좋아요를 누르지 않은 게시물 목록을 성공적으로 가져왔습니다."),
 
-
+    /**
+     * COMMENT
+     */
     SUCCESS_CREATE_COMMENT(HttpStatus.OK, "댓글 작성을 성공했습니다."),
     SUCCESS_GET_COMMENT_LIST(HttpStatus.OK, "댓글 목록을 성공적으로 가져왔습니다."),
     SUCCESS_GET_RECENT_COMMENT(HttpStatus.OK, "최신 댓글을 성공적으로 가져왔습니다."),
     SUCCESS_GET_COMMENT_COUNT(HttpStatus.OK, "댓글 갯수를 성공적으로 가져왔습니다."),
+
+
     SUCCESS_CREATE_LIKE(HttpStatus.OK, "좋아요 생성을 성공했습니다."),
     SUCCESS_GET_LIKE_LIST(HttpStatus.OK, "좋아요 목록을 성공적으로 가져왔습니다."),
     SUCCESS_CHECK_LIKE_POST(HttpStatus.OK, "좋아요 여부를 성공적으로 가져왔습니다."),
