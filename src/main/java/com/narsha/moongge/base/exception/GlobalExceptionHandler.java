@@ -143,11 +143,18 @@ public class GlobalExceptionHandler {
 
     }
 
-
-
     /**
-     * Comment
+     * COMMENT
      */
+    @ExceptionHandler(CommentNotFoundException.class)
+    protected ResponseEntity<ErrorResponseDTO>  handleCommentNotFoundException(final CommentNotFoundException e) {
+        log.error("handleCommentNotFoundException : {}", e.getMessage());
+        return ResponseEntity
+                .status(ErrorCode.COMMENT_NOT_FOUND.getStatus().value())
+                .body(new ErrorResponseDTO(ErrorCode.COMMENT_NOT_FOUND));
+
+    }
+
     @ExceptionHandler(EmptyCommentContentException.class)
     protected ResponseEntity<ErrorResponseDTO> handleEmptyCommentContentException(final EmptyCommentContentException e) {
         log.error("EmptyCommentContentException : {}", e.getMessage());
