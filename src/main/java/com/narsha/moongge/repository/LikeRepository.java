@@ -13,7 +13,7 @@ public interface LikeRepository extends JpaRepository<LikeEntity, Integer> {
 
     List<LikeEntity> findByPost(PostEntity post);
     Optional<LikeEntity> findByPostAndUser(PostEntity post, UserEntity user);
-    List<LikeEntity> findByUser(UserEntity user);
+    boolean existsByPostAndUser(PostEntity post, UserEntity user);
     Long countByPost(PostEntity post);
     Long countByUser(UserEntity user);
 

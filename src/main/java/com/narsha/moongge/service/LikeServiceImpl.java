@@ -37,24 +37,21 @@ public class LikeServiceImpl implements LikeService{
      */
     @Override
     @Transactional
-    public Integer createLike(String groupCode, Integer postId, CreateLikeDTO createLikeDTO) {
+    public Integer createLike(String userId, Integer postId, CreateLikeDTO createLikeDTO) {
 
-        GroupEntity group = groupRepository.findByGroupCode(groupCode)
-                .orElseThrow(() -> new GroupNotFoundException(ErrorCode.GROUP_NOT_FOUND));
-
-        PostEntity post = postRepository.findByPostIdAndGroup(postId, group)
-                .orElseThrow(() -> new PostNotFoundException(ErrorCode.POST_NOT_FOUND));
-
-        UserEntity user = userRepository.findByUserId(createLikeDTO.getUserId())
+        UserEntity user = userRepository.findUserWithGroup(userId)
                 .orElseThrow(() -> new UserNotFoundException(ErrorCode.USER_NOT_FOUND));
 
+        PostEntity post = postRepository.findByPostIdAndGroup(postId, user.getGroup())
+                .orElseThrow(() -> new PostNotFoundException(ErrorCode.POST_NOT_FOUND));
+
         // 좋아요가 이미 생성된 경우 예외처리
-        likeRepository.findByPostAndUser(post, user).ifPresent(like -> {
+        if (likeRepository.existsByPostAndUser(post, user)) {
             throw new LikeAlreadyExistsException(ErrorCode.LIKE_ALREADY_EXISTS);
-        });
+        }
 
         LikeEntity like = LikeEntity.builder()
-                .group(group)
+                .group(user.getGroup())
                 .post(post)
                 .user(user)
                 .build();

@@ -47,7 +47,7 @@ class LikeServiceImplTest {
         CreateLikeDTO createLikeDTO = buildCreateLikeDTO(user, group, post);
 
         // when
-        Integer savedLikeId = likeService.createLike(group.getGroupCode(), post.getPostId(), createLikeDTO);
+        Integer savedLikeId = likeService.createLike(user.getUserId(), post.getPostId(), createLikeDTO);
 
         // then
         Optional<LikeEntity> findLike = likeRepository.findById(savedLikeId);
@@ -56,7 +56,6 @@ class LikeServiceImplTest {
         LikeEntity like = findLike.get();
 
         assertEquals(savedLikeId, like.getLikeId());
-        assertEquals(createLikeDTO.getGroupCode(), like.getGroup().getGroupCode());
         assertEquals(createLikeDTO.getPostId(), like.getPost().getPostId());
         assertEquals(createLikeDTO.getUserId(), like.getUser().getUserId());
     }
@@ -70,11 +69,11 @@ class LikeServiceImplTest {
         PostEntity post = createPost(user, group);
 
         CreateLikeDTO createLikeDTO = buildCreateLikeDTO(user, group, post);
-        likeService.createLike(group.getGroupCode(), post.getPostId(), createLikeDTO);
+        likeService.createLike(user.getUserId(), post.getPostId(), createLikeDTO);
 
         // then
         assertThrows(LikeAlreadyExistsException.class, () -> {
-            likeService.createLike(group.getGroupCode(), post.getPostId(), createLikeDTO);
+            likeService.createLike(user.getUserId(), post.getPostId(), createLikeDTO);
         });
     }
 
@@ -91,10 +90,10 @@ class LikeServiceImplTest {
         PostEntity post = createPost(user1, group);
 
         CreateLikeDTO createLikeDTOByUser1 = buildCreateLikeDTO(user1, group, post);
-        Integer likeId1 = likeService.createLike(group.getGroupCode(), post.getPostId(), createLikeDTOByUser1);
+        Integer likeId1 = likeService.createLike(user1.getUserId(), post.getPostId(), createLikeDTOByUser1);
 
         CreateLikeDTO createLikeDTObyUser2 = buildCreateLikeDTO(user2, group, post);
-        Integer likeId2 = likeService.createLike(group.getGroupCode(), post.getPostId(), createLikeDTObyUser2);
+        Integer likeId2 = likeService.createLike(user2.getUserId(), post.getPostId(), createLikeDTObyUser2);
 
         // when
         List<LikeDTO> likeList = likeService.getLikeList(group.getGroupCode(), post.getPostId());
@@ -115,7 +114,7 @@ class LikeServiceImplTest {
         PostEntity post = createPost(user, group);
 
         CreateLikeDTO createLikeDTO = buildCreateLikeDTO(user, group, post);
-        Integer savedLikeId = likeService.createLike(group.getGroupCode(), post.getPostId(), createLikeDTO);
+        Integer savedLikeId = likeService.createLike(user.getUserId(), post.getPostId(), createLikeDTO);
 
         DeleteLikeDTO deleteLikeDTO = buildDeleteLikeDTO(user, group, post);
         likeService.deleteLike(group.getGroupCode(), post.getPostId(), deleteLikeDTO);
@@ -132,7 +131,7 @@ class LikeServiceImplTest {
         PostEntity post = createPost(user, group);
 
         CreateLikeDTO createLikeDTO = buildCreateLikeDTO(user, group, post);
-        likeService.createLike(group.getGroupCode(), post.getPostId(), createLikeDTO);
+        likeService.createLike(user.getUserId(), post.getPostId(), createLikeDTO);
 
         // when
         Boolean checkLikePost = likeService.checkLikePost(user.getUserId(), group.getGroupCode(), post.getPostId());
@@ -150,7 +149,7 @@ class LikeServiceImplTest {
         PostEntity post = createPost(user, group);
 
         CreateLikeDTO createLikeDTO = buildCreateLikeDTO(user, group, post);
-        likeService.createLike(group.getGroupCode(), post.getPostId(), createLikeDTO);
+        likeService.createLike(user.getUserId(), post.getPostId(), createLikeDTO);
 
         DeleteLikeDTO deleteLikeDTO = buildDeleteLikeDTO(user, group, post);
         likeService.deleteLike(group.getGroupCode(), post.getPostId(), deleteLikeDTO);
@@ -174,10 +173,10 @@ class LikeServiceImplTest {
         PostEntity post = createPost(user1, group);
 
         CreateLikeDTO createLikeDTOByUser1 = buildCreateLikeDTO(user1, group, post);
-        likeService.createLike(group.getGroupCode(), post.getPostId(), createLikeDTOByUser1);
+        likeService.createLike(user1.getUserId(), post.getPostId(), createLikeDTOByUser1);
 
         CreateLikeDTO createLikeDTObyUser2 = buildCreateLikeDTO(user2, group, post);
-        likeService.createLike(group.getGroupCode(), post.getPostId(), createLikeDTObyUser2);
+        likeService.createLike(user2.getUserId(), post.getPostId(), createLikeDTObyUser2);
 
         // when
         Long countLike = likeService.countLike(group.getGroupCode(), post.getPostId());
@@ -213,7 +212,7 @@ class LikeServiceImplTest {
         PostEntity post = createPost(user, group);
 
         CreateLikeDTO createLikeDTO = buildCreateLikeDTO(user, group, post);
-        likeService.createLike(group.getGroupCode(), post.getPostId(), createLikeDTO);
+        likeService.createLike(user.getUserId(), post.getPostId(), createLikeDTO);
 
         // when
         Boolean receiveTenLikes = likeService.receiveTenLikes(group.getGroupCode(), user.getUserId());
@@ -246,7 +245,7 @@ class LikeServiceImplTest {
         PostEntity post = createPost(user, group);
 
         CreateLikeDTO createLikeDTO = buildCreateLikeDTO(user, group, post);
-        likeService.createLike(group.getGroupCode(), post.getPostId(), createLikeDTO);
+        likeService.createLike(user.getUserId(), post.getPostId(), createLikeDTO);
 
         Boolean giveTenLikes = likeService.giveTenLikes(group.getGroupCode(), user.getUserId());
 
@@ -266,7 +265,7 @@ class LikeServiceImplTest {
         PostEntity post1 = createPost(user, group);
 
         CreateLikeDTO createLikeDTO1 = buildCreateLikeDTO(giveLikeUser, group, post1);
-        likeService.createLike(group.getGroupCode(), post1.getPostId(), createLikeDTO1);
+        likeService.createLike(giveLikeUser.getUserId(), post1.getPostId(), createLikeDTO1);
     }
 
     private void createTenLikeByManyUser(GroupEntity group, PostEntity post) {
@@ -279,7 +278,7 @@ class LikeServiceImplTest {
         UserEntity user = createUser(userId);
         joinGroup(user, group);
         CreateLikeDTO createLikeDTObyUser2 = buildCreateLikeDTO(user, group, post);
-        likeService.createLike(group.getGroupCode(), post.getPostId(), createLikeDTObyUser2);
+        likeService.createLike(userId, post.getPostId(), createLikeDTObyUser2);
     }
 
     private static void assertLikeListContains(List<LikeDTO> likeList, Integer likeId1, UserEntity user1, String message) {
@@ -292,7 +291,6 @@ class LikeServiceImplTest {
 
     private CreateLikeDTO buildCreateLikeDTO(UserEntity user, GroupEntity group, PostEntity post) {
         return CreateLikeDTO.builder()
-                .groupCode(group.getGroupCode())
                 .postId(post.getPostId())
                 .userId(user.getUserId())
                 .build();

@@ -27,13 +27,13 @@ public class LikeController {
     /**
      * 좋아요 생성하기 API
      */
-    @PostMapping("/groups/{groupCode}/posts/{postId}/likes")
+    @PostMapping("/users/{userId}/posts/{postId}/likes")
     @Operation(
             summary = "좋아요 생성",
             description = "특정 그룹의 포스트에 좋아요를 생성하는 API",
             parameters = {
-                    @Parameter(name = "groupCode", description = "좋아요를 추가할 포스트가 속한 그룹 코드", required = true),
-                    @Parameter(name = "postId", description = "좋아요를 추가할 포스트의 ID", required = true)
+                    @Parameter(name = "userId", description = "유저의 ID", required = true),
+                    @Parameter(name = "postId", description = "포스트의 ID", required = true)
             },
             requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
                     description = "좋아요 생성 정보",
@@ -45,10 +45,10 @@ public class LikeController {
                     @ApiResponse(responseCode = "400", description = "잘못된 요청", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json"))
             }
     )
-    public ResponseEntity<ResponseDTO> createLike(@PathVariable String groupCode,
+    public ResponseEntity<ResponseDTO> createLike(@PathVariable String userId,
                                                   @PathVariable Integer postId,
                                                   @Valid @RequestBody CreateLikeDTO createLikeDTO) {
-        Integer res = likeService.createLike(groupCode, postId, createLikeDTO);
+        Integer res = likeService.createLike(userId, postId, createLikeDTO);
 
         return ResponseEntity
                 .status(ResponseCode.SUCCESS_CREATE_LIKE.getStatus().value())

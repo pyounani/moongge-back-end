@@ -12,8 +12,6 @@ public class CreateLikeDTO {
 
     @NotEmpty(message = "userId를 입력해주세요.")
     private String userId;
-    @NotEmpty(message = "groupCode를 입력해주세요.")
-    private String groupCode;
     @NotNull(message = "postId를 입력해주세요.")
     private Integer postId;
 }
