@@ -1,7 +1,6 @@
 package com.narsha.moongge.controller;
 
 import com.narsha.moongge.base.code.ResponseCode;
-import com.narsha.moongge.base.dto.like.CreateLikeDTO;
 import com.narsha.moongge.base.dto.like.DeleteLikeDTO;
 import com.narsha.moongge.base.dto.like.LikeDTO;
 import com.narsha.moongge.base.dto.response.ResponseDTO;
@@ -48,9 +47,8 @@ public class LikeController {
             }
     )
     public ResponseEntity<ResponseDTO> createLike(@PathVariable String userId,
-                                                  @PathVariable Integer postId,
-                                                  @Valid @RequestBody CreateLikeDTO createLikeDTO) {
-        Integer res = likeService.createLike(userId, postId, createLikeDTO);
+                                                  @PathVariable Integer postId) {
+        Integer res = likeService.createLike(userId, postId);
 
         return ResponseEntity
                 .status(ResponseCode.SUCCESS_CREATE_LIKE.getStatus().value())
