@@ -65,17 +65,12 @@ public class UserRepositoryImpl implements UserRepositoryCustom {
         QUserEntity user = QUserEntity.userEntity;
         QGroupEntity group = QGroupEntity.groupEntity;
 
-        return Optional.ofNullable(
-                query.selectFrom(user)
-                        .where(user.userId.eq(userId)
-                                .and(query.selectOne()
-                                        .from(group)
-                                        .where(group.groupCode.eq(user.group.groupCode))
-                                        .exists()
-                                )
-                        )
-                        .fetchOne()
-        );
+        UserEntity fetchedUser = query.selectFrom(user)
+                .innerJoin(user.group, group)
+                .where(user.userId.eq(userId))
+                .fetchOne();
+
+        return Optional.ofNullable(fetchedUser);
     }
 
 }
