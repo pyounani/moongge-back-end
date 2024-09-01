@@ -164,6 +164,18 @@ public class GlobalExceptionHandler {
     }
 
     /**
+     * LIKE
+     */
+    @ExceptionHandler(LikeAlreadyExistsException.class)
+    protected ResponseEntity<ErrorResponseDTO> handleLikeAlreadyExistsException(final LikeAlreadyExistsException e) {
+        log.error("handleLikeAlreadyExistsException : {}", e.getMessage());
+        return ResponseEntity
+                .status(ErrorCode.LIKE_ALREADY_EXISTS.getStatus().value())
+                .body(new ErrorResponseDTO(ErrorCode.LIKE_ALREADY_EXISTS));
+    }
+
+
+    /**
      * HTTP 405 Exception
      */
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)

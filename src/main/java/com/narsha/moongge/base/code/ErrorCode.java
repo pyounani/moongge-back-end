@@ -53,7 +53,6 @@ public enum ErrorCode {
      */
     DUPLICATE_ID_REQUEST(HttpStatus.CONFLICT, "중복된 아이디가 있습니다."),
     ACHIEVEMENT_ALREADY_COMPLETED(HttpStatus.CONFLICT, "이미 달성된 업적입니다."),
-
     LIKE_ALREADY_EXISTS(HttpStatus.CONFLICT, "좋아요가 이미 생성되어있습니다."),
 
     /*
