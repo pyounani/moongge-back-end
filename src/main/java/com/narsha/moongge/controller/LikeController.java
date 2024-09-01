@@ -40,7 +40,7 @@ public class LikeController {
                     content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json")
             ),
             responses = {
-                    @ApiResponse(responseCode = "200", description = "좋아요 생성 성공", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json")),
+                    @ApiResponse(responseCode = "200", description = "좋아요 생성을 성공했습니다.", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json")),
                     @ApiResponse(responseCode = "404", description = "아이디에 해당하는 유저를 찾을 수 없습니다.", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json")),
                     @ApiResponse(responseCode = "404", description = "게시글 정보를 찾을 수 없습니다.", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json")),
                     @ApiResponse(responseCode = "409", description = "좋아요가 이미 생성되어있습니다.", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json"))
@@ -67,7 +67,7 @@ public class LikeController {
                     @Parameter(name = "postId", description = "좋아요를 누른 유저 목록을 조회할 포스트의 ID", required = true)
             },
             responses = {
-                    @ApiResponse(responseCode = "200", description = "좋아요 누른 유저 목록 조회 성공", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json")),
+                    @ApiResponse(responseCode = "200", description = "좋아요 목록을 성공적으로 가져왔습니다.", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json")),
                     @ApiResponse(responseCode = "400", description = "잘못된 요청", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json"))
             }
     )
@@ -97,7 +97,7 @@ public class LikeController {
                     content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json")
             ),
             responses = {
-                    @ApiResponse(responseCode = "200", description = "좋아요 취소 성공", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json")),
+                    @ApiResponse(responseCode = "200", description = "좋아요를 성공적으로 취소했습니다.", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json")),
                     @ApiResponse(responseCode = "400", description = "잘못된 요청", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json"))
             }
     )
@@ -124,7 +124,7 @@ public class LikeController {
                     @Parameter(name = "postId", description = "좋아요 여부를 확인할 포스트의 ID", required = true)
             },
             responses = {
-                    @ApiResponse(responseCode = "200", description = "좋아요 여부 확인 성공", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json")),
+                    @ApiResponse(responseCode = "200", description = "좋아요 여부를 성공적으로 가져왔습니다.", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json")),
                     @ApiResponse(responseCode = "400", description = "잘못된 요청", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json"))
             }
     )
@@ -150,7 +150,7 @@ public class LikeController {
                     @Parameter(name = "postId", description = "좋아요 개수를 조회할 포스트의 ID", required = true)
             },
             responses = {
-                    @ApiResponse(responseCode = "200", description = "좋아요 개수 조회 성공", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json")),
+                    @ApiResponse(responseCode = "200", description = "좋아요 개수를 성공적으로 가져왔습니다.", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json")),
                     @ApiResponse(responseCode = "400", description = "잘못된 요청", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json"))
             }
     )
@@ -175,7 +175,7 @@ public class LikeController {
                     @Parameter(name = "userId", description = "좋아요 개수를 확인할 사용자 ID", required = true)
             },
             responses = {
-                    @ApiResponse(responseCode = "200", description = "10개 이상의 좋아요 받은 게시글 여부 확인 성공", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json")),
+                    @ApiResponse(responseCode = "200", description = "좋아요 10개 받기 달성 여부를 성공적으로 가져왔습니다.", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json")),
                     @ApiResponse(responseCode = "400", description = "잘못된 요청", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json"))
             }
     )
@@ -200,7 +200,7 @@ public class LikeController {
                     @Parameter(name = "userId", description = "좋아요 개수를 확인할 사용자 ID", required = true)
             },
             responses = {
-                    @ApiResponse(responseCode = "200", description = "10개 이상의 좋아요를 달았는지 여부 확인 성공", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json")),
+                    @ApiResponse(responseCode = "200", description = "좋아요 10개 주기 달성 여부를 성공적으로 가져왔습니다.", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json")),
                     @ApiResponse(responseCode = "400", description = "잘못된 요청", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json"))
             }
     )
