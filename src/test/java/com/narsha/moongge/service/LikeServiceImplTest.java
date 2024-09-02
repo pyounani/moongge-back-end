@@ -161,7 +161,7 @@ class LikeServiceImplTest {
         likeService.createLike(user2.getUserId(), post.getPostId());
 
         // when
-        Long countLike = likeService.countLike(group.getGroupCode(), post.getPostId());
+        Long countLike = likeService.countLike(user1.getUserId(), post.getPostId());
 
         // then
         assertEquals(2, countLike);

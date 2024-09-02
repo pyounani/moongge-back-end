@@ -118,12 +118,12 @@ public class LikeServiceImpl implements LikeService{
      * 특정 포스트에 좋아요 갯수 가져오기
      */
     @Override
-    public Long countLike(String groupCode, Integer postId){
+    public Long countLike(String userId, Integer postId){
 
-        GroupEntity group = groupRepository.findByGroupCode(groupCode)
-                .orElseThrow(() -> new GroupNotFoundException(ErrorCode.GROUP_NOT_FOUND));
+        UserEntity user = userRepository.findUserWithGroup(userId)
+                .orElseThrow(() -> new UserNotFoundException(ErrorCode.USER_NOT_FOUND));
 
-        PostEntity post = postRepository.findByPostIdAndGroup(postId, group)
+        PostEntity post = postRepository.findByPostIdAndGroup(postId, user.getGroup())
                 .orElseThrow(() -> new PostNotFoundException(ErrorCode.POST_NOT_FOUND));
 
         return likeRepository.countByPost(post);
