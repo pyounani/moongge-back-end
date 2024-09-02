@@ -152,9 +152,6 @@ public class LikeServiceImpl implements LikeService{
 
         Long count = likeRepository.countByUser(user);
 
-        if (count >= MIN_LIKES_REQUIRED) {
-            return true;
-        }
-        return false;
+        return count >= MIN_LIKES_REQUIRED;
     }
 }
