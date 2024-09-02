@@ -161,12 +161,11 @@ public class LikeController {
             summary = "10개 이상의 좋아요 받은 게시글 여부 확인",
             description = "사용자가 쓴 게시글 중에서 좋아요가 10개 이상 달린 글이 있는지 여부를 확인하는 API",
             parameters = {
-                    @Parameter(name = "userId", description = "좋아요 개수를 확인할 사용자 ID", required = true)
+                    @Parameter(name = "userId", description = "유저의 ID", required = true)
             },
             responses = {
                     @ApiResponse(responseCode = "200", description = "좋아요 10개 받기 달성 여부를 성공적으로 가져왔습니다.", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json")),
-                    @ApiResponse(responseCode = "400", description = "잘못된 요청", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json"))
-            }
+                    @ApiResponse(responseCode = "404", description = "아이디에 해당하는 유저를 찾을 수 없습니다.", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json"))
     )
     public ResponseEntity<ResponseDTO> checkTenLikes(@PathVariable String userId) {
         Boolean res = likeService.receiveTenLikes(userId);
