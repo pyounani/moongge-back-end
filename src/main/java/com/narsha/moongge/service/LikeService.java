@@ -12,7 +12,6 @@ public interface LikeService {
     Boolean checkLikePost(String userId, Integer postId);
     Long countLike(String userId, Integer postId);
     Boolean receiveTenLikes(String userId);
-
-    Boolean giveTenLikes(String groupCode, String userId);
+    Boolean giveTenLikes(String userId);
 }
 

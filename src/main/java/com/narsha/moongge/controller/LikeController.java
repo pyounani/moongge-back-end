@@ -179,22 +179,20 @@ public class LikeController {
     /**
      * 사용자가 좋아요를 10개 이상 달았는지 여부 API
      */
-    @GetMapping("/groups/{groupCode}/users/{userId}/likes/check-give")
+    @GetMapping("/users/{userId}/likes/check-give")
     @Operation(
             summary = "10개 이상의 좋아요를 달았는지 여부 확인",
             description = "사용자가 좋아요를 10개 이상 달았는지 여부를 확인하는 API",
             parameters = {
-                    @Parameter(name = "groupCode", description = "사용자가 좋아요를 달았는지 확인할 그룹 코드", required = true),
-                    @Parameter(name = "userId", description = "좋아요 개수를 확인할 사용자 ID", required = true)
+                    @Parameter(name = "userId", description = "유저의 ID", required = true)
             },
             responses = {
                     @ApiResponse(responseCode = "200", description = "좋아요 10개 주기 달성 여부를 성공적으로 가져왔습니다.", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json")),
                     @ApiResponse(responseCode = "400", description = "잘못된 요청", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json"))
             }
     )
-    public ResponseEntity<ResponseDTO> giveTenLikes(@PathVariable String groupCode,
-                                                    @PathVariable String userId){
-        Boolean res = likeService.giveTenLikes(groupCode, userId);
+    public ResponseEntity<ResponseDTO> giveTenLikes(@PathVariable String userId){
+        Boolean res = likeService.giveTenLikes(userId);
 
         return ResponseEntity
                 .status(ResponseCode.SUCCESS_GIVE_TEN_LIKE.getStatus().value())

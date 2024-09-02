@@ -145,12 +145,9 @@ public class LikeServiceImpl implements LikeService{
      * 사용자가 좋아요를 10개 이상 달았는지 여부 가져오기
      */
     @Override
-    public Boolean giveTenLikes(String groupCode, String userId) {
+    public Boolean giveTenLikes(String userId) {
 
-        GroupEntity group = groupRepository.findByGroupCode(groupCode)
-                .orElseThrow(() -> new GroupNotFoundException(ErrorCode.GROUP_NOT_FOUND));
-
-        UserEntity user = userRepository.findByUserIdAndGroup(userId, group)
+        UserEntity user = userRepository.findUserWithGroup(userId)
                 .orElseThrow(() -> new UserNotFoundException(ErrorCode.USER_NOT_FOUND));
 
         Long count = likeRepository.countByUser(user);
