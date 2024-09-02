@@ -58,22 +58,22 @@ public class LikeController {
     /**
      * 특정 포스트에 좋아요 누른 유저 목록 API
      */
-    @GetMapping("/groups/{groupCode}/posts/{postId}/likes/users")
+    @GetMapping("/users/{userId}/posts/{postId}/likes/users")
     @Operation(
             summary = "좋아요 누른 유저 목록 조회",
             description = "특정 그룹의 포스트에 좋아요를 누른 유저 목록을 조회하는 API",
             parameters = {
-                    @Parameter(name = "groupCode", description = "포스트가 속한 그룹 코드", required = true),
-                    @Parameter(name = "postId", description = "좋아요를 누른 유저 목록을 조회할 포스트의 ID", required = true)
+                    @Parameter(name = "userId", description = "유저의 ID", required = true),
+                    @Parameter(name = "postId", description = "포스트의 ID", required = true)
             },
             responses = {
                     @ApiResponse(responseCode = "200", description = "좋아요 목록을 성공적으로 가져왔습니다.", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json")),
                     @ApiResponse(responseCode = "400", description = "잘못된 요청", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json"))
             }
     )
-    public ResponseEntity<ResponseDTO> getLikeList(@PathVariable String groupCode,
+    public ResponseEntity<ResponseDTO> getLikeList(@PathVariable String userId,
                                                    @PathVariable Integer postId) {
-        List<LikeDTO> res = likeService.getLikeList(groupCode, postId);
+        List<LikeDTO> res = likeService.getLikeList(userId, postId);
 
         return ResponseEntity
                 .status(ResponseCode.SUCCESS_GET_LIKE_LIST.getStatus().value())

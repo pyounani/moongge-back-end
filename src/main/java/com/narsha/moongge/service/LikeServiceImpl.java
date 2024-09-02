@@ -64,15 +64,15 @@ public class LikeServiceImpl implements LikeService{
      * 특정 포스트에 좋아요 누른 유저 목록 가져오기
      */
     @Override
-    public List<LikeDTO> getLikeList(String groupCode, Integer postId) {
+    public List<LikeDTO> getLikeList(String userId, Integer postId) {
 
-        GroupEntity group = groupRepository.findByGroupCode(groupCode)
-                .orElseThrow(() -> new GroupNotFoundException(ErrorCode.GROUP_NOT_FOUND));
+        UserEntity user = userRepository.findUserWithGroup(userId)
+                .orElseThrow(() -> new UserNotFoundException(ErrorCode.USER_NOT_FOUND));
 
-        PostEntity post = postRepository.findByPostIdAndGroup(postId, group)
+        PostEntity post = postRepository.findByPostIdAndGroup(postId, user.getGroup())
                 .orElseThrow(() -> new PostNotFoundException(ErrorCode.POST_NOT_FOUND));
 
-        List<LikeEntity> likeList = likeRepository.findByPost(post);
+        List<LikeEntity> likeList = likeRepository.findLikesWithUserByPost(post);
 
         return likeList.stream()
                 .map(LikeDTO::mapToLikeDTO)

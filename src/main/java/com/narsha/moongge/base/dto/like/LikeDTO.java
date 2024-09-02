@@ -1,7 +1,5 @@
 package com.narsha.moongge.base.dto.like;
 
-import com.narsha.moongge.base.dto.comment.CommentDTO;
-import com.narsha.moongge.entity.CommentEntity;
 import com.narsha.moongge.entity.LikeEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

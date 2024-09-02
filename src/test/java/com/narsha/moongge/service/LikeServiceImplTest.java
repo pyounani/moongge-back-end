@@ -89,7 +89,7 @@ class LikeServiceImplTest {
         Integer likeId2 = likeService.createLike(user2.getUserId(), post.getPostId());
 
         // when
-        List<LikeDTO> likeList = likeService.getLikeList(group.getGroupCode(), post.getPostId());
+        List<LikeDTO> likeList = likeService.getLikeList(user1.getUserId(), post.getPostId());
 
         // then
         assertNotNull(likeList, "좋아요 목록은 null이 아니어야 합니다.");

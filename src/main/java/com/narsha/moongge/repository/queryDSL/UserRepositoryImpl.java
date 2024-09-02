@@ -66,7 +66,7 @@ public class UserRepositoryImpl implements UserRepositoryCustom {
         QGroupEntity group = QGroupEntity.groupEntity;
 
         UserEntity fetchedUser = query.selectFrom(user)
-                .innerJoin(user.group, group)
+                .join(user.group, group)
                 .where(user.userId.eq(userId))
                 .fetchOne();
 
