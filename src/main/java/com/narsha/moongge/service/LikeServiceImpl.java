@@ -6,15 +6,12 @@ import com.narsha.moongge.base.exception.*;
 import com.narsha.moongge.entity.LikeEntity;
 import com.narsha.moongge.entity.PostEntity;
 import com.narsha.moongge.entity.UserEntity;
-import com.narsha.moongge.entity.GroupEntity;
-import com.narsha.moongge.repository.GroupRepository;
 import com.narsha.moongge.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 
@@ -27,7 +24,6 @@ public class LikeServiceImpl implements LikeService{
 
     private final LikeRepository likeRepository;
     private final PostRepository postRepository;
-    private final GroupRepository groupRepository;
     private final UserRepository userRepository;
 
     /**

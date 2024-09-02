@@ -174,6 +174,14 @@ public class GlobalExceptionHandler {
                 .body(new ErrorResponseDTO(ErrorCode.LIKE_ALREADY_EXISTS));
     }
 
+    @ExceptionHandler(LikeNotFoundException.class)
+    protected ResponseEntity<ErrorResponseDTO> handleLikeNotFoundException(final LikeNotFoundException e) {
+        log.error("handleLikeNotFoundException : {}", e.getMessage());
+        return ResponseEntity
+                .status(ErrorCode.LIKE_NOT_FOUND.getStatus().value())
+                .body(new ErrorResponseDTO(ErrorCode.LIKE_NOT_FOUND));
+    }
+
 
     /**
      * HTTP 405 Exception
