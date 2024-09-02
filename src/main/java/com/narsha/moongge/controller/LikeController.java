@@ -104,24 +104,22 @@ public class LikeController {
     /**
      * 포스트에 좋아요 여부 받아오기 API
      */
-    @GetMapping("/groups/{groupCode}/users/{userId}/posts/{postId}/likes/check")
+    @GetMapping("/users/{userId}/posts/{postId}/likes/check")
     @Operation(
             summary = "좋아요 여부 확인",
             description = "특정 그룹의 포스트에 대해 사용자가 좋아요를 눌렀는지 여부를 확인하는 API",
             parameters = {
-                    @Parameter(name = "groupCode", description = "포스트가 속한 그룹 코드", required = true),
-                    @Parameter(name = "userId", description = "좋아요 여부를 확인할 사용자 ID", required = true),
-                    @Parameter(name = "postId", description = "좋아요 여부를 확인할 포스트의 ID", required = true)
+                    @Parameter(name = "userId", description = "유저의 ID", required = true),
+                    @Parameter(name = "postId", description = "포스트의 ID", required = true)
             },
             responses = {
                     @ApiResponse(responseCode = "200", description = "좋아요 여부를 성공적으로 가져왔습니다.", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json")),
                     @ApiResponse(responseCode = "400", description = "잘못된 요청", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json"))
             }
     )
-    public ResponseEntity<ResponseDTO> checkLike(@PathVariable String groupCode,
-                                                 @PathVariable String userId,
+    public ResponseEntity<ResponseDTO> checkLike(@PathVariable String userId,
                                                  @PathVariable Integer postId) {
-        boolean res = likeService.checkLikePost(userId, groupCode, postId);
+        boolean res = likeService.checkLikePost(userId, postId);
 
         return ResponseEntity
                 .status(ResponseCode.SUCCESS_CHECK_LIKE_POST.getStatus().value())

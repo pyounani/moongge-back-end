@@ -122,7 +122,7 @@ class LikeServiceImplTest {
         likeService.createLike(user.getUserId(), post.getPostId());
 
         // when
-        Boolean checkLikePost = likeService.checkLikePost(user.getUserId(), group.getGroupCode(), post.getPostId());
+        Boolean checkLikePost = likeService.checkLikePost(user.getUserId(), post.getPostId());
 
         // then
         assertTrue(checkLikePost);
@@ -140,7 +140,7 @@ class LikeServiceImplTest {
         likeService.deleteLike(user.getUserId(), post.getPostId());
 
         // when
-        Boolean checkLikePost = likeService.checkLikePost(user.getUserId(), group.getGroupCode(), post.getPostId());
+        Boolean checkLikePost = likeService.checkLikePost(user.getUserId(), post.getPostId());
 
         // then
         assertFalse(checkLikePost);

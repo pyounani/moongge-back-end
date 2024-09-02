@@ -103,20 +103,15 @@ public class LikeServiceImpl implements LikeService{
      * 유저가 특정 포스트에 좋아요 누른 여부
      */
     @Override
-    public Boolean checkLikePost(String userId, String groupCode, Integer postId) {
+    public Boolean checkLikePost(String userId, Integer postId) {
 
-        GroupEntity group = groupRepository.findByGroupCode(groupCode)
-                .orElseThrow(() -> new GroupNotFoundException(ErrorCode.GROUP_NOT_FOUND));
-
-        PostEntity post = postRepository.findByPostIdAndGroup(postId, group)
-                .orElseThrow(() -> new PostNotFoundException(ErrorCode.POST_NOT_FOUND));
-
-        UserEntity user = userRepository.findByUserId(userId)
+        UserEntity user = userRepository.findUserWithGroup(userId)
                 .orElseThrow(() -> new UserNotFoundException(ErrorCode.USER_NOT_FOUND));
 
-        Optional<LikeEntity> like = likeRepository.findByPostAndUser(post, user);
+        PostEntity post = postRepository.findByPostIdAndGroup(postId, user.getGroup())
+                .orElseThrow(() -> new PostNotFoundException(ErrorCode.POST_NOT_FOUND));
 
-        return like.isPresent();
+        return likeRepository.existsByPostAndUser(post, user);
     }
 
     /**
