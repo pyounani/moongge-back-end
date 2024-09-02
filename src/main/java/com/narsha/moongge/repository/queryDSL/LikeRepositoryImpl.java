@@ -1,9 +1,6 @@
 package com.narsha.moongge.repository.queryDSL;
 
-import com.narsha.moongge.entity.LikeEntity;
-import com.narsha.moongge.entity.PostEntity;
-import com.narsha.moongge.entity.QLikeEntity;
-import com.narsha.moongge.entity.QUserEntity;
+import com.narsha.moongge.entity.*;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -26,5 +23,19 @@ public class LikeRepositoryImpl implements LikeRepositoryCustom {
                 .join(like.user, user).fetchJoin()
                 .where(like.post.eq(post))
                 .fetch();
+    }
+
+    @Override
+    public Boolean existsPostWithMinLikesByUser(UserEntity user, Long minLikes) {
+        QLikeEntity like = QLikeEntity.likeEntity;
+        QPostEntity post = QPostEntity.postEntity;
+
+        return query.selectOne()
+                .from(like)
+                .join(like.post, post)
+                .where(post.user.eq(user))
+                .groupBy(like.post)
+                .having(like.count().goe(minLikes))
+                .fetchFirst() != null;
     }
 }

@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
 @Transactional(readOnly = true)
 public class LikeServiceImpl implements LikeService{
 
-    private static final int MIN_LIKES_REQUIRED = 10;
+    private static final Long MIN_LIKES_REQUIRED = 10L;
 
     private final LikeRepository likeRepository;
     private final PostRepository postRepository;
@@ -138,16 +138,7 @@ public class LikeServiceImpl implements LikeService{
         UserEntity user = userRepository.findUserWithGroup(userId)
                 .orElseThrow(() -> new UserNotFoundException(ErrorCode.USER_NOT_FOUND));
 
-        List<PostEntity> userPostList = postRepository.findByUser(user);
-
-        for (PostEntity post : userPostList) {
-            Long likeCount = likeRepository.countByPost(post);
-            if (likeCount >= MIN_LIKES_REQUIRED) {
-                return true;
-            }
-        }
-
-        return false;
+        return likeRepository.existsPostWithMinLikesByUser(user, MIN_LIKES_REQUIRED);
     }
 
     /**
