@@ -1,7 +1,6 @@
 package com.narsha.moongge.service;
 
 
-import com.narsha.moongge.base.dto.like.DeleteLikeDTO;
 import com.narsha.moongge.base.dto.like.LikeDTO;
 
 import java.util.List;
@@ -9,7 +8,7 @@ import java.util.List;
 public interface LikeService {
     Integer createLike(String userId, Integer postId);
     List<LikeDTO> getLikeList(String userId, Integer postId);
-    LikeDTO deleteLike(String userId, Integer postId, DeleteLikeDTO deleteLikeDTO);
+    LikeDTO deleteLike(String userId, Integer postId);
 
     Boolean checkLikePost(String userId, String groupCode, Integer postId);
     Long countLike(String groupCode, Integer postId);

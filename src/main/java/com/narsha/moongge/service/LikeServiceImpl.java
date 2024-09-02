@@ -1,7 +1,6 @@
 package com.narsha.moongge.service;
 
 import com.narsha.moongge.base.code.ErrorCode;
-import com.narsha.moongge.base.dto.like.DeleteLikeDTO;
 import com.narsha.moongge.base.dto.like.LikeDTO;
 import com.narsha.moongge.base.exception.*;
 import com.narsha.moongge.entity.LikeEntity;
@@ -84,7 +83,7 @@ public class LikeServiceImpl implements LikeService{
      */
     @Transactional
     @Override
-    public LikeDTO deleteLike(String userId, Integer postId, DeleteLikeDTO deleteLikeDTO){
+    public LikeDTO deleteLike(String userId, Integer postId){
 
         UserEntity user = userRepository.findUserWithGroup(userId)
                 .orElseThrow(() -> new UserNotFoundException(ErrorCode.USER_NOT_FOUND));

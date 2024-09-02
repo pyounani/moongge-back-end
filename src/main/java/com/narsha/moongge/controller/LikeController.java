@@ -1,7 +1,6 @@
 package com.narsha.moongge.controller;
 
 import com.narsha.moongge.base.code.ResponseCode;
-import com.narsha.moongge.base.dto.like.DeleteLikeDTO;
 import com.narsha.moongge.base.dto.like.LikeDTO;
 import com.narsha.moongge.base.dto.response.ResponseDTO;
 import com.narsha.moongge.service.LikeService;
@@ -9,7 +8,6 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -87,20 +85,14 @@ public class LikeController {
                     @Parameter(name = "userId", description = "유저의 ID", required = true),
                     @Parameter(name = "postId", description = "포스트의 ID", required = true)
             },
-            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
-                    description = "좋아요 취소 정보",
-                    required = true,
-                    content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json")
-            ),
             responses = {
                     @ApiResponse(responseCode = "200", description = "좋아요를 성공적으로 취소했습니다.", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json")),
                     @ApiResponse(responseCode = "400", description = "잘못된 요청", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json"))
             }
     )
     public ResponseEntity<ResponseDTO> deleteLike(@PathVariable String userId,
-                                                  @PathVariable Integer postId,
-                                                  @Valid @RequestBody DeleteLikeDTO deleteLikeDTO) {
-        LikeDTO res = likeService.deleteLike(userId, postId, deleteLikeDTO);
+                                                  @PathVariable Integer postId) {
+        LikeDTO res = likeService.deleteLike(userId, postId);
 
         return ResponseEntity
                 .status(ResponseCode.SUCCESS_DELETE_LIKE.getStatus().value())

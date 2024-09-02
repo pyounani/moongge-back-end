@@ -1,6 +1,5 @@
 package com.narsha.moongge.service;
 
-import com.narsha.moongge.base.dto.like.DeleteLikeDTO;
 import com.narsha.moongge.base.dto.like.LikeDTO;
 import com.narsha.moongge.base.exception.LikeAlreadyExistsException;
 import com.narsha.moongge.entity.*;
@@ -107,9 +106,7 @@ class LikeServiceImplTest {
         PostEntity post = createPost(user, group);
 
         Integer savedLikeId = likeService.createLike(user.getUserId(), post.getPostId());
-
-        DeleteLikeDTO deleteLikeDTO = buildDeleteLikeDTO(user, group, post);
-        likeService.deleteLike(user.getUserId(), post.getPostId(), deleteLikeDTO);
+        likeService.deleteLike(user.getUserId(), post.getPostId());
 
         Optional<LikeEntity> findLike = likeRepository.findById(savedLikeId);
         assertTrue(findLike.isEmpty());
@@ -140,9 +137,7 @@ class LikeServiceImplTest {
         PostEntity post = createPost(user, group);
 
         likeService.createLike(user.getUserId(), post.getPostId());
-
-        DeleteLikeDTO deleteLikeDTO = buildDeleteLikeDTO(user, group, post);
-        likeService.deleteLike(user.getUserId(), post.getPostId(), deleteLikeDTO);
+        likeService.deleteLike(user.getUserId(), post.getPostId());
 
         // when
         Boolean checkLikePost = likeService.checkLikePost(user.getUserId(), group.getGroupCode(), post.getPostId());
@@ -270,14 +265,6 @@ class LikeServiceImplTest {
                         like.getWriter().equals(user1.getUserId()) &&
                         like.getUsername().equals(user1.getUserName()));
         assertTrue(containsLike1, message);
-    }
-
-    private DeleteLikeDTO buildDeleteLikeDTO(UserEntity user, GroupEntity group, PostEntity post) {
-        return DeleteLikeDTO.builder()
-                .groupCode(group.getGroupCode())
-                .postId(post.getPostId())
-                .userId(user.getUserId())
-                .build();
     }
 
     private void joinGroup(UserEntity user, GroupEntity group) {
