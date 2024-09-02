@@ -156,12 +156,11 @@ public class LikeController {
     /**
      * 사용자가 쓴 게시글 중 좋아요 10개가 넘는 글의 여부 API
      */
-    @GetMapping("/groups/{groupCode}/users/{userId}/likes/check-receive")
+    @GetMapping("/users/{userId}/likes/check-receive")
     @Operation(
             summary = "10개 이상의 좋아요 받은 게시글 여부 확인",
             description = "사용자가 쓴 게시글 중에서 좋아요가 10개 이상 달린 글이 있는지 여부를 확인하는 API",
             parameters = {
-                    @Parameter(name = "groupCode", description = "사용자의 게시글이 포함된 그룹 코드", required = true),
                     @Parameter(name = "userId", description = "좋아요 개수를 확인할 사용자 ID", required = true)
             },
             responses = {
@@ -169,9 +168,8 @@ public class LikeController {
                     @ApiResponse(responseCode = "400", description = "잘못된 요청", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json"))
             }
     )
-    public ResponseEntity<ResponseDTO> checkTenLikes(@PathVariable String groupCode,
-                                                     @PathVariable String userId) {
-        Boolean res = likeService.receiveTenLikes(groupCode, userId);
+    public ResponseEntity<ResponseDTO> checkTenLikes(@PathVariable String userId) {
+        Boolean res = likeService.receiveTenLikes(userId);
 
         return ResponseEntity
                 .status(ResponseCode.SUCCESS_RECEIVE_TEN_LIKE.getStatus().value())

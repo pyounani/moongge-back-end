@@ -11,8 +11,8 @@ public interface LikeService {
     LikeDTO deleteLike(String userId, Integer postId);
     Boolean checkLikePost(String userId, Integer postId);
     Long countLike(String userId, Integer postId);
+    Boolean receiveTenLikes(String userId);
 
-    Boolean receiveTenLikes(String groupCode, String userId);
     Boolean giveTenLikes(String groupCode, String userId);
 }
 

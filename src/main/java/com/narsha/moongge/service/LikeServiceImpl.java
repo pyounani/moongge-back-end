@@ -133,12 +133,9 @@ public class LikeServiceImpl implements LikeService{
      * 사용자가 쓴 게시글 중 좋아요 10개가 넘는 글의 여부
      */
     @Override
-    public Boolean receiveTenLikes(String groupCode, String userId) {
+    public Boolean receiveTenLikes(String userId) {
 
-        GroupEntity group = groupRepository.findByGroupCode(groupCode)
-                .orElseThrow(() -> new GroupNotFoundException(ErrorCode.GROUP_NOT_FOUND));
-
-        UserEntity user = userRepository.findByUserIdAndGroup(userId, group)
+        UserEntity user = userRepository.findUserWithGroup(userId)
                 .orElseThrow(() -> new UserNotFoundException(ErrorCode.USER_NOT_FOUND));
 
         List<PostEntity> userPostList = postRepository.findByUser(user);

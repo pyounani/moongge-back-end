@@ -179,7 +179,7 @@ class LikeServiceImplTest {
         createTenLikeByManyUser(group, post);
 
         // when
-        Boolean receiveTenLikes = likeService.receiveTenLikes(group.getGroupCode(), user.getUserId());
+        Boolean receiveTenLikes = likeService.receiveTenLikes(user.getUserId());
 
         // then
         assertTrue(receiveTenLikes);
@@ -196,7 +196,7 @@ class LikeServiceImplTest {
         likeService.createLike(user.getUserId(), post.getPostId());
 
         // when
-        Boolean receiveTenLikes = likeService.receiveTenLikes(group.getGroupCode(), user.getUserId());
+        Boolean receiveTenLikes = likeService.receiveTenLikes(user.getUserId());
 
         // then
         assertFalse(receiveTenLikes);
