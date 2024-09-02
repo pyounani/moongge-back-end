@@ -84,16 +84,13 @@ public class LikeServiceImpl implements LikeService{
      */
     @Transactional
     @Override
-    public LikeDTO deleteLike(String groupCode, Integer postId, DeleteLikeDTO deleteLikeDTO){
+    public LikeDTO deleteLike(String userId, Integer postId, DeleteLikeDTO deleteLikeDTO){
 
-        GroupEntity group = groupRepository.findByGroupCode(groupCode)
-                .orElseThrow(() -> new GroupNotFoundException(ErrorCode.GROUP_NOT_FOUND));
-
-        PostEntity post = postRepository.findByPostIdAndGroup(postId, group)
-                .orElseThrow(() -> new PostNotFoundException(ErrorCode.POST_NOT_FOUND));
-
-        UserEntity user = userRepository.findByUserId(deleteLikeDTO.getUserId())
+        UserEntity user = userRepository.findUserWithGroup(userId)
                 .orElseThrow(() -> new UserNotFoundException(ErrorCode.USER_NOT_FOUND));
+
+        PostEntity post = postRepository.findByPostIdAndGroup(postId, user.getGroup())
+                .orElseThrow(() -> new PostNotFoundException(ErrorCode.POST_NOT_FOUND));
 
         LikeEntity like = likeRepository.findByPostAndUser(post, user)
                 .orElseThrow(() -> new LikeNotFoundException(ErrorCode.LIKE_NOT_FOUND));

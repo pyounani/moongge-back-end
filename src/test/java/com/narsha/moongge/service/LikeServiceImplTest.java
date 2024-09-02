@@ -109,7 +109,7 @@ class LikeServiceImplTest {
         Integer savedLikeId = likeService.createLike(user.getUserId(), post.getPostId());
 
         DeleteLikeDTO deleteLikeDTO = buildDeleteLikeDTO(user, group, post);
-        likeService.deleteLike(group.getGroupCode(), post.getPostId(), deleteLikeDTO);
+        likeService.deleteLike(user.getUserId(), post.getPostId(), deleteLikeDTO);
 
         Optional<LikeEntity> findLike = likeRepository.findById(savedLikeId);
         assertTrue(findLike.isEmpty());
@@ -142,7 +142,7 @@ class LikeServiceImplTest {
         likeService.createLike(user.getUserId(), post.getPostId());
 
         DeleteLikeDTO deleteLikeDTO = buildDeleteLikeDTO(user, group, post);
-        likeService.deleteLike(group.getGroupCode(), post.getPostId(), deleteLikeDTO);
+        likeService.deleteLike(user.getUserId(), post.getPostId(), deleteLikeDTO);
 
         // when
         Boolean checkLikePost = likeService.checkLikePost(user.getUserId(), group.getGroupCode(), post.getPostId());

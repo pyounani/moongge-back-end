@@ -34,11 +34,6 @@ public class LikeController {
                     @Parameter(name = "userId", description = "유저의 ID", required = true),
                     @Parameter(name = "postId", description = "포스트의 ID", required = true)
             },
-            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
-                    description = "좋아요 생성 정보",
-                    required = true,
-                    content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json")
-            ),
             responses = {
                     @ApiResponse(responseCode = "200", description = "좋아요 생성을 성공했습니다.", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json")),
                     @ApiResponse(responseCode = "404", description = "아이디에 해당하는 유저를 찾을 수 없습니다.", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json")),
@@ -84,13 +79,13 @@ public class LikeController {
     /**
      * 좋아요 취소 API
      */
-    @DeleteMapping("/groups/{groupCode}/posts/{postId}/likes")
+    @DeleteMapping("/users/{userId}/posts/{postId}/likes")
     @Operation(
             summary = "좋아요 취소",
             description = "특정 그룹의 포스트에 대한 좋아요를 취소하는 API",
             parameters = {
-                    @Parameter(name = "groupCode", description = "좋아요를 취소할 포스트가 속한 그룹 코드", required = true),
-                    @Parameter(name = "postId", description = "좋아요를 취소할 포스트의 ID", required = true)
+                    @Parameter(name = "userId", description = "유저의 ID", required = true),
+                    @Parameter(name = "postId", description = "포스트의 ID", required = true)
             },
             requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
                     description = "좋아요 취소 정보",
@@ -102,10 +97,10 @@ public class LikeController {
                     @ApiResponse(responseCode = "400", description = "잘못된 요청", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json"))
             }
     )
-    public ResponseEntity<ResponseDTO> deleteLike(@PathVariable String groupCode,
+    public ResponseEntity<ResponseDTO> deleteLike(@PathVariable String userId,
                                                   @PathVariable Integer postId,
                                                   @Valid @RequestBody DeleteLikeDTO deleteLikeDTO) {
-        LikeDTO res = likeService.deleteLike(groupCode, postId, deleteLikeDTO);
+        LikeDTO res = likeService.deleteLike(userId, postId, deleteLikeDTO);
 
         return ResponseEntity
                 .status(ResponseCode.SUCCESS_DELETE_LIKE.getStatus().value())
